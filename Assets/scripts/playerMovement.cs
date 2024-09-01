@@ -1,9 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class playerMovement : MonoBehaviour
 {
+    /*
+    PlayerControls controls;
+
+    Vector2 move;
+
+    void Awake()
+    {
+        controls = new PlayerControls();
+
+        controls.Gameplay.move.performed += ctx => move = ctx.ReadValue<Vector2>();
+        controls.Gameplay.move.canceled += ctx => move = Vector2.zero;
+    }
+
+    void Update()
+    {
+        Vector2 m = new Vector2(move.x, move.y) * Time.deltaTime;
+        transform.Translate(m, Space.World);
+    }
+
+    
     public float moveSpeed;
 
     public Transform orientation;
@@ -44,4 +65,5 @@ public class playerMovement : MonoBehaviour
         rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
     }
+    */
 }
