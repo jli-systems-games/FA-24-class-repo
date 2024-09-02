@@ -5,18 +5,18 @@ using UnityEngine;
 public class Bounce : MonoBehaviour
 {
     public Rigidbody rb;
-    int numbOfBounce = 1;
+    //int numbOfBounce = 1;
     public float xdirection = 2.5f;
     public float ydirection = -1f;
     Vector3 lastVelocity;
     float currSpeed;
     Vector3 direction;
-    int currBounce = 0;
+    //int currBounce = 0;
 
     private void Awake()
     {
         transform.position = new Vector3(0, Random.Range(-1f, 8f), 0);
-        Debug.Log(transform.position);
+        //Debug.Log(transform.position);
     }
     void Start()
     {
@@ -34,18 +34,18 @@ public class Bounce : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {   if (currBounce >= numbOfBounce) return;
+    {   //if (currBounce >= numbOfBounce) return;
         currSpeed = lastVelocity.magnitude;
         direction = Vector3.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
 
         rb.velocity = direction * currSpeed;
-        currBounce++;
+       // currBounce++;
 
         if (collision.collider.CompareTag("Wall"))
         {
             //Debug.Log("restart!");
             transform.position = new Vector3(0, Random.Range(-2f, 2f), 0);
-            currBounce = 0;
+            
         }
         
     }
