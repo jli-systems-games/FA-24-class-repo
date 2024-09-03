@@ -6,9 +6,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public GameUI gameUI;
     public int scorePlayer1, scorePlayer2;
-    public ScoreText scoreTextLeft, scoreTextRight;
     public System.Action onReset;
+    public int maxScore = 7;
+
+    public bool isGameStarted = false;
 
     private void Awake()
     {
@@ -32,13 +35,36 @@ public class GameManager : MonoBehaviour
         if (id == 2)
             scorePlayer2++;
 
-        UpdateScores();
+        gameUI.UpdateScores(scorePlayer1, scorePlayer2);
+        gameUI.HighlightScore(id);
+        CheckWin();
     }
 
-
-    private void UpdateScores()
+    public void StartGame()
     {
-        scoreTextLeft.SetScore(scorePlayer1);
-        scoreTextRight.SetScore(scorePlayer2);
+        isGameStarted = true;  // Setting the game to started
+        ResetScores();  // Reset scores when starting a new game
+        gameUI.UpdateScores(scorePlayer1, scorePlayer2); 
+        Time.timeScale = 1f;  // Resume the game
+        onReset?.Invoke();  // Reset the ball and paddles
+    }
+
+    private void ResetScores()
+    {
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+    }
+
+    private void CheckWin()
+    {
+        int winnerId = scorePlayer1 == maxScore ? 1 : scorePlayer2 == maxScore ? 2 : 0;
+
+        if (winnerId != 0)
+        {
+            // We have a winner!
+            isGameStarted = false;  // Stop the game
+            Time.timeScale = 0f;  // Pause the game
+            gameUI.OnGameEnds(winnerId);
+        }
     }
 }

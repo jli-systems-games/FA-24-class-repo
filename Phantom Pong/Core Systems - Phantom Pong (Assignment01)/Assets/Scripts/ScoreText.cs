@@ -11,4 +11,9 @@ public class ScoreText : MonoBehaviour
     {
         text.text = value.ToString();
     }
+
+    public void Highlight()
+    {
+
+    }
 }

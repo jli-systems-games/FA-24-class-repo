@@ -19,12 +19,20 @@ public class PaddleMovement : MonoBehaviour
     private void ResetPosition()
     {
         transform.position = startPosition;
+        rb2d.velocity = Vector2.zero;  // Ensure the paddle stops moving on reset
     }
 
     private void Update()
     {
-        float movement = ProcessInput();
-        Move(movement);
+        if (GameManager.instance.isGameStarted)  // Check if the game has started
+        {
+            float movement = ProcessInput();
+            Move(movement);
+        }
+        else
+        {
+            rb2d.velocity = Vector2.zero;  // Stop paddle movement if the game hasn't started
+        }
     }
 
     private float ProcessInput()

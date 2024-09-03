@@ -12,24 +12,34 @@ public class BallMovement : MonoBehaviour
 
     void Start()
     {
-        InitialPush();
         GameManager.instance.onReset += ResetBall;
+        GameManager.instance.gameUI.onStartGame += ResetBall;
     }
 
     private void ResetBall()
     {
         ResetBallPosition();
-        InitialPush();
+        if (GameManager.instance.isGameStarted)  // Only pushes the ball if the game has started
+        {
+            InitialPush(); 
+        }
     }
 
     void Update()
     {
-        ChangeDirection();
+        if (GameManager.instance.isGameStarted)
+        {
+            ChangeDirection();
+        }
+        else
+        {
+            rb2d.velocity = Vector2.zero;  // Ensures the ball stops moving when the game hasn't started
+        }
     }
 
     private void InitialPush()
     {
-        // Giving the ball a unpredictable initial push with a wide range of angles
+        // Giving the ball an unpredictable initial push with a wide range of angles
         Vector2 dir = Random.value < 0.5f ? Vector2.left : Vector2.right;
         dir.y = Random.Range(-maxInitialAngle, maxInitialAngle);
         rb2d.velocity = dir * moveSpeed;
@@ -37,7 +47,7 @@ public class BallMovement : MonoBehaviour
 
     private void ChangeDirection()
     {
-        // Significantly alter the current velocity to create an even more unpredictable "ghostly" movement
+        // Significantly altered the current velocity to create an even more unpredictable "ghostly" movement
         rb2d.velocity += new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f));
         rb2d.velocity = rb2d.velocity.normalized * moveSpeed;
     }
