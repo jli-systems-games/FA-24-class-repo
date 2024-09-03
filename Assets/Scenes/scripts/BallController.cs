@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class BallController : MonoBehaviour
 {
@@ -14,9 +16,14 @@ public class BallController : MonoBehaviour
 
     public Vector3 spawnPoint;
 
+    public TextMeshProUGUI playerOneText;
+    public TextMeshProUGUI playerTwoText;
+
     // Start is called before the first frame update
     void Start()
     {
+        playerOneScore = 0;
+        playerTwoScore = 0;
         this.direction = new Vector3(1f, 0f, 1f);
     }
 
@@ -24,6 +31,8 @@ public class BallController : MonoBehaviour
     void Update()
     {
         this.transform.position += direction * speed;
+        playerOneText.text = playerOneScore.ToString();
+        playerTwoText.text = playerTwoScore.ToString();
     }
 
     private void OnCollisionEnter(Collision collision)
