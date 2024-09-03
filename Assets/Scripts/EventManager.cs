@@ -38,27 +38,30 @@ public class EventManager : MonoBehaviour
     void randomEvents()
     {
         int numb = Random.Range(0, 3);
-        bool condition = false;
 
+        //Debug.Log(balls.Capacity);
         switch (numb)
         {
+            case 0:
+                Debug.Log("wow a new Dimension");
+                break;
             case 1:
-                condition = true; 
                 
-                TrueorFalse(condition,balls);
+                TrueorFalse(balls);
                 //Debug.Log("true & false"); 
                 //Debug.Log(numb);
                 break;
             case 2:
                 Debug.Log("Oh no, a stranger!");
                 break;
-            case 3:
-                Debug.Log("wow a new Dimension");
-                break;
+          
         }
+
+        //Debug.Log("numb:" + numb);
+        resetEvents(numb);
     }
 
-    void TrueorFalse(bool events, List<GameObject> dummies)
+    void TrueorFalse(List<GameObject> dummies)
     {
        
         GameObject wrongBall;
@@ -77,17 +80,20 @@ public class EventManager : MonoBehaviour
             }
            
         }
+        
 
-        Debug.Log(events);
+      
+    }
 
-        /*if(events != 1 && leng >= 1)
+    void resetEvents(int n)
+    {
+        int len = balls.Count;
+        if(len >= 1 && n != 1)
         {
-            foreach(GameObject i in dummies)
+            foreach(GameObject x in balls)
             {
-                Destroy(i);
-
+                Destroy(x);
             }
-            
-        }*/
+        }
     }
 }
