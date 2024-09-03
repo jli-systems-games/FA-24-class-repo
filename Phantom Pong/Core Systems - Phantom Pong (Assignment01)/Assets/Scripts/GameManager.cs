@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameUI gameUI;
+    public GameAudio gameAudio;
     public int scorePlayer1, scorePlayer2;
     public System.Action onReset;
     public int maxScore = 7;
@@ -37,6 +38,9 @@ public class GameManager : MonoBehaviour
 
         gameUI.UpdateScores(scorePlayer1, scorePlayer2);
         gameUI.HighlightScore(id);
+
+        gameAudio.PlayScoreSound();
+
         CheckWin();
     }
 
@@ -65,6 +69,7 @@ public class GameManager : MonoBehaviour
             isGameStarted = false;  // Stop the game
             Time.timeScale = 0f;  // Pause the game
             gameUI.OnGameEnds(winnerId);
+            gameAudio.PlayWinSound();
         }
     }
 }

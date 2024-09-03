@@ -75,6 +75,7 @@ public class BallMovement : MonoBehaviour
         PaddleMovement paddle = collision.collider.GetComponent<PaddleMovement>();
         if (paddle)
         {
+            GameManager.instance.gameAudio.PlayPaddleSound();
             rb2d.velocity *= speedMultiplier;
         }
     }
