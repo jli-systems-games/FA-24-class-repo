@@ -9,6 +9,9 @@ public class Ball : MonoBehaviour
     private Rigidbody2D rb;
 
     private int initialDir;
+    private float initialThrust;
+
+    private int upDown;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +19,7 @@ public class Ball : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         initialDir = Random.Range(0, 1);
+        initialThrust = thrust;
 
         if(initialDir == 0)
         {
@@ -35,28 +39,45 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.CompareTag("P1") || other.gameObject.CompareTag("P2"))
+        {
+            thrust = (float)(thrust * 1.5);
+            if (transform.position.y <= 0)
+            {
+                rb.AddForce(transform.up * thrust);
+            }
+
+            else
+            {
+                rb.AddForce(transform.up * -thrust);
+            }
+        }
         if (other.gameObject.CompareTag("top"))
         {
-            rb.AddForce(transform.up * - thrust);
+            rb.AddForce(transform.up * -thrust);
         }
-        if (other.gameObject.CompareTag("bottom")) 
+        else if (other.gameObject.CompareTag("bottom")) 
         {
             rb.AddForce(transform.up * thrust);
         }
 
-        if (other.gameObject.CompareTag("P1"))
+        else if (other.gameObject.CompareTag("P1"))
         {
             rb.AddForce(transform.right * thrust);
+
         }
-        if (other.gameObject.CompareTag("P2"))
+        else if (other.gameObject.CompareTag("P2"))
         {
-            rb.AddForce(transform.up * -thrust);
+            rb.AddForce(transform.right * -thrust);
         }
 
         else
         {
+            Debug.Log("out of bounds");
+            thrust = initialThrust;
             Instantiate(gameObject, ballPos, Quaternion.identity);
             Destroy(gameObject);
         }
+        Debug.Log("ball velocity: " + rb.velocity);
     }
 }

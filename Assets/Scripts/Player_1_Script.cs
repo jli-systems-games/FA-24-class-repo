@@ -11,7 +11,7 @@ public class Player_1_Script : MonoBehaviour
     void Start()
     {
         playerPos = transform.position;
-        Debug.Log(playerPos);
+        //Debug.Log(playerPos);
     }
 
     // Update is called once per frame
