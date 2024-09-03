@@ -134,8 +134,8 @@ GameObject:
   - component: {fileID: 350434635}
   - component: {fileID: 350434634}
   - component: {fileID: 350434633}
-  - component: {fileID: 350434632}
   - component: {fileID: 350434637}
+  - component: {fileID: 350434638}
   m_Layer: 0
   m_Name: Paddle B
   m_TagString: Paddle
@@ -143,19 +143,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &350434632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350434631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ed6f93d2630ebd4aabc38b217ab4d77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 350434633}
 --- !u!54 &350434633
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -230,7 +217,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350434631}
   m_LocalRotation: {x: -0.00000025694067, y: -0.7071068, z: -0.70710677, w: 0.00000027567145}
-  m_LocalPosition: {x: 4.06, y: 0.29, z: 1.88}
+  m_LocalPosition: {x: 4.06, y: 0.23, z: 1.88}
   m_LocalScale: {x: 8.560747, y: 6.1348276, z: 8.269512}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -250,6 +237,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.019999998, y: 0.11082344, z: 0.020000005}
   m_Center: {x: 0, y: -0.00036941282, z: 2.293318e-11}
+--- !u!114 &350434638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350434631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f334df6581a4ccf4cb28d2b191ddc649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3.5
+  rb: {fileID: 0}
 --- !u!1 &398426742
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,6 +733,7 @@ GameObject:
   - component: {fileID: 1525352750}
   - component: {fileID: 1525352749}
   - component: {fileID: 1525352747}
+  - component: {fileID: 1525352753}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -753,8 +755,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 4
-  m_CollisionDetection: 1
+  m_Constraints: 116
+  m_CollisionDetection: 0
 --- !u!135 &1525352749
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -762,7 +764,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525352746}
-  m_Material: {fileID: 13400000, guid: 9f695708d0387334d81b6b43660c5636, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -826,13 +828,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525352746}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08, y: 0.33, z: 1.91}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0.08, y: 0.21, z: 1.91}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1525352753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525352746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e157d2821e98a044e9162973e19b3a29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.038
 --- !u!1 &1629289506
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,7 +1058,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5605788237398523916}
   m_LocalRotation: {x: -0.00000025694067, y: -0.7071068, z: -0.70710677, w: 0.00000027567145}
-  m_LocalPosition: {x: -3.75, y: 0.29, z: 1.8795}
+  m_LocalPosition: {x: -3.75, y: 0.23, z: 1.8795}
   m_LocalScale: {x: 8.560747, y: 6.1348276, z: 8.269512}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1062,8 +1077,8 @@ GameObject:
   - component: {fileID: 1001664702098547686}
   - component: {fileID: 8951160421956234562}
   - component: {fileID: 8951160421956234564}
-  - component: {fileID: 8951160421956234565}
   - component: {fileID: 8951160421956234566}
+  - component: {fileID: 8951160421956234567}
   m_Layer: 0
   m_Name: Paddle A
   m_TagString: Paddle
@@ -1129,19 +1144,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 118
   m_CollisionDetection: 0
---- !u!114 &8951160421956234565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5605788237398523916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad48f613b77c7e144966d93b9666a264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 8951160421956234564}
 --- !u!65 &8951160421956234566
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1155,3 +1157,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.019999998, y: 0.11082344, z: 0.020000005}
   m_Center: {x: 0, y: -0.00036941282, z: 2.293318e-11}
+--- !u!114 &8951160421956234567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5605788237398523916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bacaf9b32254a7242b8ec123039ab11c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3.5
+  rb: {fileID: 0}
