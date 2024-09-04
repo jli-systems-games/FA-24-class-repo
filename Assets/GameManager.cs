@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(BallPrice);
         BallPrice++;
         BallText.GetComponent<TextMeshProUGUI>().text = "Price:$"+BallPrice.ToString();
+        
   
     }
 

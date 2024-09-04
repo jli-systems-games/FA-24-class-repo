@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 237315659}
   m_Layer: 0
   m_Name: Player2Pay
-  m_TagString: Untagged
+  m_TagString: Trigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e62d9cb6491344dc8f4b7e6cae08871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer1Cost: 0
 --- !u!1 &396989983
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +279,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &396989984
 RectTransform:
   m_ObjectHideFlags: 0
@@ -521,7 +522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &493356677
 RectTransform:
   m_ObjectHideFlags: 0
@@ -699,7 +700,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $50
+  m_text: $10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -789,7 +790,7 @@ GameObject:
   - component: {fileID: 738611375}
   m_Layer: 0
   m_Name: Player1Pay
-  m_TagString: Untagged
+  m_TagString: Trigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -847,6 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e62d9cb6491344dc8f4b7e6cae08871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer1Cost: 0
 --- !u!1 &892869267
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,11 +896,15 @@ MonoBehaviour:
   ball: {fileID: 1943997651}
   Player1Paddle: {fileID: 2061107498}
   Player1Goal: {fileID: 1689595104}
+  Player1Cost: {fileID: 738611372}
   Player2Paddle: {fileID: 1702618309}
   Player2Goal: {fileID: 1715012939}
+  Player2Cost: {fileID: 237315655}
   Player1Text: {fileID: 690195994}
   Player2Text: {fileID: 2146387635}
   BallText: {fileID: 1431711030}
+  Broke1Text: {fileID: 493356676}
+  Broke2Text: {fileID: 396989983}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1984,7 +1990,7 @@ Transform:
   m_GameObject: {fileID: 1943997651}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.79671, y: 0.79671, z: 0.79671}
+  m_LocalScale: {x: 0.6981251, y: 0.6981251, z: 0.6981251}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2214,7 +2220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '$50
+  m_text: '$10
 
 '
   m_isRightToLeft: 0
