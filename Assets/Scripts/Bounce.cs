@@ -10,6 +10,8 @@ public class Bounce : MonoBehaviour
     public float ydirection = -1f;
     Vector3 lastVelocity;
     float currSpeed;
+    float maxspeed = 5.5f;
+    float minspeed = 4.5f;
     Vector3 direction;
     //int currBounce = 0;
 
@@ -28,25 +30,42 @@ public class Bounce : MonoBehaviour
     void Update()
     {
         lastVelocity = rb.velocity;
-        //originally put in the lat update function
+       
+        //Debug.Log(currSpeed);
+        if(currSpeed > maxspeed)
+        {
+            
+            lastVelocity = lastVelocity.normalized * maxspeed;
+        }
+        else if(currSpeed < minspeed)
+        {
+            lastVelocity = lastVelocity.normalized * minspeed;
+        }
+        Debug.Log(direction);
         
 
     }
 
     private void OnCollisionEnter(Collision collision)
-    {   //if (currBounce >= numbOfBounce) return;
+    {   
+        
+        //FixedSpeed(lastVelocity, minspeed, maxspeed);
         currSpeed = lastVelocity.magnitude;
+
         direction = Vector3.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
 
         rb.velocity = direction * currSpeed;
-       // currBounce++;
+        
 
         if (collision.collider.CompareTag("Wall"))
         {
-            //Debug.Log("restart!");
-            transform.position = new Vector3(0, Random.Range(-2f, 2f), 0);
             
+            transform.position = new Vector3(0, Random.Range(-2f, 2f), 0);
+            rb.AddForce(xdirection, ydirection, 0f, ForceMode.Force);
+
+
         }
         
     }
+    
 }
