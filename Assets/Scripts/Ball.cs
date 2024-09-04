@@ -13,13 +13,18 @@ public class Ball : MonoBehaviour
 
     private int upDown;
 
-    private float currentDirection;
-    private float prevPos;
-    private float currentPos;
+    private Vector3 currentDirection;
+    private Vector3 prevPos;
+    private Vector3 currentPos;
+
+    [SerializeField] private GameObject P1;
+    [SerializeField] private GameObject P2;
     // Start is called before the first frame update
     void Start()
     {
         ballPos = transform.position;
+        prevPos = transform.position;
+
         rb = GetComponent<Rigidbody2D>();
 
         initialDir = Random.Range(0, 2);
@@ -28,10 +33,12 @@ public class Ball : MonoBehaviour
         if(initialDir == 0)
         {
             rb.AddForce(transform.right * thrust);
+            rb.AddForce(transform.up * thrust);
         }
         if (initialDir == 1) 
         {
             rb.AddForce(transform.right * -thrust);
+            rb.AddForce(transform.up * -thrust);
         }
     }
 
@@ -43,9 +50,19 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        currentPos = transform.position;
+
+        currentDirection = currentPos - prevPos;
+
+        //Debug.Log("current direction: " + currentDirection);
+
+        prevPos = transform.position;
+
+        rb.velocity = new Vector2 (0,0);
+
         if (other.gameObject.CompareTag("P1") || other.gameObject.CompareTag("P2"))
         {
-            thrust = (float)(thrust * 1.5);
+            thrust = (float)(thrust * 1.05);
             if (transform.position.y <= 0)
             {
                 rb.AddForce(transform.up * thrust);
@@ -58,11 +75,31 @@ public class Ball : MonoBehaviour
         }
         if (other.gameObject.CompareTag("top"))
         {
-            rb.AddForce(Vector3.up * -thrust);
+            rb.AddForce(Vector3.up * -initialThrust);
+
+            if (currentDirection.x >= 0) 
+            {
+                rb.AddForce(Vector3.right * thrust);
+            }
+
+            if(currentDirection.x < 0)
+            {
+                rb.AddForce(Vector3.right * -thrust);
+            }
         }
         else if (other.gameObject.CompareTag("bottom")) 
         {
-            rb.AddForce(Vector3.up * thrust);
+            rb.AddForce(Vector3.up * initialThrust);
+
+            if (currentDirection.x >= 0)
+            {
+                rb.AddForce(Vector3.right * thrust);
+            }
+
+            if (currentDirection.x < 0)
+            {
+                rb.AddForce(Vector3.right * -thrust);
+            }
         }
 
         else if (other.gameObject.CompareTag("P1"))
@@ -77,11 +114,20 @@ public class Ball : MonoBehaviour
 
         else
         {
+            if (other.gameObject.CompareTag("left"))
+            {
+                P2.GetComponent<Player_1_Script>().score++;
+            }
+
+            if (other.gameObject.CompareTag("right")) 
+            {
+                P1.GetComponent<Player_1_Script>().score++;
+            }
             Debug.Log("out of bounds");
             thrust = initialThrust;
             Instantiate(gameObject, ballPos, Quaternion.identity);
             Destroy(gameObject);
         }
-        Debug.Log("ball velocity: " + rb.velocity);
+        //Debug.Log("ball velocity: " + rb.velocity);
     }
 }

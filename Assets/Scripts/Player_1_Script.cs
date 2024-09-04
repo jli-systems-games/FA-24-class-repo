@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player_1_Script : MonoBehaviour
@@ -13,6 +14,10 @@ public class Player_1_Script : MonoBehaviour
 
     private int sabotageChance;
     public bool sabotagable;
+
+    public int score;
+
+    [SerializeField] private TextMeshProUGUI scoreboard;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +32,8 @@ public class Player_1_Script : MonoBehaviour
     void Update()
     {
         transform.position = playerPos;
+
+        scoreboard.text = score.ToString();
             if (this.gameObject.CompareTag("P1"))
             {
                 MovementP1();
@@ -181,11 +188,13 @@ public class Player_1_Script : MonoBehaviour
 
     public IEnumerator DeactivateOpp()
     {
-        otherPlayer.SetActive(false);
+        otherPlayer.GetComponent<SpriteRenderer>().enabled = false;
+        otherPlayer.GetComponent<BoxCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(2);
 
-        otherPlayer.SetActive(true);
+        otherPlayer.GetComponent<SpriteRenderer>().enabled = true;
+        otherPlayer.GetComponent<BoxCollider2D>().enabled = true;
 
         yield return new WaitForSeconds(5);
 
