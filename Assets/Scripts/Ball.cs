@@ -62,7 +62,7 @@ public class Ball : MonoBehaviour
 
         if (other.gameObject.CompareTag("P1") || other.gameObject.CompareTag("P2"))
         {
-            thrust = (float)(thrust * 1.05);
+            thrust = (float)(thrust * 1.1);
             if (transform.position.y <= 0)
             {
                 rb.AddForce(transform.up * thrust);
@@ -116,12 +116,12 @@ public class Ball : MonoBehaviour
         {
             if (other.gameObject.CompareTag("left"))
             {
-                P2.GetComponent<Player_1_Script>().score++;
+                P2.GetComponent<Player>().score++;
             }
 
             if (other.gameObject.CompareTag("right")) 
             {
-                P1.GetComponent<Player_1_Script>().score++;
+                P1.GetComponent<Player>().score++;
             }
             Debug.Log("out of bounds");
             thrust = initialThrust;

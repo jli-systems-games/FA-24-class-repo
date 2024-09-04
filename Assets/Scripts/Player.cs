@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Player_1_Script : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float speed;
     private Vector3 playerPos;
@@ -37,7 +37,7 @@ public class Player_1_Script : MonoBehaviour
             if (this.gameObject.CompareTag("P1"))
             {
                 MovementP1();
-                if (Input.GetKeyDown(KeyCode.RightShift) && otherPlayer.GetComponent<Player_1_Script>().sabotagable)
+                if (Input.GetKeyDown(KeyCode.RightShift) && otherPlayer.GetComponent<Player>().sabotagable)
                 {
                     Sabotage("right");
                 }
@@ -45,7 +45,7 @@ public class Player_1_Script : MonoBehaviour
             if (this.gameObject.CompareTag("P2"))
             {
                 MovementP2();
-                if (Input.GetKeyDown(KeyCode.LeftShift) && otherPlayer.GetComponent<Player_1_Script>().sabotagable)
+                if (Input.GetKeyDown(KeyCode.LeftShift) && otherPlayer.GetComponent<Player>().sabotagable)
                 {
                     Sabotage("left");
                 }
@@ -119,7 +119,7 @@ public class Player_1_Script : MonoBehaviour
 
         Debug.Log("Sabotage Chance: " + sabotageChance);
 
-        otherPlayer.GetComponent<Player_1_Script>().sabotagable = false;
+        otherPlayer.GetComponent<Player>().sabotagable = false;
 
         if (sabotageChance == 1)
         {
@@ -147,43 +147,43 @@ public class Player_1_Script : MonoBehaviour
 
     public IEnumerator InvertControlsLeft()
     {
-        otherPlayer.GetComponent<Player_1_Script>().invertedLeft = true;
+        otherPlayer.GetComponent<Player>().invertedLeft = true;
         //Debug.Log("left controls inverted: " + invertedLeft);
 
         yield return new WaitForSeconds(5);
 
-        otherPlayer.GetComponent<Player_1_Script>().invertedLeft = false;
+        otherPlayer.GetComponent<Player>().invertedLeft = false;
         //Debug.Log("left controls inverted: " + invertedLeft);
 
         yield return new WaitForSeconds(5);
 
-        otherPlayer.GetComponent<Player_1_Script>().sabotagable = true;
+        otherPlayer.GetComponent<Player>().sabotagable = true;
     }
 
     public IEnumerator InvertControlsRight()
     {
-        otherPlayer.GetComponent<Player_1_Script>().invertedRight = true;
+        otherPlayer.GetComponent<Player>().invertedRight = true;
         Debug.Log ("right controls inverted: " + invertedRight);
         yield return new WaitForSeconds(5);
-        otherPlayer.GetComponent<Player_1_Script>().invertedRight = false;
+        otherPlayer.GetComponent<Player>().invertedRight = false;
 
         yield return new WaitForSeconds(5);
 
-        otherPlayer.GetComponent<Player_1_Script>().sabotagable = true;
+        otherPlayer.GetComponent<Player>().sabotagable = true;
     }
 
     public IEnumerator SlowOpponent()
     {
-        float oppSpeed = otherPlayer.GetComponent<Player_1_Script>().speed;
-        otherPlayer.GetComponent<Player_1_Script>().speed = 1.5f;
+        float oppSpeed = otherPlayer.GetComponent<Player>().speed;
+        otherPlayer.GetComponent<Player>().speed = .5f;
 
         yield return new WaitForSeconds(5);
 
-        otherPlayer.GetComponent<Player_1_Script>().speed = oppSpeed;
+        otherPlayer.GetComponent<Player>().speed = oppSpeed;
 
         yield return new WaitForSeconds(5);
 
-        otherPlayer.GetComponent<Player_1_Script>().sabotagable = true;
+        otherPlayer.GetComponent<Player>().sabotagable = true;
     }
 
     public IEnumerator DeactivateOpp()
@@ -198,6 +198,6 @@ public class Player_1_Script : MonoBehaviour
 
         yield return new WaitForSeconds(5);
 
-        otherPlayer.GetComponent<Player_1_Script>().sabotagable = true;
+        otherPlayer.GetComponent<Player>().sabotagable = true;
     }
 }
