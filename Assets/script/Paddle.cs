@@ -11,6 +11,15 @@ public class Paddle : MonoBehaviour
 
     private float movement;
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+           Debug.Log("Ball Priced...");
+           GameObject.Find("GameManager").GetComponent<GameManager>().BallPriced();         
+        }
+    }
+
     void Start()
     {
         startPosition = transform.position;
