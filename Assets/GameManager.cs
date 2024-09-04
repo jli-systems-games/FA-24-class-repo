@@ -20,16 +20,36 @@ public class GameManager : MonoBehaviour
     public GameObject Player1Text;
     public GameObject Player2Text;
     public GameObject BallText;
+    public GameObject Broke1Text;
+    public GameObject Broke2Text;
 
-    private int Player1Score=50;
-    private int Player2Score=50;
+    private int Player1Score=10;
+    private int Player2Score=10;
     private int BallPrice;
+
+    void Start()
+    {
+
+    }
 
     public void Player1Scored()
     {
         Player1Score = Player1Score - BallPrice;
         Player1Text.GetComponent<TextMeshProUGUI>().text = "$"+ Player1Score.ToString();
         ResetPosition();
+    }
+
+    public void Player1IsBroke()
+    {
+        if (Player1Score <= 0)
+        {
+            Debug.Log("Player1 isBroke");
+            Broke1Text.SetActive(true);
+        }
+        else
+        {
+            Broke1Text.SetActive(false);
+        }
     }
 
     public void Player2Scored()
@@ -52,7 +72,7 @@ public class GameManager : MonoBehaviour
         ball.GetComponent<Ball>().Reset();
         Player1Paddle.GetComponent<Paddle>().Reset();
         Player2Paddle.GetComponent<Paddle>().Reset();
-        BallText.GetComponent<TextMeshProUGUI>().text = "Price=0";
+        BallText.GetComponent<TextMeshProUGUI>().text = "Price:0";
         BallPrice = 0;
     }
 
