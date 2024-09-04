@@ -34,6 +34,6 @@ public class Paddle : MonoBehaviour
     public void Reset()
     {
         rb.velocity = Vector2.zero;
-        transform.position = startPosition;
+        //transform.position = startPosition;
     }
 }

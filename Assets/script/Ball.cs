@@ -12,16 +12,22 @@ public class Ball : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        Launch();
+        //Launch();
+        StartCoroutine(LaunchAfterDelay());
     }
 
     public void Reset()
     {
         rb.velocity = Vector2.zero;
         transform.position = startPosition;
-        Launch();
+        StartCoroutine(LaunchAfterDelay());
     }
 
+    private IEnumerator LaunchAfterDelay()
+    {
+        yield return new WaitForSeconds(0.5f); 
+        Launch();
+    }
 
     private void Launch()
     {

@@ -25,8 +25,8 @@ public class GameManager : MonoBehaviour
     public GameObject Broke1Text;
     public GameObject Broke2Text;
 
-    private int Player1Score=10;
-    private int Player2Score=10;
+    private int Player1Score=50;
+    private int Player2Score=50;
     private int BallPrice;
 
     void Start()
