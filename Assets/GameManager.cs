@@ -28,14 +28,14 @@ public class GameManager : MonoBehaviour
     public void Player1Scored()
     {
         Player1Score = Player1Score - BallPrice;
-        Player1Text.GetComponent<TextMeshProUGUI>().text = Player1Score.ToString();
+        Player1Text.GetComponent<TextMeshProUGUI>().text = "$"+ Player1Score.ToString();
         ResetPosition();
     }
 
     public void Player2Scored()
     {
         Player2Score = Player2Score - BallPrice;
-        Player2Text.GetComponent<TextMeshProUGUI>().text = Player2Score.ToString();
+        Player2Text.GetComponent<TextMeshProUGUI>().text = "$" + Player2Score.ToString();
         ResetPosition();
     }
 
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log(BallPrice);
         BallPrice++;
-        BallText.GetComponent<TextMeshProUGUI>().text = "Price="+BallPrice.ToString();
+        BallText.GetComponent<TextMeshProUGUI>().text = "Price:$"+BallPrice.ToString();
   
     }
 
