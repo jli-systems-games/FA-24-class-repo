@@ -21,6 +21,7 @@ public class BallController : MonoBehaviour
 
     public TextMeshProUGUI playerOneText;
     public TextMeshProUGUI playerTwoText;
+    public Image boostImage;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class BallController : MonoBehaviour
         playerTwoScore = 0;
         initialSpeed = speed;
         this.direction = new Vector3(1f, 0f, 1f);
+        boostImage.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -59,6 +61,7 @@ public class BallController : MonoBehaviour
     if (collision.gameObject.CompareTag("Cat"))
         {
             speed = boostedSpeed;
+            boostImage.gameObject.SetActive(true);
         }
     }
 
@@ -67,5 +70,6 @@ public class BallController : MonoBehaviour
         transform.position = spawnPoint;
         speed = initialSpeed;
         direction = new Vector3(1f, 0f, 1f);
+        boostImage.gameObject.SetActive(false);
     }
 }
