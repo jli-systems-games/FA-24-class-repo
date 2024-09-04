@@ -22,7 +22,7 @@ public class Ball : MonoBehaviour
         ballPos = transform.position;
         rb = GetComponent<Rigidbody2D>();
 
-        initialDir = Random.Range(0, 1);
+        initialDir = Random.Range(0, 2);
         initialThrust = thrust;
 
         if(initialDir == 0)
