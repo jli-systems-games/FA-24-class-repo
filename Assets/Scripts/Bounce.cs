@@ -13,11 +13,15 @@ public class Bounce : MonoBehaviour
     float maxspeed = 5.5f;
     float minspeed = 4.5f;
     Vector3 direction;
+
+
+    public Players p1;
+    public player2 p2;
     //int currBounce = 0;
 
     private void Awake()
     {
-        transform.position = new Vector3(0, Random.Range(-1f, 8f), 0);
+        transform.position = new Vector3(0, Random.Range(-1f, 6.6f), 0);
         //Debug.Log(transform.position);
     }
     void Start()
@@ -41,30 +45,40 @@ public class Bounce : MonoBehaviour
         {
             lastVelocity = lastVelocity.normalized * minspeed;
         }
-        Debug.Log(direction);
+       if(p1.gameEnd || p2.gameEnd)
+        {
+            rb.velocity = Vector3.zero;
+        }
         
 
     }
 
     private void OnCollisionEnter(Collision collision)
-    {   
-        
+    {
+        float slope = ydirection / xdirection;
         //FixedSpeed(lastVelocity, minspeed, maxspeed);
         currSpeed = lastVelocity.magnitude;
 
         direction = Vector3.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
 
-        rb.velocity = direction * currSpeed;
-        
-
-        if (collision.collider.CompareTag("Wall"))
+        if(direction.y/direction.x < slope || direction.y / direction.x > slope)
         {
-            
-            transform.position = new Vector3(0, Random.Range(-2f, 2f), 0);
-            rb.AddForce(xdirection, ydirection, 0f, ForceMode.Force);
-
 
         }
+
+            rb.velocity = direction * currSpeed;
+        
+/*
+        if (collision.collider.CompareTag("Wall"))
+        {
+            float newxdirection = Random.Range(-2.5f, 2.5f);
+             rb.velocity = Vector3.zero;
+            transform.position = new Vector3(0, Random.Range(-2f, 2f), 0);
+            rb.AddForce(newxdirection, ydirection, 0f, ForceMode.VelocityChange);
+           
+
+
+        }*/
         
     }
     

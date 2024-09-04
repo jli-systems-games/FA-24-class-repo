@@ -13,6 +13,8 @@ public class EventManager : MonoBehaviour
     public float timePassed = 15f;
     public GameObject Pong;
     List<GameObject> balls= new List<GameObject>();
+    public Players p1;
+    public player2 p2;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class EventManager : MonoBehaviour
 
     private IEnumerator determineEvents(float time)
     {
-        while (true)
+        while (!p1.gameEnd || !p2.gameEnd)
         {
             yield return new WaitForSeconds(time);
             randomEvents();

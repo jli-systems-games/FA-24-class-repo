@@ -18,5 +18,6 @@ public class Enemy : MonoBehaviour
     {
         steps = speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, pong.position, steps);
+
     }
 }
