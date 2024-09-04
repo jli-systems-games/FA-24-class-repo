@@ -11,10 +11,12 @@ public class GameManager : MonoBehaviour
     [Header("Player 1")]
     public GameObject Player1Paddle;
     public GameObject Player1Goal;
+    public GameObject Player1Cost;
 
     [Header("Player 2")]
     public GameObject Player2Paddle;
     public GameObject Player2Goal;
+    public GameObject Player2Cost;
 
     [Header("Score UI")]
     public GameObject Player1Text;
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
         ResetPosition();
     }
 
-    public void Player1IsBroke()
+   /* public void Player1IsBroke()
     {
         if (Player1Score <= 0)
         {
@@ -51,7 +53,7 @@ public class GameManager : MonoBehaviour
             Broke1Text.SetActive(false);
         }
     }
-
+   */
     public void Player2Scored()
     {
         Player2Score = Player2Score - BallPrice;
