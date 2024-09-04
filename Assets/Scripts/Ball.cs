@@ -19,6 +19,8 @@ public class Ball : MonoBehaviour
 
     [SerializeField] private GameObject P1;
     [SerializeField] private GameObject P2;
+
+    [SerializeField] private GameObject background;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +64,7 @@ public class Ball : MonoBehaviour
 
         if (other.gameObject.CompareTag("P1") || other.gameObject.CompareTag("P2"))
         {
-            thrust = (float)(thrust * 1.1);
+            thrust = (float)(thrust * 1.2);
             if (transform.position.y <= 0)
             {
                 rb.AddForce(transform.up * thrust);
@@ -123,11 +125,24 @@ public class Ball : MonoBehaviour
             {
                 P1.GetComponent<Player>().score++;
             }
+
             Debug.Log("out of bounds");
             thrust = initialThrust;
-            Instantiate(gameObject, ballPos, Quaternion.identity);
-            Destroy(gameObject);
+            StartCoroutine(changeBG());
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
         }
         //Debug.Log("ball velocity: " + rb.velocity);
+    }
+
+    private IEnumerator changeBG() 
+    {
+        background.GetComponent<SpriteRenderer>().enabled = false;
+
+        yield return new WaitForSeconds(1.5f);
+
+        background.GetComponent <SpriteRenderer>().enabled = true;
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        Instantiate(gameObject, ballPos, Quaternion.identity);
+        Destroy(gameObject);
     }
 }
