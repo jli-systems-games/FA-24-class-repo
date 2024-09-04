@@ -26,4 +26,12 @@ public class paddle : MonoBehaviour
 
     }
 
- }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Ball")
+        {
+            collision.gameObject.GetComponent<ball>().IncreaseSpeed();
+        }
+    }
+
+}

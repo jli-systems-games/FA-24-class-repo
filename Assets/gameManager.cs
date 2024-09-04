@@ -24,6 +24,7 @@ public class gameManager : MonoBehaviour
     void ResetPosition()
     {
     ball.transform.position = Vector3.zero;
+        ball.GetComponent<ball>().Launch();
 
     player1Paddle.transform.position = new Vector3(-8, 0.78f, 0); 
     player2Paddle.transform.position = new Vector3(8, 0.78f, 0);  
