@@ -34,7 +34,7 @@ public class GameUI : MonoBehaviour
     public void OnGameEnds(int winnerId)
     {
         menuObject.SetActive(true);
-        winText.text = $"Player {winnerId} wins!";
+        winText.text = $"Player {winnerId} Wins";
     }
 } 
 

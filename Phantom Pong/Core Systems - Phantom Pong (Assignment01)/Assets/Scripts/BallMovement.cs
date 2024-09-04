@@ -76,7 +76,19 @@ public class BallMovement : MonoBehaviour
         if (paddle)
         {
             GameManager.instance.gameAudio.PlayPaddleSound();
+
             rb2d.velocity *= speedMultiplier;
+
+            // Trigger screen shake
+            CameraShake cameraShake = Camera.main.GetComponent<CameraShake>();
+            if (cameraShake != null)
+            {
+                StartCoroutine(cameraShake.Shake(0.1f, 0.07f)); //Can adjust duration and magnitude/strength of shake
+            }
+        }
+        else
+        {
+            
         }
     }
 }
