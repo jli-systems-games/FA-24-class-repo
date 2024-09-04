@@ -12,6 +12,10 @@ public class Ball : MonoBehaviour
     private float initialThrust;
 
     private int upDown;
+
+    private float currentDirection;
+    private float prevPos;
+    private float currentPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,11 +58,11 @@ public class Ball : MonoBehaviour
         }
         if (other.gameObject.CompareTag("top"))
         {
-            rb.AddForce(transform.up * -thrust);
+            rb.AddForce(Vector3.up * -thrust);
         }
         else if (other.gameObject.CompareTag("bottom")) 
         {
-            rb.AddForce(transform.up * thrust);
+            rb.AddForce(Vector3.up * thrust);
         }
 
         else if (other.gameObject.CompareTag("P1"))
