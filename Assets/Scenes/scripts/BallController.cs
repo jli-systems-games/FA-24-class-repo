@@ -8,11 +8,14 @@ public class BallController : MonoBehaviour
 {
     private Vector3 direction;
     public float speed;
+    public float initialSpeed;
+    public float boostedSpeed = 20f;
 
     [SerializeField]
     private int playerOneScore;
     [SerializeField]
     private int playerTwoScore;
+
 
     public Vector3 spawnPoint;
 
@@ -24,6 +27,7 @@ public class BallController : MonoBehaviour
     {
         playerOneScore = 0;
         playerTwoScore = 0;
+        initialSpeed = speed;
         this.direction = new Vector3(1f, 0f, 1f);
     }
 
@@ -43,13 +47,25 @@ public class BallController : MonoBehaviour
         if (collision.gameObject.name == "WestWall")
         {
             playerTwoScore++;
-            transform.position = spawnPoint;
+            ResetBall();
         }
 
         if (collision.gameObject.name == "EastWall")
         {
             playerOneScore++;
-            transform.position = spawnPoint;
+            ResetBall();
         }
+
+    if (collision.gameObject.CompareTag("Cat"))
+        {
+            speed = boostedSpeed;
+        }
+    }
+
+    private void ResetBall()
+    {
+        transform.position = spawnPoint;
+        speed = initialSpeed;
+        direction = new Vector3(1f, 0f, 1f);
     }
 }

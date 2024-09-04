@@ -7,7 +7,7 @@ public class MoveOnWayPoints : MonoBehaviour
     public List<GameObject> waypoints;
     public float speed = 2;
     int index = 0;
-    //public bool isLoop = true;
+    public bool isLoop = true;
 
     // Start is called before the first frame update
     void Start()
@@ -24,13 +24,17 @@ public class MoveOnWayPoints : MonoBehaviour
         float distance = Vector3.Distance(transform.position, destination);
         if(distance <= 0.05)
         {
-            if(index < waypoints.Count-1)
-            index++;
+            if(index < waypoints.Count - 1)
+            {
+                index++;
+            }
+            else
+            {
+                if (isLoop && index > 1)
+                    index = 0;
+
+            }
         }
-        //else
-        //{
-        //    if(isLoop)
-        //    index = 0;
-        //}
+
     }
 }
