@@ -25,36 +25,30 @@ public class GameManager : MonoBehaviour
     public GameObject Broke1Text;
     public GameObject Broke2Text;
 
-    private int Player1Score=50;
-    private int Player2Score=50;
+    private int Player1Score=5;
+    private int Player2Score=5;
     private int BallPrice;
 
     void Start()
     {
-
+        Broke1Text.SetActive(false);
+        Broke2Text.SetActive(false);
     }
 
-    public void Player1Scored()
+    public void Player2Scored()
     {
         Player1Score = Player1Score - BallPrice;
         Player1Text.GetComponent<TextMeshProUGUI>().text = "$"+ Player1Score.ToString();
         ResetPosition();
     }
 
-   /* public void Player1IsBroke()
+  /* public void Player1IsBroke()
     {
-        if (Player1Score <= 0)
-        {
-            Debug.Log("Player1 isBroke");
-            Broke1Text.SetActive(true);
-        }
-        else
-        {
-            Broke1Text.SetActive(false);
-        }
-    }
-   */
-    public void Player2Scored()
+       
+      
+    }*/
+  
+    public void Player1Scored()
     {
         Player2Score = Player2Score - BallPrice;
         Player2Text.GetComponent<TextMeshProUGUI>().text = "$" + Player2Score.ToString();
@@ -63,11 +57,10 @@ public class GameManager : MonoBehaviour
 
     public void BallPriced()
     {
-        Debug.Log(BallPrice);
+       // Debug.Log(BallPrice);
         BallPrice++;
         BallText.GetComponent<TextMeshProUGUI>().text = "Price:$"+BallPrice.ToString();
         
-  
     }
 
     private void ResetPosition()
@@ -77,6 +70,17 @@ public class GameManager : MonoBehaviour
         Player2Paddle.GetComponent<Paddle>().Reset();
         BallText.GetComponent<TextMeshProUGUI>().text = "Price:0";
         BallPrice = 0;
+        if (Player1Score <= 0)
+        {
+            Debug.Log("Player1 isBroke");
+            Broke1Text.SetActive(true);
+        }
+        if (Player2Score <= 0)
+        {
+            Debug.Log("Player1 isBroke");
+            Broke2Text.SetActive(true);
+        }
+
     }
 
 
