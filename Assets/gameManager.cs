@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;  
+using UnityEngine.SceneManagement;
 
 public class gameManager : MonoBehaviour
 {
@@ -22,7 +22,11 @@ public class gameManager : MonoBehaviour
     private int Player1Score;
     private int Player2Score;
 
-    public int winScore = 7;  
+    public int winScore = 7;
+
+    // 定义获胜场景的名称
+    public string playeronewin = "playeronewin"; // 场景名称需要与你的Build Settings中的场景名称相匹配
+    public string playertwowin = "playertwowin";
 
     void ResetPosition()
     {
@@ -39,11 +43,9 @@ public class gameManager : MonoBehaviour
         player1text.GetComponent<TextMeshProUGUI>().text = Player1Score.ToString();
         ResetPosition();
 
-        
         if (Player1Score >= winScore)
         {
-            
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene(playeronewin); // 使用正确的场景名称
         }
     }
 
@@ -53,11 +55,25 @@ public class gameManager : MonoBehaviour
         player2text.GetComponent<TextMeshProUGUI>().text = Player2Score.ToString();
         ResetPosition();
 
-        
         if (Player2Score >= winScore)
         {
-            
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(playertwowin); // 使用正确的场景名称
+        }
+    }
+
+    void Update()
+    {
+        // 调试用的场景加载代码，可以删除或保留
+        if (Player1Score >= winScore)
+        {
+            Debug.Log("Player 1 Wins, loading scene: " + playeronewin);
+            SceneManager.LoadScene(playeronewin);
+        }
+
+        if (Player2Score >= winScore)
+        {
+            Debug.Log("Player 2 Wins, loading scene: " + playertwowin);
+            SceneManager.LoadScene(playertwowin);
         }
     }
 }
