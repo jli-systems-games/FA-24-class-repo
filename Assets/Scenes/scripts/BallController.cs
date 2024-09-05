@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class BallController : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class BallController : MonoBehaviour
     public AudioClip catHitSound;
     private AudioSource audioSource;
 
+    public GameObject gameOverPanel;
+    public Button restartButton;
+    public int winningScore = 25;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,8 +40,10 @@ public class BallController : MonoBehaviour
         initialSpeed = speed;
         this.direction = new Vector3(1f, 0f, 1f);
         boostImage.gameObject.SetActive(false);
-
+        gameOverPanel.SetActive(false);
         audioSource = GetComponent<AudioSource>();
+
+        restartButton.onClick.AddListener(RestartGame);
     }
 
     // Update is called once per frame
@@ -55,12 +62,14 @@ public class BallController : MonoBehaviour
         if (collision.gameObject.name == "WestWall")
         {
             playerTwoScore++;
+            CheckGameOver();
             ResetBall();
         }
 
         if (collision.gameObject.name == "EastWall")
         {
             playerOneScore++;
+            CheckGameOver();
             ResetBall();
         }
 
@@ -68,13 +77,13 @@ public class BallController : MonoBehaviour
         {
             speed = boostedSpeed;
             boostImage.gameObject.SetActive(true);
-            //audioSource.PlayOneShot(catHitSound);
+            audioSource.PlayOneShot(catHitSound);
         }
 
-        //if (collision.gameObject.CompareTag("Paddle"))
-        //{
-        //    audioSource.PlayOneShot(paddleHitSound);
-        //}
+        if (collision.gameObject.CompareTag("Paddle"))
+        {
+            audioSource.PlayOneShot(paddleHitSound);
+        }
     }
 
     private void ResetBall()
@@ -84,4 +93,25 @@ public class BallController : MonoBehaviour
         direction = new Vector3(1f, 0f, 1f);
         boostImage.gameObject.SetActive(false);
     }
+
+    private void CheckGameOver()
+    {
+        if (playerOneScore >= winningScore || playerTwoScore >= winningScore)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }
+
