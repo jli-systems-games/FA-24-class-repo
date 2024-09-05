@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     {
         Broke1Text.SetActive(false);
         Broke2Text.SetActive(false);
+        
+       
     }
 
     public void Player2Scored()
@@ -42,12 +44,6 @@ public class GameManager : MonoBehaviour
         ResetPosition();
     }
 
-  /* public void Player1IsBroke()
-    {
-       
-      
-    }*/
-  
     public void Player1Scored()
     {
         Player2Score = Player2Score - BallPrice;
@@ -62,6 +58,14 @@ public class GameManager : MonoBehaviour
         BallText.GetComponent<TextMeshProUGUI>().text = "Price:$"+BallPrice.ToString();
         
     }
+
+    /*public void Host()
+    {
+        if ()
+        {
+
+        }
+    }*/
 
     private void ResetPosition()
     {
