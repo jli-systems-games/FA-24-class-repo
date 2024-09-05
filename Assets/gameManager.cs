@@ -24,8 +24,7 @@ public class gameManager : MonoBehaviour
 
     public int winScore = 7;
 
-    // 定义获胜场景的名称
-    public string playeronewin = "playeronewin"; // 场景名称需要与你的Build Settings中的场景名称相匹配
+    public string playeronewin = "playeronewin";
     public string playertwowin = "playertwowin";
 
     void ResetPosition()
@@ -45,8 +44,8 @@ public class gameManager : MonoBehaviour
 
         if (Player1Score >= winScore)
         {
-            SceneManager.LoadScene(playeronewin); // 使用正确的场景名称
-        }
+            SceneManager.LoadScene(playeronewin);
+        } 
     }
 
     public void Player2Scored()
@@ -57,13 +56,12 @@ public class gameManager : MonoBehaviour
 
         if (Player2Score >= winScore)
         {
-            SceneManager.LoadScene(playertwowin); // 使用正确的场景名称
+            SceneManager.LoadScene(playertwowin);
         }
     }
 
     void Update()
     {
-        // 调试用的场景加载代码，可以删除或保留
         if (Player1Score >= winScore)
         {
             Debug.Log("Player 1 Wins, loading scene: " + playeronewin);
@@ -77,3 +75,4 @@ public class gameManager : MonoBehaviour
         }
     }
 }
+//https://www.youtube.com/watch?v=YHSanceczXY&t=10s
