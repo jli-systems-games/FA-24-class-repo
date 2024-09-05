@@ -33,6 +33,6 @@ public class ball : MonoBehaviour
     {
         float tempX = rb.velocity.x;
         float tempY = rb.velocity.y;
-        rb.velocity = new Vector2(tempX * 1.1f, tempY * 1.1f);
+        rb.velocity = new Vector2(tempX * 1.3f, tempY * 1.3f);
     }
 }

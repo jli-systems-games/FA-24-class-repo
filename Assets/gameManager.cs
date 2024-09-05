@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;  
 
 public class gameManager : MonoBehaviour
 {
@@ -21,13 +22,15 @@ public class gameManager : MonoBehaviour
     private int Player1Score;
     private int Player2Score;
 
+    public int winScore = 7;  
+
     void ResetPosition()
     {
-    ball.transform.position = Vector3.zero;
+        ball.transform.position = Vector3.zero;
         ball.GetComponent<ball>().Launch();
 
-    player1Paddle.transform.position = new Vector3(-8, 0.78f, 0); 
-    player2Paddle.transform.position = new Vector3(8, 0.78f, 0);  
+        player1Paddle.transform.position = new Vector3(-8, 0.78f, 0);
+        player2Paddle.transform.position = new Vector3(8, 0.78f, 0);
     }
 
     public void Player1Scored()
@@ -35,6 +38,13 @@ public class gameManager : MonoBehaviour
         Player1Score++;
         player1text.GetComponent<TextMeshProUGUI>().text = Player1Score.ToString();
         ResetPosition();
+
+        
+        if (Player1Score >= winScore)
+        {
+            
+            SceneManager.LoadScene(4);
+        }
     }
 
     public void Player2Scored()
@@ -42,5 +52,12 @@ public class gameManager : MonoBehaviour
         Player2Score++;
         player2text.GetComponent<TextMeshProUGUI>().text = Player2Score.ToString();
         ResetPosition();
+
+        
+        if (Player2Score >= winScore)
+        {
+            
+            SceneManager.LoadScene(3);
+        }
     }
 }
