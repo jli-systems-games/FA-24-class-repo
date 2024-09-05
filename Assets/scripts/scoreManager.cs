@@ -13,6 +13,9 @@ public class scoreManager : MonoBehaviour
     private float points3;
 
     public GameObject endScreen;
+    public GameObject p1endText;
+    public GameObject p2endText;
+    public GameObject p3endText;
     
     public void Update()
     {
@@ -23,6 +26,21 @@ public class scoreManager : MonoBehaviour
         if(points1 >= 10 || points2 >= 10 || points3 >= 10 )
         {
             endScreen.SetActive(true);
+        }
+
+        if(points1 >= 10)
+        {
+            p1endText.SetActive(true);
+        }
+
+        if(points2 >= 10)
+        {
+            p2endText.SetActive(true);
+        }
+
+        if(points3 >= 10)
+        {
+            p3endText.SetActive(true);
         }
 
     }
