@@ -9,29 +9,40 @@ public class BrickMove : MonoBehaviour
     public float speed = 2.0f;
 
     private float targetY;
+    private bool playerStart = false; // Track if the player has pressed a key
 
-    // Start is called before the first frame update
     void Start()
     {
         // Initialize boundaries for y-axis movement
-        pointA = new Vector3(transform.position.x, -4, transform.position.z); // Lower boundary
-        pointB = new Vector3(transform.position.x, 4, transform.position.z); // Upper boundary
-
-        // Set an initial random target
-        SetRandomTargetY();
+        pointA = new Vector3(transform.position.x, -4, transform.position.z);
+        pointB = new Vector3(transform.position.x, 4, transform.position.z);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float step = speed * Time.deltaTime;
-        transform.position = new Vector3(transform.position.x, Mathf.MoveTowards(transform.position.y, targetY, step), transform.position.z);
-
-        // Check if the object has reached the target position
-        if (Mathf.Abs(transform.position.y - targetY) < 0.001f)
+        // Check for player input (WASD or Arrow keys)
+        if (!playerStart)
         {
-            // If reached, set a new random target between pointA.y and pointB.y
-            SetRandomTargetY();
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) ||
+                Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
+                Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
+                Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                playerStart = true; // Start movement once player presses a key
+                SetRandomTargetY();     // Set an initial target for the bricks
+            }
+        }
+
+        // If player has moved, start brick movement
+        if (playerStart)
+        {
+            float step = speed * Time.deltaTime;
+            transform.position = new Vector3(transform.position.x, Mathf.MoveTowards(transform.position.y, targetY, step), transform.position.z);
+
+            if (Mathf.Abs(transform.position.y - targetY) < 0.001f)
+            {
+                SetRandomTargetY();
+            }
         }
     }
 
@@ -40,3 +51,4 @@ public class BrickMove : MonoBehaviour
         targetY = Random.Range(pointA.y, pointB.y);
     }
 }
+
