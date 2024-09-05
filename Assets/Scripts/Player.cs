@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public int score;
 
     [SerializeField] private TextMeshProUGUI scoreboard;
+
+    [SerializeField] private AudioSource siren;
     // Start is called before the first frame update
     void Start()
     {
@@ -116,6 +118,8 @@ public class Player : MonoBehaviour
     {
         Debug.Log("sabotaged!");
         sabotageChance = Random.Range(1, 4);
+
+        siren.Play();
 
         Debug.Log("Sabotage Chance: " + sabotageChance);
 

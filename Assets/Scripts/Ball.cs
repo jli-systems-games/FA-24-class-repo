@@ -21,6 +21,9 @@ public class Ball : MonoBehaviour
     [SerializeField] private GameObject P2;
 
     [SerializeField] private GameObject background;
+
+    [SerializeField] private AudioSource click;
+    [SerializeField] private AudioSource buzzer;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +77,8 @@ public class Ball : MonoBehaviour
             {
                 rb.AddForce(transform.up * -thrust);
             }
+
+            click.Play();
         }
         if (other.gameObject.CompareTag("top"))
         {
@@ -125,6 +130,8 @@ public class Ball : MonoBehaviour
             {
                 P1.GetComponent<Player>().score++;
             }
+
+            buzzer.Play();
 
             Debug.Log("out of bounds");
             thrust = initialThrust;
