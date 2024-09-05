@@ -10,12 +10,17 @@ public class addUp : MonoBehaviour
     public GameObject LeftHand;
     public GameObject RightHand;
 
+    public AudioSource audioSource;
+    public AudioClip collisionSound;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
             Debug.Log("Ball Priced...");
             GameObject.Find("GameManager").GetComponent<GameManager>().BallPriced();
+
+            PlayCollisionSound();
 
             if (!isLeftSide)
             {
@@ -29,6 +34,15 @@ public class addUp : MonoBehaviour
             }
         }
    
+    }
+
+    private void PlayCollisionSound()
+    {
+        if(audioSource != null && collisionSound != null)
+        {
+            audioSource.PlayOneShot(collisionSound);
+        }
+
     }
 
 
