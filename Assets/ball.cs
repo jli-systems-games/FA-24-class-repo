@@ -5,14 +5,18 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private Rigidbody2D ballRb;
+    private AudioSource audioSource;
 
     [SerializeField] private float initialVelocity = 4f;
-    [SerializeField] private float velocityMultiplier = 1.1f;
+    [SerializeField] private float velocityMultiplier = 1.5f;
+    [SerializeField] private AudioClip paddleHitSound;
 
     // Start is called before the first frame update
     void Start()
     {
         ballRb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+
         if (ballRb == null)
         {
             Debug.LogError("Rigidbody2D not found on ball!");
@@ -20,6 +24,11 @@ public class Ball : MonoBehaviour
         else
         {
             Launch();
+        }
+
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource not found on ball");
         }
     }
 
@@ -35,6 +44,11 @@ public class Ball : MonoBehaviour
         if (collision.gameObject.CompareTag("Paddle"))
         {
             ballRb.velocity *= velocityMultiplier;
+
+            if (audioSource != null && paddleHitSound != null)
+            {
+                audioSource.PlayOneShot(paddleHitSound);
+            }
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
