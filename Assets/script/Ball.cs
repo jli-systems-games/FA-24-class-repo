@@ -25,7 +25,7 @@ public class Ball : MonoBehaviour
 
     private IEnumerator LaunchAfterDelay()
     {
-        yield return new WaitForSeconds(0.5f); 
+        yield return new WaitForSeconds(0.6f); 
         Launch();
     }
 
