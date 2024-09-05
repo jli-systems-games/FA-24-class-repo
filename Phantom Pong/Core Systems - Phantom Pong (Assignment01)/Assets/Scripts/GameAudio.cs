@@ -9,6 +9,7 @@ public class GameAudio : MonoBehaviour
     public AudioClip paddleSound;
     public AudioClip scoreSound;
     public AudioClip winSound;
+    public AudioClip buttonSound;
 
     public void PlayPaddleSound()
     {
@@ -23,5 +24,10 @@ public class GameAudio : MonoBehaviour
     public void PlayWinSound()
     {
         asSounds.PlayOneShot(winSound);
+    }
+
+    public void PlayButtonSound()
+    {
+        asSounds.PlayOneShot(buttonSound);
     }
 }

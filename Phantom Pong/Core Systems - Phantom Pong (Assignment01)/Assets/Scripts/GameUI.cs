@@ -26,6 +26,7 @@ public class GameUI : MonoBehaviour
     }
     public void OnStartGameButtonClicked()
     {
+        GameManager.instance.gameAudio.PlayButtonSound();
         menuObject.SetActive(false);
         GameManager.instance.StartGame();  // Start the game
         onStartGame?.Invoke();
