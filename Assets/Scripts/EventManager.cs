@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 
 
@@ -15,17 +17,34 @@ public class EventManager : MonoBehaviour
     List<GameObject> balls= new List<GameObject>();
     public Players p1;
     public player2 p2;
-    // Start is called before the first frame update
+    public GameObject enemy;
+    public int numb;
+    Enemy gn;
+    Bounce ball;
+    bool haveBug;
+    public bool gameStart;
+    public TMP_Text instruct;
+    public GameObject nB, yB;
     void Start()
     {
+        gn = enemy.GetComponent<Enemy>();
+        ball = Pong.GetComponent<Bounce>();
         manager = determineEvents(timePassed);
-        StartCoroutine(manager);
+        
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameStart)
+        {
+            StartCoroutine(manager);
+            nB.SetActive(false); 
+            yB.SetActive(false);
+            ball.start = true;
+            gameStart = false;
+        }
     }
 
     private IEnumerator determineEvents(float time)
@@ -35,32 +54,41 @@ public class EventManager : MonoBehaviour
             yield return new WaitForSeconds(time);
             randomEvents();
         }
+        if(p1.gameEnd || p2.gameEnd) {
+
+            StopCoroutine(manager);
+        }
     }
 
     void randomEvents()
     {
-        int numb = Random.Range(0, 3);
+        if (haveBug)
+        {
+            numb = Random.Range(1, 3);
+        }
+        else
+        {
+            numb = 1;
 
+        }
+       
         //Debug.Log(balls.Capacity);
         switch (numb)
         {
-            case 0:
-                Debug.Log("wow a new Dimension");
-                break;
             case 1:
                 
                 TrueorFalse(balls);
-                //Debug.Log("true & false"); 
-                //Debug.Log(numb);
+                resetEvents(numb);
                 break;
             case 2:
-                Debug.Log("Oh no, a stranger!");
+                Gnome();
+                resetEvents(numb);
                 break;
-          
+
         }
 
         //Debug.Log("numb:" + numb);
-        resetEvents(numb);
+        //resetEvents(numb);
     }
 
     void TrueorFalse(List<GameObject> dummies)
@@ -86,6 +114,10 @@ public class EventManager : MonoBehaviour
 
       
     }
+    void Gnome()
+    {
+        enemy.SetActive(true);
+    }
 
     void resetEvents(int n)
     {
@@ -97,5 +129,27 @@ public class EventManager : MonoBehaviour
                 Destroy(x);
             }
         }
+        
+        if (n != 2 || gn.isCaughtByPlayer == true)
+        {
+            Debug.Log("Reset");
+            enemy.SetActive(false);
+            //ball.Reset();
+            
+        }
+    }
+
+    public void noBug()
+    {
+        instruct.enabled = false;
+        haveBug = false;
+        gameStart = true;
+    }
+
+    public void yesBug()
+    {
+        instruct.enabled = false;
+        haveBug = true;
+        gameStart = true;
     }
 }
