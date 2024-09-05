@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     //UI
     public GameObject csText;
-    public GameObject hsText;
+    //public GameObject hsText;
 
     private int currentScore;
     //private int highScore;
