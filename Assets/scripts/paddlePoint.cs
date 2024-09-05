@@ -7,6 +7,11 @@ public class paddlePoint : MonoBehaviour
 {
     public float pointScore;
 
+    void Start()
+    {
+        Physics.IgnoreLayerCollision(3, 4);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "player3")
