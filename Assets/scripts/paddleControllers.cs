@@ -11,12 +11,12 @@ public class paddleControllers : MonoBehaviour
     {
         if ( gameObject.tag == "player1" )
         {
-            if (Input.GetKey(KeyCode.G)) {
+            if (Input.GetKey(KeyCode.X)) {
             transform.position += new Vector3(0, 0, speed) * Time.deltaTime;
 			
 		    }
 		
-            if (Input.GetKey(KeyCode.F)) {
+            if (Input.GetKey(KeyCode.Z)) {
             transform.position += new Vector3(0, 0, -speed) * Time.deltaTime;
 			
 		    }
@@ -25,12 +25,12 @@ public class paddleControllers : MonoBehaviour
         if ( gameObject.tag == "player2" )
         {
 
-            if (Input.GetKey(KeyCode.K)) {
+            if (Input.GetKey(KeyCode.N)) {
                 transform.position += new Vector3(0, 0, speed) * Time.deltaTime;
                 
             }
             
-            if (Input.GetKey(KeyCode.J)) {
+            if (Input.GetKey(KeyCode.B)) {
                 transform.position += new Vector3(0, 0, -speed) * Time.deltaTime;
                 
             }
