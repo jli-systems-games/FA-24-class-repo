@@ -6,7 +6,7 @@ public class paddles : MonoBehaviour
 {
     [SerializeField] private float speed = 7f;
     [SerializeField] private bool isPaddle1;
-    private float yBound = 6.5f;
+    private float yBound = 6f;
     
     // Update is called once per frame
     void Update()
