@@ -23,6 +23,10 @@ public class BallController : MonoBehaviour
     public TextMeshProUGUI playerTwoText;
     public Image boostImage;
 
+    public AudioClip paddleHitSound;
+    public AudioClip catHitSound;
+    private AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +35,8 @@ public class BallController : MonoBehaviour
         initialSpeed = speed;
         this.direction = new Vector3(1f, 0f, 1f);
         boostImage.gameObject.SetActive(false);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -58,11 +64,17 @@ public class BallController : MonoBehaviour
             ResetBall();
         }
 
-    if (collision.gameObject.CompareTag("Cat"))
+        if (collision.gameObject.CompareTag("Cat"))
         {
             speed = boostedSpeed;
             boostImage.gameObject.SetActive(true);
+            //audioSource.PlayOneShot(catHitSound);
         }
+
+        //if (collision.gameObject.CompareTag("Paddle"))
+        //{
+        //    audioSource.PlayOneShot(paddleHitSound);
+        //}
     }
 
     private void ResetBall()
