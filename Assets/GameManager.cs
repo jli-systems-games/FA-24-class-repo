@@ -12,11 +12,13 @@ public class GameManager : MonoBehaviour
     public GameObject Player1Paddle;
     public GameObject Player1Goal;
     public GameObject Player1Cost;
+    public GameObject LeftHand;
 
     [Header("Player 2")]
     public GameObject Player2Paddle;
     public GameObject Player2Goal;
     public GameObject Player2Cost;
+    public GameObject RightHand;
 
     [Header("Score UI")]
     public GameObject Player1Text;
@@ -74,6 +76,9 @@ public class GameManager : MonoBehaviour
         Player2Paddle.GetComponent<Paddle>().Reset();
         BallText.GetComponent<TextMeshProUGUI>().text = "Price:0";
         BallPrice = 0;
+        LeftHand.SetActive(false);
+        RightHand.SetActive(false);
+
         if (Player1Score <= 0)
         {
             Debug.Log("Player1 isBroke");
