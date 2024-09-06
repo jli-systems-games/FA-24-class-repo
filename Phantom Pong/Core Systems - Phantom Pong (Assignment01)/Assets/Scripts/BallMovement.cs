@@ -10,18 +10,35 @@ public class BallMovement : MonoBehaviour
     public float maxStartY = 4f;
     public float speedMultiplier = 1.1f;
 
+    // Ghost effect variables
+    public SpriteRenderer ballSprite;
+    public float visibleDuration = 2f;   // Time ball stays visible
+    public float invisibleDuration = 1f; // Time ball stays invisible
+    public float fadeDuration = 0.5f;    // Time it takes to fade in/out
+    private bool isFading = false;
+
     void Start()
     {
         GameManager.instance.onReset += ResetBall;
         GameManager.instance.gameUI.onStartGame += ResetBall;
+
+        if (ballSprite == null)  // If not assigned in inspector, get SpriteRenderer component from the GameObject
+        {
+            ballSprite = GetComponent<SpriteRenderer>();
+        }
     }
 
     private void ResetBall()
     {
         ResetBallPosition();
-        if (GameManager.instance.isGameStarted)  // Only pushes the ball if the game has started
+        if (GameManager.instance.isGameStarted)
         {
-            InitialPush(); 
+            InitialPush();
+            StartGhostEffect();  // Start the ghost effect only when the game has started
+        }
+        else
+        {
+            StopGhostEffect();  // Stop the ghost effect when the game hasn't started
         }
     }
 
@@ -33,7 +50,7 @@ public class BallMovement : MonoBehaviour
         }
         else
         {
-            rb2d.velocity = Vector2.zero;  // Ensures the ball stops moving when the game hasn't started
+            rb2d.velocity = Vector2.zero;
         }
     }
 
@@ -76,7 +93,6 @@ public class BallMovement : MonoBehaviour
         if (paddle)
         {
             GameManager.instance.gameAudio.PlayPaddleSound();
-
             rb2d.velocity *= speedMultiplier;
 
             // Trigger screen shake
@@ -86,9 +102,56 @@ public class BallMovement : MonoBehaviour
                 StartCoroutine(cameraShake.Shake(0.1f, 0.07f)); //Can adjust duration and magnitude/strength of shake
             }
         }
-        else
+    }
+
+    // --- Ghost Fading Effect Methods ---
+
+    private void StartGhostEffect()
+    {
+        if (!isFading)
         {
-            
+            StartCoroutine(GhostEffectCoroutine());
         }
+    }
+
+    private void StopGhostEffect()
+    {
+        StopAllCoroutines();  // Stops the "ghost" effect when the game is not started
+        isFading = false;
+        ballSprite.color = new Color(1f, 1f, 1f, 1f); // Make sure the ball stays visible
+    }
+
+    private IEnumerator GhostEffectCoroutine()
+    {
+        isFading = true;
+
+        while (true)  // Infinite loop to continue the effect
+        {
+            // Fade out (ball disappears)
+            yield return Fade(1f, 0f, fadeDuration);
+            yield return new WaitForSeconds(invisibleDuration);
+
+            // Fade in (ball reappears)
+            yield return Fade(0f, 1f, fadeDuration);
+            yield return new WaitForSeconds(visibleDuration);
+        }
+    }
+
+    private IEnumerator Fade(float startAlpha, float endAlpha, float duration)
+    {
+        float elapsed = 0f;
+        Color ballColor = ballSprite.color;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
+            ballColor.a = alpha;
+            ballSprite.color = ballColor;
+            yield return null;
+        }
+
+        ballColor.a = endAlpha;  
+        ballSprite.color = ballColor;
     }
 }
