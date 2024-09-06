@@ -9,6 +9,7 @@ public class BrickMove : MonoBehaviour
     public float speed = 2.0f;
     public float sizeIncrease = 0.2f;
 
+    private bool hasPlayerMoved = false;
     private float targetY;
 
     // Start is called before the first frame update
@@ -25,14 +26,29 @@ public class BrickMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float step = speed * Time.deltaTime;
-        transform.position = new Vector3(transform.position.x, Mathf.MoveTowards(transform.position.y, targetY, step), transform.position.z);
-
-        // Check if the object has reached the target position
-        if (Mathf.Abs(transform.position.y - targetY) < 0.001f)
+        // Check for player input (WASD or Arrow keys)
+        if (!hasPlayerMoved)
         {
-            // If reached, set a new random target between pointA.y and pointB.y
-            SetRandomTargetY();
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) ||
+                Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
+                Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
+                Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                hasPlayerMoved = true; // Start movement once player presses a key
+                SetRandomTargetY();     // Set an initial target for the bricks
+            }
+        }
+
+        // If player has moved, start brick movement
+        if (hasPlayerMoved)
+        {
+            float step = speed * Time.deltaTime;
+            transform.position = new Vector3(transform.position.x, Mathf.MoveTowards(transform.position.y, targetY, step), transform.position.z);
+
+            if (Mathf.Abs(transform.position.y - targetY) < 0.001f)
+            {
+                SetRandomTargetY();
+            }
         }
     }
 
