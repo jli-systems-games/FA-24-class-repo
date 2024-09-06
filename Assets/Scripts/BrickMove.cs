@@ -7,6 +7,7 @@ public class BrickMove : MonoBehaviour
     public Vector3 pointA;
     public Vector3 pointB;
     public float speed = 2.0f;
+    public float sizeIncrease = 0.2f;
 
     private float targetY;
 
@@ -38,5 +39,17 @@ public class BrickMove : MonoBehaviour
     void SetRandomTargetY()
     {
         targetY = Random.Range(pointA.y, pointB.y);
+    }
+
+    public void IncreaseSpeed()
+    {
+        speed += 1f;
+        Debug.Log("Speed is" + speed);
+    }
+
+    public void IncreaseSize()
+    {
+        Vector3 newSize = transform.localScale + new Vector3(sizeIncrease, sizeIncrease, sizeIncrease);
+        transform.localScale = newSize;
     }
 }

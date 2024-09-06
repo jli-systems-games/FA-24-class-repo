@@ -224,6 +224,7 @@ MonoBehaviour:
   pointA: {x: 0, y: 0, z: 0}
   pointB: {x: 0, y: 0, z: 0}
   speed: 2
+  sizeIncrease: 0.2
 --- !u!61 &85101826
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -572,13 +573,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 627340439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8a9dabae3dd04a95995327d2b84eab2, type: 3}
+  m_Script: {fileID: 11500000, guid: d5c1b830611344906b15871db09a7327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerScoreText: {fileID: 2101257120}
   gameScoreText: {fileID: 1069371714}
   negativeBoundaryX: -8.5
   positiveBoundaryX: 8.5
+  brickR: {fileID: 85101825}
+  brickL: {fileID: 1676623822}
+  player: {fileID: 1886483599}
 --- !u!1 &766856216
 GameObject:
   m_ObjectHideFlags: 0
@@ -1197,6 +1201,7 @@ MonoBehaviour:
   pointA: {x: 0, y: 0, z: 0}
   pointB: {x: 0, y: 0, z: 0}
   speed: 2
+  sizeIncrease: 0.2
 --- !u!61 &1676623823
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1325,7 +1330,6 @@ GameObject:
   - component: {fileID: 1886483604}
   - component: {fileID: 1886483605}
   - component: {fileID: 1886483603}
-  - component: {fileID: 1886483607}
   m_Layer: 0
   m_Name: pong-ball
   m_TagString: Player
@@ -1415,6 +1419,7 @@ MonoBehaviour:
   moveSpeed: 5
   minY: -4.66
   maxY: 4.66
+  scoreManager: {fileID: 0}
 --- !u!61 &1886483604
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1462,22 +1467,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1886483607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1886483599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8a9dabae3dd04a95995327d2b84eab2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerScoreText: {fileID: 2101257120}
-  gameScoreText: {fileID: 1069371714}
-  negativeBoundaryX: -8.5
-  positiveBoundaryX: 8.5
 --- !u!1 &2038663583
 GameObject:
   m_ObjectHideFlags: 0
