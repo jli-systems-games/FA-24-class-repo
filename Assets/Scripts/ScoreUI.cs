@@ -9,8 +9,8 @@ public class ScoreUI : MonoBehaviour
     public TextMeshProUGUI playerScoreText; // Reference to the player score UI text
     public TextMeshProUGUI gameScoreText;   // Reference to the game score UI text
 
-    private static int playerScore = 0;
-    private static int gameScore = 0;
+    private int playerScore = 0;
+    private int gameScore = 0;
 
     public float negativeBoundaryX = -8.5f;
     public float positiveBoundaryX = 8.5f;
@@ -30,8 +30,8 @@ public class ScoreUI : MonoBehaviour
             Debug.Log("PlayerPoint");
             playerScore += 1;
             ScoreUpdate();
-            ResetGame();
-
+            //ResetGame();
+            transform.position = Vector3.zero;
         }
     }
 
@@ -41,7 +41,8 @@ public class ScoreUI : MonoBehaviour
         Debug.Log("GamePoint");
         gameScore += 1;
         ScoreUpdate();
-        ResetGame();
+        //ResetGame();
+        transform.position = Vector3.zero;
     }
 
     void ScoreUpdate()
@@ -50,8 +51,8 @@ public class ScoreUI : MonoBehaviour
         gameScoreText.text = gameScore.ToString();
     }
 
-    void ResetGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+    //void ResetGame()
+    //{
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    //}
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 public class BallMove : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float minY = -5f;     
-    public float maxY = 5f;      
+    public float minY = -5f;
+    public float maxY = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -19,8 +19,8 @@ public class BallMove : MonoBehaviour
     {
 
         // Get input from both WASD keys and Arrow keys
-        float moveHorizontal = Input.GetAxis("Horizontal");  
-        float moveVertical = Input.GetAxis("Vertical");      
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
@@ -32,5 +32,4 @@ public class BallMove : MonoBehaviour
         // Update the object's position with the clamped y value
         transform.position = new Vector3(transform.position.x, clampedY, transform.position.z);
     }
-
 }
