@@ -8,9 +8,10 @@ public class EventManagers : MonoBehaviour
     public int fails = 0;
     public bool gameEnd;
     IEnumerator manager;
+    public bool sucess;
+    public LoadingPrinter printer;
 
-
-    bool firstpass = true;
+    public bool firstpass = true;
     int n = 0;
     public GameObject canvas1,canvas2,canvas3;
     // Start is called before the first frame update
@@ -29,9 +30,10 @@ public class EventManagers : MonoBehaviour
     {  
         while (!gameEnd)
         {
-            Debug.Log("gping");
+            //Debug.Log("gping");
             determineEvents(); 
             yield return new WaitForSeconds(t);
+            
         }
         
     }
@@ -94,7 +96,6 @@ public class EventManagers : MonoBehaviour
         canvas1.SetActive(true);
 
 
-
         //turn off other events if they are active.
         if(canvas2.activeSelf)
         {
@@ -133,6 +134,17 @@ public class EventManagers : MonoBehaviour
         else if (canvas2.activeSelf)
         {
             canvas2.SetActive(false);
+        }
+    }
+
+    public void checkforFails(bool b)
+    {
+        
+        Debug.Log("Checking fail/sucess rate");
+        if (b == false)
+        {
+            fails++;
+            Debug.Log("://");
         }
     }
 }
