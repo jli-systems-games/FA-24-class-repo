@@ -57,4 +57,6 @@ public class GameManager : MonoBehaviour
         GameState randomState = MicroGamePool[Random.Range(0,MicroGamePool.Count+1)];
         ChangeState(randomState);
     }
+
+    
 }
