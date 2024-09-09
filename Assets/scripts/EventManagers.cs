@@ -10,6 +10,7 @@ public class EventManagers : MonoBehaviour
     IEnumerator manager;
     public bool sucess;
     public LoadingPrinter printer;
+    
 
     public bool firstpass = true;
     int n = 0;
@@ -24,7 +25,7 @@ public class EventManagers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(time);
+        Debug.Log(fails);
     }
     private IEnumerator manageEvents(float t)
     {  
@@ -70,7 +71,7 @@ public class EventManagers : MonoBehaviour
                 
             }
 
-            Debug.Log(n);
+            //Debug.Log(n);
             switch (n)
                 {
                     case 1:
