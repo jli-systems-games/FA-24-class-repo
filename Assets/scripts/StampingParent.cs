@@ -41,7 +41,8 @@ public class StampingParent : MonoBehaviour
 
     void RandomizeandCopy()
     {
-        //Debug.Log("start to ranomize");
+        
+        //children are all the individual objects with an overall empty book parent
         int len = children.Count;
         int index = Random.Range(0, len);
 
@@ -50,6 +51,8 @@ public class StampingParent : MonoBehaviour
         nBook.transform.position = new Vector3(transform.position.x, transform.position.y,0) ;
         children.Add(nBook.transform);
         len = children.Count;
+
+        //these are the new random z positions.
         List<int> newSibIndexes = randomize(len);
         
         for (int i = 0; i < len; i++)
@@ -58,6 +61,12 @@ public class StampingParent : MonoBehaviour
                 children[i].position = new Vector3(transform.position.x, transform.position.y, newSibIndexes[i]);
             
         }
+
+        Physics.SyncTransforms();
+
+        Physics.autoSimulation = false;
+        Physics.Simulate(Time.fixedDeltaTime);
+        Physics.autoSimulation = true;
     }
 
     List<int> randomize(int n)

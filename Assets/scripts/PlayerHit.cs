@@ -9,6 +9,7 @@ public class PlayerHit : MonoBehaviour
 
     public bool isLeftMouseClick;
     public bool rayCastSuccessful;
+    public StampingParent Grandparent;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,11 +23,11 @@ public class PlayerHit : MonoBehaviour
         {
             isLeftMouseClick = true;
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 5f))
+            if (Physics.Raycast(ray, out hit, 55f))
             {
-                Debug.Log("Hit");
+                //Debug.Log("Hit");
                 rayCastSuccessful = true;
-                hit.transform.position = new Vector3(transform.position.x - 15f, transform.position.y, 0);
+                hit.transform.position = new Vector3(transform.position.x - 12f, transform.position.y, 0);
             }
             else
             {
@@ -38,15 +39,47 @@ public class PlayerHit : MonoBehaviour
         {
             isLeftMouseClick = false;
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 5f))
+            if (Physics.Raycast(ray, out hit, 55f))
             {
                 rayCastSuccessful = true;
-                hit.transform.position = new Vector3(transform.position.x - 15f, transform.position.y, 0);
+                hit.transform.position = new Vector3(transform.position.x - 12f, transform.position.y, 0);
             }
             else
             {
                 rayCastSuccessful = false;
             }
+        }
+
+        checkSuccess();
+    }
+
+    void checkSuccess()
+    {
+        if (isLeftMouseClick)
+        {
+            if (rayCastSuccessful && hit.collider.gameObject.tag == "Hold")
+            {
+                Grandparent.Score.Add(1);
+            }
+            else
+            {
+                Grandparent.Score.Add(0);
+            }
+
+        }
+        else
+        {
+
+            if (rayCastSuccessful && hit.collider.gameObject.tag == "Return")
+            {
+                Debug.Log("correct");
+                Grandparent.Score.Add(1);
+            }
+            else
+            {
+                Grandparent.Score.Add(0);
+            }
+
         }
     }
 }

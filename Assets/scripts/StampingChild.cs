@@ -23,24 +23,20 @@ public class StampingChild : MonoBehaviour //, IPointerDownHandler
     {   
         if (plyr.isLeftMouseClick)
         {
-           
-             
-                if (plyr.rayCastSuccessful && plyr.hit.collider.gameObject.tag == "Hold")
+               /* if (plyr.rayCastSuccessful && plyr.hit.collider.gameObject.tag == "Hold")
                 {
                     Grandparent.Score.Add(1);
                 }
                 else
                 {
                     Grandparent.Score.Add(0);
-                }
-               
-            
+                }*/
             
         }
         else 
         {
             
-                if (plyr.rayCastSuccessful && plyr.hit.collider.gameObject.tag == "Return")
+                /*if (plyr.rayCastSuccessful && plyr.hit.collider.gameObject.tag == "Return")
                 {
                     Debug.Log("correct");
                     Grandparent.Score.Add(1);
@@ -48,41 +44,12 @@ public class StampingChild : MonoBehaviour //, IPointerDownHandler
                 else
                 {
                     Grandparent.Score.Add(0);
-                }
+                }*/
             
         }
 
     }
    
    
-   /* public void OnPointerDown(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            //Debug.Log("CLicked!");
-            if (gameObject.tag == "Hold")
-            {
-                Grandparent.Score.Add(1);
-            }
-            else
-            {
-                Grandparent.Score.Add(0);
-            }
-        }
-        
-        if(eventData.button == PointerEventData.InputButton.Left)
-        {
-           // Debug.Log("leftClicked!");
-            if (gameObject.tag == "Return")
-            {
-                Debug.Log("correct");
-                Grandparent.Score.Add(1);
-            }
-            else
-            {
-                Grandparent.Score.Add(0);
-            }
-        }
-        parent.position = new Vector3( transform.position.x - 325f, transform.position.y,0);
-    }*/
+   
 }

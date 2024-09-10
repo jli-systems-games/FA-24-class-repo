@@ -23,10 +23,16 @@ public class MatchingManager : MonoBehaviour
         }
 
     }
-    public GameObject[] Ids;
+    public GameObject userInput;
+
     public EventManagers manage;
     List <Book> neededBooks = new List <Book>();
+    List <Transform> dummyBooks = new List <Transform>();
     int index;
+    public string ClickedButtonName;
+    GameObject[] selected;
+    private GameObject _studentid;
+    Vector3 OgPos;
     private void Awake()
     {
         Book d1 = new Book("D1");
@@ -41,12 +47,9 @@ public class MatchingManager : MonoBehaviour
         string id = neededBooks[index].IDs;
         Debug.Log(id);
         
-        List<GameObject> selected = new List<GameObject>();
+      
+       selected = GameObject.FindGameObjectsWithTag(id);       
         
-        for (int i = 0; i < 2; i++)
-        {
-                selected.Add(GameObject.FindWithTag(id));       
-        }
 
         foreach (GameObject obj in selected) {
             Debug.Log(obj);
@@ -56,15 +59,33 @@ public class MatchingManager : MonoBehaviour
                 btt.interactable = true;
             }
             else
-            {
-                obj.transform.position = new Vector3(-220f, obj.transform.position.y, 0f);
+            {   _studentid = obj;
+                OgPos = obj.transform.position;
+                obj.transform.position = new Vector3(obj.transform.position.x + 265f, obj.transform.position.y, 0f);
             }
         }
-        
 
-        if (!manage.firstpass)
+        bool added = false;
+        if (manage.firstpass)
         {
+            foreach(Transform t in transform)
+            {
+                dummyBooks.Add(t);  
+            }
+        }
+        else
+        {
+            do
+            {
+                int index = Random.Range(0, dummyBooks.Count);
+                Button butn = dummyBooks[index].GetComponent<Button>();
+                if(!butn.interactable)
+                {
+                    butn.interactable = true;
+                    added = true;
+                }
 
+            } while (added == false);
         }
     }
     void Start()
@@ -76,5 +97,12 @@ public class MatchingManager : MonoBehaviour
     void Update()
     {
         
+    }
+    private void OnDisable()
+    {
+        bool result = neededBooks[index].compare(userInput.name);
+        manage.checkforFails(result);
+        _studentid.transform.position = OgPos;
+
     }
 }
