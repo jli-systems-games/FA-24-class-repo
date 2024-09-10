@@ -13,7 +13,7 @@ public class PuzzleBlock : MonoBehaviour
     void Start()
     {
         RightPosition = transform.position;
-        transform.position = new Vector3(Random.Range(-7, 7), Random.Range(4, -4));
+        transform.position = new Vector3(Random.Range(4, 7), Random.Range(3, -3));
     }
 
     // Update is called once per frame
