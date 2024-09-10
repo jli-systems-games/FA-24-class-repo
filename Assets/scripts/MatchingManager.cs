@@ -37,9 +37,13 @@ public class MatchingManager : MonoBehaviour
     {
         Book d1 = new Book("D1");
         Book c1 = new Book("C1");
+        Book e2 = new Book("E2");
+        Book b2 = new Book("B2");
 
         neededBooks.Add(d1);
         neededBooks.Add(c1);
+        neededBooks.Add(e2);
+        neededBooks.Add(b2);
     }
     private void OnEnable()
     {

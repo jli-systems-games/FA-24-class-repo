@@ -10,6 +10,8 @@ public class LoadingPrinter : MonoBehaviour
     int counted = 0;
     public EventManagers manage;
     public TMP_Text score;
+    public TMP_Text goalText;
+
     // Start is called before the first frame update
 
     float exp = 1;
@@ -25,25 +27,19 @@ public class LoadingPrinter : MonoBehaviour
             goal+= increment;
             exp++;
         }
-       
+       goalText.text = "Goal" + goal.ToString();
     }
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log("the goal is " + goal);
-        //Debug.Log(counted);
-    }
     //being called when clicked 
     public void countingPapers()
     {
         counted++;
         score.text = counted.ToString();
-        //determineSucess(counted);
+        
         
     }
     bool determineSucess()

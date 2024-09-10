@@ -6,13 +6,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class StampingChild : MonoBehaviour //, IPointerDownHandler
 {
-    public StampingParent Grandparent;
+    
     public Transform parent;
     public PlayerHit plyr;
-    
-    /*RaycastHit hit;
-    Ray ray;*/
-    // Start is called before the first frame update
+    public GameObject holdStamp;
+    public GameObject returnStamp;
+
     void Start()
     {
         
@@ -21,35 +20,34 @@ public class StampingChild : MonoBehaviour //, IPointerDownHandler
     // Update is called once per frame
     void Update()
     {   
-        if (plyr.isLeftMouseClick)
+        if (plyr.isLeftMouseClick && plyr.hitObject == parent.name)
         {
-               /* if (plyr.rayCastSuccessful && plyr.hit.collider.gameObject.tag == "Hold")
-                {
-                    Grandparent.Score.Add(1);
-                }
-                else
-                {
-                    Grandparent.Score.Add(0);
-                }*/
-            
+               holdStamp.SetActive(true);
+            returnStamp.SetActive(false);
         }
-        else 
+        else if(!plyr.isLeftMouseClick && plyr.hitObject == parent.name)
         {
             
-                /*if (plyr.rayCastSuccessful && plyr.hit.collider.gameObject.tag == "Return")
-                {
-                    Debug.Log("correct");
-                    Grandparent.Score.Add(1);
-                }
-                else
-                {
-                    Grandparent.Score.Add(0);
-                }*/
-            
+               returnStamp.SetActive(true);
+                holdStamp.SetActive(false);
         }
 
     }
-   
-   
-   
+
+    private void OnDisable()
+    {
+        if (holdStamp.activeSelf)
+        {
+            holdStamp.SetActive(false);
+        }
+
+        if (returnStamp.activeSelf)
+        {
+            returnStamp.SetActive(false);
+        }
+        
+    }
+
+
+
 }

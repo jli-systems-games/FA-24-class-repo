@@ -14,7 +14,7 @@ public class EventManagers : MonoBehaviour
 
     public bool firstpass = true;
     int n = 0;
-    public GameObject canvas1,canvas2,canvas3,BookGrand;
+    public GameObject canvas1,canvas2,canvas3,BookGrand,plyInput;
     // Start is called before the first frame update
     void Start()
     {
@@ -102,6 +102,7 @@ public class EventManagers : MonoBehaviour
         {
             canvas2.SetActive(false);
             BookGrand.SetActive(false);
+            plyInput.SetActive(false);
         }
         else if (canvas3.activeSelf)
         {
@@ -114,6 +115,7 @@ public class EventManagers : MonoBehaviour
         canvas2.SetActive(true);
 
         BookGrand.SetActive(true);
+        plyInput.SetActive(true);
 
         if (canvas1.activeSelf)
         {
@@ -138,6 +140,7 @@ public class EventManagers : MonoBehaviour
         {
             canvas2.SetActive(false);
             BookGrand.SetActive(false);
+            plyInput.SetActive(false);
         }
     }
 

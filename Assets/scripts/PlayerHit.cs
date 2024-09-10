@@ -9,6 +9,7 @@ public class PlayerHit : MonoBehaviour
 
     public bool isLeftMouseClick;
     public bool rayCastSuccessful;
+    public string hitObject;
     public StampingParent Grandparent;
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,7 @@ public class PlayerHit : MonoBehaviour
             {
                 //Debug.Log("Hit");
                 rayCastSuccessful = true;
+                hitObject = hit.collider.gameObject.name;
                 hit.transform.position = new Vector3(transform.position.x - 12f, transform.position.y, 0);
             }
             else
@@ -42,6 +44,7 @@ public class PlayerHit : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 55f))
             {
                 rayCastSuccessful = true;
+                hitObject = hit.collider.gameObject.name;
                 hit.transform.position = new Vector3(transform.position.x - 12f, transform.position.y, 0);
             }
             else
