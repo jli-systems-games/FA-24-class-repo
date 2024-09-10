@@ -2,21 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerJump : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    //public GameManager gamemanager;
     // Start is called before the first frame update
     void Start()
     {
-
+        int age = GameManager.health;
     }
 
     // Update is called once per frame
     void Update()
-    {
-
-    }
-
-    public void ChangeState(GameState newState)
     {
 
     }
