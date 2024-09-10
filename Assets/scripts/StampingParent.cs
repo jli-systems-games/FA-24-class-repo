@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class StampingParent : MonoBehaviour
 { 
@@ -54,7 +55,7 @@ public class StampingParent : MonoBehaviour
         for (int i = 0; i < len; i++)
         {
             
-                children[i].SetSiblingIndex(newSibIndexes[i]);
+                children[i].position = new Vector3(transform.position.x, transform.position.y, newSibIndexes[i]);
             
         }
     }
@@ -84,7 +85,7 @@ public class StampingParent : MonoBehaviour
         {
             score += i;
         }
-        Debug.Log(score);
+        //Debug.Log(score);
         if (score <= Mathf.Floor(goal / 2))
         {
             return false;
