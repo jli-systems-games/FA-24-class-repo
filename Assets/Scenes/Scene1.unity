@@ -523,6 +523,7 @@ GameObject:
   - component: {fileID: 1317156354}
   - component: {fileID: 1317156353}
   - component: {fileID: 1317156352}
+  - component: {fileID: 1317156356}
   m_Layer: 0
   m_Name: mouse
   m_TagString: Untagged
@@ -563,7 +564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc275ee9a01753f4a8fc7596f98bc0c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 13
 --- !u!212 &1317156354
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -631,6 +632,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1317156356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317156351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23acd9a5d6d88d458f094f7b190ad85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delayBeforeLoading: 3
+  sceneNameToLoad: TransitionScene
 --- !u!1 &1638172491
 GameObject:
   m_ObjectHideFlags: 0
