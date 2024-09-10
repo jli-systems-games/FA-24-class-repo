@@ -23,7 +23,7 @@ public class BookButton : MonoBehaviour
     void Update()
     {
         Debug.Log("original" + OGposition);
-        Debug.Log(yourBook.position);
+        //Debug.Log(yourBook.position);
         if (match.ClickedButtonName != gameObject.name )
         {
             yourBook.position = OGposition;

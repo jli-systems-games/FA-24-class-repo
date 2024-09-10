@@ -62,11 +62,7 @@ public class StampingParent : MonoBehaviour
             
         }
 
-        Physics.SyncTransforms();
-
-        Physics.autoSimulation = false;
-        Physics.Simulate(Time.fixedDeltaTime);
-        Physics.autoSimulation = true;
+     
     }
 
     List<int> randomize(int n)

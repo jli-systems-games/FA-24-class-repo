@@ -7,10 +7,10 @@ using UnityEngine.EventSystems;
 public class StampingChild : MonoBehaviour //, IPointerDownHandler
 {
     
-    public Transform parent;
+   /* public Transform parent;
     public PlayerHit plyr;
     public GameObject holdStamp;
-    public GameObject returnStamp;
+    public GameObject returnStamp;*/
 
     void Start()
     {
@@ -20,30 +20,20 @@ public class StampingChild : MonoBehaviour //, IPointerDownHandler
     // Update is called once per frame
     void Update()
     {   
-        if (plyr.isLeftMouseClick && plyr.hitObject == parent.name)
-        {
-               holdStamp.SetActive(true);
-            returnStamp.SetActive(false);
-        }
-        else if(!plyr.isLeftMouseClick && plyr.hitObject == parent.name)
-        {
-            
-               returnStamp.SetActive(true);
-                holdStamp.SetActive(false);
-        }
+        
 
     }
 
     private void OnDisable()
     {
-        if (holdStamp.activeSelf)
+        Debug.Log("detroying");
+        foreach(Transform t in transform)
         {
-            holdStamp.SetActive(false);
-        }
-
-        if (returnStamp.activeSelf)
-        {
-            returnStamp.SetActive(false);
+            if (t.CompareTag("stamp"))
+            {
+                Debug.Log(t);
+                Destroy(t.gameObject);
+            }
         }
         
     }

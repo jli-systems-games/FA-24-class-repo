@@ -13,13 +13,21 @@ public class MatchingManager : MonoBehaviour
             this.IDs = name;
         }
         public bool compare(string objectName)
-        {
-            if(objectName != IDs) {
-                return false;
-            }else
+        {   
+            if(objectName != null)
             {
-                return true;
+                if(objectName != IDs) {
+                    return false;
+                }else
+                {
+                    return true;
+                }
             }
+            else
+            {
+                return false;
+            }
+           
         }
 
     }
@@ -47,7 +55,9 @@ public class MatchingManager : MonoBehaviour
     }
     private void OnEnable()
     {
+        
         index = Random.Range(0, neededBooks.Count);
+        Debug.Log("index is " + index);
         string id = neededBooks[index].IDs;
         Debug.Log(id);
         
@@ -103,8 +113,15 @@ public class MatchingManager : MonoBehaviour
         
     }
     private void OnDisable()
-    {
-        bool result = neededBooks[index].compare(userInput.name);
+    { bool result; 
+        if(userInput != null)
+        {
+            result = neededBooks[index].compare(userInput.name);
+        }else
+        {
+            result = false;
+        }
+       
         manage.checkforFails(result);
         _studentid.transform.position = OgPos;
 

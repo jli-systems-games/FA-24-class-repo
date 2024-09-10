@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MatchingManager;
 
 public class PlayerHit : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class PlayerHit : MonoBehaviour
 
     public bool isLeftMouseClick;
     public bool rayCastSuccessful;
-    public string hitObject;
+    public GameObject holdStamp;
+    public GameObject returnStamp;
+    //public GameObject hitObject;
     public StampingParent Grandparent;
     // Start is called before the first frame update
     void Start()
@@ -28,8 +31,9 @@ public class PlayerHit : MonoBehaviour
             {
                 //Debug.Log("Hit");
                 rayCastSuccessful = true;
-                hitObject = hit.collider.gameObject.name;
-                hit.transform.position = new Vector3(transform.position.x - 12f, transform.position.y, 0);
+                //hitObject = hit.collider.gameObject;
+                AddHoldStamp();
+                hit.transform.position = new Vector3(hit.transform.position.x - 10f, hit.transform.position.y, hit.transform.position.z);
             }
             else
             {
@@ -44,8 +48,9 @@ public class PlayerHit : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 55f))
             {
                 rayCastSuccessful = true;
-                hitObject = hit.collider.gameObject.name;
-                hit.transform.position = new Vector3(transform.position.x - 12f, transform.position.y, 0);
+                //hitObject = hit.collider.gameObject;
+                AddReturnStamp();
+                hit.transform.position = new Vector3(hit.transform.position.x - 10f, hit.transform.position.y, hit.transform.position.z);
             }
             else
             {
@@ -84,5 +89,21 @@ public class PlayerHit : MonoBehaviour
             }
 
         }
+    }
+
+    void AddHoldStamp()
+    {
+        GameObject childStamp = Instantiate(holdStamp);
+        childStamp.transform.SetParent(hit.transform);
+        childStamp.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 0.25f);
+        childStamp.SetActive(true);
+    }
+
+    void AddReturnStamp()
+    {
+        GameObject childReturn= Instantiate(returnStamp);
+        childReturn.transform.SetParent(hit.transform);
+        childReturn.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 0.25f);
+        childReturn.SetActive(true);
     }
 }
