@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EventManagers : MonoBehaviour
 {
@@ -10,16 +11,19 @@ public class EventManagers : MonoBehaviour
     IEnumerator manager;
     public bool sucess;
     public LoadingPrinter printer;
+    public TMP_Text endStart_text;
     
 
     public bool firstpass = true;
     int n = 0;
-    public GameObject canvas1,canvas2,canvas3,BookGrand,plyInput;
+    TMP_Text suceed;
+    public GameObject canvas1,canvas2,canvas3,BookGrand,plyInput,StartandEnd,sucessText;
     // Start is called before the first frame update
     void Start()
     {
         manager = manageEvents(time);
         StartCoroutine(manager);
+        suceed = sucessText.GetComponent<TMP_Text>();
     }
     
     // Update is called once per frame
@@ -32,16 +36,27 @@ public class EventManagers : MonoBehaviour
         while (!gameEnd)
         {
             //Debug.Log("gping");
+            
             determineEvents(); 
             yield return new WaitForSeconds(t);
-            
+            TranstionPhase();
+            yield return new WaitForSeconds(2);
+
         }
-        
+        if (gameEnd)
+        {
+            canvas1.SetActive(false);
+            canvas2.SetActive(false);
+            canvas3.SetActive(false);
+            StartandEnd.SetActive(true);
+            suceed.text = string.Empty;
+            endStart_text.text = "You got fired.";
+        }
     }
 
     void determineEvents()
     {
-        
+       
         
         if(fails <= 2)
         {
@@ -76,13 +91,16 @@ public class EventManagers : MonoBehaviour
                 {
                     case 1:
                         Event1();
-                        break;
+                   
+                    break;
                     case 2:
                         Event2();
-                        break;
+                    ;
+                    break;
                     case 3:
                         Event3();
-                        break;
+                    
+                    break;
                 }
         }
         else
@@ -108,6 +126,10 @@ public class EventManagers : MonoBehaviour
         {
             canvas3.SetActive(false);
         }
+        else if (StartandEnd.activeSelf)
+        {
+            StartandEnd.SetActive(false);
+        };
 
     }
     void Event2()
@@ -124,7 +146,10 @@ public class EventManagers : MonoBehaviour
         else if (canvas3.activeSelf)
         {
             canvas3.SetActive(false);
-        }
+        }else if (StartandEnd.activeSelf)
+        {
+            StartandEnd.SetActive(false);
+        };
     }
     void Event3()
     {
@@ -142,16 +167,47 @@ public class EventManagers : MonoBehaviour
             BookGrand.SetActive(false);
             plyInput.SetActive(false);
         }
+        else if (StartandEnd.activeSelf)
+        {
+            StartandEnd.SetActive(false);
+        };
     }
 
     public void checkforFails(bool b)
     {
         
-        Debug.Log("Checking fail/sucess rate");
+        
         if (b == false)
         {
             fails++;
+            sucessText.SetActive(true);
+            suceed.text = "://";
             Debug.Log("://");
+        }
+        else
+        {
+            sucessText.SetActive(true);
+            suceed.text = "Yay";
+            
+        }
+    }
+    public void TranstionPhase()
+    {
+        StartandEnd.SetActive(true);
+
+        if (canvas1.activeSelf)
+        {
+            canvas1.SetActive(false);
+        }
+        else if (canvas2.activeSelf)
+        {
+            canvas2.SetActive(false);
+            BookGrand.SetActive(false);
+            plyInput.SetActive(false);
+        }
+        else if (canvas3.activeSelf)
+        {
+            canvas3.SetActive(false);
         }
     }
 }

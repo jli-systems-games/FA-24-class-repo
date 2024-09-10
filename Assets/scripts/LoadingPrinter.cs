@@ -47,7 +47,6 @@ public class LoadingPrinter : MonoBehaviour
         if(counted >= goal)
         {
             
-            Debug.Log("Yay");
             return true;
         }
         else

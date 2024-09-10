@@ -36,7 +36,7 @@ public class MatchingManager : MonoBehaviour
     public EventManagers manage;
     List <Book> neededBooks = new List <Book>();
     List <Transform> dummyBooks = new List <Transform>();
-    int index;
+    int index,activebtn;
     public string ClickedButtonName;
     GameObject[] selected;
     private GameObject _studentid;
@@ -56,7 +56,7 @@ public class MatchingManager : MonoBehaviour
     private void OnEnable()
     {
         
-        index = Random.Range(0, neededBooks.Count);
+        index = Mathf.FloorToInt(Random.Range(0, neededBooks.Count));
         Debug.Log("index is " + index);
         string id = neededBooks[index].IDs;
         Debug.Log(id);
@@ -90,14 +90,21 @@ public class MatchingManager : MonoBehaviour
         else
         {
             do
-            {
-                int index = Random.Range(0, dummyBooks.Count);
-                Button butn = dummyBooks[index].GetComponent<Button>();
-                if(!butn.interactable)
+            {   if(activebtn != dummyBooks.Count)
                 {
-                    butn.interactable = true;
+                    int index = Random.Range(0, dummyBooks.Count);
+                    Button butn = dummyBooks[index].GetComponent<Button>();
+                    if(!butn.interactable)
+                    {
+                        butn.interactable = true;
+                        added = true;
+                    }
+                }
+                else
+                {
                     added = true;
                 }
+                
 
             } while (added == false);
         }
@@ -124,6 +131,14 @@ public class MatchingManager : MonoBehaviour
        
         manage.checkforFails(result);
         _studentid.transform.position = OgPos;
+
+        foreach (Transform b in dummyBooks)
+        {
+            if (b.GetComponent<Button>().interactable)
+            {
+                activebtn++;
+            }
+        }
 
     }
 }

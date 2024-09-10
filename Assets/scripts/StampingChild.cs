@@ -26,12 +26,12 @@ public class StampingChild : MonoBehaviour //, IPointerDownHandler
 
     private void OnDisable()
     {
-        Debug.Log("detroying");
+        //Debug.Log("detroying");
         foreach(Transform t in transform)
         {
             if (t.CompareTag("stamp"))
             {
-                Debug.Log(t);
+                
                 Destroy(t.gameObject);
             }
         }
