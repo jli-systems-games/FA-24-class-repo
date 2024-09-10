@@ -23,10 +23,10 @@ public class Timer : MonoBehaviour
         timeMeter.value = timer;
         timer -= Time.deltaTime;
 
-        if(timer <= 0)
-        {
-            timer = 0;
-        }
+        //if(timer <= 0)
+        //{
+        //    timer = 0;
+        //}
 
     }
 

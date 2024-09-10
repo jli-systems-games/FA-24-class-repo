@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public static GameState state;
 
     //Managers
-    public CherryDrop CherryDrop;
+    public CherryGame CherryGame;
     public WhippedCream WhippedCream;
 
     public List<GameState> MicroGamePool = new List<GameState>();
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
         if(state == GameState.Game1)
         {
-            CherryDrop.StartMicroGame(score);
+            CherryGame.StartMicroGame(score);
         }
     }
 
