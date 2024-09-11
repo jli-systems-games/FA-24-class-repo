@@ -11,6 +11,7 @@ public class StampingParent : MonoBehaviour
 
     List<Transform> children = new List<Transform>();
     Vector3 ogPosition;
+
     // Start is called before the first frame update
     private void OnEnable()
     {
@@ -36,7 +37,7 @@ public class StampingParent : MonoBehaviour
     void Update()
     {
         
-        //Debug.Log("the hireachy place is " + index);
+        
     }
 
     void RandomizeandCopy()
@@ -103,9 +104,18 @@ public class StampingParent : MonoBehaviour
     {
         bool suceed = success();
         manage.checkforFails(suceed);
+
         foreach(Transform t in children)
         {
             t.position = ogPosition;
         }
+
+        Score.Clear();
+        /*foreach(int i in Score)
+         {
+             Debug.Log(i);
+         }*/
+
+        
     }
 }

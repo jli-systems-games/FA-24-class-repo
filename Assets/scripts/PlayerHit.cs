@@ -108,4 +108,10 @@ public class PlayerHit : MonoBehaviour
         childReturn.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y + 2f, hit.transform.position.z - 0.25f);
         childReturn.SetActive(true);
     }
+
+    private void OnDisable()
+    {
+        rayCastSuccessful = false;
+        
+    }
 }

@@ -29,15 +29,15 @@ public class BookButton : MonoBehaviour
             yourBook.position = OGposition;
             img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
         }
-        Debug.Log(match.userInput);
+        //Debug.Log(match.userInput);
     }
 
     public void pullingUpBook()
     {
         img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
 
-        yourBook.position = new Vector3(yourBook.position.x, yourBook.position.y + 100f, 0f);
-        match.userInput = yourBook.gameObject;
+        yourBook.position = new Vector3(yourBook.position.x, yourBook.position.y + 3f, 0f);
+        match.userInput = yourBook.name;
         match.ClickedButtonName = EventSystem.current.currentSelectedGameObject.name;
     }
     private void OnDisable()

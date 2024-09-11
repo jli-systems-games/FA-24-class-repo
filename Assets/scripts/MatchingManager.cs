@@ -31,7 +31,7 @@ public class MatchingManager : MonoBehaviour
         }
 
     }
-    public GameObject userInput;
+    public string userInput;
 
     public EventManagers manage;
     List <Book> neededBooks = new List <Book>();
@@ -40,7 +40,9 @@ public class MatchingManager : MonoBehaviour
     public string ClickedButtonName;
     GameObject[] selected;
     private GameObject _studentid;
+    public RectTransform canvas;
     Vector3 OgPos;
+    float x, y;
     private void Awake()
     {
         Book d1 = new Book("D1");
@@ -59,10 +61,10 @@ public class MatchingManager : MonoBehaviour
         index = Mathf.FloorToInt(Random.Range(0, neededBooks.Count));
         
         string id = neededBooks[index].IDs;
-        
+        userInput = string.Empty;
         
       
-       selected = GameObject.FindGameObjectsWithTag(id);       
+        selected = GameObject.FindGameObjectsWithTag(id);       
         
 
         foreach (GameObject obj in selected) {
@@ -75,7 +77,9 @@ public class MatchingManager : MonoBehaviour
             else
             {   _studentid = obj;
                 OgPos = obj.transform.position;
-                obj.transform.position = new Vector3(obj.transform.position.x + 265f, obj.transform.position.y, 0f);
+               
+                obj.transform.position = new Vector3(obj.transform.position.x + 5f, obj.transform.position.y, 0f);
+                //Debug.Log("It moved");
             }
         }
 
@@ -111,7 +115,8 @@ public class MatchingManager : MonoBehaviour
     }
     void Start()
     {
-        
+        x = canvas.position.x;
+        y = canvas.position.y;
     }
 
     // Update is called once per frame
@@ -123,7 +128,7 @@ public class MatchingManager : MonoBehaviour
     { bool result; 
         if(userInput != null)
         {
-            result = neededBooks[index].compare(userInput.name);
+            result = neededBooks[index].compare(userInput);
         }else
         {
             result = false;
