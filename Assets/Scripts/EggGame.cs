@@ -19,12 +19,15 @@ public class EggGame : MonoBehaviour
     public bool didOk;
     public bool failed;
 
+    public GameObject qIndic;
+
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         _eggSprite = egg.GetComponent<SpriteRenderer>();
         stoppedCooking = false;
+        qIndic.SetActive(false);
 
         StartMicroGame();
     }
@@ -43,6 +46,7 @@ public class EggGame : MonoBehaviour
     public void StartMicroGame()
     {
         _eggSprite.sprite = eggStates[0];
+        qIndic.SetActive(true);
 
         didGreat = false;
         didOk = false;
@@ -95,7 +99,7 @@ public class EggGame : MonoBehaviour
                         failed = false;
                 }
 
-
+                qIndic.SetActive(false);
                 StartCoroutine(_gameManager.Result(didGreat, didOk, failed));
             }
         }

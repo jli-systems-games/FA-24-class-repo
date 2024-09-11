@@ -25,6 +25,8 @@ public class CherryGame : MonoBehaviour
     public bool didOk;
     public bool failed;
 
+    public GameObject dragIndic;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -32,6 +34,7 @@ public class CherryGame : MonoBehaviour
         cherryTimer = FindObjectOfType<Timer>();
         wrapUpStarted = false;
         cherriesDropped = 0;
+        dragIndic.SetActive(false);
 
         //StartMicroGame(GameManager.score);
     }
@@ -51,6 +54,7 @@ public class CherryGame : MonoBehaviour
     }
     public void StartMicroGame(int score)
     {
+        dragIndic.SetActive(true);
         cherryScore = 0;
 
         if (score < 3) 
@@ -79,6 +83,7 @@ public class CherryGame : MonoBehaviour
 
     public IEnumerator EndMicroGame()
     {
+        dragIndic.SetActive(false);
         wrapUpStarted = true;
 
         if (cherryScore == cherryNum)

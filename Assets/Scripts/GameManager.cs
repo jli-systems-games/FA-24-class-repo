@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     //Managers
     public CherryGame CherryGame;
     public WhippedCream WhippedCream;
+    public EggGame EggGame;
 
     public List<GameState> MicroGamePool = new List<GameState>();
 
@@ -63,11 +64,13 @@ public class GameManager : MonoBehaviour
         if (didGreat)
         {
             outcome.text = "Great!";
+            score += 2;
         }
 
         else if (didOkay)
         {
             outcome.text = "Okay!";
+            score++;
         }
 
         else 
