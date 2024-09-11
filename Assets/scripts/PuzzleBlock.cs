@@ -27,6 +27,7 @@ public class PuzzleBlock : MonoBehaviour
                 {
                     transform.position = RightPosition;
                     InRightPosition = true;
+                    Debug.Log("InPlace");
                     GetComponent<SortingGroup>().sortingOrder = 0;
                 }
                 

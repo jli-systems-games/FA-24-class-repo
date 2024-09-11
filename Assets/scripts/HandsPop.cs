@@ -1,88 +1,84 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HandsPop : MonoBehaviour
 {
-    [Header("Graphics")]
-    [SerializeField] private Sprite Hand;
-    [SerializeField] private Sprite HandHit;
-
-    private Vector2 startPosition = new Vector2(0f,-2.56f);
-    private Vector2 endPosition = Vector2.zero;
-
+    private Vector2 startPosition; // 使用场景中的初始位置
+    private Vector2 endPosition;   // 上移的位置
     private float showDuration = 0.5f;
-    private float duration = 1f;
-
-    private SpriteRenderer spriteRenderer;
-
-    private bool hittable = true;
-
-    private IEnumerator ShowHide(Vector2 start,Vector2 end)
-    {
-        transform.localPosition = start;
-
-        float elapsed = 0f;
-        while(elapsed < showDuration)
-        {
-            transform.localPosition = Vector2.Lerp(start, end, elapsed / showDuration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localPosition = end;
-
-        yield return new WaitForSeconds(duration);
-
-        elapsed = 0f;
-        while (elapsed < showDuration)
-        {
-            transform.localPosition = Vector2.Lerp(end, start, elapsed / showDuration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localPosition = start;
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        StartCoroutine(ShowHide(startPosition, endPosition)); 
-    }
+    private HandsManager gameManager; // 引用游戏管理器
+    private bool hittable = false;    // 是否可被击打
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // 获取场景中的初始位置
+        startPosition = transform.localPosition;
+        // 设置上移后的目标位置
+        endPosition = startPosition + new Vector2(0f, 3.5f); // 调整上移的高度，可以根据需要修改
+    }
+
+    public void Initialize(HandsManager manager)
+    {
+        gameManager = manager;
+    }
+
+    // 开始显示手
+    public IEnumerator ShowHand()
+    {
+        hittable = true;
+
+        float elapsed = 0f;
+        while (elapsed < showDuration)
+        {
+            // 从起始位置到目标位置插值
+            transform.localPosition = Vector2.Lerp(startPosition, endPosition, elapsed / showDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localPosition = endPosition;
+
+        // 等待击打，3秒内未击打则判定为Missed
+        float timer = 3f;
+        while (timer > 0f && hittable)
+        {
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (hittable)
+        {
+            Debug.Log("Missed");
+            yield return HideHand();
+        }
     }
 
     private void OnMouseDown()
     {
-        spriteRenderer.sprite = HandHit;
-
-        StopAllCoroutines();
-        StartCoroutine(QuickHide());
-
-        hittable = false;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private IEnumerator QuickHide()
-    {
-        yield return new WaitForSeconds(0.25f);
-
-        if (!hittable)
+        if (hittable)
         {
-            Hide();
+            hittable = false;
+            Debug.Log("Hand Hit!");
+
+            StopAllCoroutines(); // 停止所有协程
+            StartCoroutine(HideHand()); // 开始隐藏
         }
     }
 
-    private void Hide()
+    // 隐藏手
+    private IEnumerator HideHand()
     {
+        float elapsed = 0f;
+        while (elapsed < showDuration)
+        {
+            // 从目标位置返回到初始位置
+            transform.localPosition = Vector2.Lerp(endPosition, startPosition, elapsed / showDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
         transform.localPosition = startPosition;
+        gameObject.SetActive(false); // 隐藏物体
+        gameManager.OnHandCleared(); // 通知管理器手已被击打完
     }
 }

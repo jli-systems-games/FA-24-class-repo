@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         //GameObject, gameObject, and this.gameObject
-
     }
 
     // Update is called once per frame
@@ -52,11 +51,116 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ChooseRandomGame()
+   // public void ChooseRandomGame()
     {
         GameState randomState = MicroGamePool[Random.Range(0, MicroGamePool.Count + 1)];
         ChangeState(randomState);
     }
    
+
+}*/
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public enum GameState
+{
+    Idle,
+    Game1,
+    Game2,
+    Game3,
+    Transition
+}
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance;
+    public static GameState state;
+    public float transitionTime = 3f; 
+    public float gameTime = 10f; 
+    private int currentGameIndex = 0; 
+    private List<string> gameScenes = new List<string> { "Game1", "Game2", "Game3" };
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // 确保不在场景切换时销毁
+        }
+        else
+        {
+            Destroy(gameObject); // 如果已经有一个GameManager实例存在，销毁新的
+        }
+    }
+
+    void Start()
+    {
+        //DontDestroyOnLoad(gameObject);
+        StartCoroutine(TransitionPhase());
+    }
+
+    public void ChangeState(GameState newState)
+    {
+        state = newState;
+        Debug.Log("State changed to: " + state);
+
+        if (state == GameState.Transition)
+        {
+            SceneManager.LoadScene("mian");
+            StartCoroutine(TransitionPhase());
+        }
+    }
+
+    IEnumerator TransitionPhase()
+    {
+        state = GameState.Transition;
+        Debug.Log("Transitioning...");
+
+        yield return new WaitForSeconds(transitionTime);
+
+        LoadGameScene();
+    }
+
+
+    void LoadGameScene()
+    {
+        if (currentGameIndex < gameScenes.Count)
+        {
+            state = (GameState)(currentGameIndex + 1); 
+            SceneManager.LoadScene(gameScenes[currentGameIndex]); 
+            StartCoroutine(StartMicroGame(gameTime));
+        }
+        else
+        {
+            Debug.Log("All games completed!");
+            
+        }
+    }
+
+    IEnumerator StartMicroGame(float duration)
+    {
+        Debug.Log("Starting Microgame: " + state);
+        yield return new WaitForSeconds(duration); 
+
+        currentGameIndex++;
+        SceneManager.LoadScene("mian"); 
+        StartCoroutine(TransitionPhase());
+    }
+
+    public void StartMicroGameSub()
+    {
+        Debug.Log("Microgame started!");
+        StartCoroutine(EndMicroGame());
+    }
+
+
+    IEnumerator EndMicroGame()
+    {
+        yield return new WaitForSeconds(10f);
+        ChangeState(GameState.Transition);
+    }
 
 }
