@@ -22,7 +22,7 @@ public class BookButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("original" + OGposition);
+      
         //Debug.Log(yourBook.position);
         if (match.ClickedButtonName != gameObject.name )
         {

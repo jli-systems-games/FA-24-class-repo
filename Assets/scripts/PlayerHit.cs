@@ -26,6 +26,7 @@ public class PlayerHit : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             isLeftMouseClick = true;
+            
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 55f))
             {
@@ -44,6 +45,7 @@ public class PlayerHit : MonoBehaviour
         else if(Input.GetMouseButtonDown(1))
         {
             isLeftMouseClick = false;
+            
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 55f))
             {
@@ -95,7 +97,7 @@ public class PlayerHit : MonoBehaviour
     {
         GameObject childStamp = Instantiate(holdStamp);
         childStamp.transform.SetParent(hit.transform);
-        childStamp.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 0.2f);
+        childStamp.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y + 2f, hit.transform.position.z - 0.2f);
         childStamp.SetActive(true);
     }
 
@@ -103,7 +105,7 @@ public class PlayerHit : MonoBehaviour
     {
         GameObject childReturn= Instantiate(returnStamp);
         childReturn.transform.SetParent(hit.transform);
-        childReturn.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 0.25f);
+        childReturn.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y + 2f, hit.transform.position.z - 0.25f);
         childReturn.SetActive(true);
     }
 }

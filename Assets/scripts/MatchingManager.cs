@@ -57,16 +57,16 @@ public class MatchingManager : MonoBehaviour
     {
         
         index = Mathf.FloorToInt(Random.Range(0, neededBooks.Count));
-        Debug.Log("index is " + index);
+        
         string id = neededBooks[index].IDs;
-        Debug.Log(id);
+        
         
       
        selected = GameObject.FindGameObjectsWithTag(id);       
         
 
         foreach (GameObject obj in selected) {
-            Debug.Log(obj);
+            
             if(obj.GetComponent<Button>() != null)
             {
                 Button btt = obj.GetComponent<Button>();

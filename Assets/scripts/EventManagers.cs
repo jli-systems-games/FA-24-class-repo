@@ -45,9 +45,7 @@ public class EventManagers : MonoBehaviour
         }
         if (gameEnd)
         {
-            canvas1.SetActive(false);
-            canvas2.SetActive(false);
-            canvas3.SetActive(false);
+           
             StartandEnd.SetActive(true);
             suceed.text = string.Empty;
             endStart_text.text = "You got fired.";
@@ -182,7 +180,7 @@ public class EventManagers : MonoBehaviour
             fails++;
             sucessText.SetActive(true);
             suceed.text = "://";
-            Debug.Log("://");
+            //Debug.Log("://");
         }
         else
         {

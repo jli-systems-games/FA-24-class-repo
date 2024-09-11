@@ -27,7 +27,7 @@ public class LoadingPrinter : MonoBehaviour
             goal+= increment;
             exp++;
         }
-       goalText.text = "Goal" + goal.ToString();
+       goalText.text = "Goal: " + goal.ToString();
     }
     void Start()
     {
