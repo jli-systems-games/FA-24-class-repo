@@ -93,5 +93,7 @@ public class DragAndDrop : MonoBehaviour
         //send to win scene, then be able to go to main menu
         //have a script in the win scene that stops all coroutines on start
         //have some stuff to reset gamemanager
+
+        SceneManager.LoadScene("End");
     }
 }
