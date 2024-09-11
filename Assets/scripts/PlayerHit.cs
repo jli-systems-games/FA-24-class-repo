@@ -95,7 +95,7 @@ public class PlayerHit : MonoBehaviour
     {
         GameObject childStamp = Instantiate(holdStamp);
         childStamp.transform.SetParent(hit.transform);
-        childStamp.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 0.25f);
+        childStamp.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 0.2f);
         childStamp.SetActive(true);
     }
 
