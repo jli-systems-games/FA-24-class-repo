@@ -5,7 +5,7 @@ using UnityEngine;
 public class WhippedCream : MonoBehaviour
 {
     private GameManager _gameManager;
-    private Timer _timer;
+    public Timer _timer;
 
     //GameObjects
     public GameObject whisk;
@@ -26,15 +26,10 @@ public class WhippedCream : MonoBehaviour
     public bool didOK;
     public bool failed;
 
-    public GameObject spaceIndic;
-
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        _timer = FindObjectOfType<Timer>();
-
-        spaceIndic.SetActive(false);
 
         //StartMicroGame(GameManager.score);
         whiskAnim = whisk.GetComponent<Animator>();
@@ -56,8 +51,8 @@ public class WhippedCream : MonoBehaviour
 
     public void StartMicroGame(int score)
     {
-        spaceIndic.SetActive(true);
         whippingCream.GetComponent<SpriteRenderer>().sprite = unwhippedCream;
+        whippingCream.GetComponent<SpriteRenderer>().flipY = false;
         numofRotations = 0;
 
         if ((score / 3) <= 10)
@@ -117,10 +112,10 @@ public class WhippedCream : MonoBehaviour
             numofRotations++;
         }
 
-        if (whipRate > 6)
+        if (whipRate >= 6)
         {
             whippingCream.GetComponent<SpriteRenderer>().flipY = true;
-            EndGame(true);
+            StartCoroutine(EndGame(true));
         }
 
         else if(numofRotations <= 3)
@@ -131,11 +126,11 @@ public class WhippedCream : MonoBehaviour
         else
         {
             whiskAnim.enabled = false;
-            EndGame(false);
+            StartCoroutine(EndGame(false));
         }
     }
 
-    private void EndGame(bool flippedOver)
+    private IEnumerator EndGame(bool flippedOver)
     {
         if (flippedOver || _timer.timer <= 0)
         {
@@ -162,7 +157,7 @@ public class WhippedCream : MonoBehaviour
             whippingCream.GetComponent<SpriteRenderer>().sprite = whippedCream;
         }
 
-        spaceIndic.SetActive(false);
+        yield return new WaitForSeconds(1);
 
         StartCoroutine(_gameManager.Result(didGreat,didOK,failed));
     }

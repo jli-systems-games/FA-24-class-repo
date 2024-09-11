@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class EggGame : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class EggGame : MonoBehaviour
 
     public int eggStatesCount;
     private float timeBetweenStateChange;
+    private float timeLimit;
     private bool stoppedCooking;
 
     //result bools
@@ -20,19 +22,15 @@ public class EggGame : MonoBehaviour
     public bool didOk;
     public bool failed;
 
-    public GameObject qIndic;
-
     private bool pressedButton;
 
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        _eggSprite = egg.GetComponent<SpriteRenderer>();
         stoppedCooking = false;
-        qIndic.SetActive(false);
 
-        StartMicroGame();
+        //StartMicroGame();
     }
 
     // Update is called once per frame
@@ -48,16 +46,19 @@ public class EggGame : MonoBehaviour
         }
     }
 
-    public void StartMicroGame()
+    public void StartMicroGame(int score)
     {
+        _eggSprite = egg.GetComponent<SpriteRenderer>();
+
         pressedButton = false;
         _eggSprite.sprite = eggStates[0];
-        qIndic.SetActive(true);
 
         didGreat = false;
         didOk = false;
         failed = false;
         eggStatesCount = 0;
+
+        timeLimit = score/1.5f;
 
         StartCoroutine(cookEgg());
     }
@@ -66,7 +67,14 @@ public class EggGame : MonoBehaviour
     {
         if (!stoppedCooking && eggStatesCount < eggStates.Length) 
         {
-                timeBetweenStateChange = Random.Range(.5f, 3);
+            if(timeLimit <= 2)
+            {
+                timeBetweenStateChange = Random.Range(.5f, 3- timeLimit);
+            }
+            else
+            {
+                timeBetweenStateChange = Random.Range(.5f, 1);
+            }
                 yield return new WaitForSeconds(timeBetweenStateChange);
                 
             if (!pressedButton)
@@ -113,7 +121,6 @@ public class EggGame : MonoBehaviour
                         failed = false;
                 }
 
-                qIndic.SetActive(false);
                 StartCoroutine(_gameManager.Result(didGreat, didOk, failed));
             }
     }

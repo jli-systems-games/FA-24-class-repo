@@ -26,7 +26,7 @@ public class CherryDrop : MonoBehaviour
         transform.position = mousePos;  
     }
 
-    private void OnMouseExit()
+    private void OnMouseUp()
     {
         gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
     }

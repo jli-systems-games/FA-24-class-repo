@@ -26,12 +26,26 @@ public class GameManager : MonoBehaviour
 
     public List<GameState> MicroGamePool = new List<GameState>();
 
+    //UI elements
     public TextMeshProUGUI outcome;
+    public TextMeshProUGUI scoreOnScreen;
+    public GameObject timer;
+    public GameObject DragIndic;
+    public GameObject qIndic;
+    public GameObject spaceIndic;
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         outcome.enabled = false;
+        timer.SetActive(false);
+        DragIndic.SetActive(false);
+        qIndic.SetActive(false);
+        spaceIndic.SetActive(false);
+
+        score = 0;
+
+        ChooseRandomGame();
     }
 
     // Update is called once per frame
@@ -43,13 +57,32 @@ public class GameManager : MonoBehaviour
     public void ChangeState(GameState newState) 
     {
         state = newState;
+        Debug.Log(state);
 
         //CherryDrop.ChangeState(state);
         //WhippedCream.ChangeState(state);
 
         if(state == GameState.Game1)
         {
+            timer.SetActive(true);
+            DragIndic.SetActive(true);
+            CherryGame.gameObject.SetActive(true);
             CherryGame.StartMicroGame(score);
+        }
+
+        if (state == GameState.Game2) 
+        {
+            spaceIndic.SetActive(true);
+            timer.SetActive(true);
+            WhippedCream.gameObject.SetActive(true);
+            WhippedCream.StartMicroGame(score);
+        }
+
+        if(state == GameState.Game3)
+        {
+            qIndic.SetActive(true);
+            EggGame.gameObject.SetActive(true);
+            EggGame.StartMicroGame(score);
         }
     }
 
@@ -78,10 +111,22 @@ public class GameManager : MonoBehaviour
             outcome.text = "You suck!";
         }
 
+        scoreOnScreen.text = "Score: " + score;
+
         outcome.enabled = true;
+        timer.SetActive(false);
+        DragIndic.SetActive(false);
+        qIndic.SetActive(false);
+        spaceIndic.SetActive(false);
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
+        Debug.Log("starting new game");
         outcome.enabled = false;
+        CherryGame.gameObject.SetActive(false);
+        WhippedCream.gameObject.SetActive(false);
+        EggGame.gameObject.SetActive(false);
+
+        ChooseRandomGame();
     }
 }

@@ -17,7 +17,7 @@ public class CherryGame : MonoBehaviour
     private int cherryNum;
     public int cherriesDropped;
 
-    private Timer cherryTimer;
+    public Timer cherryTimer;
     private bool wrapUpStarted;
 
     //result bools
@@ -25,16 +25,13 @@ public class CherryGame : MonoBehaviour
     public bool didOk;
     public bool failed;
 
-    public GameObject dragIndic;
 
     // Start is called before the first frame update
     private void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        cherryTimer = FindObjectOfType<Timer>();
         wrapUpStarted = false;
         cherriesDropped = 0;
-        dragIndic.SetActive(false);
 
         //StartMicroGame(GameManager.score);
     }
@@ -44,17 +41,16 @@ public class CherryGame : MonoBehaviour
     {
         if (cherryTimer.timer == 0 && wrapUpStarted == false)
         {
-            StartCoroutine(EndMicroGame());
+            EndMicroGame();
         }
 
         if(cherriesDropped == cherryNum && wrapUpStarted == false)
         {
-            StartCoroutine(EndMicroGame());
+            EndMicroGame();
         }
     }
     public void StartMicroGame(int score)
     {
-        dragIndic.SetActive(true);
         cherryScore = 0;
 
         if (score < 3) 
@@ -77,13 +73,12 @@ public class CherryGame : MonoBehaviour
     public void CreateCherries()
     {
         Vector3 cherryPos = new Vector3(Random.Range(-4, 7), Random.Range(2, 4), 0);
-        GameObject newCherry = Instantiate(cherryPrefab, cherryPos, Quaternion.identity);
+        GameObject newCherry = Instantiate(cherryPrefab, cherryPos, Quaternion.identity, transform);
         cherries.Add(newCherry);
     }
 
-    public IEnumerator EndMicroGame()
+    public void EndMicroGame()
     {
-        dragIndic.SetActive(false);
         wrapUpStarted = true;
 
         if (cherryScore == cherryNum)
@@ -107,10 +102,6 @@ public class CherryGame : MonoBehaviour
             failed = true;
         }
 
-        StartCoroutine(_gameManager.Result(didGreat,didOk,failed));
-
-        yield return new WaitForSeconds(2);
-
         for (int i = 0; i < cherries.Count; i++)
         {
             Destroy(cherries[i]);
@@ -120,7 +111,7 @@ public class CherryGame : MonoBehaviour
 
         wrapUpStarted = false;
 
-        gameObject.SetActive(false);
+        StartCoroutine(_gameManager.Result(didGreat, didOk, failed));
     }
 
     public void ChangeState(GameState newState)
