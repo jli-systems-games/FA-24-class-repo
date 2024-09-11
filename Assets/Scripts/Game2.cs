@@ -7,7 +7,7 @@ using TMPro;
 public class Game2 : MonoBehaviour
 {
     public GameObject[] sceneShapes;    // Array of shapes already in the scene (assign in Inspector)
-    public TextMeshProUGUI pickShapeText; // Reference to the TextMeshPro Text (assign in Inspector)
+    public TextMeshProUGUI randomLetterText; // Reference to the TextMeshPro Text (assign in Inspector)
 
     private GameObject correctShape;    // The shape the player needs to clickk
 
@@ -62,6 +62,7 @@ public class Game2 : MonoBehaviour
         }
 
         // Update the TextMeshPro text to show which shape to pick
-        pickShapeText.text = correctShape.name;
+        randomLetterText.text = correctShape.name;
+
     }
 }

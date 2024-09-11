@@ -5,7 +5,7 @@ using TMPro;
 
 public class Game1 : MonoBehaviour
 {
-    public TMP_Text randomLetterTMP;  // Reference to the TMP Text component
+    public TMP_Text randomLetterText;  // Reference to the TMP Text component
     private char currentLetter;       // The letter the player has to press
 
     // Start is called before the first frame update
@@ -35,6 +35,6 @@ public class Game1 : MonoBehaviour
     void RandomLetter()
     {
         currentLetter = (char)Random.Range(65, 91); // Random letter between 'A' (65) and 'Z' (90)
-        randomLetterTMP.text = currentLetter.ToString(); // Display the letter using TMP
+        randomLetterText.text = currentLetter.ToString(); // Display the letter using TMP
     }
 }
