@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 public class DragAndDrop : MonoBehaviour
 {
     public GameObject SelectedPiece;
+    public GameObject[] AllPieces;
     int OIL = 1;
 
     // Start is called before the first frame update
@@ -41,6 +42,8 @@ public class DragAndDrop : MonoBehaviour
             {
                 SelectedPiece.GetComponent<PuzzleBlock>().Selected = false;
                 SelectedPiece = null;
+
+                CheckCompletion();
             }
            
            
@@ -50,6 +53,25 @@ public class DragAndDrop : MonoBehaviour
         {
             Vector3 MousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             SelectedPiece.transform.position = new Vector3(MousePoint.x,MousePoint.y,0);
+        }
+
+        void CheckCompletion()
+        {
+            bool allInPlace = true;
+            foreach (GameObject piece in AllPieces)
+            {
+                PuzzleBlock puzzleBlock = piece.GetComponent<PuzzleBlock>();
+                if (!puzzleBlock.InRightPosition)
+                {
+                    allInPlace = false;
+                    break;
+                }
+            }
+
+            if (allInPlace)
+            {
+                Debug.Log("Completed");
+            }
         }
     }
 }

@@ -21,13 +21,24 @@ public class CodePanel : MonoBehaviour
     void Update()
     {
         codeText.text = codeTextValue;
-        if (codeTextValue == "1234")
-        {
-            Debug.Log("IsCorrect");
-            //isOpened = true;
-        }
+        
 
-        if (codeTextValue.Length >= 4) codeTextValue = "";
+        if (codeTextValue.Length >= 4)
+        {
+
+            if (codeTextValue == "1234")
+            {
+                Debug.Log("IsCorrect");
+                //isOpened = true;
+            }
+            else
+            {
+                Debug.Log("IsFalse");
+            }
+
+            codeTextValue = "";
+        }
+        
     }
 
     public void AddDigit(string digit)
