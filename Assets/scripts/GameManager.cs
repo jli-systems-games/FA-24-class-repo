@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
     public static GameState state;
     public float transitionTime = 3f; 
     public float gameTime = 10f; 
-    private int currentGameIndex = 0; 
+    public int currentGameIndex = 0; 
     private List<string> gameScenes = new List<string> { "Game1", "Game2", "Game3" };
 
     private void Awake()
@@ -88,11 +88,11 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // 确保不在场景切换时销毁
+            DontDestroyOnLoad(gameObject); 
         }
         else
         {
-            Destroy(gameObject); // 如果已经有一个GameManager实例存在，销毁新的
+            Destroy(gameObject); 
         }
     }
 
@@ -110,6 +110,7 @@ public class GameManager : MonoBehaviour
         if (state == GameState.Transition)
         {
             SceneManager.LoadScene("mian");
+            StopAllCoroutines();
             StartCoroutine(TransitionPhase());
         }
     }
@@ -145,12 +146,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("Starting Microgame: " + state);
         yield return new WaitForSeconds(duration); 
 
-        currentGameIndex++;
+        //currentGameIndex++;
         SceneManager.LoadScene("mian"); 
         StartCoroutine(TransitionPhase());
     }
 
-    public void StartMicroGameSub()
+   /* public void StartMicroGameSub()
     {
         Debug.Log("Microgame started!");
         StartCoroutine(EndMicroGame());
@@ -161,6 +162,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(10f);
         ChangeState(GameState.Transition);
-    }
+    }*/
 
 }

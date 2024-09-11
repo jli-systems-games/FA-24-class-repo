@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class DragAndDrop : MonoBehaviour
 {
@@ -9,10 +10,14 @@ public class DragAndDrop : MonoBehaviour
     public GameObject[] AllPieces;
     int OIL = 1;
 
+    public GameObject win;
+    private GameManager _gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        win.SetActive(false);
     }
 
     // Update is called once per frame
@@ -44,8 +49,7 @@ public class DragAndDrop : MonoBehaviour
                 SelectedPiece = null;
 
                 CheckCompletion();
-            }
-           
+            }   
            
         }
 
@@ -55,8 +59,9 @@ public class DragAndDrop : MonoBehaviour
             SelectedPiece.transform.position = new Vector3(MousePoint.x,MousePoint.y,0);
         }
 
-        void CheckCompletion()
-        {
+    }
+    public void CheckCompletion()
+    {
             bool allInPlace = true;
             foreach (GameObject piece in AllPieces)
             {
@@ -68,10 +73,25 @@ public class DragAndDrop : MonoBehaviour
                 }
             }
 
+            Debug.Log(allInPlace);
+
             if (allInPlace)
             {
                 Debug.Log("Completed");
+                StartCoroutine(ShowWin());
             }
-        }
+    }
+
+
+    
+
+    IEnumerator ShowWin()
+    {
+        win.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        //_gameManager.ChangeState(GameState.Transition)
+        //send to win scene, then be able to go to main menu
+        //have a script in the win scene that stops all coroutines on start
+        //have some stuff to reset gamemanager
     }
 }

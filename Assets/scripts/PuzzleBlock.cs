@@ -9,11 +9,15 @@ public class PuzzleBlock : MonoBehaviour
     public bool InRightPosition;
     public bool Selected;
 
+    private DragAndDrop _dropManager;
+
     // Start is called before the first frame update
     void Start()
     {
         RightPosition = transform.position;
         transform.position = new Vector3(Random.Range(4, 7), Random.Range(3, -3));
+
+        _dropManager = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<DragAndDrop>();
     }
 
     // Update is called once per frame
@@ -29,6 +33,7 @@ public class PuzzleBlock : MonoBehaviour
                     InRightPosition = true;
                     Debug.Log("InPlace");
                     GetComponent<SortingGroup>().sortingOrder = 0;
+                    _dropManager.CheckCompletion();
                 }
                 
             }
