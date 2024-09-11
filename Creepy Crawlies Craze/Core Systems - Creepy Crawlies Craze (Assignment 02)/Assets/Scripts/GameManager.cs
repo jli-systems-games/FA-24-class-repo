@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public string[] miniGameScenes; // Array to hold names of mini-game scenes
     private int currentMiniGameIndex = 0; // Tracks the current mini-game
-    private bool hasLostAnyMiniGame = false; // Track if the player has lost any mini-game
+    private int lossCount = 0; // Track the number of losses
+    private const int maxLossesAllowed = 1; // Set the maximum number of losses allowed before game over
 
     private void Awake()
     {
@@ -42,8 +43,17 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            hasLostAnyMiniGame = true; // Mark that the player has lost
-            SceneManager.LoadScene("End Screen"); // Load the end screen if the player lost
+            lossCount++; // Increment the loss count
+            if (lossCount > maxLossesAllowed)
+            {
+                SceneManager.LoadScene("End Screen"); // Load the end screen if too many losses
+            }
+            else
+            {
+                // Restart the current mini-game or proceed to the next one
+                SceneManager.LoadScene("Transition Scene");  // Load the transition scene
+                StartCoroutine(LoadNextSceneAfterDelay(GetCurrentMiniGame()));  // Reload the current mini-game
+            }
         }
     }
 
@@ -64,18 +74,31 @@ public class GameManager : MonoBehaviour
         else
         {
             // If all mini-games have been played, go to end screen
-            return "EndScreen";
+            return "End Screen";
+        }
+    }
+
+    public string GetCurrentMiniGame()
+    {
+        if (currentMiniGameIndex < miniGameScenes.Length)
+        {
+            return miniGameScenes[currentMiniGameIndex];
+        }
+        else
+        {
+            // If all mini-games have been played, go to end screen
+            return "End Screen";
         }
     }
 
     public void ResetMiniGameSequence()
     {
         currentMiniGameIndex = 0; // Resets the mini-game loop if necessary
-        hasLostAnyMiniGame = false; // Reset loss status
+        lossCount = 0; // Reset loss count
     }
 
-    public bool HasLostAnyMiniGame()
+    public int GetLossCount()
     {
-        return hasLostAnyMiniGame;
+        return lossCount;
     }
 }

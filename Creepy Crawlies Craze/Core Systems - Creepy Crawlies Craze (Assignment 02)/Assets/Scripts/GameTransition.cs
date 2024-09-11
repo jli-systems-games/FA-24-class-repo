@@ -11,19 +11,16 @@ public class GameTransition : MonoBehaviour
     public TMP_Text countdownText;
     private float countdownTime = 2.5f; // 2.5-second countdown
 
-   
-
     void Start()
     {
+        // Set the transition message
         transitionMessage.text = "Get Ready to Scuttle!";
         StartCoroutine(CountdownToNextGame());
     }
 
     IEnumerator CountdownToNextGame()
     {
-      
-
-        // Wait for the countdown to complete
+        // Countdown loop
         while (countdownTime > 0)
         {
             countdownText.text = countdownTime.ToString("F0");
@@ -31,15 +28,30 @@ public class GameTransition : MonoBehaviour
             countdownTime--;
         }
 
+        // Ensure the countdown text shows zero
+        countdownText.text = "0";
 
-        Debug.Log("Doors closed. Loading next game.");
-
-        LoadNextGame(); // Load the next mini-game scene
+        // Log and load the next game
+        Debug.Log("Loading next game.");
+        LoadNextGame();
     }
 
     void LoadNextGame()
     {
+        // Retrieve the next game scene or end screen
         string nextGameScene = GameManager.instance.GetNextMiniGame();
-        SceneManager.LoadScene(nextGameScene);
+
+        if (!string.IsNullOrEmpty(nextGameScene))
+        {
+            Debug.Log($"Loading scene: {nextGameScene}"); // Debug log to check scene name
+            // Load the next mini-game scene
+            SceneManager.LoadScene(nextGameScene);
+        }
+        else
+        {
+            Debug.Log("No next game scene found. Loading End Screen.");
+            // No next game scene, so go to end screen
+            SceneManager.LoadScene("End Screen");
+        }
     }
 }

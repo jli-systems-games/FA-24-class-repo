@@ -15,6 +15,9 @@ public class ButtonMashBash : MonoBehaviour
     public Button button2;  // Reference to UI Button 2
     public Button button3;  // Reference to UI Button 3
 
+    public TMP_Text messageText; // Reference to the message text component
+    public float messageDisplayTime = 2.5f; // Time to display the result message
+
     private int pressCount = 0;      // How many times the selected button has been pressed
     private bool gameStarted = false;
     private Button correctButton;    // The correct button to press
@@ -79,7 +82,19 @@ public class ButtonMashBash : MonoBehaviour
         }
 
         // If the time runs out and player hasn't pressed enough, they lose
-        EndMiniGame(false);
+        StartCoroutine(ShowResult("Time's Up! You Lose!")); // End game if time runs out
+    }
+
+    IEnumerator ShowResult(string message)
+    {
+        // Display the result message
+        messageText.text = message;
+
+        // Wait for the specified amount of time
+        yield return new WaitForSeconds(messageDisplayTime);
+
+        // End the current mini-game
+        EndMiniGame(message == "You Win!"); // End game with win or loss
     }
 
     void EndMiniGame(bool didPlayerWin)

@@ -11,9 +11,12 @@ public class CritterController : MonoBehaviour
     public float moveSpeed = 2f;  // Movement speed for the critters
     public Vector2 movementBounds;  // Define the area within which the critters can move
 
-    public TextMeshProUGUI timerText;  
-    public float timerDuration = 10f;  // Set the timer duration
+    public TextMeshProUGUI timerText;
+    public float timerDuration = 15f;  // Set the timer duration
     private float timer;  // Countdown timer
+
+    public TextMeshProUGUI messageText; // Reference to the message text component
+    public float messageDisplayTime = 2.5f; // Time to display the result message
 
     private Vector2[] movementTargets;  // Targets for each critter to move toward
 
@@ -57,12 +60,12 @@ public class CritterController : MonoBehaviour
                 if (clickedCritter == correctCritter)
                 {
                     Debug.Log("Correct critter clicked! You win!");
-                    GameManager.instance.EndCurrentMiniGame(true);  // Player wins the mini-game
+                    StartCoroutine(ShowResult("Correct Critter! You Win!", true));
                 }
                 else
                 {
                     Debug.Log("Wrong critter clicked! You lose!");
-                    GameManager.instance.EndCurrentMiniGame(false);  // Player loses the mini-game
+                    StartCoroutine(ShowResult("Wrong Critter! You Lose!", false));
                 }
             }
             else
@@ -111,12 +114,25 @@ public class CritterController : MonoBehaviour
         if (timer > 0)
         {
             timer -= Time.deltaTime; // Decrease the timer
-            timerText.text = "Time: " + Mathf.Ceil(timer).ToString(); 
+            timerText.text = "Time: " + Mathf.Ceil(timer).ToString();
         }
         else
         {
             Debug.Log("Time's up! You lose!");
-            GameManager.instance.EndCurrentMiniGame(false);  // Player loses the mini-game
+            StartCoroutine(ShowResult("Time's Up! You Lose!", false));  // Player loses the mini-game
         }
+    }
+
+    // Show result message and then end the mini-game after a delay
+    IEnumerator ShowResult(string message, bool didPlayerWin)
+    {
+        // Display the result message
+        messageText.text = message;
+
+        // Wait for the specified amount of time
+        yield return new WaitForSeconds(messageDisplayTime);
+
+        // End the current mini-game
+        GameManager.instance.EndCurrentMiniGame(didPlayerWin);
     }
 }
