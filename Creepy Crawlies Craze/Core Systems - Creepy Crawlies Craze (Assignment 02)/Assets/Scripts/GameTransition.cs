@@ -9,13 +9,13 @@ public class GameTransition : MonoBehaviour
 {
     public TMP_Text transitionMessage;
     public TMP_Text countdownText;
-    private float countdownTime = 2f; // 2-second countdown
+    private float countdownTime = 2.5f; // 2.5-second countdown
 
    
 
     void Start()
     {
-        transitionMessage.text = "Prepare to Crawl!";
+        transitionMessage.text = "Get Ready to Scuttle!";
         StartCoroutine(CountdownToNextGame());
     }
 
