@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Game2 : MonoBehaviour
 {
-    public GameObject[] shapePrefabs;   // Array of shape prefabs (assign in Inspector)
-    public RectTransform canvasRect;    // Reference to the Canvas RectTransform
+    public GameObject[] sceneShapes;    // Array of shapes already in the scene (assign in Inspector)
+    public TextMeshProUGUI pickShapeText; // Reference to the TextMeshPro Text (assign in Inspector)
 
-    private GameObject[] currentShapes;  // Array to hold the instantiated shapes
-    private GameObject correctShape;     // The shape the player needs to click
-
+    private GameObject correctShape;    // The shape the player needs to clickk
 
     // Start is called before the first frame update
     void Start()
@@ -24,9 +23,8 @@ public class Game2 : MonoBehaviour
         // Check for mouse click
         if (Input.GetMouseButtonDown(0))
         {
-            // Check if the player clicked on the shape
-            Vector2 mousePos = Input.mousePosition;
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(mousePos), Vector2.zero);
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
             if (hit.collider != null)
             {
@@ -36,8 +34,7 @@ public class Game2 : MonoBehaviour
                 if (clickedShape == correctShape)
                 {
                     Debug.Log("Correct shape clicked!");
-                    DestroyShapes();  // Remove all shapes
-                    SpawnShapes(); // Spawn new shapes
+                    SpawnShapes();  // Randomize positions and pick a new target shape
                 }
                 else
                 {
@@ -49,43 +46,22 @@ public class Game2 : MonoBehaviour
 
     void SpawnShapes()
     {
-        // Initialize the current shapes array
-        currentShapes = new GameObject[shapePrefabs.Length];
-
         // Randomly choose which shape will be the "correct" one
-        int correctShapeIndex = Random.Range(0, shapePrefabs.Length);
-        correctShape = null;
+        int correctShapeIndex = Random.Range(0, sceneShapes.Length);
+        correctShape = sceneShapes[correctShapeIndex];
 
-        // Loop through the shapes and instantiate each one
-        for (int i = 0; i < shapePrefabs.Length; i++)
+        // Loop through the scene shapes and reposition each one
+        foreach (GameObject shape in sceneShapes)
         {
-            GameObject shapePrefab = shapePrefabs[i];
-
-            // Instantiate the shape on the canvas
-            currentShapes[i] = Instantiate(shapePrefab, canvasRect);
-
-            // Randomize the position of the shape on the screen
-            Vector2 randomPosition = new Vector2(
-                Random.Range(0, canvasRect.rect.width),
-                Random.Range(0, canvasRect.rect.height)
+            // Randomize the position of the shape in world space
+            shape.transform.position = new Vector3(
+                Random.Range(-7f, 7f),  // Adjust these values based on your world boundaries
+                Random.Range(-3.5f, 3.5f),  // Adjust these values based on your world boundaries
+                shape.transform.position.z  // Keep the same Z position for 2D
             );
-            currentShapes[i].GetComponent<RectTransform>().anchoredPosition = randomPosition;
-
-            // Set the correct shape
-            if (i == correctShapeIndex)
-            {
-                correctShape = currentShapes[i];
-            }
         }
-    }
 
-    void DestroyShapes()
-    {
-        // Destroy all current shapes
-        for (int i = 0; i < currentShapes.Length; i++)
-        {
-            Destroy(currentShapes[i]);
-        }
+        // Update the TextMeshPro text to show which shape to pick
+        pickShapeText.text = correctShape.name;
     }
 }
-
