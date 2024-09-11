@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,10 +24,13 @@ public class GameManager : MonoBehaviour
     public WhippedCream WhippedCream;
 
     public List<GameState> MicroGamePool = new List<GameState>();
+
+    public TextMeshProUGUI outcome;
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+        outcome.enabled = false;
     }
 
     // Update is called once per frame
@@ -52,5 +56,29 @@ public class GameManager : MonoBehaviour
     {
         GameState randomState = MicroGamePool[Random.Range(0,MicroGamePool.Count)];
         ChangeState(randomState);
+    }
+
+    public IEnumerator Result(bool didGreat, bool didOkay, bool failed)
+    {
+        if (didGreat)
+        {
+            outcome.text = "Great!";
+        }
+
+        else if (didOkay)
+        {
+            outcome.text = "Okay!";
+        }
+
+        else 
+        {
+            outcome.text = "You suck!";
+        }
+
+        outcome.enabled = true;
+
+        yield return new WaitForSeconds(2);
+
+        outcome.enabled = false;
     }
 }

@@ -12,7 +12,6 @@ public class CherryGame : MonoBehaviour
     public GameObject iceCreamBowl;
     public GameObject cherryPrefab;
     public List<GameObject> cherries = new List<GameObject>();
-    public TextMeshProUGUI outcome;
 
     public int cherryScore;
     private int cherryNum;
@@ -21,6 +20,11 @@ public class CherryGame : MonoBehaviour
     private Timer cherryTimer;
     private bool wrapUpStarted;
 
+    //result bools
+    public bool didGreat;
+    public bool didOk;
+    public bool failed;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -28,9 +32,8 @@ public class CherryGame : MonoBehaviour
         cherryTimer = FindObjectOfType<Timer>();
         wrapUpStarted = false;
         cherriesDropped = 0;
-        outcome.enabled = false;
 
-        StartMicroGame(GameManager.score);
+        //StartMicroGame(GameManager.score);
     }
 
     // Update is called once per frame
@@ -80,20 +83,26 @@ public class CherryGame : MonoBehaviour
 
         if (cherryScore == cherryNum)
         {
-            outcome.text = "Great!";
+            didGreat = true;
+            didOk = false;
+            failed = false;
         }
 
         else if (cherryScore > 0)
         {
-            outcome.text = "Okay!";
+            didGreat = false;
+            didOk = true;
+            failed = false;
         }
 
         else 
         {
-            outcome.text = "You Suck!";
+            didGreat= false;
+            didOk = false;
+            failed = true;
         }
 
-        outcome.enabled = true;
+        StartCoroutine(_gameManager.Result(didGreat,didOk,failed));
 
         yield return new WaitForSeconds(2);
 
@@ -103,8 +112,6 @@ public class CherryGame : MonoBehaviour
         }
 
         cherries.Clear();
-
-        outcome.enabled = false;
 
         wrapUpStarted = false;
 
