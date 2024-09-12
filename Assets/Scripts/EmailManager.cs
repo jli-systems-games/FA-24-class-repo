@@ -15,11 +15,17 @@ public class EmailManager : MonoBehaviour
     private int correctButtonIndex;
 
 
-
+    //asked chat about the for each part and index 
     public void Start()
     {
         PickRandomColor();
 
+    }
+
+    public void OnEnable()
+    {
+
+        PickRandomColor();
     }
 
     public void PickRandomColor()

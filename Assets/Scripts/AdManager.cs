@@ -15,10 +15,17 @@ public class AdManager : MonoBehaviour
     public float Score = 0;
 
 
-    public void Start()
+    //public void Start()
+    //{
+    //    StartCoroutine(DelayPopUp());
+
+    //    Score = 0;
+
+    //}
+
+    public void OnEnable()
     {
         StartCoroutine(DelayPopUp());
-
         Score = 0;
     }
 
@@ -39,7 +46,10 @@ public class AdManager : MonoBehaviour
         popupThree.gameObject.SetActive(true);
     }
 
-
+    public void Update()
+    {
+        Restart();
+    }
     public void Restart()
     {
         if (Score == 3)
@@ -48,6 +58,7 @@ public class AdManager : MonoBehaviour
             Currentgame.SetActive(false);
             MinigameTwo.SetActive(true);
 
+            Score = 0;
         }
 
 

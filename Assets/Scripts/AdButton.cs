@@ -8,6 +8,10 @@ public class AdButton : MonoBehaviour
 
     private AdManager bScript;
 
+    public void Start()
+    {
+        bScript = GameObject.FindGameObjectWithTag("Ads").GetComponent<AdManager>();
+    }
 
     public void Close()
     {

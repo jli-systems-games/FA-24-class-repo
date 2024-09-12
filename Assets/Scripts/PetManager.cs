@@ -20,6 +20,13 @@ public class PetManager : MonoBehaviour
     {
         PickRandomNeed();
 
+
+    }
+
+    public void OnEnable()
+    {
+
+        PickRandomNeed();
     }
 
     public void PickRandomNeed()
