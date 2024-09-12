@@ -5,22 +5,25 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class timer : MonoBehaviour
+public class timerGame2 : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] public float remainingTime;
 
+    public GameObject script;
+    public buttonGame buttongame;
+
     void Update()
     {
-        /*if (remainingTime > 0)
+
+        GameObject script = GameObject.FindWithTag("script");
+        buttongame = script.GetComponent<buttonGame>();
+
+        
+        if(buttongame.timerException == false)
         {
-            remainingTime -= Time.deltaTime;
-        }
-        */
-        if (remainingTime <= 0)
-        {
+            if (remainingTime <= 0)
             {
-                remainingTime = 0;
                 SceneManager.LoadScene("gameOver");
             }
         }

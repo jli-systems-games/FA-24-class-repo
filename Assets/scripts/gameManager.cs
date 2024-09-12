@@ -10,6 +10,13 @@ public class gameManager : MonoBehaviour
     public GameObject transitionCanvas;
     public string[] games;
 
+    public GameObject timer;
+    public GameObject timerGame2;
+    public timer timerr;
+    public timerGame2 timerrr;
+
+    bool isDone = false;
+
     void Start()
     {
         for (int i = 0; i < Object.FindObjectsOfType<gameManager>().Length; i++)
@@ -25,6 +32,7 @@ public class gameManager : MonoBehaviour
 
         
         DontDestroyOnLoad(this.gameObject);
+        
     }
 
     void OnEnable()
@@ -55,8 +63,52 @@ public class gameManager : MonoBehaviour
         startCanvas.gameObject.SetActive(false);
     }
 
+    IEnumerator WaitToMakeTrue()
+    {
+        yield return new WaitForSeconds(8);
+        isDone = false;
+    }
+
     void Update()
     {
+        if (SceneManager.GetActiveScene () == SceneManager.GetSceneByName ("game2"))
+        {
+            GameObject timerGame2 = GameObject.FindWithTag("timer");
+            timerrr = timerGame2.GetComponent<timerGame2>();
+
+            if ( clearedGames % 4 == 0)
+            {
+                if (!isDone)
+                {
+                    timerrr.remainingTime -= 2;
+                    Debug.Log("speed up");
+                    isDone = true;
+                    StartCoroutine(WaitToMakeTrue());
+                }
+                
+            }
         
+        }
+        else
+        {
+            GameObject timer = GameObject.FindWithTag("timer");
+            timerr = timer.GetComponent<timer>();
+            if (clearedGames % 4 == 0)
+            {
+                if (!isDone)
+                {
+                    timerr.remainingTime -= 2;
+                    Debug.Log("speed up");
+                    isDone = true;
+                    StartCoroutine(WaitToMakeTrue());
+                }
+            }
+        
+        }
+
+
     }
+
+        
 }
+

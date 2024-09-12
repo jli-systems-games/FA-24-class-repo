@@ -19,8 +19,15 @@ public class buttonGame : MonoBehaviour
     public Button bunny;
     public bool BunClicked = false;
 
+    public bool timerException = false;
+
     public GameObject gameCanvas;
     public GameObject transitionCanvas;
+
+
+    public GameObject timerGame2;
+    public timerGame2 timerr;
+
 
     private IEnumerator delayText()
     {
@@ -40,13 +47,15 @@ public class buttonGame : MonoBehaviour
             SceneManager.LoadScene("gameOver");
         }
 
-        if(decision == "don't hit the bunny" && BunClicked == false)
+        if(decision == "don't hit the bunny" && BunClicked == false && 
+        timerr.remainingTime == 0)
         {
             yield return new WaitForSeconds(1);
             bunny.image.sprite = bunHappy;
             yield return new WaitForSeconds(1);
             transitionCanvas.gameObject.SetActive(true);
             gameCanvas.gameObject.SetActive(false);
+
         }
 
         if(decision == "hit the bunny" && BunClicked == true)
@@ -68,6 +77,16 @@ public class buttonGame : MonoBehaviour
         
     }
 
+    private IEnumerator outcomeException()
+    {
+            timerException = true;
+            yield return new WaitForSeconds(1);
+            bunny.image.sprite = bunHappy;
+            yield return new WaitForSeconds(1);
+            transitionCanvas.gameObject.SetActive(true);
+            gameCanvas.gameObject.SetActive(false);
+    }
+
     public void bunnyClicked()
     {
         bunny.image.sprite = bunSad;
@@ -78,11 +97,19 @@ public class buttonGame : MonoBehaviour
     void Start()
     {
         StartCoroutine(delayText());
+        GameObject timerGame2 = GameObject.FindWithTag("timer");
+        timerr = timerGame2.GetComponent<timerGame2>();
     }
 
     void Update()
     {
-
+        if(decision == "don't hit the bunny" && BunClicked == false && 
+        timerr.remainingTime <= 1)
+        {
+            timerException = true;
+            StartCoroutine(outcomeException());
+        }
+        Debug.Log(timerException);
     }
 
 }
