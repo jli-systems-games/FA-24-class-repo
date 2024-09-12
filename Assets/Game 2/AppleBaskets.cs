@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class AppleBaskets : MonoBehaviour
 {
     public GameObject goal;
 
     public float spawn;
-    public List<Transform> spawnLocations = new List<Transform>();
+    public List<Transform> spawnLocations = new();
 
     public GameObject player;
     public Vector3 startPosition;
@@ -18,19 +20,13 @@ public class AppleBaskets : MonoBehaviour
         goal.transform.position = spawnLocations[Random.Range(0, spawnLocations.Count)].position;
     }
 
-    public void Begin()
-    {
-        player.transform.position = startPosition;
-        goal.transform.position = spawnLocations[Random.Range(0, spawnLocations.Count)].position;
-    }
-
     public void Win()
     {
-        Begin();
+        SceneManager.LoadScene(7, LoadSceneMode.Single);
     }
 
     public void Lose()
     {
-        Begin();
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }

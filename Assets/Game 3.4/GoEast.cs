@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GoEast : MonoBehaviour
 {
@@ -12,18 +13,15 @@ public class GoEast : MonoBehaviour
         startPosition = player.transform.position;
     }
 
-    public void Begin()
-    {
-        player.transform.position = startPosition;
-    }
-
     public void Win()
     {
-        Begin();
+        //Begin();
+        SceneManager.LoadScene(7, LoadSceneMode.Single);
     }
 
     public void Lose()
     {
-        Begin();
+        //Begin();
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }
