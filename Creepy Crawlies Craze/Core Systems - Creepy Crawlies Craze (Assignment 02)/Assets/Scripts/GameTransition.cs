@@ -10,11 +10,13 @@ public class GameTransition : MonoBehaviour
     public TMP_Text transitionMessage;
     public TMP_Text countdownText;
     private float countdownTime = 2.5f; // 2.5-second countdown
+    public Animator transition;
+    private static GameTransition instance; // To ensure it's persistent
 
     void Start()
     {
         // Set the transition message
-        transitionMessage.text = "Get Ready to Scuttle!";
+        transitionMessage.text = "Get Ready to Scuttle Away!";
         StartCoroutine(CountdownToNextGame());
     }
 
@@ -30,6 +32,13 @@ public class GameTransition : MonoBehaviour
 
         // Ensure the countdown text shows zero
         countdownText.text = "0";
+
+        // Start the circlewipe animation
+        transition.ResetTrigger("Start"); // Reset the trigger to ensure it's ready to be set again
+        transition.SetTrigger("Start"); // Set the trigger to play the animation
+
+        // Wait for the circlewipe animation to complete
+        yield return new WaitForSeconds(1f);
 
         // Log and load the next game
         Debug.Log("Loading next game.");

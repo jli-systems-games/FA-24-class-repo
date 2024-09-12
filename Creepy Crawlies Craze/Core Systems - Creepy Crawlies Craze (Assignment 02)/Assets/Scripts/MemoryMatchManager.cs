@@ -85,10 +85,15 @@ public class MemoryMatchManager : MonoBehaviour
             secondCard.GetComponent<Button>().interactable = false;
             currentMatches++;
 
+            // Show success message
+            StartCoroutine(ShowResult("Match Found!"));
+
+            // Check if all pairs are matched
             if (currentMatches == totalMatches)
             {
                 Debug.Log("You matched all pairs!");
-                GameManager.instance.EndCurrentMiniGame(true); // End mini-game with a win
+                // Show the success message for winning and then end the game
+                StartCoroutine(ShowResult("You Matched All Pairs!", true));
             }
         }
         else
@@ -97,6 +102,9 @@ public class MemoryMatchManager : MonoBehaviour
             firstCard.GetComponent<Image>().sprite = cardBack;
             secondCard.GetComponent<Image>().sprite = cardBack;
             Debug.Log("No match!");
+
+            // Show failure message
+            StartCoroutine(ShowResult("No Match! Try Again."));
         }
 
         firstCard = null;
@@ -110,7 +118,7 @@ public class MemoryMatchManager : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-            timerText.text = Mathf.Floor(timeRemaining).ToString(); // Update timer display
+            timerText.text = "Time: " + Mathf.Floor(timeRemaining).ToString(); // Update timer display
         }
         else
         {
@@ -122,9 +130,7 @@ public class MemoryMatchManager : MonoBehaviour
             StartCoroutine(ShowResult("Time's Up! You Lose!"));
         }
     }
-
-    // Show result message and then end the mini-game after a delay
-    IEnumerator ShowResult(string message)
+    IEnumerator ShowResult(string message, bool isEndGame)
     {
         // Display the result message
         messageText.text = message;
@@ -132,7 +138,16 @@ public class MemoryMatchManager : MonoBehaviour
         // Wait for the specified amount of time
         yield return new WaitForSeconds(messageDisplayTime);
 
-        // End the current mini-game
-        GameManager.instance.EndCurrentMiniGame(message == "You Matched All Pairs!"); // End game with win or loss
+        // If this is the end of the game, call the GameManager to end the mini-game
+        if (isEndGame)
+        {
+            GameManager.instance.EndCurrentMiniGame(true); // End the game with a win
+        }
+    }
+
+    // Overload for ShowResult that only takes the message and defaults isEndGame to false
+    IEnumerator ShowResult(string message)
+    {
+        yield return ShowResult(message, false); // Call the other version of ShowResult with isEndGame set to false
     }
 }
