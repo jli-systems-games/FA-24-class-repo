@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class HandsManager : MonoBehaviour
 {
-    public List<GameObject> hands; 
+    public List<GameObject> hands;
 
-    
+    //private TimeBar _timeBar;
 
     private List<HandsPop> handsPopComponents = new List<HandsPop>(); 
     private int clearedCount = 0;
@@ -19,6 +19,7 @@ public class HandsManager : MonoBehaviour
     private void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+       // _timeBar = GameObject.FindGameObjectWithTag("TimeController").GetComponent<TimeBar>();
 
 
         win.SetActive(false);
@@ -76,8 +77,15 @@ public class HandsManager : MonoBehaviour
         }
     }
 
-   
-    public void OnHandCleared()
+    void Update()
+    {
+       /* if (_timeBar.timeRemaining == 0)
+        {
+            _gameManager.currentGameIndex++;
+        }*/
+    }
+
+        public void OnHandCleared()
     {
         clearedCount++;
         _gameManager.currentGameIndex++;
