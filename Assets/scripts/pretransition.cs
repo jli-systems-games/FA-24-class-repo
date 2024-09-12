@@ -11,8 +11,6 @@ public class pretransition : MonoBehaviour
 
     public GameObject gameManagerScript;
     public VideoPlayer videoPlayer;
-    public string[] games;
-    public string randomGame;
 
     [SerializeField] string videoFileName;
 

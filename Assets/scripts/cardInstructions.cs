@@ -14,7 +14,6 @@ public class cardInstructions : MonoBehaviour
     public TextMeshProUGUI text;
 
     public GameObject win;
-    public GameObject lose;
 
     public GameObject cardSpread;
 
@@ -109,9 +108,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -126,9 +123,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -143,9 +138,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -160,9 +153,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -177,9 +168,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -194,9 +183,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -211,9 +198,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -228,9 +213,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -245,8 +228,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -261,9 +243,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -279,9 +259,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
 
@@ -296,9 +274,7 @@ public class cardInstructions : MonoBehaviour
 
             else
             {
-                Debug.Log("incorrect");
-                lose.gameObject.SetActive(true);
-                cardSpread.gameObject.SetActive(false);
+                SceneManager.LoadScene("gameOver");
             }
         }
     }
