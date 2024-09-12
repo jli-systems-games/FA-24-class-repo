@@ -12,7 +12,7 @@ public class EventManagers : MonoBehaviour
     public bool sucess;
     public LoadingPrinter printer;
     public TMP_Text endStart_text;
-    
+    public GameObject StartUIParent;
 
     public bool firstpass = true;
     int n = 0;
@@ -22,7 +22,7 @@ public class EventManagers : MonoBehaviour
     void Start()
     {
         manager = manageEvents(time);
-        StartCoroutine(manager);
+        //StartCoroutine(manager);
         suceed = sucessText.GetComponent<TMP_Text>();
     }
     
@@ -207,5 +207,12 @@ public class EventManagers : MonoBehaviour
         {
             canvas3.SetActive(false);
         }
+    }
+
+    public void begin()
+    {
+        StartCoroutine(manager);
+        StartUIParent.SetActive(false);
+
     }
 }

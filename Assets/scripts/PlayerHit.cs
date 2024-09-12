@@ -14,6 +14,8 @@ public class PlayerHit : MonoBehaviour
     public GameObject returnStamp;
     //public GameObject hitObject;
     public StampingParent Grandparent;
+
+    bool mouseclicked;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,7 @@ public class PlayerHit : MonoBehaviour
             {
                 rayCastSuccessful = false;
             }
+            checkSuccess();
 
         }
         else if(Input.GetMouseButtonDown(1))
@@ -57,10 +60,11 @@ public class PlayerHit : MonoBehaviour
             else
             {
                 rayCastSuccessful = false;
-            }
+            } 
+            checkSuccess();
         }
 
-        checkSuccess();
+       
     }
 
     void checkSuccess()
@@ -82,7 +86,7 @@ public class PlayerHit : MonoBehaviour
 
             if (rayCastSuccessful && hit.collider.gameObject.tag == "Return")
             {
-                Debug.Log("correct");
+                //Debug.Log("correct");
                 Grandparent.Score.Add(1);
             }
             else

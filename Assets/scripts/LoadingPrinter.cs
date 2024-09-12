@@ -9,8 +9,9 @@ public class LoadingPrinter : MonoBehaviour
     int goal;
     int counted = 0;
     public EventManagers manage;
-    public TMP_Text score;
+    public TMP_Text score,respond;
     public TMP_Text goalText;
+
 
     // Start is called before the first frame update
 
@@ -33,6 +34,13 @@ public class LoadingPrinter : MonoBehaviour
     {
         
     }
+    private void Update()
+    {
+         if(counted > goal)
+          {
+                respond.text = ":[ not too much, it will jam it.";
+          }
+    }
 
     //being called when clicked 
     public void countingPapers()
@@ -44,13 +52,13 @@ public class LoadingPrinter : MonoBehaviour
     }
     bool determineSucess()
     {
-        if(counted >= goal)
+        if(counted == goal)
         {
             
             return true;
         }
         else
-        {
+        {   
             return false;
             //Debug.Log("://");
         }
@@ -61,5 +69,6 @@ public class LoadingPrinter : MonoBehaviour
         manage.checkforFails(sucess);
         counted = 0;
         score.text = "0";
+        respond.text = "Hmmmmm";
     }
 }

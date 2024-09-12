@@ -11,7 +11,7 @@ public class StampingParent : MonoBehaviour
 
     List<Transform> children = new List<Transform>();
     Vector3 ogPosition;
-
+    int score = 0;
     // Start is called before the first frame update
     private void OnEnable()
     {
@@ -25,7 +25,9 @@ public class StampingParent : MonoBehaviour
         else
         {
             //Debug.Log("start to ranomize");
+            
             RandomizeandCopy();
+            //Debug.Log(children.Count);
         }
     }
     void Start()
@@ -85,14 +87,15 @@ public class StampingParent : MonoBehaviour
     }
     bool success()
     {
-        int score = 0;
+        //int score = 0;
         int goal = children.Count;
         foreach(int i in Score)
         {
+           
             score += i;
         }
         //Debug.Log(score);
-        if (score <= Mathf.Floor(goal / 2))
+        if (score < goal)
         {
             return false;
         }else
@@ -102,7 +105,9 @@ public class StampingParent : MonoBehaviour
     }
     private void OnDisable()
     {
+        
         bool suceed = success();
+       
         manage.checkforFails(suceed);
 
         foreach(Transform t in children)
@@ -111,6 +116,7 @@ public class StampingParent : MonoBehaviour
         }
 
         Score.Clear();
+        score = 0;
         /*foreach(int i in Score)
          {
              Debug.Log(i);
