@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class gameManager : MonoBehaviour
 {
     public int clearedGames;
+    public GameObject startCanvas;
+    public GameObject transitionCanvas;
     public string[] games;
-    public string randomGame;
 
     void Start()
     {
@@ -50,8 +51,8 @@ public class gameManager : MonoBehaviour
 
     public void StartGame()
     {
-        randomGame = games[Random.Range(0, games.Length)];
-        SceneManager.LoadScene(randomGame);
+        transitionCanvas.gameObject.SetActive(true);
+        startCanvas.gameObject.SetActive(false);
     }
 
     void Update()
