@@ -33,7 +33,7 @@ public class CherryDrop : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
         if (other.gameObject.CompareTag("ice-cream")){
             cherryGameManager.cherryScore++;
         }
@@ -43,6 +43,6 @@ public class CherryDrop : MonoBehaviour
             cherryGameManager.cherryScore--;
         }
 
-        cherryGameManager.cherriesDropped++;
+        cherryGameManager.CountCherry();
     }
 }

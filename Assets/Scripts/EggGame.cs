@@ -52,6 +52,7 @@ public class EggGame : MonoBehaviour
 
         pressedButton = false;
         _eggSprite.sprite = eggStates[0];
+        stoppedCooking = false;
 
         didGreat = false;
         didOk = false;

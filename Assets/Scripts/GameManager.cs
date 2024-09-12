@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameState> MicroGamePool = new List<GameState>();
 
+    public GameObject transitionObj;
+
     //UI elements
     public TextMeshProUGUI outcome;
     public TextMeshProUGUI scoreOnScreen;
@@ -33,6 +35,14 @@ public class GameManager : MonoBehaviour
     public GameObject DragIndic;
     public GameObject qIndic;
     public GameObject spaceIndic;
+
+    //Audio
+
+    public AudioSource AudioSource;
+    public AudioClip wompWomp;
+    public AudioClip yippee;
+    public AudioClip ding;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,10 +52,9 @@ public class GameManager : MonoBehaviour
         DragIndic.SetActive(false);
         qIndic.SetActive(false);
         spaceIndic.SetActive(false);
+        scoreOnScreen.enabled = false;
 
         score = 0;
-
-        ChooseRandomGame();
     }
 
     // Update is called once per frame
@@ -84,6 +93,11 @@ public class GameManager : MonoBehaviour
             EggGame.gameObject.SetActive(true);
             EggGame.StartMicroGame(score);
         }
+
+        if(state == GameState.Transition)
+        {
+            StartCoroutine(gameTransition());
+        }
     }
 
     public void ChooseRandomGame()
@@ -98,20 +112,27 @@ public class GameManager : MonoBehaviour
         {
             outcome.text = "Great!";
             score += 2;
+
+            AudioSource.clip = yippee;
         }
 
         else if (didOkay)
         {
             outcome.text = "Okay!";
             score++;
+
+            AudioSource.clip = ding;
         }
 
         else 
         {
             outcome.text = "You suck!";
+
+            AudioSource.clip = wompWomp;
         }
 
         scoreOnScreen.text = "Score: " + score;
+        AudioSource.Play();
 
         outcome.enabled = true;
         timer.SetActive(false);
@@ -127,6 +148,24 @@ public class GameManager : MonoBehaviour
         WhippedCream.gameObject.SetActive(false);
         EggGame.gameObject.SetActive(false);
 
+        ChangeState(GameState.Transition);
+    }
+
+    public IEnumerator gameTransition()
+    {
+        transitionObj.SetActive(true);
+
+        transitionObj.GetComponent<Animator>().Play("transition");
+
+        yield return new WaitForSeconds(5);
+
         ChooseRandomGame();
+        transitionObj.SetActive(false);
+    }
+
+    public void StartGame()
+    {
+        scoreOnScreen.enabled = true;
+        transitionObj.SetActive(false);
     }
 }

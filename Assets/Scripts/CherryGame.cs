@@ -41,17 +41,22 @@ public class CherryGame : MonoBehaviour
     {
         if (cherryTimer.timer == 0 && wrapUpStarted == false)
         {
-            EndMicroGame();
-        }
-
-        if(cherriesDropped == cherryNum && wrapUpStarted == false)
-        {
+            wrapUpStarted = true;
             EndMicroGame();
         }
     }
     public void StartMicroGame(int score)
     {
+        for (int i = 0; i < cherries.Count; i++)
+        {
+            Destroy(cherries[i]);
+        }
+
+        cherries.Clear();
+
         cherryScore = 0;
+        cherriesDropped = 0;
+        wrapUpStarted = false;
 
         if (score < 3) 
         {
@@ -68,6 +73,7 @@ public class CherryGame : MonoBehaviour
         }
 
         cherryTimer.timer = 5;
+        cherryTimer.timeMeter.maxValue = 5;
     }
 
     public void CreateCherries()
@@ -77,11 +83,23 @@ public class CherryGame : MonoBehaviour
         cherries.Add(newCherry);
     }
 
+    public void CountCherry()
+    {
+        cherriesDropped++;
+
+        Debug.Log("Cherries Dropped: " + cherriesDropped + "+ Cherry Count: " + cherries.Count);
+
+        if(cherriesDropped == cherries.Count)
+        {
+            wrapUpStarted = true;
+            EndMicroGame();
+        }
+    }
+
     public void EndMicroGame()
     {
-        wrapUpStarted = true;
 
-        if (cherryScore == cherryNum)
+        if (cherryScore == cherries.Count)
         {
             didGreat = true;
             didOk = false;
@@ -101,13 +119,6 @@ public class CherryGame : MonoBehaviour
             didOk = false;
             failed = true;
         }
-
-        for (int i = 0; i < cherries.Count; i++)
-        {
-            Destroy(cherries[i]);
-        }
-
-        cherries.Clear();
 
         wrapUpStarted = false;
 

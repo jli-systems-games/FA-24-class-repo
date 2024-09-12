@@ -66,6 +66,7 @@ public class WhippedCream : MonoBehaviour
         }
 
         _timer.timer = initialTimer;
+        _timer.timeMeter.maxValue = initialTimer;
 
         StartCoroutine(whipCream());
     }
@@ -100,10 +101,7 @@ public class WhippedCream : MonoBehaviour
             whiskAnim.enabled = true;
             whiskAnim.Play("whisk");
         }
-        else
-        {
-            whiskAnim.enabled = false;
-        }
+
 
         yield return new WaitForSeconds(whiskAnim.GetCurrentAnimatorClipInfo(0).Length);
 
@@ -125,7 +123,6 @@ public class WhippedCream : MonoBehaviour
 
         else
         {
-            whiskAnim.enabled = false;
             StartCoroutine(EndGame(false));
         }
     }
@@ -156,6 +153,8 @@ public class WhippedCream : MonoBehaviour
 
             whippingCream.GetComponent<SpriteRenderer>().sprite = whippedCream;
         }
+
+        whiskAnim.enabled = false;
 
         yield return new WaitForSeconds(1);
 
