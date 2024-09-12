@@ -54,7 +54,6 @@ public class gameManager : MonoBehaviour
         SceneManager.LoadScene(randomGame);
     }
 
-
     void Update()
     {
         

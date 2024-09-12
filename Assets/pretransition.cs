@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 
-public class NextGame : MonoBehaviour
+public class pretransition : MonoBehaviour
 {
 
     public GameObject gameManagerScript;
@@ -15,6 +15,9 @@ public class NextGame : MonoBehaviour
     public string randomGame;
 
     [SerializeField] string videoFileName;
+
+    public GameObject transitionCanvass;
+    public GameObject gameCanvas;
 
     void Start()
     {
@@ -36,8 +39,8 @@ public class NextGame : MonoBehaviour
     
     void EndReached(UnityEngine.Video.VideoPlayer vp)
      {
-        randomGame = games[Random.Range(0, games.Length)];
-        SceneManager.LoadScene(randomGame);
+        gameCanvas.gameObject.SetActive(true);
+        transitionCanvass.gameObject.SetActive(false);
      }
     
 }
