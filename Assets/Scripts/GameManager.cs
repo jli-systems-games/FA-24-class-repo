@@ -15,11 +15,12 @@ public class GameManager : MonoBehaviour
 
     private int currentGameIndex;
 
+    public GameObject uiCanvas;
     public TMP_Text timerText;
     public TMP_Text scoreText;
     public TMP_Text livesText;
 
-    public float timerDecrease = .5f;
+    public float timerDecrease = 0.5f;
 
     private void Awake()
     {
@@ -52,7 +53,7 @@ public class GameManager : MonoBehaviour
         if (timer > 0)
         {
             Debug.Log("DeltaTime: " + Time.deltaTime); // Check the value of Time.deltaTime
-            timer -= Time.deltaTime;
+            timer -= Time.deltaTime; // Timer counting down
             UpdateUI();
         }
         else
@@ -74,8 +75,7 @@ public class GameManager : MonoBehaviour
         lives--;
         if (lives <= 0)
         {
-            Debug.Log("Game Over!");
-            SceneManager.LoadScene("StartScene");
+            SceneManager.LoadScene("EndScene");
             Destroy(gameObject);
         }
         else
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateUI()
     {
-        timerText.text = "Timer: " + Mathf.Ceil(timer).ToString("F1");
+        timerText.text = "Timer: " + timer.ToString("F1");
         livesText.text = "Lives: " + lives.ToString();
         scoreText.text = "Score: " + score.ToString();
     }

@@ -25,6 +25,6 @@ public class IntroManager : MonoBehaviour
 
     void StartGame()
     {
-        SceneManager.LoadScene("UIScene");
+        SceneManager.LoadScene("MiniGame1");
     }
 }

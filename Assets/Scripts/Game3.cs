@@ -14,7 +14,7 @@ public class Game3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        targetPresses = Random.Range(10, 31);
+        targetPresses = Random.Range(10, 26);
         currentPresses = 0;
         pressCountText.text = targetPresses.ToString();
     }
