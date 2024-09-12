@@ -7,6 +7,7 @@ using TMPro;
 
 public enum GameState
 {
+    Title,
     Game1,  //customer
     Game2,  //match
     Game3,  //clean
@@ -27,6 +28,10 @@ public class GameManager : MonoBehaviour
     public ControllerCustomer controllerCustomer;
 
     public List<GameState> MicroGamePool = new List<GameState>();
+    private int currentGameIndex = 0;
+
+    public Animator transition;
+    public float transitionTime = 1f;
 
     // void Start()
     // {
@@ -41,12 +46,18 @@ public class GameManager : MonoBehaviour
     void UpdateUI()
     {
         healthText.text = "Health: " + health;
-        scoreText.text = "Tips: " + score;
+        scoreText.text = "Tips: $" + score;
+
+        if (health == 0)
+        {
+            SceneManager.LoadScene(4);
+            
+        }
     }
 
     public void PlayGame()
     {
-        ChooseRandomGame();
+        NextGame();
     }
 
     public void ChangeState(GameState newState)
@@ -79,18 +90,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ChooseRandomGame()
+    public void NextGame()
     {
         if (MicroGamePool.Count > 0)
         {
-            int randomIndex = Random.Range(0, MicroGamePool.Count);
-            GameState randomState = MicroGamePool[randomIndex];
-            ChangeState(randomState);
+            state = MicroGamePool[currentGameIndex];
+            ChangeState(state);
+            currentGameIndex = (currentGameIndex + 1) % MicroGamePool.Count;
         }
         else
         {
             Debug.Log("no state");
         }
-}
+    }
     
 }
