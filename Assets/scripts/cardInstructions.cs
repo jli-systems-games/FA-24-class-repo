@@ -21,10 +21,38 @@ public class cardInstructions : MonoBehaviour
     public GameObject gameCanvas;
     public GameObject transitionCanvas;
 
+    public Sprite cardBack;
+    /*
+    public Sprite tenClub;
+    public Sprite queenDia;
+    public Sprite threeSpade;
+    public Sprite sevenHeart;
+    public Sprite nineDia;
+    public Sprite fourClub;
+    public Sprite kingHeart;
+    public Sprite aceSpade;
+    public Sprite eightSpade;
+    public Sprite fiveHeart;
+    public Sprite jackClub;
+    public Sprite twoDia;
+    */
+
+    public Button tenClubB;
+    public Button queenDiaB;
+    public Button threeSpadeB;
+    public Button sevenHeartB;
+    public Button nineDiaB;
+    public Button fourClubB;
+    public Button kingHeartB;
+    public Button aceSpadeB;
+    public Button eightSpadeB;
+    public Button fiveHeartB;
+    public Button jackClubB;
+    public Button twoDiaB;
+
     void Start()
     {
-        randomCard = cards[Random.Range(0, cards.Length)];
-        ChangeCardInstructions();
+        StartCoroutine(delayText());
     }
 
     public void ChangeCardInstructions() {
@@ -36,6 +64,34 @@ public class cardInstructions : MonoBehaviour
         yield return new WaitForSeconds(1);
         transitionCanvas.gameObject.SetActive(true);
         gameCanvas.gameObject.SetActive(false);
+    }
+
+    private IEnumerator delayText()
+    {
+        yield return new WaitForSeconds(1);
+        randomCard = cards[Random.Range(0, cards.Length)];
+        ChangeCardInstructions();
+        yield return new WaitForSeconds(1);
+        text.text = " ";
+        StartCoroutine(cardDisplay());
+    }
+
+    private IEnumerator cardDisplay()
+    {
+        yield return new WaitForSeconds(1);
+        tenClubB.image.sprite = cardBack;
+        queenDiaB.image.sprite = cardBack;
+        threeSpadeB.image.sprite = cardBack;
+        sevenHeartB.image.sprite = cardBack;
+        nineDiaB.image.sprite = cardBack;
+        fourClubB.image.sprite = cardBack;
+        kingHeartB.image.sprite = cardBack;
+        aceSpadeB.image.sprite = cardBack;
+        eightSpadeB.image.sprite = cardBack;
+        fiveHeartB.image.sprite = cardBack;
+        jackClubB.image.sprite = cardBack;
+        twoDiaB.image.sprite = cardBack;
+       
     }
 
     public void CheckCard()
