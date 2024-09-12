@@ -6,10 +6,10 @@ using TMPro;
 
 public class Game2 : MonoBehaviour
 {
-    public GameObject[] sceneShapes;    // Array of shapes already in the scene (assign in Inspector)
-    public TextMeshProUGUI randomLetterText; // Reference to the TextMeshPro Text (assign in Inspector)
+    public GameObject[] sceneShapes;
+    public TextMeshProUGUI randomLetterText;
 
-    private GameObject correctShape;    // The shape the player needs to clickk
+    private GameObject correctShape;
 
     // Start is called before the first frame update
     void Start()
@@ -33,12 +33,12 @@ public class Game2 : MonoBehaviour
                 // Check if the clicked shape is the correct one
                 if (clickedShape == correctShape)
                 {
-                    Debug.Log("Correct shape clicked!");
-                    SpawnShapes();  // Randomize positions and pick a new target shape
+                    Debug.Log("Correct!");
+                    GameManager.instance.OnGameComplete(true);
                 }
                 else
                 {
-                    Debug.Log("Wrong shape! Try again.");
+                    GameManager.instance.OnGameComplete(false);
                 }
             }
         }

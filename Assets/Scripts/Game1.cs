@@ -23,11 +23,11 @@ public class Game1 : MonoBehaviour
             if (Input.GetKeyDown(currentLetter.ToString().ToLower()) || Input.GetKeyDown(currentLetter.ToString().ToUpper()))
             {
                 Debug.Log("Correct!");  // Player pressed the correct key
-                RandomLetter(); // Generate a new letter
+                GameManager.instance.OnGameComplete(true);
             }
             else
             {
-                Debug.Log("Wrong key!");
+                GameManager.instance.OnGameComplete(false);
             }
         }
     }

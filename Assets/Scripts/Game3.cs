@@ -7,20 +7,30 @@ using TMPro;
 public class Game3 : MonoBehaviour
 {
     public TMP_Text pressCountText;   // Text to display how many presses are needed
-    public TMP_Text resultText;       // Text to show when the task is completed
 
-    private int requiredPresses;      // Random number of presses required
-    private int currentPresses;       // Count of player's presses
+    private int targetPresses;
+    private int currentPresses;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        targetPresses = Random.Range(10, 31);
+        currentPresses = 0;
+        pressCountText.text = targetPresses.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            currentPresses++;
+        }
+
+        // If the player presses space the exact number of times
+        if (currentPresses == targetPresses)
+        {
+            GameManager.instance.OnGameComplete(true);
+        }
     }
 }

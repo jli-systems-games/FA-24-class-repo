@@ -9,17 +9,17 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public float timer;
+    public float maxTimer;
     public int lives;
     public int score;
+
+    private int currentGameIndex;
 
     public TMP_Text timerText;
     public TMP_Text scoreText;
     public TMP_Text livesText;
 
-    public float timerDecrease = 1f;
-    private int gamesPlayed = 0;
-
-    private int currentGameIndex;
+    public float timerDecrease = .5f;
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timer = 10f;
+        maxTimer = 10f;
         lives = 3;
         score = 0;
         currentGameIndex = 1;
@@ -51,27 +51,21 @@ public class GameManager : MonoBehaviour
     {
         if (timer > 0)
         {
+            Debug.Log("DeltaTime: " + Time.deltaTime); // Check the value of Time.deltaTime
             timer -= Time.deltaTime;
-            UpdateUI(); // Update UI every frame
+            UpdateUI();
         }
         else
         {
-            GameOver();
+            OnGameComplete(false);
         }
     }
 
+    // Load the current mini-game scene based on currentGameIndex
     void StartGame()
     {
         SceneManager.LoadScene("MiniGame" + currentGameIndex);
-        gamesPlayed++;
-
-        // Every 3 games, decrease the timer
-        if (gamesPlayed >= 3)
-        {
-            timer = Mathf.Max(5f, timer - timerDecrease); // Ensure timer doesn't go below 5 seconds
-            gamesPlayed = 0; // Reset the counter
-        }
-
+        ResetTimer();
         UpdateUI();
     }
 
@@ -81,12 +75,12 @@ public class GameManager : MonoBehaviour
         if (lives <= 0)
         {
             Debug.Log("Game Over!");
-            // Implement Game Over logic here
+            SceneManager.LoadScene("StartScene");
+            Destroy(gameObject);
         }
         else
         {
-            currentGameIndex = (currentGameIndex + 1) % 3;
-            StartGame();
+            MoveToNextGame();
         }
         UpdateUI();
     }
@@ -96,21 +90,38 @@ public class GameManager : MonoBehaviour
         if (success)
         {
             score++;
-            currentGameIndex = (currentGameIndex + 1) % 3;
-            StartGame();
         }
         else
         {
             GameOver();
+            return;
         }
+
+        MoveToNextGame();
         UpdateUI();
     }
 
-    // Update the UI text elements
+    void MoveToNextGame()
+    {
+        currentGameIndex++;
+        if (currentGameIndex > 3)
+        {
+            currentGameIndex = 1;
+        }
+
+        maxTimer = Mathf.Max(3f, maxTimer - timerDecrease); //Decrease timer at game switch
+        StartGame();
+    }
+
+    void ResetTimer()
+    {
+        timer = maxTimer;
+    }
+
     void UpdateUI()
     {
-        timerText.text = "Timer: " + Mathf.Ceil(timer);
-        livesText.text = "Lives: " + lives;
-        scoreText.text = "Score: " + score;
+        timerText.text = "Timer: " + Mathf.Ceil(timer).ToString("F1");
+        livesText.text = "Lives: " + lives.ToString();
+        scoreText.text = "Score: " + score.ToString();
     }
 }
