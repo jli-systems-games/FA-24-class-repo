@@ -16,7 +16,7 @@ public class HandsPop : MonoBehaviour
         
         startPosition = transform.localPosition;
         
-        endPosition = startPosition + new Vector2(0f, 3.5f); 
+        endPosition = startPosition + new Vector2(0f, 5f); 
     }
 
     public void Initialize(HandsManager manager)
