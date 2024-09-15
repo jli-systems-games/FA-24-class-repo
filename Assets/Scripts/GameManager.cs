@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     {
         if (timer > 0)
         {
-            Debug.Log("DeltaTime: " + Time.deltaTime); // Check the value of Time.deltaTime
+            //Debug.Log("DeltaTime: " + Time.deltaTime); // Check the value of Time.deltaTime
             timer -= Time.deltaTime; // Timer counting down
             UpdateUI();
         }
