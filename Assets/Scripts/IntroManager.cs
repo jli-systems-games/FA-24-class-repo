@@ -19,6 +19,6 @@ public class IntroManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("LightSwitch");
+        SceneManager.LoadScene("SelectionScene");
     }
 }

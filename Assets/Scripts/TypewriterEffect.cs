@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class TypewriterEffect : MonoBehaviour
@@ -13,6 +14,7 @@ public class TypewriterEffect : MonoBehaviour
     private bool finishedTyping = false;
 
     public string[] dialogueLines;
+
     private int currentLineIndex = 0;
 
     private Coroutine typingCoroutine;
@@ -20,6 +22,14 @@ public class TypewriterEffect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        dialogueLines = new string[]
+        {
+            "Welcome to Fidget Laboratories!",
+            "We have a selection of curated experiences to satisfy your fidget needs.",
+            "You can press Q and E to switch between each experience.",
+            "Select your first experience with the buttons below."
+        };
+
         currentTypingSpeed = typingSpeed;
         StartNextDialogue();
     }
@@ -28,7 +38,7 @@ public class TypewriterEffect : MonoBehaviour
     void Update()
     {
         // Check for Enter press
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
         {
             if (isTyping)
             {
@@ -59,7 +69,7 @@ public class TypewriterEffect : MonoBehaviour
         }
         else
         {
-            dialogueText.text = "End of dialogue.";
+            dialogueText.text = "Select your first experience with the buttons below.";
         }
     }
 
@@ -78,4 +88,3 @@ public class TypewriterEffect : MonoBehaviour
         finishedTyping = true;
     }
 }
-
