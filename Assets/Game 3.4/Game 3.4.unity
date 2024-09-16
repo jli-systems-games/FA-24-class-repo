@@ -1218,6 +1218,7 @@ GameObject:
   - component: {fileID: 1837899354}
   - component: {fileID: 1837899353}
   - component: {fileID: 1837899352}
+  - component: {fileID: 1837899355}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1346,6 +1347,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &1837899355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837899347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17dfd528ee43044bfb99ffa01c78612b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsThatChangeColor:
+  - {fileID: 1837899347}
+  C: 0
+  S: 0
+  RR: 0
+  GG: 0
+  BB: 0
+  R: 0
+  G: 0
+  B: 0
 --- !u!1 &1935899665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1356,6 +1379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1935899667}
   - component: {fileID: 1935899666}
+  - component: {fileID: 1935899668}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1392,6 +1416,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1935899668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935899665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17dfd528ee43044bfb99ffa01c78612b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsThatChangeColor:
+  - {fileID: 2104907604}
+  - {fileID: 90665634}
+  - {fileID: 135568245}
+  - {fileID: 583616175}
+  - {fileID: 304567401}
+  - {fileID: 2138652945}
+  - {fileID: 987235424}
+  - {fileID: 647946294}
+  C: 0
+  S: 0
+  RR: 0
+  GG: 0
+  BB: 0
+  R: 0
+  G: 0
+  B: 0
 --- !u!1 &2104907604
 GameObject:
   m_ObjectHideFlags: 0

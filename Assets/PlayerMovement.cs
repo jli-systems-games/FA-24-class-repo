@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        startPosition = transform.position;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -34,11 +33,5 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(-70f, 0, 0, ForceMode.Impulse);
         }
-    }
-
-    public void Reset()
-    {
-        rb.velocity = Vector2.zero;
-        transform.position = startPosition;
     }
 }

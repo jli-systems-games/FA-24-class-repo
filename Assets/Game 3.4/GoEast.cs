@@ -10,18 +10,21 @@ public class GoEast : MonoBehaviour
 
     void Start()
     {
+
         startPosition = player.transform.position;
     }
 
     public void Win()
     {
-        //Begin();
+        TotalScore.currentScore++;
+
         SceneManager.LoadScene(7, LoadSceneMode.Single);
     }
 
     public void Lose()
     {
-        //Begin();
+        TotalScore.currentScore = 0;
+
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }

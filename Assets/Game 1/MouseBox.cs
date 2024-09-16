@@ -18,11 +18,15 @@ public class MouseBox : MonoBehaviour
 
     public void Win()
     {
+        TotalScore.currentScore++;
+
         SceneManager.LoadScene(7, LoadSceneMode.Single);
     }
 
     public void Lose()
     {
+        TotalScore.currentScore = 0;
+
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }

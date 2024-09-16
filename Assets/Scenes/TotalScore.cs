@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TotalScore : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static int currentScore = 0;
 
-    // Update is called once per frame
+    public GameObject csText;
+
     void Update()
     {
-        
+        DisplayScore();
+    }
+
+    void DisplayScore()
+    {
+        csText.GetComponent<TextMeshProUGUI>().text = currentScore.ToString();
     }
 }
