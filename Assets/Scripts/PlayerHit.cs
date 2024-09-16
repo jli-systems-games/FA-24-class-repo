@@ -8,6 +8,8 @@ public class PlayerHit : MonoBehaviour
     Ray ray;
 
     public MobMovement mob;
+    public Light flashLight;
+    bool isFlashON;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +24,23 @@ public class PlayerHit : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             Debug.Log("pressed");
-            if(Physics.Raycast(ray, out hit, 5f))
+            if (!isFlashON )
+            {
+                flashLight.enabled = true;
+                isFlashON = true;
+                if(Physics.Raycast(ray, out hit, 5f))
                     {
-                        Debug.Log("flashlight");
-                        mob.isHunting = false;
+                         Debug.Log("flashlight");
+                         mob.isHunting = false;
             
                     }
+            }
+            else
+            {
+                flashLight.enabled = false;
+                isFlashON = false;
+            }
+            
         }
         
     }

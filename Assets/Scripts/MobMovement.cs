@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
@@ -13,12 +14,15 @@ public class MobMovement : MonoBehaviour
     public Rigidbody rb;
 
     float steps;
-    public float speed = 2f;
+    public float speed = 1f;
     RaycastHit hit;
     Ray _ray;
     public bool isHunting;
     int pos;
     Animator animate;
+    float plyDistance;
+    AudioSource cue;
+    float maxDistance = 8.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +30,8 @@ public class MobMovement : MonoBehaviour
         spawnPoints.Add(leftSide);
         movement = Hunt();
         animate = GetComponent<Animator>();
-
+        cue = GetComponent<AudioSource>();
+        cue.Play();
         StartCoroutine(movement);
     }
 
@@ -34,6 +39,8 @@ public class MobMovement : MonoBehaviour
     void FixedUpdate()
     {
         steps = speed * Time.deltaTime;
+        plyDistance = Vector3.Distance(transform.position, plyr.position);
+        Debug.Log(plyDistance);
        // _ray = new Ray(transform.position, transform.right);
 
         if(pos == 0)
@@ -46,13 +53,16 @@ public class MobMovement : MonoBehaviour
         }
         if(isHunting)
         {
+            float volume = Mathf.Lerp(0.5f, 0f, plyDistance / maxDistance);
             transform.position = Vector3.MoveTowards(transform.position, plyr.position, steps);
-
-            //isHunting = false;
+            cue.volume = Mathf.Clamp(volume, 0f, 0.3f);
+            
         }
         else
         {
-            animate.SetTrigger("Caught");
+            /*animate.enabled = true;
+            animate.SetTrigger("Caught");*/
+            Hide();
         }
         
 
@@ -78,9 +88,22 @@ public class MobMovement : MonoBehaviour
     {
         pos = Mathf.FloorToInt(Random.Range(0, spawnPoints.Count));
         transform.position = spawnPoints[pos].position;
-        Debug.Log(pos);
+        //Debug.Log(pos);
         isHunting = true;
 
 
     }
+
+    void Hide()
+    {
+        if(pos == 0)
+        {
+            transform.Translate(Vector3.right);
+        }
+        else
+        {
+            transform.Translate(-Vector3.right);
+        }
+    }
+  
 }
