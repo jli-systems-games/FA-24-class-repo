@@ -95,5 +95,6 @@ public class DragAndDrop : MonoBehaviour
         //have some stuff to reset gamemanager
 
         SceneManager.LoadScene("End");
+
     }
 }

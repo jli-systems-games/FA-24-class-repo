@@ -74,8 +74,12 @@ public enum GameState
     Transition
 }
 
+
+
 public class GameManager : MonoBehaviour
 {
+   
+
     public static GameManager Instance;
     public static GameState state;
     public float transitionTime = 3f; 
@@ -100,6 +104,7 @@ public class GameManager : MonoBehaviour
     {
         //DontDestroyOnLoad(gameObject);
         StartCoroutine(TransitionPhase());
+
     }
 
     public void ChangeState(GameState newState)

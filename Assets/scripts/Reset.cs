@@ -8,11 +8,7 @@ public class Reset : MonoBehaviour
     //private GameManager _gameManager;
     //_gameManager.gameSManager.topAllCoroutines();
 
-    private void Start()
-    {
-        StopAllCoroutines();
 
-    }
 
     public void ResetGame()
     {
