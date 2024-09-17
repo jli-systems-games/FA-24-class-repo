@@ -9,7 +9,7 @@ public class PlayerHit : MonoBehaviour
 
     public MobMovement mob;
     public Light flashLight;
-    bool isFlashON;
+    bool isFlashON,isflickering;
     int flashed = 10;
     // Start is called before the first frame update
     void Start()
@@ -58,9 +58,10 @@ public class PlayerHit : MonoBehaviour
             
         }
 
-        if(flashed == 3)
+        if(flashed == 3 && !isflickering)
         {
             StartCoroutine(flickering());
+            isflickering = true;
         }
         
     }
@@ -68,7 +69,7 @@ public class PlayerHit : MonoBehaviour
     private IEnumerator flickering()
     {
 
-        float flahDuration = 1f;
+        float flahDuration =1f;
         float elapsedT = 0f;
 
         while(elapsedT < flahDuration)
@@ -78,7 +79,7 @@ public class PlayerHit : MonoBehaviour
            flashLight.intensity = Mathf.Lerp(1.14f, 0f, t);
            yield return null;
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
         elapsedT = 0f;
         while (elapsedT < flahDuration)
         {
@@ -87,7 +88,7 @@ public class PlayerHit : MonoBehaviour
             flashLight.intensity = Mathf.Lerp(0f, 1.14f, t);
             yield return null;
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
         elapsedT = 0f;
         while (elapsedT < flahDuration)
         {
