@@ -9,7 +9,7 @@ public class CameraMovement : MonoBehaviour
     public Transform right;
 
     Vector3 lookingDirect;//need to be updated
-    bool isLookingForward = true;
+    public bool isLookingForward = true;
     
     // Start is called before the first frame update
     void Start()
@@ -38,20 +38,20 @@ public class CameraMovement : MonoBehaviour
 
     void Looking()
     {
-        if (Input.GetMouseButtonDown(0) && isLookingForward)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && isLookingForward)
            {    lookingDirect = left.position - transform.position;
                         Quaternion rotation = Quaternion.LookRotation(lookingDirect, Vector3.up);
                         transform.rotation = rotation;
                         isLookingForward = false;
         }
-        else if (Input.GetMouseButtonDown(1) && isLookingForward)
+        else if (Input.GetKeyDown(KeyCode.RightArrow) && isLookingForward)
         {
             lookingDirect = right.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(lookingDirect, Vector3.up);
             transform.rotation = rotation;
             isLookingForward = false;
         }
-        else if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             lookingDirect = forward.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(lookingDirect, Vector3.up);
