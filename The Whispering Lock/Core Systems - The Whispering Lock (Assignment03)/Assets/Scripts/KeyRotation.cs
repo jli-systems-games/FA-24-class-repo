@@ -16,8 +16,8 @@ public class KeyRotation : MonoBehaviour
 {
     public float rotationSpeed = 50f; // Speed at which the key rotates
     public KeyState keyState = KeyState.Locked; // Current state of the key
-    public float stuckDuration = 4f; // How long the key stays stuck
-    public float stuckInterval = 2f; // Interval between stuck events
+    public float stuckDuration = 2f; // How long the key stays stuck
+    public float stuckInterval = 4f; // Interval between stuck events
     private float stuckTimer = 2f; // Timer to manage when key gets unstuck
     private float stuckCheckTimer = 0f; // Timer to manage stuck checks
     public TextMeshProUGUI unlockMessage; // Reference to a TextMeshProUGUI element
@@ -29,13 +29,19 @@ public class KeyRotation : MonoBehaviour
     void Start()
     {
         // Initialize totalRotation based on current rotation
-        totalRotation = transform.eulerAngles.y % 360f;
+        totalRotation = transform.eulerAngles.y % 720f;
         stuckCheckTimer = stuckInterval; // Start the stuck check timer
         Debug.Log("The Lock is locked.");
     }
 
     void Update()
     {
+         // Skip interactions if the key is in the Unlocked state
+        if (keyState == KeyState.Unlocked)
+        {
+            return;
+        }
+
         // Get the horizontal input axis (typically A/D or Left/Right arrows)
         float input = Input.GetAxis("Horizontal");
 
@@ -61,7 +67,7 @@ public class KeyRotation : MonoBehaviour
                     // Debug log for total rotation
                     // Debug.Log("Total Rotation: " + totalRotation);
 
-                    if (totalRotation >= 360f) // Check if a full rotation has been completed
+                    if (totalRotation >= 720f) // Check if a full rotation has been completed
                     {
                         Unlock(); // Unlock the lock
                     }
@@ -133,8 +139,8 @@ public class KeyRotation : MonoBehaviour
     IEnumerator ShakeKey()
     {
         isShaking = true; // Set shaking flag to true
-        float shakeDuration = 1.5f; // Duration of the shake effect
-        float shakeMagnitude = 0.05f; // Magnitude of the shake effect
+        float shakeDuration = 1f; // Duration of the shake effect
+        float shakeMagnitude = 0.02f; // Magnitude of the shake effect
 
         Vector3 originalPosition = transform.position; // Store the original position of the key
 
@@ -157,7 +163,7 @@ public class KeyRotation : MonoBehaviour
 
     IEnumerator ResetUnlockMessage()
     {
-        yield return new WaitForSeconds(2f); // Wait for 2 seconds
+        yield return new WaitForSeconds(3f); // Wait for 3 seconds
 
         if (unlockMessage != null) // Check if the unlockMessage reference is set
         {
