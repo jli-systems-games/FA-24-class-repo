@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
 
     Vector3 lookingDirect;//need to be updated
     public bool isLookingForward = true;
-    
+    public GameManager manage;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,18 +20,23 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (manage.gameStart)
+        {
+             if(Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) 
+                    {
         
+                         Looking();
 
-      /*  if(transform.rotation.y ==  -90 || transform.rotation.y == 90)
-        {
-            isLookingForward = false;
+                    }
+                    else
+                    {
+                        manage.gameStart = false;
+                        manage.ChangeState(GameState.EndScreen);
+                    }
+
         }
-        else
-        {
-            isLookingForward = true;
-        }*/
-
-        Looking();
+       
+        
         
         
     }

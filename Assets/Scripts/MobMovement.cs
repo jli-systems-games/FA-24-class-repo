@@ -8,11 +8,10 @@ using UnityEngine;
 
 public class MobMovement : MonoBehaviour
 {
-    IEnumerator movement;
+  
 
-    public Transform plyr, rightSide, leftSide;
+    public Transform plyr, rightSide, leftSide,ghoul;
     List<Transform> spawnPoints = new List<Transform>();
-    public Rigidbody rb;
 
     float steps;
     public float speed = 1.5f;
@@ -20,21 +19,26 @@ public class MobMovement : MonoBehaviour
     Ray _ray;
     public bool isHunting,gameOver,hidingStarted;
     public CameraMovement cam;
+    public GhoulAnimationManager animationManager;
+    public GameManager manage;
     int pos;
     float plyDistance,t,elapsedTime;
     bool started;
     AudioSource cue;
     Renderer monst;
     Vector3 ogPos;
+    Quaternion ogRotation;
    
     // Start is called before the first frame update
     void Start()
     {
         spawnPoints.Add(rightSide);
         spawnPoints.Add(leftSide);
+        ogRotation = ghoul.rotation;
         cue = GetComponent<AudioSource>();
         monst = GetComponent<Renderer>();
         cue.Play();
+        cue.volume = 0f;
         ogPos = transform.position;
         
     }
@@ -42,58 +46,74 @@ public class MobMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
-        steps = speed * Time.deltaTime;
-        plyDistance = Vector3.Distance(transform.position, plyr.position);
-       
+        if (manage.gameStart)
+        {   steps = speed * Time.deltaTime;
+            plyDistance = Vector3.Distance(transform.position, plyr.position);
+            if (manage.startAudio)
+            {
+                cue.volume = 0.25f;
+                manage.startAudio = false;
+            }
 
-        if (pos == 0)
-        {
-            _ray = new Ray(transform.position, -transform.right);
-            cue.panStereo = 1.0f;
-        }
-        else
-        {
-            _ray = new Ray(transform.position, transform.right);
-            cue.panStereo = -1.0f;
-        }
-        if(!started)
-        {
-            reSpawn();
-            started = true;
+            if (pos == 0)
+            {
+                _ray = new Ray(transform.position, -transform.right);
+                ghoul.rotation = ogRotation;
+                cue.panStereo = 1.0f;
+            }
+            else
+            {
+                //Debug.Log(ghoul.rotation.y);
+                _ray = new Ray(transform.position, transform.right);
+                ghoul.rotation = Quaternion.Euler(0, ghoul.rotation.y + 90, 0);
+                cue.panStereo = -1.0f;
+            }
+            if(!started)
+            {
+                reSpawn();
+                started = true;
                
            
-        }
-        else
-        {
-      
-            if (!hidingStarted)
-            {
-                StartCoroutine(Hide());
-                cue.volume = 0.25f;
-                hidingStarted = true;
-                
             }
-            
-        }
-        if (isHunting)
-            {   //Debug.Log("getting close:" + plyDistance);
-                
-                transform.position = Vector3.MoveTowards(transform.position, plyr.position, steps);
-                if(plyDistance < 15f && cue.volume <= 0.6f)
+            else
+            {
+      
+                if (!hidingStarted)
                 {
-                    cue.volume += 0.01f;
+                    StartCoroutine(Hide());
+                    cue.volume = 0.25f;
+                    hidingStarted = true;
                 
                 }
+            
+            }
+            if (isHunting)
+                {   //Debug.Log("getting close:" + plyDistance);
+                
+                    transform.position = Vector3.MoveTowards(transform.position, plyr.position, steps);
+                    if(plyDistance < 15f && cue.volume <= 0.6f)
+                    {
+                        cue.volume += 0.01f;
+                
+                    }
                
+                }
+
+            if(Physics.Raycast(_ray, out hit, 2f))
+            {
+                //Debug.Log("Jumpscare!");
+                if(hit.collider.tag == "Player")
+                {
+                    animationManager.ChangeStage(AnimationStages.Jumpscare);
+                    isHunting = false;
+                    gameOver = true;
+                    manage.ChangeState(GameState.EndScreen);
+                }
+            
             }
 
-        if(Physics.Raycast(_ray, out hit, 1f))
-        {
-            Debug.Log("Jumpscare!");
-            isHunting = false;
-            gameOver = true;
         }
+        
 
      
     }
@@ -104,7 +124,7 @@ public class MobMovement : MonoBehaviour
         pos = Mathf.FloorToInt(Random.Range(0, spawnPoints.Count));
         transform.position = spawnPoints[pos].position;
         //Debug.Log(pos);
-        //cue.UnPause();
+        animationManager.ChangeStage(AnimationStages.Hunting);
         isHunting = true;
 
 
@@ -119,13 +139,13 @@ public class MobMovement : MonoBehaviour
            // Debug.Log("sPoint:" + startPoint);
             if(pos == 0)
             {   
-                endPoint= transform.position.x + 3.0f;
+                endPoint= transform.position.x + 2.0f;
                 //Debug.Log(endPoint);
 
             }
             else
             {
-                endPoint = transform.position.x - 3.0f;
+                endPoint = transform.position.x - 2.0f;
                 //Debug.Log(endPoint);
             }
 
