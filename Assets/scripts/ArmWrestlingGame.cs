@@ -11,7 +11,10 @@ public class ArmWrestlingGame : MonoBehaviour
     public TMP_Text roundText; 
     public TMP_Text countdownText; 
     public TMP_Text timerText; 
-    public TMP_Text winnerText; 
+    public TMP_Text winnerText;
+
+    public AudioClip startSound; // sound
+    private AudioSource audioSource; 
 
     private float countdown = 3f; 
     private float timer; 
@@ -22,6 +25,7 @@ public class ArmWrestlingGame : MonoBehaviour
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         StartCoroutine(StartCountdown()); // start the timer
         timer = timeLimit;
     }
@@ -84,6 +88,10 @@ public class ArmWrestlingGame : MonoBehaviour
         }
 
         countdownText.text = "Start!";
+        if (startSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(startSound); // play sound
+        }
         isGameActive = true; 
         yield return new WaitForSeconds(1f);
         countdownText.text = ""; 
