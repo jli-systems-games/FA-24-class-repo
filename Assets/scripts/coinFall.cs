@@ -10,6 +10,7 @@ public class coinFall : MonoBehaviour
 
     public Material newMaterial; // 第一套新材质
     public Material secondNewMaterial; // 第二套新材质
+    public Material originalMaterial; // 原始材质
 
     public GameObject[] textObjects1; // 第一套文字物体
     public GameObject[] textObjects2; // 第二套文字物体
@@ -20,10 +21,11 @@ public class coinFall : MonoBehaviour
 
     private int spawnCount = 0; // 记录生成的物体数量
     private List<GameObject> spawnedObjects = new List<GameObject>(); // 存储生成的物体
+    private bool canSpawn = true; // 控制是否可以继续生成硬币
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L))
+        if ((Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L)) && canSpawn)
         {
             SpawnObject();
         }
@@ -31,7 +33,7 @@ public class coinFall : MonoBehaviour
 
     void SpawnObject()
     {
-        if (objectPrefab != null && playerTransform != null)
+        if (objectPrefab != null && playerTransform != null && canSpawn)
         {
             // 生成物体并增加计数
             Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
@@ -42,16 +44,23 @@ public class coinFall : MonoBehaviour
             spawnedObjects.Add(newObject);
             spawnCount++; // 增加计数
 
-            // 当生成的物体达到20个时，启动协程进行第一次摄像机转场和物体切换
-            if (spawnCount == 20)
+            // 当生成的物体达到50个时，启动协程进行第一次摄像机转场和物体切换
+            if (spawnCount == 50)
             {
                 StartCoroutine(HandleTransition(textObjects1, textObjects2, newMaterial));
             }
 
-            // 当生成的物体达到40个时，启动协程进行第二次摄像机转场和物体切换
-            if (spawnCount == 40)
+            // 当生成的物体达到100个时，启动协程进行第二次摄像机转场和物体切换
+            if (spawnCount == 100)
             {
                 StartCoroutine(HandleTransition(textObjects2, textObjects3, secondNewMaterial));
+            }
+
+            // 当生成的物体达到110个时，启动协程进行清理和恢复操作
+            if (spawnCount == 200)
+            {
+                StartCoroutine(HandleFinalTransition());
+                canSpawn = false; // 停止生成更多硬币
             }
         }
         else
@@ -62,23 +71,59 @@ public class coinFall : MonoBehaviour
 
     IEnumerator HandleTransition(GameObject[] oldTextObjects, GameObject[] newTextObjects, Material material)
     {
+        Debug.Log("开始摄像机转场");
+
         // 切换到转场摄像机
         MainCamera.SetActive(false);
         TransCamera.SetActive(true);
 
         // 等待1秒钟后进行材质和文字物体的切换
         yield return new WaitForSeconds(1f);
+        yield return null; // 确保摄像机切换
 
         // 执行材质和文字物体的切换
         ChangeMaterialOfObjects(material);
         SwitchTextObjects(oldTextObjects, newTextObjects);
 
         // 等待5秒钟后切换回主摄像机
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
+        yield return null; // 确保渲染更新
 
         // 切换回主摄像机
         TransCamera.SetActive(false);
         MainCamera.SetActive(true);
+
+        Debug.Log("摄像机转场完成");
+    }
+
+    IEnumerator HandleFinalTransition()
+    {
+        Debug.Log("开始最终摄像机转场");
+
+        // 切换到转场摄像机
+        MainCamera.SetActive(false);
+        TransCamera.SetActive(true);
+
+        // 等待1秒钟后进行清理和恢复操作
+        yield return new WaitForSeconds(1f);
+        yield return null; // 确保摄像机切换
+
+        // 清空生成出的硬币
+        ClearSpawnedObjects();
+
+        // 恢复物体材质和文字颜色
+        RestoreMaterialOfObjects();
+        RestoreTextObjects();
+
+        // 等待5秒钟后切换回主摄像机
+        yield return new WaitForSeconds(3f);
+        yield return null; // 确保渲染更新
+
+        // 切换回主摄像机
+        TransCamera.SetActive(false);
+        MainCamera.SetActive(true);
+
+        Debug.Log("最终摄像机转场完成");
     }
 
     void ChangeMaterialOfObjects(Material material)
@@ -134,6 +179,57 @@ public class coinFall : MonoBehaviour
             if (textObject != null)
             {
                 textObject.SetActive(true);
+            }
+        }
+    }
+
+    void ClearSpawnedObjects()
+    {
+        foreach (GameObject obj in spawnedObjects)
+        {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        spawnedObjects.Clear(); // 清空列表
+    }
+
+    void RestoreMaterialOfObjects()
+    {
+        // 分别查找场景中的物体名为"M", "K", "L"
+        GameObject objM = GameObject.Find("M");
+        GameObject objK = GameObject.Find("K");
+        GameObject objL = GameObject.Find("L");
+
+        // 恢复每个物体的材质
+        ChangeMaterial(objM, "M", originalMaterial);
+        ChangeMaterial(objK, "K", originalMaterial);
+        ChangeMaterial(objL, "L", originalMaterial);
+    }
+
+    void RestoreTextObjects()
+    {
+        // 关闭所有文字物体
+        foreach (GameObject textObject in textObjects1)
+        {
+            if (textObject != null)
+            {
+                textObject.SetActive(true);
+            }
+        }
+        foreach (GameObject textObject in textObjects2)
+        {
+            if (textObject != null)
+            {
+                textObject.SetActive(false);
+            }
+        }
+        foreach (GameObject textObject in textObjects3)
+        {
+            if (textObject != null)
+            {
+                textObject.SetActive(false);
             }
         }
     }
