@@ -56,9 +56,4 @@ public class GameManager : MonoBehaviour
         // Load the scene by name
         SceneManager.LoadScene(gameScenes[currentSceneIndex]);
     }
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 }

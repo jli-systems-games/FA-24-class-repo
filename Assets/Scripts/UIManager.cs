@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject[] uiElementsToHide;
+    public GameObject[] hiddenText;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
 
-        foreach (GameObject uiElement in uiElementsToHide)
+        foreach (GameObject uiElement in hiddenText)
         {
             if (currentSceneName == "SelectionScene") // Replace with your specific scene name
             {
@@ -50,5 +50,4 @@ public class UIManager : MonoBehaviour
     {
         UpdateUIVisibility();
     }
-
 }

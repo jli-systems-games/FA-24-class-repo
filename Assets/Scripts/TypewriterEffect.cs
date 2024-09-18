@@ -25,7 +25,7 @@ public class TypewriterEffect : MonoBehaviour
         dialogueLines = new string[]
         {
             "Welcome to Fiddle Laboratories!",
-            "We have a selection of curated experiences to expercise mindlessness.",
+            "We have provided selection of curated experiences to exercise mindlessness.",
             "You can press Q and E to switch between each experience.",
             "Select your first experience with the buttons below."
         };

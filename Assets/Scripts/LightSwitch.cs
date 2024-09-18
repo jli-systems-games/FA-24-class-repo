@@ -10,12 +10,14 @@ public class LightSwitch : MonoBehaviour
     public Sprite switchOn;
     public Sprite switchOff;
 
+    public AudioClip switchOnSound;
+    public AudioClip switchOffSound;
+    private AudioSource audioSource;
+
     public float fadeDuration = 0.2f;
 
     private bool isLightOn = true;
     private float targetAlpha;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,8 @@ public class LightSwitch : MonoBehaviour
 
         // Set the correct switch sprite
         lightSwitch.sprite = isLightOn ? switchOn : switchOff;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -34,17 +38,15 @@ public class LightSwitch : MonoBehaviour
 
     }
 
-    // Toggle the light, update the overlay, and change the switch sprite
     public void ToggleLight()
     {
-        // Toggle the light state
         isLightOn = !isLightOn;
 
         // Set target alpha for the overlay
         targetAlpha = isLightOn ? 0f : 0.7f;
-
-        // Start fading the overlay and updating the switch sprite
         StartCoroutine(FadeOverlay());
+
+        PlaySound(isLightOn ? switchOnSound : switchOffSound);
     }
 
     // Coroutine to fade the dark overlay and update the sprite simultaneously
@@ -67,5 +69,13 @@ public class LightSwitch : MonoBehaviour
 
         // Ensure the final alpha is set
         darkOverlay.color = new Color(0, 0, 0, targetAlpha);
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }
