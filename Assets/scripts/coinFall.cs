@@ -5,6 +5,7 @@ using UnityEngine;
 public class coinFall : MonoBehaviour
 {
     public GameObject objectPrefab;
+    public GameObject diamoPrefab; // diamo 物体的预制体
     public float spawnRadius = 10f;
     public Transform playerTransform;
 
@@ -20,14 +21,30 @@ public class coinFall : MonoBehaviour
     public GameObject TransCamera;
 
     private int spawnCount = 0; // 记录生成的物体数量
-    private List<GameObject> spawnedObjects = new List<GameObject>(); // 存储生成的物体
+    private int clickCount = 0; // 记录点击次数
+    private List<GameObject> spawnedObjects = new List<GameObject>(); // 存储生成的硬币
+    private List<GameObject> spawnedDiamoObjects = new List<GameObject>(); // 存储生成的 diamo
     private bool canSpawn = true; // 控制是否可以继续生成硬币
+    private bool canSpawnDiamo = false; // 控制是否可以生成 diamo
 
     void Update()
     {
+        // 检测按键是否被按下（M、K、L中的任意一个）
         if ((Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L)) && canSpawn)
         {
             SpawnObject();
+
+            // 当可以生成 diamo 时，记录点击次数
+            if (canSpawnDiamo)
+            {
+                clickCount++;
+
+                // 每 10 次点击生成一个 diamo 物体
+                if (clickCount % 5 == 0)
+                {
+                    SpawnDiamo();
+                }
+            }
         }
     }
 
@@ -35,7 +52,7 @@ public class coinFall : MonoBehaviour
     {
         if (objectPrefab != null && playerTransform != null && canSpawn)
         {
-            // 生成物体并增加计数
+            // 生成硬币物体
             Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
             randomOffset.y = 0;
             Vector3 spawnPosition = playerTransform.position + randomOffset;
@@ -57,7 +74,7 @@ public class coinFall : MonoBehaviour
             }
 
             // 当生成的物体达到110个时，启动协程进行清理和恢复操作
-            if (spawnCount == 200)
+            if (spawnCount == 150)
             {
                 StartCoroutine(HandleFinalTransition());
                 canSpawn = false; // 停止生成更多硬币
@@ -66,6 +83,25 @@ public class coinFall : MonoBehaviour
         else
         {
             Debug.LogError("objectPrefab 或 playerTransform 未设置！");
+        }
+    }
+
+    void SpawnDiamo()
+    {
+        if (diamoPrefab != null && playerTransform != null)
+        {
+            // 生成 diamo 物体
+            Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
+            randomOffset.y = 0;
+            Vector3 spawnPosition = playerTransform.position + randomOffset;
+
+            GameObject newDiamo = Instantiate(diamoPrefab, spawnPosition, Quaternion.identity);
+            spawnedDiamoObjects.Add(newDiamo);
+            Debug.Log("生成了一个 diamo 物体！");
+        }
+        else
+        {
+            Debug.LogError("diamoPrefab 或 playerTransform 未设置！");
         }
     }
 
@@ -85,7 +121,10 @@ public class coinFall : MonoBehaviour
         ChangeMaterialOfObjects(material);
         SwitchTextObjects(oldTextObjects, newTextObjects);
 
-        // 等待5秒钟后切换回主摄像机
+        // 切换后开始允许生成 diamo
+        canSpawnDiamo = true;
+
+        // 等待3秒钟后切换回主摄像机
         yield return new WaitForSeconds(3f);
         yield return null; // 确保渲染更新
 
@@ -108,14 +147,15 @@ public class coinFall : MonoBehaviour
         yield return new WaitForSeconds(1f);
         yield return null; // 确保摄像机切换
 
-        // 清空生成出的硬币
+        // 清空生成出的硬币和 diamo
         ClearSpawnedObjects();
+        ClearSpawnedDiamoObjects();
 
         // 恢复物体材质和文字颜色
         RestoreMaterialOfObjects();
         RestoreTextObjects();
 
-        // 等待5秒钟后切换回主摄像机
+        // 等待3秒钟后切换回主摄像机
         yield return new WaitForSeconds(3f);
         yield return null; // 确保渲染更新
 
@@ -126,14 +166,36 @@ public class coinFall : MonoBehaviour
         Debug.Log("最终摄像机转场完成");
     }
 
+    void ClearSpawnedObjects()
+    {
+        foreach (GameObject obj in spawnedObjects)
+        {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        spawnedObjects.Clear(); // 清空列表
+    }
+
+    void ClearSpawnedDiamoObjects()
+    {
+        foreach (GameObject obj in spawnedDiamoObjects)
+        {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        spawnedDiamoObjects.Clear(); // 清空 diamo 列表
+    }
+
     void ChangeMaterialOfObjects(Material material)
     {
-        // 分别查找场景中的物体名为"M", "K", "L"
         GameObject objM = GameObject.Find("M");
         GameObject objK = GameObject.Find("K");
         GameObject objL = GameObject.Find("L");
 
-        // 替换每个物体的材质
         ChangeMaterial(objM, "M", material);
         ChangeMaterial(objK, "K", material);
         ChangeMaterial(objL, "L", material);
@@ -143,11 +205,9 @@ public class coinFall : MonoBehaviour
     {
         if (obj != null)
         {
-            // 获取物体的Renderer组件
             Renderer objRenderer = obj.GetComponent<Renderer>();
             if (objRenderer != null)
             {
-                // 替换材质
                 objRenderer.material = material;
                 Debug.Log($"物体{name}的材质已成功替换！");
             }
@@ -164,7 +224,6 @@ public class coinFall : MonoBehaviour
 
     void SwitchTextObjects(GameObject[] oldTextObjects, GameObject[] newTextObjects)
     {
-        // 关闭旧的文字物体
         foreach (GameObject textObject in oldTextObjects)
         {
             if (textObject != null)
@@ -173,7 +232,6 @@ public class coinFall : MonoBehaviour
             }
         }
 
-        // 打开新的文字物体
         foreach (GameObject textObject in newTextObjects)
         {
             if (textObject != null)
@@ -183,26 +241,12 @@ public class coinFall : MonoBehaviour
         }
     }
 
-    void ClearSpawnedObjects()
-    {
-        foreach (GameObject obj in spawnedObjects)
-        {
-            if (obj != null)
-            {
-                Destroy(obj);
-            }
-        }
-        spawnedObjects.Clear(); // 清空列表
-    }
-
     void RestoreMaterialOfObjects()
     {
-        // 分别查找场景中的物体名为"M", "K", "L"
         GameObject objM = GameObject.Find("M");
         GameObject objK = GameObject.Find("K");
         GameObject objL = GameObject.Find("L");
 
-        // 恢复每个物体的材质
         ChangeMaterial(objM, "M", originalMaterial);
         ChangeMaterial(objK, "K", originalMaterial);
         ChangeMaterial(objL, "L", originalMaterial);
@@ -210,7 +254,6 @@ public class coinFall : MonoBehaviour
 
     void RestoreTextObjects()
     {
-        // 关闭所有文字物体
         foreach (GameObject textObject in textObjects1)
         {
             if (textObject != null)
