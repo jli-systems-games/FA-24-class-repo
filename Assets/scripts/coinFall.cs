@@ -68,13 +68,13 @@ public class coinFall : MonoBehaviour
             }
 
             // 当生成的物体达到100个时，启动协程进行第二次摄像机转场和物体切换
-            if (spawnCount == 100)
+            if (spawnCount == 150)
             {
                 StartCoroutine(HandleTransition(textObjects2, textObjects3, secondNewMaterial));
             }
 
             // 当生成的物体达到110个时，启动协程进行清理和恢复操作
-            if (spawnCount == 150)
+            if (spawnCount == 350)
             {
                 StartCoroutine(HandleFinalTransition());
                 canSpawn = false; // 停止生成更多硬币
