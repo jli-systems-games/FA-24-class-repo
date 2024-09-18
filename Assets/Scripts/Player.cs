@@ -28,17 +28,17 @@ public class Player : MonoBehaviour
     {
         if (!spokeToManager)
         {
-            if (Input.GetMouseButton(0) && Input.GetMouseButton(1) && Input.GetMouseButton(4))
+            if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
             {
                 _gameManager.ChangeState(GameStates.Squeeze);
             }
 
-            if (Input.GetMouseButton(0) && Input.GetMouseButton(4) && !Input.GetMouseButton(1))
-            {
-                _gameManager.ChangeState(GameStates.Shake);
-            }
+            //else if (Input.GetMouseButton(0) && Input.GetMouseButton(4) && !Input.GetMouseButton(1))
+            //{
+            //    _gameManager.ChangeState(GameStates.Shake);
+            //}
 
-            if (Input.GetMouseButtonDown(2))
+            else if (Input.GetMouseButtonDown(2))
             {
                 _gameManager.ChangeState(GameStates.Smash);
             }
@@ -49,17 +49,17 @@ public class Player : MonoBehaviour
     {
         if (!spokeToManager)
         {
-            if (Input.GetMouseButton(0) && Input.GetMouseButton(1) && Input.GetMouseButton(4))
+            if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
             {
                 _gameManager.ChangeState(GameStates.Squeeze);
             }
 
-            if (Input.GetMouseButton(0) && Input.GetMouseButton(4) && !Input.GetMouseButton(1))
-            {
-                _gameManager.ChangeState(GameStates.Shake);
-            }
+            //else if (Input.GetMouseButton(0) && Input.GetMouseButton(4) && !Input.GetMouseButton(1))
+            //{
+            //    _gameManager.ChangeState(GameStates.Shake);
+            //}
 
-            if (Input.GetMouseButtonDown(2))
+            else if (Input.GetMouseButtonDown(2))
             {
                 _gameManager.ChangeState(GameStates.Smash);
             }

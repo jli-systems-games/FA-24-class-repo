@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         _player.spokeToManager = false;
-        _player.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        _player.gameObject.GetComponent<SpriteRenderer>().enabled = true;
 
         ChangeState(GameStates.Idle);
     }
