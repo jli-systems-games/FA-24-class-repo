@@ -6,13 +6,14 @@ public class AudioManager : MonoBehaviour
 {
     public AudioSource rotationSound; // AudioSource for rotation sound effects
     public AudioSource unlockSound; // AudioSource for unlock sound effects
+    public AudioSource stuckSound;    // AudioSource for stuck sound effects
     public AudioSource backgroundMusicSource; // AudioSource for background music
 
     [Range(0f, 1f)] public float rotationSoundVolume = 1f; // Volume for rotation sound
     [Range(0f, 1f)] public float unlockSoundVolume = 1f;   // Volume for unlock sound
+    [Range(0f, 1f)] public float stuckSoundVolume = 1f;    // Volume for stuck sound
     [Range(0f, 1f)] public float backgroundMusicVolume = 1f; // Volume for background music
 
-    public float fadeDuration = 1f; // Duration for fade in/out effect
 
     void Start()
     {
@@ -28,7 +29,8 @@ public class AudioManager : MonoBehaviour
     {
         if (rotationSound != null && !rotationSound.isPlaying)
         {
-            StartCoroutine(HandleSoundEffect(rotationSound, rotationSoundVolume));
+            rotationSound.volume = rotationSoundVolume;
+            rotationSound.Play();
         }
     }
 
@@ -36,44 +38,17 @@ public class AudioManager : MonoBehaviour
     {
         if (unlockSound != null)
         {
-            StartCoroutine(HandleSoundEffect(unlockSound, unlockSoundVolume));
+            unlockSound.volume = unlockSoundVolume;
+            unlockSound.Play();
         }
     }
 
-    private IEnumerator HandleSoundEffect(AudioSource soundEffect, float soundEffectVolume)
+    public void PlayStuckSound()
     {
-        // Fade out background music
-        if (backgroundMusicSource != null)
+        if (stuckSound != null)
         {
-            yield return StartCoroutine(FadeAudioSource(backgroundMusicSource, backgroundMusicSource.volume, backgroundMusicVolume - 0.5f, fadeDuration));
+            stuckSound.volume = stuckSoundVolume;
+            stuckSound.Play();
         }
-
-        // Play the sound effect
-        soundEffect.volume = soundEffectVolume; // Adjust this as necessary
-        soundEffect.Play();
-
-        // Wait for the sound effect to finish
-        yield return new WaitForSeconds(soundEffect.clip.length);
-
-        // Fade background music back in
-        if (backgroundMusicSource != null)
-        {
-            yield return StartCoroutine(FadeAudioSource(backgroundMusicSource, backgroundMusicSource.volume, backgroundMusicVolume, fadeDuration));
-        }
-    }
-
-    private IEnumerator FadeAudioSource(AudioSource audioSource, float startVolume, float endVolume, float duration)
-    {
-        float startTime = Time.time;
-        float endTime = startTime + duration;
-
-        while (Time.time < endTime)
-        {
-            float elapsed = (Time.time - startTime) / duration;
-            audioSource.volume = Mathf.Lerp(startVolume, endVolume, elapsed);
-            yield return null;
-        }
-
-        audioSource.volume = endVolume; // Ensure the final volume is set
     }
 }
