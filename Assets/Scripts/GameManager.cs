@@ -41,6 +41,12 @@ public class GameManager : MonoBehaviour
             // Go to the next scene
             CycleScene(1);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("StartScene");
+        }
+
+
     }
 
     private void CycleScene(int direction)

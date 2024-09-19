@@ -72,7 +72,7 @@ public class LightSwitch : MonoBehaviour
     }
 
     private void PlaySound(AudioClip clip)
-    {
+    { 
         if (audioSource != null && clip != null)
         {
             audioSource.PlayOneShot(clip);
