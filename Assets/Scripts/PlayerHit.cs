@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerHit : MonoBehaviour
 {   
     RaycastHit hit;
@@ -11,15 +11,18 @@ public class PlayerHit : MonoBehaviour
     public MobMovement mob;
     public GhoulAnimationManager animationManager;
     public Light flashLight;
-    bool isFlashON,isflickering;
+    public Image battery;
+    bool isFlashON,isflickering,isCoolingdown;
     AudioSource on;
 
     int flashed = 10;
+    float coolDownTime = 1.75f;
     // Start is called before the first frame update
     void Start()
     {
         on = GetComponent<AudioSource>();
-        
+        Color img = battery.color;
+        img.a = 0f;
     }
 
     // Update is called once per frame
@@ -36,10 +39,10 @@ public class PlayerHit : MonoBehaviour
                     flashLight.enabled = true;
                     on.Play();
                     isFlashON = true;
-                    
-                    if(Physics.Raycast(ray, out hit, 7f))
+                    isCoolingdown = false;
+                    if(Physics.Raycast(ray, out hit, 8f))
                         {
-                             //Debug.Log(hit.collider.name);
+                             
                              if(hit.collider.tag == "Mob")
                             {
                                 animationManager.ChangeStage(AnimationStages.Caught);
@@ -50,11 +53,17 @@ public class PlayerHit : MonoBehaviour
                         }
                 }
                 else
-                {   flashed--;
+                {  
                     flashLight.enabled = false;
-                    on.clip = clips[0];
-                    on.Play();
-                    isFlashON = false;
+                    if (!isCoolingdown)
+                    {   flashed--;
+                        on.clip = clips[0];
+                        on.Play();
+                        StartCoroutine(CoolDown());
+                        isCoolingdown = true;
+                    }
+                    
+                    
                 }
 
             }
@@ -117,5 +126,37 @@ public class PlayerHit : MonoBehaviour
             yield return null;
         }
         yield break;
+    }
+
+    IEnumerator CoolDown()
+    {
+        //cool down;
+        
+        Color img = battery.color;
+        img.a = 0f;
+
+        StartCoroutine(fade(0f,1f));
+        yield return new WaitForSeconds(coolDownTime);
+        isFlashON = false;
+        img.a = 0f; 
+        yield break;
+    }
+
+    IEnumerator fade(float startAlpha, float endAlpha)
+    {   
+        float passedtime = 0f;
+        Color img = battery.color;
+
+        while (passedtime < coolDownTime)
+        {
+            passedtime += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, passedtime/coolDownTime);
+
+            img.a = alpha;
+            battery.color = img;
+            yield return null;
+        }
+        
+       
     }
 }

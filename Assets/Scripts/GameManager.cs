@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-//using UnityEngine.Windows;
+using UnityEngine.SceneManagement;
+using System.Xml.Serialization;
 
 public enum GameState
 {
-    StartScreen, Instruction, EndScreen
+    StartScreen, Instruction, EndScreen, GamePlay
 }
 public class GameManager : MonoBehaviour
 {
     public GameState state;
     public bool gameStart,startAudio;
-    public GameObject _start, _instruct, _end, _canvas;
-
-
+    public GameObject _start, _instruct, _end, _canvas, _game, _background, restartButton;
     // Start is called before the first frame update
     void Start()
     {
-        state = GameState.StartScreen;  
+        state = GameState.StartScreen;
+       
     }
 
     // Update is called once per frame
@@ -29,9 +29,9 @@ public class GameManager : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
             {
-                Debug.Log("start");
+                //Debug.Log("start");
                 StartGame();
-
+                
             }
         }
     }
@@ -46,14 +46,15 @@ public class GameManager : MonoBehaviour
                 gameStart = false;
 
                 break;
-            case GameState.Instruction:
-
+            case GameState.GamePlay:
+                _game.SetActive(true);
+                _background.SetActive(false);
                 break;
             case GameState.EndScreen:
-                _canvas.SetActive(true);
-                _instruct.SetActive(false);
+                _background.SetActive(true);
+                _game.SetActive(false);
                 _end.SetActive(true);
-
+                StartCoroutine(reStart());
                 break;
         }
     }
@@ -67,8 +68,20 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
-        _canvas.SetActive(false);
+        //_canvas.SetActive(false);
         gameStart = true;
         startAudio = true;
+    }
+
+    IEnumerator reStart()
+    {
+        yield return new WaitForSeconds(1f);
+        restartButton.SetActive(true);
+    }
+
+    public void Reset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
     }
 }

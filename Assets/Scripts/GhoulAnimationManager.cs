@@ -16,7 +16,7 @@ public class GhoulAnimationManager : MonoBehaviour
         ghoul = GetComponent<Animation>();
         int clips = ghoul.GetClipCount();
 
-        Debug.Log("clips:" +  clips);
+        
     }
 
     // Update is called once per frame

@@ -52,6 +52,7 @@ public class MobMovement : MonoBehaviour
             if (manage.startAudio)
             {
                 cue.volume = 0.25f;
+                manage.ChangeState(GameState.GamePlay);
                 manage.startAudio = false;
             }
 
@@ -81,7 +82,7 @@ public class MobMovement : MonoBehaviour
                 if (!hidingStarted)
                 {
                     StartCoroutine(Hide());
-                    cue.volume = 0.25f;
+                    
                     hidingStarted = true;
                 
                 }
@@ -93,7 +94,7 @@ public class MobMovement : MonoBehaviour
                     transform.position = Vector3.MoveTowards(transform.position, plyr.position, steps);
                     if(plyDistance < 15f && cue.volume <= 0.6f)
                     {
-                        cue.volume += 0.01f;
+                        cue.volume += 0.03f;
                 
                     }
                
@@ -153,9 +154,9 @@ public class MobMovement : MonoBehaviour
             while (elapsedTime < moveDuration)
             {
                 elapsedTime += Time.deltaTime;
-
+                
                 t = elapsedTime / moveDuration;
-
+                cue.volume -= t;
                 transform.position = new Vector3(Mathf.Lerp(startPoint, endPoint, t), transform.position.y, transform.position.z);
                 yield return null;
             }
