@@ -32,11 +32,13 @@ public class penClick : MonoBehaviour
 
     private IEnumerator annoyCheck()
     {
+        Debug.Log("check");
         yield return new WaitForSeconds(5);
         if (timesClicked > 4)
         {
             annoyed = true;
             yield return new WaitForSeconds(3);
+            
             annoyed = false;
             timesClicked = 0;
             StartCoroutine(annoyCheck());
@@ -49,7 +51,6 @@ public class penClick : MonoBehaviour
         {
             image.sprite = frame2;
             audioPlayer.Play();
-            Debug.Log("click");
             
         }
 
@@ -57,7 +58,6 @@ public class penClick : MonoBehaviour
         {
             image.sprite = frame3;
             penClicked = true;
-            Debug.Log("clickup");
 
         }
 
@@ -65,7 +65,6 @@ public class penClick : MonoBehaviour
         if (penClicked == true && image.sprite == frame3 && Input.GetKeyDown(KeyCode.Space))
         {
             image.sprite = frame2;
-            Debug.Log("clickdown");
             audioPlayer.Play();
 
         }
