@@ -18,9 +18,27 @@ public class penClick : MonoBehaviour
 
     bool checkInput = false;
 
+    bool annoyed = false;
+
+    public GameObject gameobject;
+
     void Start()
     {
         image = GetComponent<Image>();
+        StartCoroutine(annoyCheck());
+    }
+
+    private IEnumerator annoyCheck()
+    {
+        yield return new WaitForSeconds(5);
+        if (timesClicked > 5)
+        {
+            annoyed = true;
+            yield return new WaitForSeconds(5);
+            annoyed = false;
+            timesClicked = 0;
+            StartCoroutine(annoyCheck());
+        }
     }
 
     void Update()
@@ -61,5 +79,15 @@ public class penClick : MonoBehaviour
             timesClicked += 1;
         }
         
+        if (annoyed == true)
+        {
+            gameobject.gameObject.SetActive(true);
+        }
+
+        if (annoyed == false)
+        {
+            gameobject.gameObject.SetActive(false);
+        }
+
     }
 }
