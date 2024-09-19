@@ -22,6 +22,8 @@ public class penClick : MonoBehaviour
 
     public GameObject gameobject;
 
+    public AudioSource audioPlayer;
+
     void Start()
     {
         image = GetComponent<Image>();
@@ -46,6 +48,7 @@ public class penClick : MonoBehaviour
         if (penClicked == false && Input.GetKeyDown(KeyCode.Space))
         {
             image.sprite = frame2;
+            audioPlayer.Play();
             Debug.Log("click");
             
         }
@@ -63,6 +66,7 @@ public class penClick : MonoBehaviour
         {
             image.sprite = frame2;
             Debug.Log("clickdown");
+            audioPlayer.Play();
 
         }
 
