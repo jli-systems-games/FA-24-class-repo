@@ -5,46 +5,62 @@ using UnityEngine;
 public class coinFall : MonoBehaviour
 {
     public GameObject objectPrefab;
-    public GameObject diamoPrefab; // diamo 物体的预制体
+    public GameObject diamoPrefab;
     public float spawnRadius = 10f;
     public Transform playerTransform;
 
-    public Material newMaterial; // 第一套新材质
-    public Material secondNewMaterial; // 第二套新材质
-    public Material originalMaterial; // 原始材质
+    public Material newMaterial;
+    public Material secondNewMaterial;
+    public Material originalMaterial;
 
-    public GameObject[] textObjects1; // 第一套文字物体
-    public GameObject[] textObjects2; // 第二套文字物体
-    public GameObject[] textObjects3; // 第三套文字物体
+    public GameObject[] textObjects1;
+    public GameObject[] textObjects2;
+    public GameObject[] textObjects3;
 
     public GameObject MainCamera;
     public GameObject TransCamera;
 
-    private int spawnCount = 0; // 记录生成的物体数量
-    private int clickCount = 0; // 记录点击次数
-    private List<GameObject> spawnedObjects = new List<GameObject>(); // 存储生成的硬币
-    private List<GameObject> spawnedDiamoObjects = new List<GameObject>(); // 存储生成的 diamo
-    private bool canSpawn = true; // 控制是否可以继续生成硬币
-    private bool canSpawnDiamo = false; // 控制是否可以生成 diamo
+    public AudioSource hitTableAudioSource; // 引用 HitTable 的音频源
+    public List<AudioClip> coinSoundList; // 用于存储 CoinSound 的音频剪辑列表
+
+    private AudioSource coinAudioSource; // 用于播放随机 CoinSound 的私有音频源
+    private int spawnCount = 0;
+    private int clickCount = 0;
+    private List<GameObject> spawnedObjects = new List<GameObject>();
+    private List<GameObject> spawnedDiamoObjects = new List<GameObject>();
+    private bool canSpawn = true;
+    private bool canSpawnDiamo = false;
+
+    // 在游戏开始时初始化私有音频源
+    void Start()
+    {
+        if (hitTableAudioSource != null)
+        {
+            hitTableAudioSource.enabled = false;
+        }
+
+        // 初始化私有的 AudioSource
+        coinAudioSource = gameObject.AddComponent<AudioSource>();
+    }
 
     void Update()
     {
-        // 检测按键是否被按下（M、K、L中的任意一个）
         if ((Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L)) && canSpawn)
         {
             SpawnObject();
 
-            // 当可以生成 diamo 时，记录点击次数
             if (canSpawnDiamo)
             {
                 clickCount++;
 
-                // 每 10 次点击生成一个 diamo 物体
                 if (clickCount % 5 == 0)
                 {
                     SpawnDiamo();
                 }
             }
+
+            // 播放随机的 CoinSound 音频
+            PlayRandomCoinSound();
         }
     }
 
@@ -52,32 +68,28 @@ public class coinFall : MonoBehaviour
     {
         if (objectPrefab != null && playerTransform != null && canSpawn)
         {
-            // 生成硬币物体
             Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
             randomOffset.y = 0;
             Vector3 spawnPosition = playerTransform.position + randomOffset;
 
             GameObject newObject = Instantiate(objectPrefab, spawnPosition, Quaternion.identity);
             spawnedObjects.Add(newObject);
-            spawnCount++; // 增加计数
+            spawnCount++;
 
-            // 当生成的物体达到50个时，启动协程进行第一次摄像机转场和物体切换
             if (spawnCount == 50)
             {
                 StartCoroutine(HandleTransition(textObjects1, textObjects2, newMaterial));
             }
 
-            // 当生成的物体达到100个时，启动协程进行第二次摄像机转场和物体切换
             if (spawnCount == 150)
             {
                 StartCoroutine(HandleTransition(textObjects2, textObjects3, secondNewMaterial));
             }
 
-            // 当生成的物体达到110个时，启动协程进行清理和恢复操作
             if (spawnCount == 350)
             {
                 StartCoroutine(HandleFinalTransition());
-                canSpawn = false; // 停止生成更多硬币
+                canSpawn = false;
             }
         }
         else
@@ -90,7 +102,6 @@ public class coinFall : MonoBehaviour
     {
         if (diamoPrefab != null && playerTransform != null)
         {
-            // 生成 diamo 物体
             Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
             randomOffset.y = 0;
             Vector3 spawnPosition = playerTransform.position + randomOffset;
@@ -109,26 +120,33 @@ public class coinFall : MonoBehaviour
     {
         Debug.Log("开始摄像机转场");
 
-        // 切换到转场摄像机
+        // 启用音频源并播放音频
+        if (hitTableAudioSource != null)
+        {
+            hitTableAudioSource.enabled = true;
+            hitTableAudioSource.Play();
+        }
+
         MainCamera.SetActive(false);
         TransCamera.SetActive(true);
 
-        // 等待1秒钟后进行材质和文字物体的切换
         yield return new WaitForSeconds(1f);
-        yield return null; // 确保摄像机切换
+        yield return null;
 
-        // 执行材质和文字物体的切换
         ChangeMaterialOfObjects(material);
         SwitchTextObjects(oldTextObjects, newTextObjects);
 
-        // 切换后开始允许生成 diamo
         canSpawnDiamo = true;
 
-        // 等待3秒钟后切换回主摄像机
         yield return new WaitForSeconds(3f);
-        yield return null; // 确保渲染更新
+        yield return null;
 
-        // 切换回主摄像机
+        // 摄像机切换完成后禁用音频源
+        if (hitTableAudioSource != null)
+        {
+            hitTableAudioSource.enabled = false;
+        }
+
         TransCamera.SetActive(false);
         MainCamera.SetActive(true);
 
@@ -139,31 +157,62 @@ public class coinFall : MonoBehaviour
     {
         Debug.Log("开始最终摄像机转场");
 
-        // 切换到转场摄像机
+        // 启用音频源并播放音频
+        if (hitTableAudioSource != null)
+        {
+            hitTableAudioSource.enabled = true;
+            hitTableAudioSource.Play();
+        }
+
         MainCamera.SetActive(false);
         TransCamera.SetActive(true);
 
-        // 等待1秒钟后进行清理和恢复操作
         yield return new WaitForSeconds(1f);
-        yield return null; // 确保摄像机切换
+        yield return null;
 
-        // 清空生成出的硬币和 diamo
         ClearSpawnedObjects();
         ClearSpawnedDiamoObjects();
+        StopCoinSound(); // 停止 CoinSound 播放
 
-        // 恢复物体材质和文字颜色
         RestoreMaterialOfObjects();
         RestoreTextObjects();
 
-        // 等待3秒钟后切换回主摄像机
         yield return new WaitForSeconds(3f);
-        yield return null; // 确保渲染更新
+        yield return null;
 
-        // 切换回主摄像机
+        // 摄像机切换完成后禁用音频源
+        if (hitTableAudioSource != null)
+        {
+            hitTableAudioSource.enabled = false;
+        }
+
         TransCamera.SetActive(false);
         MainCamera.SetActive(true);
 
         Debug.Log("最终摄像机转场完成");
+    }
+
+    void PlayRandomCoinSound()
+    {
+        if (coinSoundList != null && coinSoundList.Count > 0)
+        {
+            int randomIndex = Random.Range(0, coinSoundList.Count);
+            AudioClip randomClip = coinSoundList[randomIndex];
+            if (randomClip != null)
+            {
+                // 播放随机选择的音频剪辑
+                coinAudioSource.clip = randomClip;
+                coinAudioSource.Play();
+            }
+        }
+    }
+
+    void StopCoinSound()
+    {
+        if (coinAudioSource.isPlaying)
+        {
+            coinAudioSource.Stop();
+        }
     }
 
     void ClearSpawnedObjects()
@@ -175,7 +224,7 @@ public class coinFall : MonoBehaviour
                 Destroy(obj);
             }
         }
-        spawnedObjects.Clear(); // 清空列表
+        spawnedObjects.Clear();
     }
 
     void ClearSpawnedDiamoObjects()
@@ -187,7 +236,7 @@ public class coinFall : MonoBehaviour
                 Destroy(obj);
             }
         }
-        spawnedDiamoObjects.Clear(); // 清空 diamo 列表
+        spawnedDiamoObjects.Clear();
     }
 
     void ChangeMaterialOfObjects(Material material)
