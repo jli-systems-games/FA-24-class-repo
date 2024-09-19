@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
-{
-    public GameObject[] testHands;
-    public Transform testHandPos;
-
+{  
     public GameObject leftHandUI;
     public GameObject rightHandUI;
 
@@ -35,6 +32,14 @@ public class InputManager : MonoBehaviour
     public Transform anchor8;
     public Transform anchor9;
     public Transform anchor0;
+
+    private float leftHandCooldown = 0.5f;
+    private float rightHandCooldown = 0.5f;
+
+    private Coroutine leftHandCooldownRoutine;
+    private Coroutine rightHandCooldownRoutine;
+
+    public bool gameStarted = false;
     void Start()
     {
         leftHandAnimator = leftHandUI.GetComponent<Animator>();
@@ -43,55 +48,125 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (gameStarted)
         {
-            int randomIndex = Random.Range(0, testHands.Length);
-            Instantiate(testHands[randomIndex], testHandPos.position, Quaternion.identity);
-        }
+            if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                leftHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand1, anchor1.position, Quaternion.identity);
+                StartLeftHandCooldown();
+            }
+            if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                leftHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand2, anchor2.position, Quaternion.identity);
+                StartLeftHandCooldown();
+            }
+            if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                leftHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand3, anchor3.position, Quaternion.identity);
+                StartLeftHandCooldown();
+            }
+            if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                leftHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand4, anchor4.position, Quaternion.identity);
+                StartLeftHandCooldown();
+            }
 
+            if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                rightHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand7, anchor7.position, Quaternion.identity);
+                StartRightHandCooldown();
+            }
+            if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha8))
+            {
+                rightHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand8, anchor8.position, Quaternion.identity);
+                StartRightHandCooldown();
+            }
+            if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha9))
+            {
+                rightHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand9, anchor9.position, Quaternion.identity);
+                StartRightHandCooldown();
+            }
+            if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                rightHandAnimator.SetTrigger("Trigger");
+                Instantiate(hand0, anchor0.position, Quaternion.identity);
+                StartRightHandCooldown();
+            }
+        }        
+    }
 
+    void StartLeftHandCooldown()
+    {
+        canUseLeftHand = false;
+        if (leftHandCooldownRoutine != null)
+        {
+            StopCoroutine(leftHandCooldownRoutine);
+        }
+        leftHandCooldownRoutine = StartCoroutine(LeftHandCooldownRoutine());
+    }
 
-        if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha1)) 
-        {
-            leftHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand1, anchor1.position, Quaternion.identity);
-        }
-        if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            leftHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand2, anchor2.position, Quaternion.identity);
+    IEnumerator LeftHandCooldownRoutine()
+    {
+        yield return new WaitForSeconds(leftHandCooldown);
+        canUseLeftHand = true;
+    }
 
-        }
-        if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha3))
+    void StartRightHandCooldown()
+    {
+        canUseRightHand = false;
+        if (rightHandCooldownRoutine != null)
         {
-            leftHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand3, anchor3.position, Quaternion.identity);
+            StopCoroutine(rightHandCooldownRoutine);
         }
-        if (canUseLeftHand && Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            leftHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand4, anchor4.position, Quaternion.identity);
-        }
+        rightHandCooldownRoutine = StartCoroutine(RightHandCooldownRoutine());
+    }
 
-        if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha7))
+    IEnumerator RightHandCooldownRoutine()
+    {
+        yield return new WaitForSeconds(rightHandCooldown);
+        canUseRightHand = true;
+    }
+
+    // Public function to reset cooldown for a specific hand
+    public void ResetHandCooldown(bool isLeftHand)
+    {
+        if (isLeftHand)
         {
-            rightHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand7, anchor7.position, Quaternion.identity);
+            if (leftHandCooldownRoutine != null)
+            {
+                StopCoroutine(leftHandCooldownRoutine);
+            }
+            canUseLeftHand = true;
         }
-        if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha8))
+        else
         {
-            rightHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand8, anchor8.position, Quaternion.identity);
+            if (rightHandCooldownRoutine != null)
+            {
+                StopCoroutine(rightHandCooldownRoutine);
+            }
+            canUseRightHand = true;
         }
-        if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha9))            
-        {
-            rightHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand9, anchor9.position, Quaternion.identity);            
-        }
-        if (canUseRightHand && Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            rightHandAnimator.SetTrigger("Trigger");
-            Instantiate(hand0, anchor0.position, Quaternion.identity);
-        }
+    }
+
+    public void StartGame()
+    { 
+        gameStarted = true;
+        leftHandAnimator.SetTrigger("Trigger");
+        rightHandAnimator.SetTrigger("Trigger");
+
+    }
+
+    public void EndGame()
+    {
+        gameStarted = false;
+        leftHandAnimator.SetTrigger("Wait");
+        rightHandAnimator.SetTrigger("Wait");
     }
 }

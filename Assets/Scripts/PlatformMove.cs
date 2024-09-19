@@ -22,10 +22,14 @@ public class PlatformMove : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (!scoreAdded && gameObject.transform.position.x < playerObject.transform.position.x)
+        if (playerObject != null)
         {
-            levelController.AddScore();
-            scoreAdded = true;
+            if (!scoreAdded && gameObject.transform.position.x < playerObject.transform.position.x)
+            {
+                levelController.AddScore();
+                scoreAdded = true;
+            }
         }
+        
     }
 }

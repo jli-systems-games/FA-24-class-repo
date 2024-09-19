@@ -18,11 +18,23 @@ public class EnemyHands : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private PowerButtonAnimController powerButtonAnimController;
+    private MiniGameLevelController miniGameLevelController;
+    private AudioManager audioManager;
+    private InputManager inputManager;
+
+    public Hand hand;
+    public enum Hand
+    { 
+     LeftHand, RightHand
+    }
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         cameraShake = FindObjectOfType<CameraShake>();
+        inputManager = FindObjectOfType<InputManager>();
+        audioManager = FindObjectOfType<AudioManager>();
         powerButtonAnimController = FindObjectOfType<PowerButtonAnimController>();
+        miniGameLevelController = FindObjectOfType<MiniGameLevelController>();
         animator = GetComponent<Animator>();
 
         if (skins.Length > 0) 
@@ -37,16 +49,23 @@ public class EnemyHands : MonoBehaviour
 
     private void Update()
     {
-        if (canDefence && Input.GetKeyDown(defenceKey) && !attackDefenced)
+        if (canDefence && Input.GetKeyDown(defenceKey) && !attackDefenced  && inputManager.gameStarted)
         {
-            cameraShake.ShakeCamera();
+            cameraShake.ShakeCamera();           
             attackDefenced = true;
             animator.SetTrigger("Trigger");
-            Invoke("DestroyHand", 1f);            
+            audioManager.PlayDefended();
+            if (hand == Hand.LeftHand)
+                inputManager.ResetHandCooldown(true);
+            else if (hand == Hand.RightHand)
+                inputManager.ResetHandCooldown(false);
+
+            Invoke("DestroyHand", 1f);
         }
     }
     void StartCountdown()
     {
+        audioManager.PlayDefendReady();
         canDefence = true;
     }
     void DestroyHand()
@@ -59,7 +78,7 @@ public class EnemyHands : MonoBehaviour
         if (!attackDefenced)
         {    
             powerButtonAnimController.TriggerButtonAnim();
-
+            miniGameLevelController.GameEnd ();
         }
     
     }
