@@ -31,10 +31,10 @@ public class penClick : MonoBehaviour
     private IEnumerator annoyCheck()
     {
         yield return new WaitForSeconds(5);
-        if (timesClicked > 5)
+        if (timesClicked > 4)
         {
             annoyed = true;
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(3);
             annoyed = false;
             timesClicked = 0;
             StartCoroutine(annoyCheck());
@@ -43,14 +43,14 @@ public class penClick : MonoBehaviour
 
     void Update()
     {
-        if (penClicked == false && Input.GetKeyDown(KeyCode.X))
+        if (penClicked == false && Input.GetKeyDown(KeyCode.Space))
         {
             image.sprite = frame2;
             Debug.Log("click");
             
         }
 
-        if (penClicked == false && image.sprite == frame2 && Input.GetKeyUp(KeyCode.X))
+        if (penClicked == false && image.sprite == frame2 && Input.GetKeyUp(KeyCode.Space))
         {
             image.sprite = frame3;
             penClicked = true;
@@ -59,14 +59,14 @@ public class penClick : MonoBehaviour
         }
 
         
-        if (penClicked == true && image.sprite == frame3 && Input.GetKeyDown(KeyCode.X))
+        if (penClicked == true && image.sprite == frame3 && Input.GetKeyDown(KeyCode.Space))
         {
             image.sprite = frame2;
             Debug.Log("clickdown");
 
         }
 
-        if (penClicked == true && image.sprite == frame2 && Input.GetKeyUp(KeyCode.X))
+        if (penClicked == true && image.sprite == frame2 && Input.GetKeyUp(KeyCode.Space))
         {
             image.sprite = frame4;
             penClicked = false;
@@ -74,7 +74,7 @@ public class penClick : MonoBehaviour
         }
         
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             timesClicked += 1;
         }
