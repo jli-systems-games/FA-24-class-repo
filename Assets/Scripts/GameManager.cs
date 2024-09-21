@@ -12,20 +12,29 @@ public class GameManager : MonoBehaviour
 
     private Player _player;
 
+    public int fidgets;
+    public int beatenStage;
+
     [SerializeField] private GameObject _doll;
     [SerializeField] private GameObject _dollTrigger;
     private SpriteRenderer _dollSprite;
 
     //sprites
-    public Sprite squeezedSprite;
-    public Sprite smashedSprite;
-    public Sprite shakenSprite;
-    public Sprite idleSprite;
+    public Sprite[] squeezedSprite;
+    public Sprite[] smashedSprite;
+    public Sprite[] shakenSprite;
+    public Sprite[] idleSprite;
+
+    //hand sprites
+    public Sprite fist;
+    public Sprite hand;
     // Start is called before the first frame update
     void Start()
     {
         _player = FindObjectOfType<Player>();
         _dollSprite = _doll.GetComponent<SpriteRenderer>();
+        fidgets = 0;
+        beatenStage = 0;
     }
 
     // Update is called once per frame
@@ -56,21 +65,41 @@ public class GameManager : MonoBehaviour
 
         if(gameState == GameStates.Idle)
         {
-            _dollSprite.sprite = idleSprite;
+            _dollSprite.sprite = idleSprite[beatenStage];
         }
 
         else
         {
             _player.spokeToManager = true;
+            fidgets++;
+        }
+
+        if (fidgets < 5)
+        {
+            beatenStage = 0;
+        }
+
+        else if (fidgets < 10)
+        {
+            beatenStage = 1;
+        }
+
+        else if (fidgets < 20)
+        {
+            beatenStage = 2;
+        }
+        else if (fidgets > 30) 
+        {
+            beatenStage = 3;
         }
     }
 
     public IEnumerator Squeezed()
     {
-        _dollSprite.sprite = squeezedSprite;
+        _dollSprite.sprite = squeezedSprite[beatenStage];
         _player.gameObject.GetComponent<SpriteRenderer>().enabled = false;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         _player.spokeToManager = false;
         _player.gameObject.GetComponent<SpriteRenderer>().enabled = true;
@@ -81,7 +110,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator Shaken()
     {
         _doll.transform.parent = _player.gameObject.transform;
-        _dollSprite.sprite = shakenSprite;
+        _dollSprite.sprite = shakenSprite[beatenStage];
         //_doll.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         _player.gameObject.GetComponent<SpriteRenderer>().enabled = false;
 
@@ -99,9 +128,15 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator Smashed()
     {
-        _dollSprite.sprite = smashedSprite;
-        yield return new WaitForSeconds(2f);
+        _dollSprite.sprite = smashedSprite[beatenStage];
+        _player.gameObject.GetComponent<SpriteRenderer>().sprite = fist;
+        _player.gameObject.GetComponent<Animator>().enabled = true;
+        _player.gameObject.GetComponent<Animator>().Play("fist-smash");
 
+        yield return new WaitForSeconds(.5f);
+
+        _player.gameObject.GetComponent<Animator>().enabled = false;
+        _player.gameObject.GetComponent<SpriteRenderer>().sprite = hand;
         _player.spokeToManager = false;
         ChangeState(GameStates.Idle);
     }
