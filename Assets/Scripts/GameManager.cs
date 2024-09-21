@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     //hand sprites
     public Sprite fist;
     public Sprite hand;
+
+    //sound
+    public AudioSource squeakSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -98,8 +101,9 @@ public class GameManager : MonoBehaviour
     {
         _dollSprite.sprite = squeezedSprite[beatenStage];
         _player.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        squeakSound.Play();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
 
         _player.spokeToManager = false;
         _player.gameObject.GetComponent<SpriteRenderer>().enabled = true;
@@ -132,6 +136,7 @@ public class GameManager : MonoBehaviour
         _player.gameObject.GetComponent<SpriteRenderer>().sprite = fist;
         _player.gameObject.GetComponent<Animator>().enabled = true;
         _player.gameObject.GetComponent<Animator>().Play("fist-smash");
+        squeakSound.Play();
 
         yield return new WaitForSeconds(.5f);
 
