@@ -20,10 +20,10 @@ public class coinFall : MonoBehaviour
     public GameObject MainCamera;
     public GameObject TransCamera;
 
-    public AudioSource hitTableAudioSource; // 引用 HitTable 的音频源
-    public List<AudioClip> coinSoundList; // 用于存储 CoinSound 的音频剪辑列表
+    public AudioSource hitTableAudioSource; 
+    public List<AudioClip> coinSoundList; 
 
-    private AudioSource coinAudioSource; // 用于播放随机 CoinSound 的私有音频源
+    private AudioSource coinAudioSource;
     private int spawnCount = 0;
     private int clickCount = 0;
     private List<GameObject> spawnedObjects = new List<GameObject>();
@@ -31,7 +31,7 @@ public class coinFall : MonoBehaviour
     private bool canSpawn = true;
     private bool canSpawnDiamo = false;
 
-    // 在游戏开始时初始化私有音频源
+    
     void Start()
     {
         if (hitTableAudioSource != null)
@@ -39,7 +39,7 @@ public class coinFall : MonoBehaviour
             hitTableAudioSource.enabled = false;
         }
 
-        // 初始化私有的 AudioSource
+        
         coinAudioSource = gameObject.AddComponent<AudioSource>();
     }
 
@@ -59,7 +59,7 @@ public class coinFall : MonoBehaviour
                 }
             }
 
-            // 播放随机的 CoinSound 音频
+           
             PlayRandomCoinSound();
         }
     }
@@ -120,7 +120,7 @@ public class coinFall : MonoBehaviour
     {
         Debug.Log("开始摄像机转场");
 
-        // 启用音频源并播放音频
+        
         if (hitTableAudioSource != null)
         {
             hitTableAudioSource.enabled = true;
@@ -141,7 +141,7 @@ public class coinFall : MonoBehaviour
         yield return new WaitForSeconds(3f);
         yield return null;
 
-        // 摄像机切换完成后禁用音频源
+        
         if (hitTableAudioSource != null)
         {
             hitTableAudioSource.enabled = false;
@@ -157,7 +157,7 @@ public class coinFall : MonoBehaviour
     {
         Debug.Log("开始最终摄像机转场");
 
-        // 启用音频源并播放音频
+        
         if (hitTableAudioSource != null)
         {
             hitTableAudioSource.enabled = true;
@@ -172,7 +172,7 @@ public class coinFall : MonoBehaviour
 
         ClearSpawnedObjects();
         ClearSpawnedDiamoObjects();
-        StopCoinSound(); // 停止 CoinSound 播放
+        StopCoinSound(); 
 
         RestoreMaterialOfObjects();
         RestoreTextObjects();
@@ -180,7 +180,7 @@ public class coinFall : MonoBehaviour
         yield return new WaitForSeconds(3f);
         yield return null;
 
-        // 摄像机切换完成后禁用音频源
+       
         if (hitTableAudioSource != null)
         {
             hitTableAudioSource.enabled = false;
@@ -200,7 +200,7 @@ public class coinFall : MonoBehaviour
             AudioClip randomClip = coinSoundList[randomIndex];
             if (randomClip != null)
             {
-                // 播放随机选择的音频剪辑
+                
                 coinAudioSource.clip = randomClip;
                 coinAudioSource.Play();
             }
