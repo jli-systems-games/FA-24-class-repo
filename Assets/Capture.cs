@@ -28,10 +28,15 @@ public class Capture : MonoBehaviour
         Debug.Log(Screen.width);
        
         if(Input.GetMouseButtonDown(0))
-        {   clicked++;
+        {
+            if (!viewingPhoto)
+            {
+                clicked++;
+            }
+            
             Debug.Log(clicked);
             //turn on camera;
-            if (!cameraON && clicked == 1)
+            if (!cameraON && clicked == 1 )
             {
                 TurnOnCam();
                 
