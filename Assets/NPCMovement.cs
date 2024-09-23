@@ -1,5 +1,7 @@
+
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -8,10 +10,12 @@ public class NPCMovement : MonoBehaviour
 {   
     Rigidbody rb;
     [SerializeField] float moveSpeed;
+    public GameObject[] spawnPoint;
     Vector3 randomDirection;
     Ray _ray;
     RaycastHit hit;
-    bool gotBLocked;
+    bool gotBLocked, isRespawning; 
+    float stuckedTime = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,13 +26,34 @@ public class NPCMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {   
         _ray = new Ray(transform.position, transform.forward);
         
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.CompareTag("wall"))
+        {
+            Respawn();
+        }
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+       
+        if(!isRespawning)
+        {
+            stuckedTime += Time.deltaTime;
+
+        }
+       
+        if(stuckedTime >= 2f)
+        {
+            //respawn;
+            Respawn();
+            //isRespawning = false;
+        }
+        //Debug.Log(stuckedTime);
         //StartCoroutine(Movement());
     }
 
@@ -58,38 +83,82 @@ public class NPCMovement : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
         PauseMovement();
-        
-       /* if (!gotBLocked)
+        yield return new WaitForSeconds(1f);
+        while (gotBLocked)
         {
-            StartCoroutine(Movement());
-        }*/
-        
+            Debug.Log("angle is " + transform.rotation.y);
+            transform.rotation = Quaternion.Euler(transform.rotation.x, Mathf.Clamp(transform.rotation.y + 75f, 0, 360), transform.rotation.z);
+            //Debug.Log("the angle increased: " + Mathf.Clamp(transform.rotation.y + 75f, 0, 360));
+
+            if (!Physics.Raycast(_ray, out hit, 13f))
+            {
+                randomDirection = transform.forward;
+                gotBLocked = false;
+                StartCoroutine(Movement());
+
+            }
+           yield return null;
+        }
+        /* if (!gotBLocked)
+         {
+             StartCoroutine(Movement());
+         }*/
+
     }
     void PauseMovement()
     {
         
         rb.angularVelocity = Vector3.zero;
         rb.velocity = Vector3.zero;
-        StartCoroutine(CheckandTurn());
+        //StartCoroutine(CheckandTurn());
 
     }
-    IEnumerator CheckandTurn()
+    void CheckandTurn()
     {
-       
-
-        transform.rotation = Quaternion.Euler(transform.rotation.x, Mathf.Clamp(transform.rotation.y * 25f,-180, 180), transform.rotation.z);
-        yield return new WaitForSeconds(2f);
-
-        if(Physics.Raycast(_ray,out hit, 5f))
+        // while (gotBLocked)
+        while(gotBLocked)
         {
-            StartCoroutine(CheckandTurn());
+            Debug.Log("angle is " + transform.rotation.y);
+            transform.rotation = Quaternion.Euler(transform.rotation.x, Mathf.Clamp(transform.rotation.y + 75f,0, 360), transform.rotation.z);
+            //Debug.Log("the angle increased: " + Mathf.Clamp(transform.rotation.y + 75f, 0, 360));
+
+            if(!Physics.Raycast(_ray, out hit, 13f))
+            {   
+                randomDirection = transform.forward;
+                gotBLocked = false;
+                StartCoroutine(Movement());
+
+            }
+            //yield return null;
+        }
+            
+
+        
+        
+        
+        //yield return new WaitForSeconds(1f);
+
+        /*if(Physics.Raycast(_ray,out hit, 13f))
+        {   
+            Debug.Log(transform.rotation.y);
+            CheckandTurn();
+            return;
+            
         }
         else
         {
-            randomDirection = transform.forward;
-            gotBLocked = false;
-            StartCoroutine(Movement());
-        }
+          
+        }*/
+    }
+
+    void Respawn()
+    {   
+        isRespawning = true;
+        int index = Mathf.FloorToInt(Random.Range(0,spawnPoint.Length));
+        //Debug.Log(index);
+        transform.position = spawnPoint[index].transform.position;
+        stuckedTime = 0;
+        isRespawning = false;
     }
 
 }
