@@ -22,10 +22,10 @@ public class Meteorites : MonoBehaviour
 
     IEnumerator SpawnMeteorites()
     {
-        while (true) 
+        while (true)
         {
             SpawnMeteorite();
-            yield return new WaitForSeconds(1f); 
+            yield return new WaitForSeconds(.5f);
         }
     }
 
@@ -38,8 +38,8 @@ public class Meteorites : MonoBehaviour
     public void SpawnMeteorite()
     {
         //spawn location
-        int randomX = Random.Range(-5, 5);
-        Vector3 spawnPosition = new (randomX, player.position.y + 45, 0);
+        int randomX = Random.Range(-5, 6);
+        Vector3 spawnPosition = new(randomX, player.position.y + 45, 0);
 
         ////spawn cubes
         GameObject cube;
