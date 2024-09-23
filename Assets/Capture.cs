@@ -24,8 +24,7 @@ public class Capture : MonoBehaviour
     
     void Update()
     {
-        Debug.Log(photoCam.scaledPixelHeight);
-        Debug.Log(Screen.width);
+        
        
         if(Input.GetMouseButtonDown(0))
         {
