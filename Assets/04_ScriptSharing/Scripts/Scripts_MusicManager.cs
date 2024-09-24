@@ -4,15 +4,5 @@ using UnityEngine;
 
 public class Scripts_MusicManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //we didn't really add any code here during the demo - it exists just to be referenced by other scripts
 }

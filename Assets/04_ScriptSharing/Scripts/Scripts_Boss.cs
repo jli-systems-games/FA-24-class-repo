@@ -2,15 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//enums are "structs" which is why they aren't in the class
+//this makes it so it can be referenced by other scripts in our project
 public enum BossStage
 {
     Stage01,
     Stage02
 }
+//enums don't technically "do" anything - they just put labels on a variable that is human readable
+//they are great for making "states"
+
 public class Scripts_Boss : MonoBehaviour
 {
+    //here we walked through what we might do to add a boss to our existing scripts
+
     private Scripts_GameManager _gameManager;
     private Scripts_MusicManager _musicManager;
+
 
     public BossStage currentStage = BossStage.Stage01;
     
