@@ -41,20 +41,6 @@ public class NPCMovement : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
        
-        if(!isRespawning)
-        {
-            stuckedTime += Time.deltaTime;
-
-        }
-       
-        if(stuckedTime >= 2f)
-        {
-            //respawn;
-            Respawn();
-            //isRespawning = false;
-        }
-        //Debug.Log(stuckedTime);
-        //StartCoroutine(Movement());
     }
 
     void RandomizeDirection()
@@ -86,23 +72,21 @@ public class NPCMovement : MonoBehaviour
         yield return new WaitForSeconds(1f);
         while (gotBLocked)
         {
-            Debug.Log("angle is " + transform.rotation.y);
-            transform.rotation = Quaternion.Euler(transform.rotation.x, Mathf.Clamp(transform.rotation.y + 75f, 0, 360), transform.rotation.z);
+            //Debug.Log("angle is " + transform.rotation.y);
+            transform.Rotate(Vector3.up * 10f);
             //Debug.Log("the angle increased: " + Mathf.Clamp(transform.rotation.y + 75f, 0, 360));
 
-            if (!Physics.Raycast(_ray, out hit, 13f))
+            if (!Physics.Raycast(_ray, out hit,10f))
             {
                 randomDirection = transform.forward;
                 gotBLocked = false;
                 StartCoroutine(Movement());
+                yield break;
 
             }
            yield return null;
         }
-        /* if (!gotBLocked)
-         {
-             StartCoroutine(Movement());
-         }*/
+        
 
     }
     void PauseMovement()
@@ -110,48 +94,12 @@ public class NPCMovement : MonoBehaviour
         
         rb.angularVelocity = Vector3.zero;
         rb.velocity = Vector3.zero;
-        //StartCoroutine(CheckandTurn());
+        
 
     }
-    void CheckandTurn()
-    {
-        // while (gotBLocked)
-        while(gotBLocked)
-        {
-            Debug.Log("angle is " + transform.rotation.y);
-            transform.rotation = Quaternion.Euler(transform.rotation.x, Mathf.Clamp(transform.rotation.y + 75f,0, 360), transform.rotation.z);
-            //Debug.Log("the angle increased: " + Mathf.Clamp(transform.rotation.y + 75f, 0, 360));
+    
 
-            if(!Physics.Raycast(_ray, out hit, 13f))
-            {   
-                randomDirection = transform.forward;
-                gotBLocked = false;
-                StartCoroutine(Movement());
-
-            }
-            //yield return null;
-        }
-            
-
-        
-        
-        
-        //yield return new WaitForSeconds(1f);
-
-        /*if(Physics.Raycast(_ray,out hit, 13f))
-        {   
-            Debug.Log(transform.rotation.y);
-            CheckandTurn();
-            return;
-            
-        }
-        else
-        {
-          
-        }*/
-    }
-
-    void Respawn()
+    public void Respawn()
     {   
         isRespawning = true;
         int index = Mathf.FloorToInt(Random.Range(0,spawnPoint.Length));

@@ -8,6 +8,7 @@ public class Capture : MonoBehaviour
     [Header("Photo Taker")]
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
+    [SerializeField] private GameObject target;
     [SerializeField] private GameObject Photocamera;
     [SerializeField] private Camera photoCam;
     [SerializeField] private Shader camShader;
@@ -15,10 +16,17 @@ public class Capture : MonoBehaviour
     private bool viewingPhoto,cameraON;
     private Texture2D screenCapture;
     int clicked = 0;
+    MeshRenderer targetRenderer;
+    NPCMovement targetMovement;
+    AudioSource shutter;
+    public Animator fadeIN;
     void Start()
     {
         
         //screenCapture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        targetRenderer = target.GetComponent<MeshRenderer>();
+        targetMovement = target.GetComponent<NPCMovement>();
+        shutter = GetComponent<AudioSource>();
     }
 
     
@@ -33,7 +41,7 @@ public class Capture : MonoBehaviour
                 clicked++;
             }
             
-            Debug.Log(clicked);
+            //Debug.Log(clicked);
             //turn on camera;
             if (!cameraON && clicked == 1 )
             {
@@ -41,8 +49,10 @@ public class Capture : MonoBehaviour
                 
             }else if(cameraON && clicked == 2) 
             {
-                Debug.Log("took picture");
+                //Debug.Log("took picture");
+                
                 StartCoroutine(CapturePhoto());
+                //CheckForPrescence();
             }
             /*else if(clicked >= 3)
             {
@@ -58,14 +68,15 @@ public class Capture : MonoBehaviour
     {
        
         viewingPhoto = true;
-        
+        shutter.Play();
         yield return new WaitForEndOfFrame();
 
 
         //Rect regiontoRead = new Rect(0,0, photoCam.scaledPixelWidth, photoCam.scaledPixelHeight);
-
+       
         captureImage();
         TurnOffCam ();
+        
         showPhotos();
         yield return new WaitForSeconds(3.0f);
         RemovePhoto();
@@ -76,8 +87,9 @@ public class Capture : MonoBehaviour
        
         Sprite photoSprite = Sprite.Create(screenCapture, new Rect(0f, 0f, screenCapture.width, screenCapture.height), new Vector2(0.5f, 0.5f), 100.0f);
         photoDisplayArea.sprite = photoSprite;
-
-        photoFrame.SetActive(true);
+        CheckForPrescence();
+        photoFrame.SetActive(true); 
+        fadeIN.Play("PhotoFade");
     }
 
     void RemovePhoto()
@@ -91,10 +103,10 @@ public class Capture : MonoBehaviour
     void TurnOnCam()
     {   
         Photocamera.SetActive(true);
-        if (camShader != null)
+        /*if (camShader != null)
         {
             photoCam.SetReplacementShader(camShader, string.Empty);
-        }
+        }*/
         cameraON = true;
        
 
@@ -102,7 +114,7 @@ public class Capture : MonoBehaviour
     void TurnOffCam()
     {
         cameraON = false;
-        photoCam.ResetReplacementShader();
+        //photoCam.ResetReplacementShader();
         Photocamera.SetActive(false);
         clicked = 0;
     }
@@ -115,5 +127,17 @@ public class Capture : MonoBehaviour
         screenCapture.ReadPixels(new Rect(0, 0, rendertext.width, rendertext.height), 0, 0, false);
         screenCapture.Apply();
         RenderTexture.active = null;
+    }
+
+    void CheckForPrescence()
+    {
+        Plane[] CameraPlanes = GeometryUtility.CalculateFrustumPlanes(photoCam);//put other camera reference here;
+        bool isInCamera = GeometryUtility.TestPlanesAABB(CameraPlanes, targetRenderer.bounds);
+        Debug.Log("target in camera is" +  isInCamera);
+        if(isInCamera )
+        {
+            //play the yahaha sound;
+            targetMovement.Respawn();
+        }
     }
 }
