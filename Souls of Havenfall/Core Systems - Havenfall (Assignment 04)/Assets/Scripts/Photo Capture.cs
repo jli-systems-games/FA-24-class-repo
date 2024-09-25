@@ -42,16 +42,16 @@ public class PhotoCapture : MonoBehaviour
             cameraUI.SetActive(cameraUIToggled);
         }
 
-        // Handles photo capture with right mouse button
+        // Handle photo capture with right mouse button, but only if the camera UI is active
         if (Input.GetMouseButtonDown(1))
         {
-            if (!viewingPhoto)
+            if (cameraUI.activeSelf && !viewingPhoto)
             {
                 StartCoroutine(CapturePhoto());
             }
-            else
+            else if (viewingPhoto)
             {
-                RemovePhoto();
+                RemovePhoto(); // Allow photo to be removed regardless of camera UI state
             }
         }
     }
