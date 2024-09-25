@@ -50,7 +50,6 @@ public class PhoneCamera : MonoBehaviour
         {
             cameraSound.Play();
         }
-    
     }
 
     IEnumerator FlashEffect()
