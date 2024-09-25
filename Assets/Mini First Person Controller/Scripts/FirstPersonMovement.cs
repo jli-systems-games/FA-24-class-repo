@@ -15,12 +15,24 @@ public class FirstPersonMovement : MonoBehaviour
     /// <summary> Functions to override movement speed. Will use the last added override. </summary>
     public List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
 
-
+    private static FirstPersonMovement instance;
 
     void Awake()
     {
         // Get the rigidbody on this.
         rigidbody = GetComponent<Rigidbody>();
+
+        if (instance == null)
+        {
+            // If not, set this as the instance and mark it to not be destroyed on scene load
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            // If an instance already exists, destroy the new one
+            Destroy(gameObject);
+        }
     }
 
     void FixedUpdate()

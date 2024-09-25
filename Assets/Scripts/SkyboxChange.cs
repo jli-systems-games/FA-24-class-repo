@@ -17,7 +17,7 @@ public class SkyboxChange : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ToggleLights(false);
+        //ToggleLights(false);
     }
 
     // Update is called once per frame
