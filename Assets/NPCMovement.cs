@@ -2,34 +2,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditorInternal.VersionControl;
+
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class NPCMovement : MonoBehaviour
-{   
+{
     Rigidbody rb;
     [SerializeField] float moveSpeed;
+    [SerializeField] AudioSource laughter;
+    [SerializeField] Transform plyr;
+    [SerializeField] Animator anim;
     public GameObject[] spawnPoint;
     Vector3 randomDirection;
     Ray _ray;
     RaycastHit hit;
     bool gotBLocked, isRespawning; 
     float stuckedTime = 0;
+    float plyDistance;
+    [SerializeField]StartGameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
         RandomizeDirection();
-        StartCoroutine(Movement());
+       
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {   
+    {   if (gameManager.isStarting)
+        {
+             StartCoroutine(Movement());
+             StartCoroutine(audioPlay());
+             gameManager.isStarting = false;
+        }
         _ray = new Ray(transform.position, transform.forward);
-        
+        plyDistance = Vector3.Distance(transform.position, plyr.position); 
+        if(plyDistance > 8f)
+        {
+            laughter.volume -= Time.deltaTime;
+        }else
+        {
+            laughter.volume += Time.deltaTime;
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -56,8 +73,6 @@ public class NPCMovement : MonoBehaviour
             rb.velocity = randomDirection * moveSpeed;
            if(Physics.Raycast(_ray,out hit, 3f))
             {
-                Debug.Log(Physics.Raycast(_ray, out hit, 2f));
-                
                 
                 gotBLocked = true;
             }
@@ -74,13 +89,14 @@ public class NPCMovement : MonoBehaviour
         {
             //Debug.Log("angle is " + transform.rotation.y);
             transform.Rotate(Vector3.up * 10f);
-            //Debug.Log("the angle increased: " + Mathf.Clamp(transform.rotation.y + 75f, 0, 360));
 
             if (!Physics.Raycast(_ray, out hit,10f))
             {
                 randomDirection = transform.forward;
                 gotBLocked = false;
                 StartCoroutine(Movement());
+                //walking animation
+                anim.SetTrigger("Jump");
                 yield break;
 
             }
@@ -94,8 +110,8 @@ public class NPCMovement : MonoBehaviour
         
         rb.angularVelocity = Vector3.zero;
         rb.velocity = Vector3.zero;
-        
-
+        //trigger idle animation.
+        anim.SetTrigger("Idle");
     }
     
 
@@ -107,6 +123,25 @@ public class NPCMovement : MonoBehaviour
         transform.position = spawnPoint[index].transform.position;
         stuckedTime = 0;
         isRespawning = false;
+    }
+
+    IEnumerator audioPlay()
+    {
+        while (true)
+        {   yield return new WaitForSeconds(2f);
+
+          
+            laughter.Play();
+
+            yield return new WaitForSeconds(2f);
+
+            laughter.Play();
+
+            yield return new WaitForSeconds(2f);
+
+        }
+        
+
     }
 
 }

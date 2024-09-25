@@ -12,6 +12,7 @@ public class Capture : MonoBehaviour
     [SerializeField] private GameObject Photocamera;
     [SerializeField] private Camera photoCam;
     [SerializeField] private Shader camShader;
+    
 
     private bool viewingPhoto,cameraON;
     private Texture2D screenCapture;
@@ -19,7 +20,9 @@ public class Capture : MonoBehaviour
     MeshRenderer targetRenderer;
     NPCMovement targetMovement;
     AudioSource shutter;
+    public AudioClip sparkling,clicks;
     public Animator fadeIN;
+    
     void Start()
     {
         
@@ -27,6 +30,7 @@ public class Capture : MonoBehaviour
         targetRenderer = target.GetComponent<MeshRenderer>();
         targetMovement = target.GetComponent<NPCMovement>();
         shutter = GetComponent<AudioSource>();
+     
     }
 
     
@@ -54,10 +58,7 @@ public class Capture : MonoBehaviour
                 StartCoroutine(CapturePhoto());
                 //CheckForPrescence();
             }
-            /*else if(clicked >= 3)
-            {
-                TurnOffCam();
-            }*/
+           
             
             
             
@@ -68,7 +69,7 @@ public class Capture : MonoBehaviour
     {
        
         viewingPhoto = true;
-        shutter.Play();
+        shutter.PlayOneShot(clicks, 0.7f);
         yield return new WaitForEndOfFrame();
 
 
@@ -137,6 +138,7 @@ public class Capture : MonoBehaviour
         if(isInCamera )
         {
             //play the yahaha sound;
+            shutter.PlayOneShot(sparkling, 0.4f);
             targetMovement.Respawn();
         }
     }
