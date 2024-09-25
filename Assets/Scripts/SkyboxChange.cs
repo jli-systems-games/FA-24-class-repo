@@ -17,7 +17,7 @@ public class SkyboxChange : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        ToggleLights(false);
     }
 
     // Update is called once per frame
@@ -25,7 +25,6 @@ public class SkyboxChange : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            // Toggle skybox and lighting
             if (isDay)
             {
                 SetNight();
@@ -35,7 +34,6 @@ public class SkyboxChange : MonoBehaviour
                 SetDay();
             }
 
-            // Switch state
             isDay = !isDay;
         }
     }
@@ -46,6 +44,7 @@ public class SkyboxChange : MonoBehaviour
         directionalLight.color = dayLightColor;
         directionalLight.intensity = dayIntensity;
         DynamicGI.UpdateEnvironment();
+        ToggleLights(false);
     }
 
     // Switch to nighttime settings
@@ -55,5 +54,19 @@ public class SkyboxChange : MonoBehaviour
         directionalLight.color = nightLightColor;
         directionalLight.intensity = nightIntensity;
         DynamicGI.UpdateEnvironment();
+        ToggleLights(true);
+    }
+
+    void ToggleLights(bool turnOn)
+    {
+        GameObject[] lightObjects = GameObject.FindGameObjectsWithTag("light");
+        foreach (GameObject obj in lightObjects)
+        {
+            Light light = obj.GetComponent<Light>();
+            if (light != null)
+            {
+                light.enabled = turnOn;
+            }
+        }
     }
 }
