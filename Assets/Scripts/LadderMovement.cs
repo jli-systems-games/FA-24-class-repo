@@ -18,7 +18,8 @@ public class LadderMovement : MonoBehaviour
             firstPersonMovement = other.GetComponent<FirstPersonMovement>(); // Disable the normal movement while climbing
             if (firstPersonMovement != null)
             {
-                firstPersonMovement.enabled = false; // Disabling player movement during climb
+                firstPersonMovement.enabled = false; // Disable normal movement
+                playerRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ; // Lock horizontal movement
             }
         }
     }
@@ -30,7 +31,9 @@ public class LadderMovement : MonoBehaviour
             isClimbing = false;
             if (firstPersonMovement != null)
             {
-                firstPersonMovement.enabled = true; // Re-enable player movement after climbing
+                firstPersonMovement.enabled = true; // Re-enable normal movement
+                playerRigidbody.constraints = RigidbodyConstraints.None; // Unlock all constraints
+                playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation; // Keep the rotation constraint intact
             }
         }
     }
@@ -41,7 +44,7 @@ public class LadderMovement : MonoBehaviour
         {
             float vertical = Input.GetAxis("Vertical"); // Use Vertical input (W/S or Up/Down arrows) to climb
             Vector3 climbDirection = new Vector3(0, vertical * climbSpeed, 0);
-            playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, climbDirection.y, playerRigidbody.velocity.z);
+            playerRigidbody.velocity = new Vector3(0, climbDirection.y, 0); // Only move on the Y-axis
         }
     }
 }
