@@ -14,6 +14,13 @@ public class NPCInteract : MonoBehaviour
     private bool playerInRange = false;
     private bool dialogueActive = false;
 
+    void Start()
+    {
+        interactPrompt.SetActive(false);
+        dialogueNPC.gameObject.SetActive(false);
+        dialogueBackground.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -22,7 +29,7 @@ public class NPCInteract : MonoBehaviour
             StartDialogue();
         }
 
-        if (dialogueActive && Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E))
+        if (dialogueActive && Input.GetMouseButtonDown(0))
         {
             DisplayNextDialogue();
         }
@@ -34,6 +41,7 @@ public class NPCInteract : MonoBehaviour
         {
             interactPrompt.SetActive(true);
             playerInRange = true;
+            currentDialogueIndex = 0;
         }
     }
 
@@ -44,6 +52,7 @@ public class NPCInteract : MonoBehaviour
             interactPrompt.SetActive(false);
             playerInRange = false;
             EndDialogue();
+            currentDialogueIndex = 0;
         }
     }
 
@@ -75,5 +84,6 @@ public class NPCInteract : MonoBehaviour
         dialogueActive = false;
         dialogueNPC.gameObject.SetActive(false);
         dialogueBackground.SetActive(false);
+        currentDialogueIndex = 0;
     }
 }
