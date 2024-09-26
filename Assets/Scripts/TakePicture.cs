@@ -38,8 +38,8 @@ public class TakePicture : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q)) 
         {
-            //StartCoroutine(takePic());
-            StartCoroutine(promptScreenshot());
+            StartCoroutine(takePic());
+            //StartCoroutine(promptScreenshot());
         }
     }
 
@@ -64,7 +64,8 @@ public class TakePicture : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(1);
 
-        prompt.SetActive(false); 
+        prompt.SetActive(false);
+        cameraObj.GetComponent<AudioSource>().Play();
         
         yield return new WaitForSecondsRealtime(1);
 
@@ -88,6 +89,7 @@ public class TakePicture : MonoBehaviour
         yield return new WaitForSeconds(.1f);
         var imageName = "Pigeon_" + System.DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".png";
         ScreenCapture.CaptureScreenshot(System.IO.Path.Combine(folderPath, imageName), 2);
+        cameraObj.GetComponent<AudioSource>().Play();
 
         Debug.Log(folderPath + imageName);
 
