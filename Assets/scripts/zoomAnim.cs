@@ -6,10 +6,8 @@ public class zoomAnim : MonoBehaviour
 {
 
     public FirstPersonController zoomed;
+    public FirstPersonController walking;
     Animator animator;
-
-    public GameObject fpc;
-    public GameObject playerCamera;
 
     public GameObject armsAndCam;
 
@@ -24,13 +22,20 @@ public class zoomAnim : MonoBehaviour
         if (zoomed.isZoomed == true)
         {
             animator.SetBool("zoomIn", true);
-            //armsAndCam.transform.parent = playerCamera.transform;
 
         }
         if (zoomed.isZoomed == false)
         {
             animator.SetBool("zoomIn", false);
-            //armsAndCam.transform.parent = fpc.transform;
+        }
+        if (walking.isWalking == true)
+        {
+            animator.SetBool("isWalkingg", true);
+
+        }
+        if (walking.isWalking == false)
+        {
+            animator.SetBool("isWalkingg", false);
         }
         
     }
