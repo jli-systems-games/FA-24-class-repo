@@ -9,6 +9,10 @@ public class photoCapture : MonoBehaviour
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
 
+    [Header("Flash Effect")]
+    [SerializeField] private GameObject cameraFlash;
+    [SerializeField] private float flashTime;
+
     private Texture2D screenCapture;
     private bool viewingPhoto;
 
@@ -52,6 +56,14 @@ public class photoCapture : MonoBehaviour
         photoDisplayArea.sprite = photoSprite;
 
         photoFrame.SetActive(true);
+        StartCoroutine(cameraFlashEffect());
+    }
+
+    IEnumerator cameraFlashEffect()
+    {
+        cameraFlash.SetActive(true);
+        yield return new WaitForSeconds(flashTime);
+        cameraFlash.SetActive(false);
     }
 
     void RemovePhoto()
