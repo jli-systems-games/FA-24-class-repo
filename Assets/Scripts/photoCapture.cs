@@ -13,6 +13,10 @@ public class photoCapture : MonoBehaviour
     [SerializeField] private GameObject cameraFlash;
     [SerializeField] private float flashTime;
 
+    [Header("Photo Fader Effect")]
+    [SerializeField] private Animator fadingAnimation;
+
+
     private Texture2D screenCapture;
     private bool viewingPhoto;
 
@@ -57,6 +61,7 @@ public class photoCapture : MonoBehaviour
 
         photoFrame.SetActive(true);
         StartCoroutine(cameraFlashEffect());
+        fadingAnimation.Play("photoFade");
     }
 
     IEnumerator cameraFlashEffect()
