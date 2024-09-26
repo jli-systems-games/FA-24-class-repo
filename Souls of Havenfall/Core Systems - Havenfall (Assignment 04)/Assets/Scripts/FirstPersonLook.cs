@@ -21,6 +21,17 @@ public class FirstPersonLook : MonoBehaviour
     {
         // Lock the mouse cursor to the game screen.
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Initialize yaw (left-right) based on character's current rotation.
+        velocity.x = character.localRotation.eulerAngles.y;
+
+        // Initialize pitch (up-down) using the camera's local X rotation, but correct for Euler wrapping.
+        float initialPitch = transform.localRotation.eulerAngles.x;
+        if (initialPitch > 180)
+        {
+            initialPitch -= 360;  // Convert angles greater than 180 to the negative equivalent
+        }
+        velocity.y = -initialPitch; 
     }
 
     void Update()
