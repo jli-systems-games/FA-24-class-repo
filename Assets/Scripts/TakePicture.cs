@@ -7,15 +7,20 @@ using UnityEngine.UI;
 public class TakePicture : MonoBehaviour
 {
     public Image spaceIndic;
+    public Button questionButton;
     public Canvas canvas;
 
     public GameObject cameraObj;
+    public GameObject cameraMesh;
+    public GameObject prompt;
 
-    private Vector3 _position;
+    private Vector3 cameraPos;
+
     // Start is called before the first frame update
     void Start()
     {
-        spaceIndic.GetComponent<Image>().enabled = false;
+        spaceIndic.gameObject.SetActive(false);
+        prompt.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,23 +31,47 @@ public class TakePicture : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        spaceIndic.GetComponent<Image>().enabled = true;
+        spaceIndic.gameObject.SetActive(true);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Q)) 
         {
-            _position = transform.position;
-            StartCoroutine(takePic());
+            //StartCoroutine(takePic());
+            StartCoroutine(promptScreenshot());
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        spaceIndic.GetComponent<Image>().enabled = false;
+        spaceIndic.gameObject.SetActive(false);
     }
 
+    private IEnumerator promptScreenshot()
+    {
+        spaceIndic.gameObject.SetActive(false);
+        questionButton.gameObject.SetActive(false);
+        cameraPos = cameraObj.transform.position;
+        cameraObj.GetComponent<Animator>().Play("take-picture");
+
+        yield return new WaitForSeconds(.67f);
+
+        cameraMesh.GetComponent<MeshRenderer>().enabled = false;
+        prompt.SetActive(true);
+
+        Time.timeScale = 0;
+
+        yield return new WaitForSecondsRealtime(1);
+
+        prompt.SetActive(false); 
+        
+        yield return new WaitForSecondsRealtime(1);
+
+        Time.timeScale = 1;
+        questionButton.gameObject.SetActive(true);
+        cameraMesh.GetComponent<MeshRenderer>().enabled = true;
+    }
     public IEnumerator takePic()
     {
         canvas.enabled = false;
@@ -52,10 +81,9 @@ public class TakePicture : MonoBehaviour
             System.IO.Directory.CreateDirectory(folderPath);
         }
         cameraObj.GetComponent<Animator>().Play("take-picture");
-        yield return new WaitForSeconds(.4f);
+        yield return new WaitForSeconds(.67f);
 
-        cameraObj.SetActive(false);
-        transform.position = _position;
+        cameraMesh.GetComponent<MeshRenderer>().enabled = false;
 
         yield return new WaitForSeconds(.1f);
         var imageName = "Pigeon_" + System.DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".png";
@@ -65,7 +93,7 @@ public class TakePicture : MonoBehaviour
 
         yield return new WaitForSeconds(.5f);
 
-        cameraObj.SetActive(true);
+        cameraMesh.GetComponent<MeshRenderer>().enabled = true;
 
         canvas.enabled = true;
     }
