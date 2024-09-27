@@ -10,8 +10,12 @@ public class snapPic : MonoBehaviour
 
     public GameObject snap;
     public FirstPersonController zoomed;
-    public detectItem cubetarget;
+    public detectItem mikutarget;
     public detectItem cointarget;
+    public detectItem easeltarget;
+    public detectItem sofatarget;
+    public detectItem artsuppliestarget;
+    public detectItem gramophonetarget;
     public AudioSource audioPlayer;
     public bool snappedPic;
     public string[] objectives;
@@ -64,7 +68,9 @@ public class snapPic : MonoBehaviour
             snappedPic = true;
             StartCoroutine(snapped());
 
-            if (cubetarget.withinTarget == true || cointarget.withinTarget == true)
+            if (mikutarget.withinTarget == true || cointarget.withinTarget == true 
+            || easeltarget.withinTarget == true || sofatarget.withinTarget == true
+            || artsuppliestarget.withinTarget == true || gramophonetarget.withinTarget == true)
             {
                 Debug.Log("Correct Item Snapped");
                 StartCoroutine(correctItem());
