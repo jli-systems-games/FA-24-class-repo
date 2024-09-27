@@ -20,7 +20,6 @@ public class detectItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(withinTarget);
 
         var bounds = collider.bounds;
         cameraFrustum = GeometryUtility.CalculateFrustumPlanes(camera);
