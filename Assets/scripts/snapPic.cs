@@ -1,14 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class snapPic : MonoBehaviour
 {
 
     public GameObject snap;
     public FirstPersonController zoomed;
-    public detectItem target;
+    public detectItem cubetarget;
+    public detectItem cointarget;
     public AudioSource audioPlayer;
+    public bool snappedPic;
+    public string[] objectives;
+    public string randomObjective;
+    public TextMeshProUGUI text;
 
     private IEnumerator snapped()
     {
@@ -16,6 +24,19 @@ public class snapPic : MonoBehaviour
         snap.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         snap.gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        snappedPic = false;
+    }
+
+    public void randomizeObjective()
+    {
+        randomObjective = objectives[Random.Range(0, objectives.Length)];
+    }
+
+    void Start()
+    {
+        randomizeObjective();
+        text.text = "Take a picture of a " + randomObjective;
     }
 
     // Update is called once per frame
@@ -23,12 +44,12 @@ public class snapPic : MonoBehaviour
     {
         if (zoomed.isZoomed == true && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            
+            snappedPic = true;
             StartCoroutine(snapped());
 
-            if (target.withinTarget == true)
+            if (cubetarget.withinTarget == true || cointarget.withinTarget == true)
             {
-                Debug.Log("got item");
+                Debug.Log("Correct Item Snapped");
             }
 
         }
