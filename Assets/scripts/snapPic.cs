@@ -15,7 +15,9 @@ public class snapPic : MonoBehaviour
     public AudioSource audioPlayer;
     public bool snappedPic;
     public string[] objectives;
+    public string[] congratulatoryMessages;
     public string randomObjective;
+    public string randomMessage;
     public TextMeshProUGUI text;
 
     private IEnumerator snapped()
@@ -28,15 +30,30 @@ public class snapPic : MonoBehaviour
         snappedPic = false;
     }
 
+    private IEnumerator correctItem()
+    {
+        yield return new WaitForSeconds(1f);
+        randomizeMessage();
+        yield return new WaitForSeconds(1f);
+        randomObjective = objectives[Random.Range(0, objectives.Length)];
+        text.text = "NOW, TAKE A PICTURE OF " + randomObjective;
+    }
+
     public void randomizeObjective()
     {
         randomObjective = objectives[Random.Range(0, objectives.Length)];
+        text.text = "TAKE A PICTURE OF " + randomObjective;
+    }
+
+    public void randomizeMessage()
+    {
+        randomMessage = congratulatoryMessages[Random.Range(0, congratulatoryMessages.Length)];
+        text.text = randomMessage;
     }
 
     void Start()
     {
         randomizeObjective();
-        text.text = "Take a picture of a " + randomObjective;
     }
 
     // Update is called once per frame
@@ -50,6 +67,7 @@ public class snapPic : MonoBehaviour
             if (cubetarget.withinTarget == true || cointarget.withinTarget == true)
             {
                 Debug.Log("Correct Item Snapped");
+                StartCoroutine(correctItem());
             }
 
         }
