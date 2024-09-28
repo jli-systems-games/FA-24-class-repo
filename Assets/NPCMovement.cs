@@ -27,17 +27,14 @@ public class NPCMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
         RandomizeDirection();
+        StartCoroutine(Movement());
+        StartCoroutine(audioPlay());
        
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {   if (gameManager.isStarting)
-        {
-             StartCoroutine(Movement());
-             StartCoroutine(audioPlay());
-             gameManager.isStarting = false;
-        }
+    {   
         _ray = new Ray(transform.position, transform.forward);
         plyDistance = Vector3.Distance(transform.position, plyr.position); 
         if(plyDistance > 8f)
