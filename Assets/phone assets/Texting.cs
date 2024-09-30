@@ -8,9 +8,10 @@ public class Texting : MonoBehaviour
 {
     public GameObject chatPanel, textObject;
 
-    [SerializeField]
-    List<Message> messageList = new();
+    public bool Taken = true;
 
+    private AudioSource audioSource;
+    public AudioClip Boop;
 
     [SerializeField]
     List<string> MessageSet1 = new List<string>
@@ -34,36 +35,9 @@ public class Texting : MonoBehaviour
         "not again",
         ">:)",
         "ill msg u again when i get closer",
-        "hows it goingg??",
-        "did u finish yett",
-        "hehehe im so exciteddd",
-        "omg btw so like",
-        "i was walking my fish yesterday",
-        "and like",
-        "apparently",
-        "theres a flying fish update??",
-        "v500.000.000.20.24:",
-        "NEW Flying Fish:",
-        "LEGENDARY evolution.",
-        "Is it a bird? Is it a plane?",
-        "Is it a... FISH??",
-        "Flying Fish now have the option",
-        "for a NEW mode of transportation",
-        //insert patch notes type comments about flying fish
-        "like what does that even mean",
-        "lmaoo",
-        "anywayss",
-        "can u take a pic of the view",
-        "when uve got a sec",
-        "...",
-        "daamn bruh",
-        "i love the sky",
-        "o waiiit",
-        "i think i see uuuu",
-        "making my way overr",
-        "see u in just a sec",
-        ":)",
     };
+
+    [SerializeField]
 
     List<string> MessageSet2 = new List<string>
     {
@@ -75,17 +49,19 @@ public class Texting : MonoBehaviour
         "and like",
         "apparently",
         "theres a flying fish update??",
-        "v500.000.000.20.24:",
-        "NEW Flying Fish:",
-        "LEGENDARY evolution.",
-        "Is it a bird? Is it a plane?",
-        "Is it a... FISH??",
+        "'v500.000.000.20.24:'",
+        "'NEW Flying Fish:'",
+        "'LEGENDARY evolution.'",
+        "'Is it a bird? Is it a plane?'",
+        "'Is it a... FISH??'",
         //insert patch notes type comments about flying fish
         "like what does that even mean",
         "anywayss",
         "can u take a pic of the view",
         "when uve got a sec",
     };
+
+    [SerializeField]
 
     List<string> MessageSet3 = new List<string>
     {
@@ -103,9 +79,14 @@ public class Texting : MonoBehaviour
 
     private bool isSendingMessages = false;
 
+    private bool isSendingMessages1 = false;
+    private bool isSendingMessages2 = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         StartCoroutine(SendMessageSet1());
     }
 
@@ -131,7 +112,8 @@ public class Texting : MonoBehaviour
 
         newMessage.textObject.text = newMessage.text;
 
-        messageList.Add(newMessage);
+
+        //messageList.Add(newMessage);
 
         //if (messageList.Count >= maxMessages)
         //{
@@ -149,14 +131,24 @@ public class Texting : MonoBehaviour
             foreach (string message in MessageSet1)
             {
                 SendMessageToChat(message);
+                audioSource.PlayOneShot(Boop);
+
                 yield return new WaitForSeconds(messageInterval);
             }
 
             isSendingMessages = false;
+            StartCoroutine(AfterMessageSet1());
+
         }
     }
 
-    public void Part2()
+    private IEnumerator AfterMessageSet1()
+    {
+        yield return new WaitForSeconds(20.0f);
+        MPart2();
+    }
+
+    public void MPart2()
     {
         StartCoroutine(SendMessageSet2());
     }
@@ -170,6 +162,8 @@ public class Texting : MonoBehaviour
             foreach (string message in MessageSet2)
             {
                 SendMessageToChat(message);
+                audioSource.PlayOneShot(Boop);
+
                 yield return new WaitForSeconds(messageInterval);
             }
 
@@ -177,7 +171,7 @@ public class Texting : MonoBehaviour
         }
     }
 
-    public void Part3()
+    public void MPart3()
     {
         StartCoroutine(SendMessageSet3());
     }
@@ -191,6 +185,8 @@ public class Texting : MonoBehaviour
             foreach (string message in MessageSet3)
             {
                 SendMessageToChat(message);
+                audioSource.PlayOneShot(Boop);
+
                 yield return new WaitForSeconds(messageInterval);
             }
 
