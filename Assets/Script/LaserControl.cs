@@ -5,7 +5,7 @@ using UnityEngine;
 public class LaserControl : MonoBehaviour
 {
     private LineRenderer lr;
-    [SerializeField] Transform from,endPoint;
+    [SerializeField] Transform from;
 
     Ray _ray;
     void Start()
