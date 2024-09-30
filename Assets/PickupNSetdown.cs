@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PickupNSetdown : MonoBehaviour
@@ -7,6 +8,9 @@ public class PickupNSetdown : MonoBehaviour
     [SerializeField] Transform Cam;
     [SerializeField] private LayerMask pickUpLayer;
     [SerializeField] Transform holdPoint;
+
+    Grabbable _grabbable;
+    public bool isHoldingBby;
     RaycastHit hit;
     void Start()
     {
@@ -16,19 +20,33 @@ public class PickupNSetdown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   Ray ray = new Ray(Cam.position, Cam.forward);
-        if(Physics.Raycast(ray, out hit, 4f, pickUpLayer))
+        if (Input.GetMouseButtonDown(0))
         {
-            if(hit.transform.TryGetComponent(out Grabbable _grabbable))
-            {   
-                if(Input.GetMouseButtonDown(0))
-                {
-                    _grabbable.Grab(holdPoint);
-                }
+            if (!isHoldingBby)
+            {
+                if(Physics.Raycast(ray, out hit, 4f, pickUpLayer))
+                {   
+                    if(hit.transform.TryGetComponent(out _grabbable))
+                    {   
                 
+                    _grabbable.Grab(holdPoint);
+                    isHoldingBby = true;
 
-                Debug.Log(_grabbable);
+                    //Debug.Log(_grabbable);
+                    }
+                }
+            }
+            else
+            {   
+                Debug.Log("drop");
+                _grabbable.Drop();
+               isHoldingBby = false;
             }
             
         }
+
+        //Debug.Log(_grabbable);
+
+        
     }
 }

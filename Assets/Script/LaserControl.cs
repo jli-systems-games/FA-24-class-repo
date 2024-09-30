@@ -6,6 +6,7 @@ public class LaserControl : MonoBehaviour
 {
     private LineRenderer lr;
     [SerializeField] Transform from;
+    [SerializeField] PickupNSetdown pick;
 
     Ray _ray;
     void Start()
@@ -19,11 +20,13 @@ public class LaserControl : MonoBehaviour
     {   
         if(Input.GetKey(KeyCode.E))
         {
-            lr.enabled = true;
-            lr.SetPosition(0,from.position);
-            RaycastHit hit;
+            if (pick.isHoldingBby)
+            {
+                lr.enabled = true;
+                lr.SetPosition(0,from.position);
+                RaycastHit hit;
       
-             if(Physics.Raycast(_ray, out hit, 50f))
+                if(Physics.Raycast(_ray, out hit, 50f))
                 {
                      if(hit.collider) 
                      {
@@ -36,6 +39,8 @@ public class LaserControl : MonoBehaviour
                     lr.SetPosition(1, transform.forward * 100f);
             
                 }
+            }
+            
         }
         else
         {

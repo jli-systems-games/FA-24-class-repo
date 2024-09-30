@@ -748,6 +748,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a7d621f63f04cc347b79fa3f70bc4266, type: 3}
   m_PrefabInstance: {fileID: 1449793427}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1104273772 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4459864851508666808, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
+  m_PrefabInstance: {fileID: 1757713190}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1426969312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -845,7 +850,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1443813397}
-  - component: {fileID: 1443813398}
   m_Layer: 3
   m_Name: front
   m_TagString: Untagged
@@ -861,26 +865,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443813396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.14, y: -0.613, z: 0.79}
+  m_LocalPosition: {x: -0.055, y: -0.945, z: 1.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 217278823}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1443813398
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1443813396}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1449793427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1078,7 +1069,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f7e4c06ce596442952b2c661417f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera: {fileID: 217278823}
+  Joint: {fileID: 1104273772}
 --- !u!54 &1789746112
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1113,6 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   from: {fileID: 1438443513}
+  pick: {fileID: 1914033221}
 --- !u!120 &1789746115
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1210,7 +1202,7 @@ LineRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0
 --- !u!1 &1914033207 stripped
 GameObject:
@@ -1235,6 +1227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   from: {fileID: 1914033213}
+  pick: {fileID: 0}
 --- !u!120 &1914033215
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1351,3 +1344,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 55
   holdPoint: {fileID: 1443813397}
+  isHoldingBby: 0
