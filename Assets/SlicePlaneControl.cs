@@ -17,12 +17,14 @@ public class SlicePlaneControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawRay(transform.position, transform.forward, Color.green);
         if (Input.GetKey(KeyCode.E))
         {
             if (!hasSliced)
             {   
-                if(Physics.Raycast(transform.position, transform.forward, out hit, 100f))
+                if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
                 {
+                    Debug.Log("HITING");
                     GameObject obj = hit.collider.gameObject;
                     if (obj.TryGetComponent(out Slice _slice))
                     {
@@ -43,7 +45,7 @@ public class SlicePlaneControl : MonoBehaviour
         Debug.Log("SLICING");
         _slice.ComputeSlice(Vector3.up, this.transform.position);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         hasSliced = false;
     }
