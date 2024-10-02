@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public int dyingChance;
 
     public TextMeshProUGUI deathText;
+    public TextMeshProUGUI deathTextBlack;
 
     public GameObject accordionObj;
 
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour
         musicPlaying = false;
         animator.speed = 0;
         deathText.enabled = false;
+        deathTextBlack.enabled = false;
         died = false;
     }
 
@@ -79,7 +81,7 @@ public class Player : MonoBehaviour
 
             else
             {
-                dyingChance = Random.Range(0, 500);
+                dyingChance = Random.Range(0, 1000);
             }
         }
     }
@@ -100,6 +102,7 @@ public class Player : MonoBehaviour
         accordionObj.GetComponent<Collider>().enabled = true;
         GetComponent<AudioSource>().Play();
         deathText.enabled = true;
+        deathTextBlack.enabled = true;
         accordion.Pause();
         animator.speed = 0;
     }
