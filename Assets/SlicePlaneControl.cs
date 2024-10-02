@@ -31,6 +31,14 @@ public class SlicePlaneControl : MonoBehaviour
                         //StartCoroutine
                         hasSliced = true;
                         StartCoroutine(StartSlicing(_slice));
+                      
+                        if(obj.CompareTag("Enemy"))
+                        {
+                            NavigationManager npc = obj.GetComponentInParent<NavigationManager>();
+                            npc.gotKilled = true;
+                            
+
+                        }
                     }
                     {
                         
@@ -48,5 +56,7 @@ public class SlicePlaneControl : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         hasSliced = false;
+
+       
     }
 }
