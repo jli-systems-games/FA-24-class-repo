@@ -5,7 +5,7 @@ using UnityEngine;
 public class SlicePlaneControl : MonoBehaviour
 {
     [SerializeField] PickupNSetdown pick;
-
+    [SerializeField] LineRenderer laser;
     RaycastHit hit;
     Slice sliceobj;
     bool hasSliced;
@@ -16,16 +16,19 @@ public class SlicePlaneControl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Debug.DrawRay(transform.position, transform.forward, Color.green);
+    {   
+        
+        Vector3 direction = laser.GetPosition(1) - laser.GetPosition(0);
+        //Debug.DrawRay(transform.position,direction * 5, Color.green);
         if (Input.GetKey(KeyCode.E))
         {
             if (!hasSliced)
             {   
-                if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                if(Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity))
                 {
-                    Debug.Log("HITING");
+                    
                     GameObject obj = hit.collider.gameObject;
+                    Debug.Log(obj.name);
                     if (obj.TryGetComponent(out Slice _slice))
                     {
                         //StartCoroutine
