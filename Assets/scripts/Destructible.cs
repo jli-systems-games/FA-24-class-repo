@@ -9,16 +9,16 @@ public class Destructible : MonoBehaviour
 
     void OnMouseDown()
     {
-        // 计算玩家与物体的距离
+        
         float distance = Vector3.Distance(player.position, transform.position);
 
-        // 如果距离小于等于2，才允许破坏
-        if (distance <= 2f)
+        
+        if (distance <= 3f)
         {
-            // 生成破碎后的版本
+            
             Instantiate(destroyedVersion, transform.position, transform.rotation);
 
-            // 销毁当前的游戏对象
+            
             Destroy(gameObject);
         }
         else
