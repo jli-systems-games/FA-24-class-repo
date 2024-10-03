@@ -11,6 +11,7 @@ public class IntroManager : MonoBehaviour
 
     public Image colleenImage;
     public Sprite newSprite;
+    public Image keyboardImage;
 
     public AudioSource audioSource;
     public AudioClip ukeleleMusic;
@@ -18,7 +19,7 @@ public class IntroManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        keyboardImage.canvasRenderer.SetAlpha(0);
     }
 
     // Update is called once per frame
@@ -29,6 +30,8 @@ public class IntroManager : MonoBehaviour
             DisableText();
             ChangeSprite();
             PlayMusic();
+
+            keyboardImage.canvasRenderer.SetAlpha(1);
         }
     }
 
