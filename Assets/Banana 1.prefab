@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2408206477816211978}
   m_Layer: 0
   m_Name: LegIK.L
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,6 +32,52 @@ Transform:
   m_Father: {fileID: 5120304042244267080}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &337437742036501999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4578930279635945464}
+  - component: {fileID: 6387579892144818277}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: human
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4578930279635945464
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337437742036501999}
+  m_LocalRotation: {x: -0.7491157, y: -0.0000000049390825, z: -0.000000007902533, w: 0.6624391}
+  m_LocalPosition: {x: -0, y: 0.0803, z: -0.0379}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7147650741003007113}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -97.028, y: 0, z: 0}
+--- !u!64 &6387579892144818277
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337437742036501999}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3216447080179446721, guid: 2fd8367cee1e04a91b5b1f7f98b9c199, type: 3}
 --- !u!1 &469119685697501593
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +89,7 @@ GameObject:
   - component: {fileID: 7403259749294864690}
   m_Layer: 0
   m_Name: LowMidSpine
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,8 +121,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7147650741003007113}
   - component: {fileID: 9186288837677021582}
+  - component: {fileID: 6918957220132992663}
+  - component: {fileID: 7229134048700024705}
   m_Layer: 0
-  m_Name: Banana
+  m_Name: Banana p1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,9 +139,10 @@ Transform:
   m_GameObject: {fileID: 565216673440986227}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0.011293272, y: 0.6911154, z: -0.28858128}
-  m_LocalScale: {x: 19.850714, y: 19.850714, z: 19.850714}
+  m_LocalScale: {x: 11.257141, y: 19.850714, z: 19.850714}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4578930279635945464}
   m_Father: {fileID: 1646261101803408915}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -167,6 +216,33 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0001111608, y: 0.0082329735, z: -0.002188312}
     m_Extent: {x: 0.0062108985, y: 0.022150317, z: 0.011456077}
   m_DirtyAABB: 0
+--- !u!64 &6918957220132992663
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565216673440986227}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3216447080179446721, guid: 2fd8367cee1e04a91b5b1f7f98b9c199, type: 3}
+--- !u!65 &7229134048700024705
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565216673440986227}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.044116355, y: 0.01706337, z: 0.056099214}
+  m_Center: {x: -0.002392754, y: -0.014445657, z: -0.0016595109}
 --- !u!1 &685573678167273233
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +254,7 @@ GameObject:
   - component: {fileID: 1766830259876221064}
   m_Layer: 0
   m_Name: Toes.L
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,7 +286,7 @@ GameObject:
   - component: {fileID: 2028331626916658734}
   m_Layer: 0
   m_Name: LowSpine
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,7 +318,7 @@ GameObject:
   - component: {fileID: 5905637641529807749}
   m_Layer: 0
   m_Name: Foot.R
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -274,7 +350,7 @@ GameObject:
   - component: {fileID: 7307656902918997506}
   m_Layer: 0
   m_Name: Toes.L_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -305,7 +381,7 @@ GameObject:
   - component: {fileID: 5120304042244267080}
   m_Layer: 0
   m_Name: BananaRig
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,6 +418,7 @@ GameObject:
   - component: {fileID: 1248069679359863787}
   - component: {fileID: 5068062560551809365}
   - component: {fileID: 5068062560551809366}
+  - component: {fileID: 5069088273991711242}
   m_Layer: 0
   m_Name: Banana 1
   m_TagString: Untagged
@@ -423,6 +500,103 @@ MonoBehaviour:
   slipped: 0
   startPosition: {x: 0, y: 0, z: 0}
   bananaPrefab: {fileID: 2131153784757900457}
+  woah: {fileID: 8300000, guid: d88def6da95ec458089f969b8ea31851, type: 3}
+--- !u!82 &5069088273991711242
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131153784757900457}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2134271557397577705
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,7 +608,7 @@ GameObject:
   - component: {fileID: 6782926604927626681}
   m_Layer: 0
   m_Name: LegPole.R
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,7 +640,7 @@ GameObject:
   - component: {fileID: 8372884293519779106}
   m_Layer: 0
   m_Name: LegIK.R_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -497,7 +671,7 @@ GameObject:
   - component: {fileID: 3743901813050272257}
   m_Layer: 0
   m_Name: LegIK.L_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -528,7 +702,7 @@ GameObject:
   - component: {fileID: 6785166868167055980}
   m_Layer: 0
   m_Name: Toes.R
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -560,7 +734,7 @@ GameObject:
   - component: {fileID: 2887475414470396021}
   m_Layer: 0
   m_Name: LowerLeg.R
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -592,7 +766,7 @@ GameObject:
   - component: {fileID: 3489921756527038848}
   m_Layer: 0
   m_Name: LegPole.L
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -624,7 +798,7 @@ GameObject:
   - component: {fileID: 4872882740708578603}
   m_Layer: 0
   m_Name: Root
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -658,7 +832,7 @@ GameObject:
   - component: {fileID: 2900104299752050769}
   m_Layer: 0
   m_Name: LegIK.R
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -690,7 +864,7 @@ GameObject:
   - component: {fileID: 4498848002442520493}
   m_Layer: 0
   m_Name: UpperLeg.L
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -904,7 +1078,7 @@ GameObject:
   - component: {fileID: 2728792701159912075}
   m_Layer: 0
   m_Name: LowerLeg.L
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -936,7 +1110,7 @@ GameObject:
   - component: {fileID: 8919388068203049755}
   m_Layer: 0
   m_Name: UpperLeg.R
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -968,7 +1142,7 @@ GameObject:
   - component: {fileID: 2244717428272026878}
   m_Layer: 0
   m_Name: UpperSpine_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -999,7 +1173,7 @@ GameObject:
   - component: {fileID: 7263142747675643973}
   m_Layer: 0
   m_Name: Foot.L
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1031,7 +1205,7 @@ GameObject:
   - component: {fileID: 2874826117363129692}
   m_Layer: 0
   m_Name: LegPole.R_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1180,7 +1354,7 @@ GameObject:
   - component: {fileID: 5907285044667895722}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1359,7 +1533,7 @@ GameObject:
   - component: {fileID: 3602790204513431489}
   m_Layer: 0
   m_Name: LegPole.L_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1390,7 +1564,7 @@ GameObject:
   - component: {fileID: 511832799511589258}
   m_Layer: 0
   m_Name: UpperMidSpine
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1422,7 +1596,7 @@ GameObject:
   - component: {fileID: 1481421392928609076}
   m_Layer: 0
   m_Name: Toes.R_end
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1453,7 +1627,7 @@ GameObject:
   - component: {fileID: 212747427559769112}
   m_Layer: 0
   m_Name: UpperSpine
-  m_TagString: Untagged
+  m_TagString: human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

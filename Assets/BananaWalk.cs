@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CameraFading;
 
 public class BananaWalk : MonoBehaviour
 {
@@ -18,11 +19,21 @@ public class BananaWalk : MonoBehaviour
     public Vector3 startPosition;
     public GameObject bananaPrefab;
 
-    public int bruh;
+    AudioSource audiosource;
+    public AudioClip woah;
+
+    public Vector3 ztopLimit;
+    public Vector3 zbotLimit;
+    public Vector3 xtopLimit;
+    public Vector3 xbotLimit;
 
     // Start is called before the first frame update
     void Start()
     {
+        CameraFade.In(.2f);
+
+        audiosource = GetComponent<AudioSource>();
+
         slipped = false;
 
         umbrella.SetActive(true);
@@ -35,6 +46,30 @@ public class BananaWalk : MonoBehaviour
     void Update()
     {
         BananaMovement();
+
+        if (transform.position.z > ztopLimit.z)
+        {
+
+            transform.position = new Vector3(transform.position.x, 0.4409999f, ztopLimit.z);
+        }
+
+        if (transform.position.z < zbotLimit.z)
+        {
+
+            transform.position = new Vector3(transform.position.x, 0.4409999f, zbotLimit.z);
+        }
+
+        if (transform.position.x > xtopLimit.x)
+        {
+
+            transform.position = new Vector3(xtopLimit.x, 0.4409999f, transform.position.z);
+        }
+
+        if (transform.position.x < xbotLimit.x)
+        {
+
+            transform.position = new Vector3(xbotLimit.x, 0.4409999f, transform.position.z);
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -52,22 +87,12 @@ public class BananaWalk : MonoBehaviour
         umbrella.SetActive(false);
         umbrellaRB.SetActive(true);
 
-
-        bruh = Random.Range(0,)
-
-            overlay camera so the star cant clip into objects while ur holding him
-
-
-
-                duplicate camera
-            change from base to overlay
-            go to maincamera
-            go to stack
-
-        player.transform.Rotate(Vector3.down * 100f);
+        audiosource.PlayOneShot(woah);
 
         animator.Play("fall");
         animator.SetBool("slipped", true);
+
+        CameraFade.Out(1.8f);
 
         StartCoroutine(EndPause());
     }
@@ -76,6 +101,8 @@ public class BananaWalk : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         Spawn();
+
+        CameraFade.In(.2f);
     }
 
     public void Spawn()
