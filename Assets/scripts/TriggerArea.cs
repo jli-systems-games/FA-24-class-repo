@@ -7,7 +7,8 @@ public class TriggerArea : MonoBehaviour
     public GameObject UICanvas; 
     public GameObject winText;  
     public GameObject loseText;  
-    private float countdownTime = 10f; 
+    //public GameObject Restart;  
+    private float countdownTime = 15f; 
     private bool gameEnded = false; 
     private TextMeshProUGUI timerText; 
 
@@ -33,9 +34,10 @@ public class TriggerArea : MonoBehaviour
             yield return null; 
         }
 
-       
+        
         if (!gameEnded)
         {
+            
             CheckCollisions(false); 
         }
     }
@@ -44,6 +46,7 @@ public class TriggerArea : MonoBehaviour
     {
         if (collisionDetected)
         {
+           
             loseText.SetActive(true);
         }
         else
@@ -56,9 +59,9 @@ public class TriggerArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && timeRemaining <= 0)
         {
-            
+            Debug.Log("Is collide");
             CheckCollisions(true);
         }
     }
