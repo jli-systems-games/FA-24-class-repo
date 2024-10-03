@@ -8,6 +8,7 @@ public class eyeshadow : MonoBehaviour
 
     public GameObject eyeshadowCanvas;
     public GameObject regularCanvas;
+    public GameObject thiss;
 
     public Texture2D cursorTexture;
     public CursorMode cursorMode = CursorMode.Auto;
@@ -27,6 +28,7 @@ public class eyeshadow : MonoBehaviour
             regularCanvas.gameObject.SetActive(false);
             eyeshadowCanvas.gameObject.SetActive(true);
             Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
+            thiss.gameObject.SetActive(false);
         }
     }
 }

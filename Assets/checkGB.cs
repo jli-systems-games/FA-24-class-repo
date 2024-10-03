@@ -14,6 +14,7 @@ public class checkGB : MonoBehaviour
     public Image image;
     public Sprite bad;
     public Sprite good;
+    public Sprite good2;
     
     public AudioSource audioSource;
     public AudioSource nextLines;
@@ -21,7 +22,11 @@ public class checkGB : MonoBehaviour
 
     public bool ended;
 
+    public bool eyeshadowGood;
+
     public GameObject regular2Canvas;
+    public GameObject nextCanvas;
+    public GameObject currentCanvas;
 
     private IEnumerator delayCheck()
     {
@@ -29,6 +34,7 @@ public class checkGB : MonoBehaviour
         yield return new WaitForSeconds(5);
         if (outArea > inArea)
         {
+            eyeshadowGood = false;
             ended = true;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             nextLines.Play();
@@ -40,10 +46,13 @@ public class checkGB : MonoBehaviour
 
         if (outArea < inArea)
         {
+            eyeshadowGood = true;
             ended = true;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             nextLinesGood.Play();
             image.sprite = good;
+            yield return new WaitForSeconds(2f);
+            image.sprite = good2;
             
         }
 
@@ -98,7 +107,21 @@ public class checkGB : MonoBehaviour
                 Debug.Log("Paused");
                 audioSource.Pause();
             }
+        if(ended == true)
+        {
+            if (outArea > inArea && !nextLines.isPlaying)
+            {
+                nextCanvas.gameObject.SetActive(true);
+                currentCanvas.gameObject.SetActive(false);
+            }
+            
         
-
+            if (outArea < inArea && !nextLinesGood.isPlaying)
+            {
+                nextCanvas.gameObject.SetActive(true);
+                currentCanvas.gameObject.SetActive(false);
+            }
+    
+        }
     }
 }
