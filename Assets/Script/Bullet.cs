@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameManager manage;
     void Start()
     {
         
@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log("Butcher dead");
+            manage.AssignState(GameState.Death);
         }
         else
         {

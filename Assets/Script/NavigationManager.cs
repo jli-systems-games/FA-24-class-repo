@@ -5,21 +5,23 @@ using UnityEngine.AI;
 
 public class NavigationManager : MonoBehaviour
 {
-    public Transform spot,plyr;
+    public Transform spot,plyr,secondary;
     [SerializeField] TrailRenderer bullet;
     [SerializeField] Transform gunPoint;
     [SerializeField] float bulletSpeed = 20f;
-    [SerializeField] Rigidbody rb; 
+    [SerializeField] Rigidbody rb;
+    [SerializeField] SlicePlaneControl slice;
     NavMeshAgent _agent;
-    
+    public IEnumerator routineToStop;
     TrailRenderer trail;
     bool reached,startedMove,bulletActive;
     public bool gotKilled;
     void Start()
     {   
        
-           _agent = GetComponent<NavMeshAgent>();
-         
+           _agent = GetComponent<NavMeshAgent>(); 
+           //routineToStop = findingPlyr();
+            
     }
 
     // Update is called once per frame
@@ -27,13 +29,17 @@ public class NavigationManager : MonoBehaviour
     {
         //Debug.Log(_agent.remainingDistance);
         float remains = _agent.remainingDistance;
-        if(remains == 0 && startedMove)
+        if(remains == 0 && startedMove && !gotKilled)
         {
             reached = true;
             if (reached)
             {
                 //Coroutine
-                StartCoroutine(findingPlyr());
+                bullet.enabled = true;
+                routineToStop = findingPlyr();
+                StartCoroutine(routineToStop);
+               
+                /*slice.stopFire = routineToStop;*/
                 reached = false;
             }
         }
@@ -79,10 +85,16 @@ public class NavigationManager : MonoBehaviour
                     bulletActive = true;
                   
                     yield return new WaitForSeconds(2f);
-                    cloneRb.isKinematic = false;
-                    cloneRb.AddForce(direct * 5f, ForceMode.VelocityChange);
+
+                    if(cloneRb != null)
+                    {
+                        cloneRb.isKinematic = false;
+                        cloneRb.AddForce(direct * 5f, ForceMode.VelocityChange);
+                    }
+                    
+                    
                     //Debug.Log(rb.velocity);
-                    Debug.Log(cloneRb.velocity);
+                    //Debug.Log(cloneRb.velocity);
                     while (remainingDistance > 0f)
                     {
                         trail.transform.position = Vector3.Lerp(startPos, hitPoint, 1 - (remainingDistance / dist));
@@ -105,5 +117,30 @@ public class NavigationManager : MonoBehaviour
         }
     }
 
+    public void Direction()
+    {
+        StartCoroutine(ChangeDirection());
+    }
+    IEnumerator ChangeDirection()
+    {
+        _agent.destination = secondary.position;
+
+        yield return new WaitForSeconds(1.5f);
+        
+        _agent.destination = spot.position;
+    }
+
+    public void killHandling()
+    {
+        //Debug.Log("killed");
+        StopAllCoroutines();
+        if (trail != null && gotKilled)
+        {
+            Debug.Log("destroying remnants");
+            Destroy(trail.gameObject);  
+        }
+    }
+
+    
     
 }
