@@ -14,6 +14,7 @@ public class blush : MonoBehaviour
     public Sprite BEBB;
     public Sprite GEGB;
     public Sprite BEGB;
+    public Sprite good;
 
     public int blushTaps;
 
@@ -32,6 +33,8 @@ public class blush : MonoBehaviour
 
     public AudioSource nextLines;
     public AudioSource nextLinesold;
+    public AudioSource oldlinesGood;
+    public AudioSource neutral;
     
     public GameObject blushComponent;
 
@@ -77,6 +80,11 @@ public class blush : MonoBehaviour
         {
             ended = true;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            oldlinesGood.Play();
+            blushComponent.gameObject.SetActive(false);
+            hanako.sprite = good;
+            yield return new WaitForSeconds(2f);
+            hanako.sprite = GEGB;
         }
         if (blushGood == false && eyeShadowStat.eyeshadowGood == true)
         {
@@ -87,12 +95,19 @@ public class blush : MonoBehaviour
             regularCanvas.gameObject.SetActive(true);
             yield return new WaitForSeconds(2);
             regularCanvas.gameObject.SetActive(false);
-            hanako.sprite = BEGB;
+            blushComponent.gameObject.SetActive(false);
+            hanako.sprite = GEBB;
         }
         if (blushGood == true && eyeShadowStat.eyeshadowGood == false)
         {
             ended = true;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            neutral.Play();
+            regularCanvas.gameObject.SetActive(true);
+            yield return new WaitForSeconds(2);
+            regularCanvas.gameObject.SetActive(false);
+            blushComponent.gameObject.SetActive(false);
+            hanako.sprite = BEGB;
         }
         if (blushGood == false && eyeShadowStat.eyeshadowGood == false)
         {
