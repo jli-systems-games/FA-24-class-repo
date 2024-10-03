@@ -5,23 +5,27 @@ using UnityEngine.AI;
 
 public class NavigationManager : MonoBehaviour
 {
-    public Transform spot,plyr,secondary;
+    public Transform spot, plyr, secondary;
     [SerializeField] TrailRenderer bullet;
     [SerializeField] Transform gunPoint;
     [SerializeField] float bulletSpeed = 20f;
     [SerializeField] Rigidbody rb;
     [SerializeField] SlicePlaneControl slice;
+    [SerializeField] AudioClip[] shots;
+
     NavMeshAgent _agent;
     public IEnumerator routineToStop;
+    AudioSource splatter;
     TrailRenderer trail;
     bool reached,startedMove,bulletActive;
     public bool gotKilled;
     void Start()
     {   
        
-           _agent = GetComponent<NavMeshAgent>(); 
-           //routineToStop = findingPlyr();
-            
+           _agent = GetComponent<NavMeshAgent>();
+        splatter = GetComponent<AudioSource>();
+        //routineToStop = findingPlyr();
+
     }
 
     // Update is called once per frame
@@ -85,12 +89,13 @@ public class NavigationManager : MonoBehaviour
                     bulletActive = true;
                   
                     yield return new WaitForSeconds(2f);
-
+                    Invoke("shotFired", 0);
                     if(cloneRb != null)
                     {
                         cloneRb.isKinematic = false;
                         cloneRb.AddForce(direct * 5f, ForceMode.VelocityChange);
                     }
+
                     
                     
                     //Debug.Log(rb.velocity);
@@ -141,6 +146,15 @@ public class NavigationManager : MonoBehaviour
         }
     }
 
-    
-    
+    public void afterSlice()
+    {
+        splatter.clip = shots[1];
+        splatter.Play();
+    }
+    void shotFired()
+    {
+        splatter.clip = shots[0];
+        splatter.Play();
+    }
+
 }

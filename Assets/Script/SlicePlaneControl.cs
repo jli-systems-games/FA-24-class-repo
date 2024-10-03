@@ -12,7 +12,7 @@ public class SlicePlaneControl : MonoBehaviour
     RaycastHit hit;
     Slice sliceobj;
     public IEnumerator stopFire;
-   
+ 
     bool hasSliced;
     void Start()
     {
@@ -33,7 +33,7 @@ public class SlicePlaneControl : MonoBehaviour
                 {
                     
                     GameObject obj = hit.collider.gameObject;
-                    Debug.Log(obj.name);
+                    
                     if (obj.TryGetComponent(out Slice _slice))
                     {
                         //StartCoroutine
@@ -44,7 +44,7 @@ public class SlicePlaneControl : MonoBehaviour
                         {
                             NavigationManager npc = obj.GetComponentInParent<NavigationManager>();
                             npc.gotKilled = true;
-                            Debug.Log("stopping");
+                            
                             //StopCoroutine(npc.routineToStop);
                             npc.killHandling();
                         }
@@ -69,13 +69,5 @@ public class SlicePlaneControl : MonoBehaviour
        
     }
 
-    void afterSlice()
-    {
-        /*if (stopFire != null)
-        {
-            Debug.Log("stopping");
-            StopCoroutine(nav.routineToStop);
-        }*/
-        
-    }
+    
 }

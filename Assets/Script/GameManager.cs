@@ -64,7 +64,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         context.text = lines[1];
-
+        yield return new WaitForSeconds(3f);
+        context.text = lines[3];
         yield return new WaitForSeconds(5f);
         //Invoke the enemy event
         Panelparent.SetActive(false);

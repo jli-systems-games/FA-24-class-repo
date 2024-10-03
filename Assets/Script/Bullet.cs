@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Debug.Log("continue");
+            //Debug.Log("continue");
         }
     }
 }
