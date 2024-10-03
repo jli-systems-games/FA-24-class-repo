@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class changeoliviasprite : MonoBehaviour
+public class changeKasumiSprite : MonoBehaviour
 {
     public blush bgood;
     public checkGB eyeShadowStat;
 
-    public Image olivia;
-    public Sprite oliviah;
-    public Sprite olivias;
+    public Image kasumi;
+    public Sprite kasumih;
+    public Sprite kasumis;
     
     void Start()
     {
@@ -22,22 +22,25 @@ public class changeoliviasprite : MonoBehaviour
         if (bgood.blushGood == true && eyeShadowStat.eyeshadowGood == true)
         {
             yield return new WaitForSeconds(3f);
-            olivia.sprite = oliviah;
+            kasumi.sprite = kasumih;
         }
         if (bgood.blushGood == false && eyeShadowStat.eyeshadowGood == false)
         {
             yield return new WaitForSeconds(3f);
-            olivia.sprite = olivias;
+            kasumi.sprite = kasumis;
         }
         if (bgood.blushGood == false && eyeShadowStat.eyeshadowGood == true)
         {
-            olivia.sprite = olivias;
+            yield return new WaitForSeconds(3f);
+            kasumi.sprite = kasumis;
         }
+        if (bgood.blushGood == true && eyeShadowStat.eyeshadowGood == false)
+        {
+            yield return new WaitForSeconds(3f);
+            kasumi.sprite = kasumis;
+        }
+
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

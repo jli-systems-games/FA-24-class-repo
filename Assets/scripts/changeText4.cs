@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class changeText : MonoBehaviour
+public class changeText4 : MonoBehaviour
 {
+    public blush blushStat;
     public TextMeshProUGUI subtitle;
     public checkGB eyeshadowStat;
 
@@ -35,16 +36,30 @@ public class changeText : MonoBehaviour
 
     }
 
+    private IEnumerator subtitleTimingN2()
+    {
+        subDone = true;
+        subtitle.text = "Now she looks like she got punched twice.";
+        yield return new WaitForSeconds(3f);
+        subtitle.text = " ";
+
+    }
+
     void Update()
     {
-        if (eyeshadowStat.eyeshadowGood == true && eyeshadowStat.subchange == true && subDone == false)
+        if (eyeshadowStat.eyeshadowGood == true && blushStat.blushGood == true && blushStat.subchange == true && subDone == false)
         {
             StartCoroutine(subtitleTimingP());
         }
 
-        if (eyeshadowStat.eyeshadowGood == false && eyeshadowStat.subchange == true && subDone == false)
+        if (eyeshadowStat.eyeshadowGood == true && blushStat.blushGood == false && blushStat.subchange == true && subDone == false)
         {
             StartCoroutine(subtitleTimingN());
+        }
+
+        if (eyeshadowStat.eyeshadowGood == false && blushStat.blushGood == false&& blushStat.subchange == true && subDone == false)
+        {
+            StartCoroutine(subtitleTimingN2());
         }
     }
 }

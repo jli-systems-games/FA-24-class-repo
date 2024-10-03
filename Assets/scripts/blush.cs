@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class blush : MonoBehaviour
 {
     public checkGB eyeShadowStat;
+    public bool subchange;
+
 
     public Image hanako;
     public Sprite GERFB;
@@ -82,6 +84,7 @@ public class blush : MonoBehaviour
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             oldlinesGood.Play();
             blushComponent.gameObject.SetActive(false);
+            subchange = true;
             hanako.sprite = good;
             yield return new WaitForSeconds(2f);
             hanako.sprite = GEGB;
@@ -96,6 +99,7 @@ public class blush : MonoBehaviour
             yield return new WaitForSeconds(2);
             regularCanvas.gameObject.SetActive(false);
             blushComponent.gameObject.SetActive(false);
+            subchange = true;
             hanako.sprite = GEBB;
         }
         if (blushGood == true && eyeShadowStat.eyeshadowGood == false)
@@ -104,9 +108,10 @@ public class blush : MonoBehaviour
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             neutral.Play();
             regularCanvas.gameObject.SetActive(true);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(5);
             regularCanvas.gameObject.SetActive(false);
             blushComponent.gameObject.SetActive(false);
+            subchange = true;
             hanako.sprite = BEGB;
         }
         if (blushGood == false && eyeShadowStat.eyeshadowGood == false)
@@ -118,6 +123,7 @@ public class blush : MonoBehaviour
             yield return new WaitForSeconds(5f);
             regularCanvas.gameObject.SetActive(false);
             blushComponent.gameObject.SetActive(false);
+            subchange = true;
             hanako.sprite = BEBB;
         }
         

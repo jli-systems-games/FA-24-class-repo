@@ -11,6 +11,8 @@ public class checkGB : MonoBehaviour
     public int inArea;
     public int outArea;
 
+    public bool notcalled = true;
+
     public Image image;
     public Sprite bad;
     public Sprite good;
@@ -21,6 +23,7 @@ public class checkGB : MonoBehaviour
     public AudioSource nextLinesGood;
 
     public bool ended;
+    public bool subchange;
 
     public bool eyeshadowGood;
 
@@ -31,7 +34,7 @@ public class checkGB : MonoBehaviour
     private IEnumerator delayCheck()
     {
         Debug.Log("start coroutine");
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4);
         if (outArea > inArea)
         {
             eyeshadowGood = false;
@@ -41,6 +44,7 @@ public class checkGB : MonoBehaviour
             regular2Canvas.gameObject.SetActive(true);
             yield return new WaitForSeconds(1.5f);
             regular2Canvas.gameObject.SetActive(false);
+            subchange = true;
             image.sprite = bad;
         }
 
@@ -49,6 +53,7 @@ public class checkGB : MonoBehaviour
             eyeshadowGood = true;
             ended = true;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            subchange = true;
             nextLinesGood.Play();
             image.sprite = good;
             yield return new WaitForSeconds(2f);
@@ -62,14 +67,10 @@ public class checkGB : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        StartCoroutine(delayCheck());
-    }
-
 
     void Update()
     {
+
         RaycastHit2D hit = Physics2D.Raycast(Input.mousePosition, Vector2.zero);
 
         if (hit.collider != null)
@@ -81,17 +82,29 @@ public class checkGB : MonoBehaviour
             enteredArea = false;
         }
 
+        Debug.Log(enteredArea);
+
         if (ended == false)
         {
 
             if (enteredArea == false && Input.GetMouseButton(0))
             {
                 outArea += 1;
+                if (notcalled == true)
+                {
+                    notcalled = false;
+                    StartCoroutine(delayCheck());
+                }
             }
         
             if (enteredArea == true && Input.GetMouseButton(0))
             {
                 inArea += 1;
+                if (notcalled == true)
+                {
+                    notcalled = false;
+                    StartCoroutine(delayCheck());
+                }
             }
 
             if (Input.GetMouseButtonDown(0))
