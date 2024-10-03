@@ -16,6 +16,10 @@ public class Wheels : MonoBehaviour
 
     public float SlipAmount;
     public float TopSpeed;
+
+    public bool CanSteer;
+    public float SteerRotationSpeed;
+    public float GravityForce;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +42,19 @@ public class Wheels : MonoBehaviour
             if (Input.GetKey(KeyCode.Space))
             {
                 CalculateAccelerationForce();
+            }
+        }
+        else
+        {
+            TruckBody.AddForceAtPosition(Vector3.down * GravityForce, transform.position);
+        }
+        if (CanSteer)
+        {
+            float _inputDirection = Input.GetAxis("Horizontal");
+            float _tireDirection = Vector3.Dot(transform.right, TruckBody.transform.up);
+            if (_inputDirection < 0 && _tireDirection > -0.75f || _inputDirection > 0 && _tireDirection < 0.75f)
+            {
+                transform.Rotate(transform.up * SteerRotationSpeed * _inputDirection);
             }
         }
     }
@@ -79,6 +96,6 @@ public class Wheels : MonoBehaviour
         float _carSpeed = Vector3.Dot(_accelerationDirection, _currentWorldVelocity);
         float _normalizedSpeed = Mathf.Clamp01(Mathf.Abs(_carSpeed) / TopSpeed);
 
-        TruckBody.AddForceAtPosition(_accelerationDirection, transform.position);
+        TruckBody.AddForceAtPosition(_accelerationDirection * TopSpeed, transform.position);
     }
 }
