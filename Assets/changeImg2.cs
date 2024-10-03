@@ -24,7 +24,7 @@ public class changeImg2 : MonoBehaviour
     public GameObject nextCanvas;
     public GameObject currentCanvas;
 
-    private IEnumerator oliviatalk()
+    private IEnumerator oliviatalkb()
     {
         yield return new WaitForSeconds(0.3f);
         image.sprite = frame3;
@@ -50,10 +50,10 @@ public class changeImg2 : MonoBehaviour
         image.sprite = frame3;
         yield return new WaitForSeconds(0.3f);
         image.sprite = frame2;
-        StartCoroutine(kasumitalk());
+        StartCoroutine(kasumitalkb());
     }
 
-    private IEnumerator kasumitalk()
+    private IEnumerator kasumitalkb()
     {
         kasumi.sprite = frame5;
         yield return new WaitForSeconds(0.3f);
@@ -78,6 +78,43 @@ public class changeImg2 : MonoBehaviour
         kasumi.sprite = frame4;
         yield return new WaitForSeconds(0.3f);
         kasumi.sprite = frame5;
+         yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame4;
+        yield return new WaitForSeconds(0.5f);
+        nextCanvas.gameObject.SetActive(true);
+        currentCanvas.gameObject.SetActive(false);
+        
+    }
+
+    private IEnumerator kasumitalkg()
+    {
+        yield return new WaitForSeconds(3.6f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame7;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame7;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame7;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame7;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame7;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame7;
+         yield return new WaitForSeconds(0.3f);
+        kasumi.sprite = frame6;
+        yield return new WaitForSeconds(0.5f);
         nextCanvas.gameObject.SetActive(true);
         currentCanvas.gameObject.SetActive(false);
         
@@ -89,12 +126,13 @@ public class changeImg2 : MonoBehaviour
         if (eyeShadowStat.eyeshadowGood == false)
         {
             image.sprite = frame2;
-            StartCoroutine(oliviatalk());
+            StartCoroutine(oliviatalkb());
         }
 
         if (eyeShadowStat.eyeshadowGood == true)
         {
             image.sprite = frame1;
+            StartCoroutine(kasumitalkg());
         }
         
     }
