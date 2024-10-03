@@ -7,6 +7,13 @@ public class eyeshadow : MonoBehaviour
     AudioSource audioSource;
 
     public GameObject eyeshadowCanvas;
+    public GameObject regularCanvas;
+
+    public Texture2D cursorTexture;
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Vector2 hotSpot = Vector2.zero;
+
+    public checkGB checkStatus;
 
     void Start()
     {
@@ -15,9 +22,11 @@ public class eyeshadow : MonoBehaviour
 
     void Update()
     {
-        if (!audioSource.isPlaying)
+        if (!audioSource.isPlaying && checkStatus.ended == false)
         {
+            regularCanvas.gameObject.SetActive(false);
             eyeshadowCanvas.gameObject.SetActive(true);
+            Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
         }
     }
 }
