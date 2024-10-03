@@ -27,6 +27,8 @@ public class BananaWalk : MonoBehaviour
     public Vector3 xtopLimit;
     public Vector3 xbotLimit;
 
+    public CharSpawn charspawn;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,11 +81,17 @@ public class BananaWalk : MonoBehaviour
         {
             BananaSlip();
             slipped = true;
+
+            charspawn.PeopleFall();
         }
     }
 
     public void BananaSlip()
     {
+        Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-5f, 5f), Random.Range(-1f, 1f)).normalized;
+
+        player.transform.Rotate(randomDirection * 5f);
+
         umbrella.SetActive(false);
         umbrellaRB.SetActive(true);
 
@@ -92,9 +100,14 @@ public class BananaWalk : MonoBehaviour
         animator.Play("fall");
         animator.SetBool("slipped", true);
 
-        CameraFade.Out(1.8f);
-
+        //StartCoroutine(BeginPause());
         StartCoroutine(EndPause());
+    }
+
+    private IEnumerator BeginPause()
+    {
+        yield return new WaitForSeconds(1.5f);
+        //CameraFade.Out(0.3f);
     }
 
     private IEnumerator EndPause()
@@ -102,7 +115,7 @@ public class BananaWalk : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Spawn();
 
-        CameraFade.In(.2f);
+        //CameraFade.In(.2f);
     }
 
     public void Spawn()
