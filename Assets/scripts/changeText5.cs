@@ -13,7 +13,7 @@ public class changeText5 : MonoBehaviour
         subtitle.text = "How do I look?";
         yield return new WaitForSeconds(2f);
         subtitle.text = "You look cute";
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.8f);
         subtitle.text = " ";
     }
 

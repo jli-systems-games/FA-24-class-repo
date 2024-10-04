@@ -6,6 +6,10 @@ using UnityEngine.UI;
 public class flipHanako : MonoBehaviour
 {
     public Image hanako;
+    public Image kasumi;
+
+    public Sprite kasumi1;
+    public Sprite kasumi2;
 
     public Sprite hanako1;
     public Sprite hanako2;
@@ -14,6 +18,8 @@ public class flipHanako : MonoBehaviour
 
     public Sprite olivia1;
     public Sprite olivia2;
+    public Sprite oliviaP1;
+    public Sprite oliviaP2;
 
     public AudioSource audiosource;
 
@@ -30,6 +36,8 @@ public class flipHanako : MonoBehaviour
     public checkGB eyeshadowStat;
     public blush blushStat;
 
+    public GameObject replayButton;
+
     private IEnumerator picTiming()
     {
         hanako.sprite = hanako2;
@@ -44,23 +52,46 @@ public class flipHanako : MonoBehaviour
 
     private IEnumerator oliviaTime()
     {
-        yield return new WaitForSeconds(2.4f);
-        olivia.sprite = olivia2;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia1;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia2;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia1;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia2;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia1;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia2;
-        yield return new WaitForSeconds(0.2f);
-        olivia.sprite = olivia1;
-        
+        if (eyeshadowStat.eyeshadowGood == true && blushStat.blushGood == true)
+        {
+            yield return new WaitForSeconds(2.4f);
+            olivia.sprite = oliviaP2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP1;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP1;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP1;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = oliviaP1;
+        }
+
+        else
+        {
+            yield return new WaitForSeconds(2.4f);
+            olivia.sprite = olivia2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia1;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia1;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia1;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia2;
+            yield return new WaitForSeconds(0.2f);
+            olivia.sprite = olivia1;
+        }
+
     }
 
     private IEnumerator shockCoroutine()
@@ -91,10 +122,30 @@ public class flipHanako : MonoBehaviour
 
     void Start()
     {
+        if (eyeshadowStat.eyeshadowGood == true && blushStat.blushGood == true)
+        {
+            olivia.sprite = oliviaP1;
+            kasumi.sprite = kasumi1;
+        }
+        else
+        {
+            olivia.sprite = olivia1;
+            kasumi.sprite = kasumi2;
+        }
+
+
         audiosource.Play();
         StartCoroutine(picTiming());
         StartCoroutine(oliviaTime());
         StartCoroutine(shockCoroutine());
+    }
+
+    void Update()
+    {
+        if (!audiosource.isPlaying)
+        {
+            replayButton.gameObject.SetActive(true);
+        }
     }
 
 }
