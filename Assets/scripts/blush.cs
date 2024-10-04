@@ -88,6 +88,9 @@ public class blush : MonoBehaviour
             hanako.sprite = good;
             yield return new WaitForSeconds(2f);
             hanako.sprite = GEGB;
+            yield return new WaitForSeconds(3f);
+            nextCanvas.gameObject.SetActive(true);
+            currentCanvas.gameObject.SetActive(false);
         }
         if (blushGood == false && eyeShadowStat.eyeshadowGood == true)
         {
@@ -101,6 +104,11 @@ public class blush : MonoBehaviour
             blushComponent.gameObject.SetActive(false);
             subchange = true;
             hanako.sprite = GEBB;
+
+            yield return new WaitForSeconds(3f);
+            nextCanvas.gameObject.SetActive(true);
+            currentCanvas.gameObject.SetActive(false);
+
         }
         if (blushGood == true && eyeShadowStat.eyeshadowGood == false)
         {
@@ -113,6 +121,10 @@ public class blush : MonoBehaviour
             blushComponent.gameObject.SetActive(false);
             subchange = true;
             hanako.sprite = BEGB;
+
+            yield return new WaitForSeconds(3f);
+            nextCanvas.gameObject.SetActive(true);
+            currentCanvas.gameObject.SetActive(false);
         }
         if (blushGood == false && eyeShadowStat.eyeshadowGood == false)
         {
@@ -125,6 +137,10 @@ public class blush : MonoBehaviour
             blushComponent.gameObject.SetActive(false);
             subchange = true;
             hanako.sprite = BEBB;
+
+            yield return new WaitForSeconds(3.5f);
+            nextCanvas.gameObject.SetActive(true);
+            currentCanvas.gameObject.SetActive(false);
         }
         
     }
