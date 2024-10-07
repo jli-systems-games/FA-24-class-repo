@@ -9,6 +9,7 @@ public class PickUpNRotate : MonoBehaviour
     Grabbable _grabbable;
     [SerializeField] Transform holdPoint;
     [SerializeField] Transform plyCamera;
+    [SerializeField] LayerMask pickUplayermask;
     Vector2 inputVect;
     bool pickedUP;
     void Start()
@@ -21,10 +22,10 @@ public class PickUpNRotate : MonoBehaviour
     {
         ray = new Ray(plyCamera.position, plyCamera.forward);
         Debug.DrawRay(plyCamera.position, plyCamera.forward * 15, Color.green);
-        if (pickedUP)
+        if (pickedUP && hit.transform != null)
         {
             Vector3 rotationDirection = new Vector3(inputVect.y, inputVect.x, 0);
-
+            Debug.Log(hit.collider.gameObject);
             hit.transform.Rotate(rotationDirection);
         }
 
@@ -33,19 +34,27 @@ public class PickUpNRotate : MonoBehaviour
     {
         if (context.started)
         {
-            
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {   
-                Debug.Log("trying to pickup");
-                if (hit.transform.TryGetComponent(out _grabbable))
-                {
+            if(!pickedUP)
+            {
+                if (Physics.Raycast(ray, out hit, 15f, pickUplayermask))
+                {   
+                    Debug.Log("trying to pickup" + hit.transform.name);
+                    if (hit.transform.TryGetComponent(out _grabbable))
+                    {
 
-                    _grabbable.Grab(holdPoint);
+                        _grabbable.Grab(holdPoint, plyCamera);
 
-                    pickedUP = true;
-                    //Debug.Log(_grabbable);
+                        pickedUP = true;
+                        //Debug.Log(_grabbable);
+                    }
                 }
             }
+            else
+            {
+                _grabbable.Drop();
+                pickedUP = false;
+            }
+            
         }
     }
 
