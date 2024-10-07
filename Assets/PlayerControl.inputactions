@@ -1,0 +1,266 @@
+{
+    "name": "PlayerControl",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "5541c178-9413-46ad-9513-89c209c9513c",
+            "actions": [
+                {
+                    "name": "LookY",
+                    "type": "Value",
+                    "id": "2ac52442-848f-4929-96f4-891564603e36",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LookX",
+                    "type": "Value",
+                    "id": "33777a78-5d30-433e-8b94-b03ec6257bdc",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "GamePadX",
+                    "type": "Value",
+                    "id": "9b370f72-5336-4458-a8cc-74933c99e104",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "c8a758ab-d4eb-4565-9934-3f604a65005b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PickUP",
+                    "type": "Button",
+                    "id": "d32d1562-c026-4b1a-aff7-1c26e690b7c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RotateObject",
+                    "type": "Value",
+                    "id": "ee23195c-4c02-40d9-8c42-8e6f030964c7",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0894dd04-75e1-4afc-98fb-6faeb86ca6e7",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1962daea-9e7d-44c3-b23d-e83a0f21583b",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31a32613-3a46-481a-a69c-b4c1a6d075eb",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookX",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52e882ac-fba6-4407-b8ce-faeca6198075",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GamePadX",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6fb85734-be68-460f-86ce-dfb3a3e8717b",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "WASD",
+                    "id": "9cb0acec-e652-4717-88dc-b63e0f8bec77",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "7bbdef7e-69b3-44d9-bd7e-c96b85d74354",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "c6f1301e-583a-4db1-ac9e-c7d4e48efa9f",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "b02b01be-f29d-4ef5-b9f9-4fbfa8b3125a",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "4a274f0d-5047-4005-b887-7924676b3654",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "2acc1990-7ab9-4570-950b-c7fc0bf42183",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickUP",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "84ff4c29-28f5-493d-a91a-604a4d61bd25",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickUP",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c4d7ca3-0732-4c54-8949-578b912b3f92",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateObject",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Arrows",
+                    "id": "b552b134-8c51-4369-9a68-e11fa2b55221",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateObject",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "73be81c4-ec10-4037-9919-7b48932292e9",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "fd9819a9-01be-4527-a8cb-05b39da40928",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "60217efa-5f2f-460b-8d8f-a6249e80d313",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "61bca0c3-3845-41be-b4e8-b58bf8a18ada",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
