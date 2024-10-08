@@ -7,7 +7,7 @@ public class LookAround : MonoBehaviour
     [SerializeField] float sensitivityX = 5f;
     [SerializeField] float sensitivityY = 0.85f;
     [SerializeField] Transform plyrCam;
-    [SerializeField] float xClamp = 85f;
+    [SerializeField] float xClamp = 65f;
     float inputX, inputY;
     float xRotation = 0f;
     void Start()
@@ -23,7 +23,7 @@ public class LookAround : MonoBehaviour
 
         //Debug.Log("yroate :" + inputY);
         xRotation -= inputY;
-        xRotation = Mathf.Clamp(xRotation, -xClamp, xClamp);
+        xRotation = Mathf.Clamp(xRotation, -xClamp, xClamp - 15f);
         Vector3 plyRotation = transform.eulerAngles;
         plyRotation.x = xRotation;
         plyrCam.eulerAngles = plyRotation;

@@ -7,11 +7,13 @@ public class PickUpNRotate : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     Grabbable _grabbable;
+    ChangeSeason _seasons;
     [SerializeField] Transform holdPoint;
     [SerializeField] Transform plyCamera;
     [SerializeField] LayerMask pickUplayermask;
+
     Vector2 inputVect;
-    bool pickedUP;
+    bool pickedUP, turningKnob;
     void Start()
     {
         
@@ -25,7 +27,7 @@ public class PickUpNRotate : MonoBehaviour
         if (pickedUP && hit.transform != null)
         {
             Vector3 rotationDirection = new Vector3(inputVect.y, inputVect.x, 0);
-            Debug.Log(hit.collider.gameObject);
+            Debug.Log(rotationDirection);
             hit.transform.Rotate(rotationDirection);
         }
 
@@ -45,7 +47,13 @@ public class PickUpNRotate : MonoBehaviour
                         _grabbable.Grab(holdPoint, plyCamera);
 
                         pickedUP = true;
+                        turningKnob = false;
                         //Debug.Log(_grabbable);
+                    }
+                    else if (hit.transform.TryGetComponent(out _seasons))
+                    {   
+                        //turn on ui saying to use d pad to turn.
+                        turningKnob = true;
                     }
                 }
             }
@@ -53,6 +61,7 @@ public class PickUpNRotate : MonoBehaviour
             {
                 _grabbable.Drop();
                 pickedUP = false;
+                turningKnob = false;
             }
             
         }
@@ -60,7 +69,24 @@ public class PickUpNRotate : MonoBehaviour
 
     public void RotateInput(InputAction.CallbackContext context)
     {
-        Debug.Log("trying to rotate");
-        inputVect = context.ReadValue<Vector2>();
+        if (pickedUP)
+        {
+            Debug.Log("trying to rotate");
+            inputVect = context.ReadValue<Vector2>();
+        }
+        else if (turningKnob)
+        {
+           
+            if (context.performed)
+            {
+                float turns  = context.ReadValue<Vector2>().x;
+                //Debug.Log("x: " + turns);
+                _seasons.seasonSwitch(turns);
+            
+            }
+            
+            
+        }
+        
     }
 }
