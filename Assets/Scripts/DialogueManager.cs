@@ -18,16 +18,16 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueLines = new List<string>
         {
-            "Welcome to your color typing: Find out which season bests suits you!\n \n(This is just for fun and may not give accurate results.)",
-            "The four seasons differ between warm/cool, color vibrancy, and intensity.\n \nYour season is determined by your skin, hair, and eye color.",
+            "Welcome to your color analysis session! Find out which season best suits you!\n\n(This is just for fun. Virtual tools are less accurate than in person color draping.)",
+            "The four seasons are differentiated by color temperature (warm or cool), value (light or darkness), and chroma (muted or bright). Your ideal season is determined by your skin, hair, and eye color.\n\nSPRING\nwarm + light  →  bright\nSUMMER\ncool + light  →  muted\nAUTUMN\nwarm + dark  →  muted‍\nWINTER\ncool + dark  →  bright",
             "First, are you warm or cool toned? Please place your face within the oval.\n \nA clashing result can make the skin look green or sickly."
         };
 
         uiElementDisplay = new List<List<GameObject>>()
         {
             new List<GameObject> { GameObject.Find("next button") },
-            new List<GameObject> { GameObject.Find("next button") },
-            new List<GameObject> { GameObject.Find("webcam image"), GameObject.Find("undertone"), GameObject.Find("next button") }
+            new List<GameObject> { GameObject.Find("next button"), GameObject.Find("seasonal palettes") },
+            new List<GameObject> { GameObject.Find("next button"), GameObject.Find("webcam image"), GameObject.Find("undertone") }
 
         };
 
@@ -72,10 +72,8 @@ public class DialogueManager : MonoBehaviour
 
     private void DropdownSelection(int index)
     {
-        // Clear existing dialogue lines
         dialogueLines.Clear();
 
-        // Update dialogue lines based on selection
         if (undertoneDropdown.options[index].text == "cool")
         {
             dialogueLines.Add("You selected cool tones! Here are some recommendations...");
