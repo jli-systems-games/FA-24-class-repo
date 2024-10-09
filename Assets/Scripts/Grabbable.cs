@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum objectState
+{
+    pickedUp,
+    setDown,
+}
 public class Grabbable : MonoBehaviour
 {
-    private Transform holdPointTransform,viewingCam;
+    [SerializeField] Transform newParent;
+    private Transform holdPointTransform;
     private Rigidbody rb;
     Vector3 ogPosition;
     Quaternion ogRotation;
+    public objectState currentState = objectState.setDown;
     void Start()
     {
          //rb = GetComponent<Rigidbody>();
@@ -19,14 +26,6 @@ public class Grabbable : MonoBehaviour
     void FixedUpdate()
     {   
 
-        /*if (holdPointTransform != null && !rb.useGravity)
-        {
-            float lerpSpeed = 10f;
-
-            Vector3 newPosition = Vector3.Lerp(transform.position, holdPointTransform.position, Time.deltaTime * lerpSpeed);
-            rb.MovePosition(newPosition);
-            
-        }*/
     }
     public void Grab(Transform holdPoint, Transform camView)
     {
@@ -39,9 +38,16 @@ public class Grabbable : MonoBehaviour
 
     public void Drop()
     {
-        transform.SetParent(null);
+        transform.SetParent(newParent);
         transform.position = ogPosition;
         transform.rotation = ogRotation;
-        //rb.useGravity = true;
+        ChangeState(objectState.setDown);
+    }
+
+    public void ChangeState(objectState state)
+    {
+        currentState = state;
+        //notifyEvents
+
     }
 }

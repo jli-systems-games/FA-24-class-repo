@@ -8,15 +8,16 @@ public class PickUpNRotate : MonoBehaviour
     RaycastHit hit;
     Grabbable _grabbable;
     ChangeSeason _seasons;
+    FridgeAnimation _fridge;
     [SerializeField] Transform holdPoint;
     [SerializeField] Transform plyCamera;
     [SerializeField] LayerMask pickUplayermask;
 
     Vector2 inputVect;
-    bool pickedUP, turningKnob;
+    bool pickedUP, turningKnob, allowtoTurn;
     void Start()
     {
-        
+        EventManager.enableThermoStat += EnableKnob; 
     }
 
     // Update is called once per frame
@@ -50,10 +51,16 @@ public class PickUpNRotate : MonoBehaviour
                         turningKnob = false;
                         //Debug.Log(_grabbable);
                     }
-                    else if (hit.transform.TryGetComponent(out _seasons))
-                    {   
+                    else if (hit.transform.TryGetComponent(out _seasons) && allowtoTurn)
+                    {
                         //turn on ui saying to use d pad to turn.
+                        Debug.Log("turning");
                         turningKnob = true;
+                    }
+                    else if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
+                    {
+                        bool opening = true;
+                        _fridge.doorOpens(opening);
                     }
                 }
             }
@@ -88,5 +95,28 @@ public class PickUpNRotate : MonoBehaviour
             
         }
         
+    }
+    public void NegativeInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (Physics.Raycast(ray, out hit, 15f, pickUplayermask))
+            {
+                if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
+                {
+                    bool opening = false;
+                    _fridge.doorOpens(opening);
+                }
+            }
+        }
+    }
+    private void EnableKnob()
+    {   
+
+        allowtoTurn = true;
+    }
+    public void DisableKnob()
+    {
+        turningKnob = false;
     }
 }

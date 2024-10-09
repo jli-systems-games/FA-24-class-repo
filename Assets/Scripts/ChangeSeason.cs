@@ -7,6 +7,8 @@ public class ChangeSeason : MonoBehaviour
     //Winter and SUmmer objects
 
     [SerializeField] GameObject knob, WinterSet, SummerSet;
+    [SerializeField] PickUpNRotate pick;
+    [SerializeField] GameManager manage;
     Animator anim;
 
     bool animateDone = false;
@@ -53,16 +55,18 @@ public class ChangeSeason : MonoBehaviour
             yield return null;
         }
         animateDone = true;
-        Debug.Log(anim.GetBool("StartRight"));
+        pick.DisableKnob();
         if (direction > 0)
         {
             WinterSet.SetActive(true);
             SummerSet.SetActive(false);
+            manage.ChangeState(GameState.winter);
 
         }else if (direction < 0)
         {
             WinterSet.SetActive(false);
             SummerSet.SetActive(true);
+            manage.ChangeState(GameState.summer);
         }
         yield break;
 

@@ -42,4 +42,6 @@ public class LookAround : MonoBehaviour
         float modedX = context.ReadValue<float>() * 10f;
         inputX = modedX * sensitivityX;
     }
+
+   
 }
