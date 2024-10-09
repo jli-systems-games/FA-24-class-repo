@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
+using UnityEngine.UI;
 public enum GameState 
 { 
     beginning, winter, rotting, summer, end,
@@ -10,15 +11,27 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public GameState current;
+    [SerializeField] GameObject rotScreen;
+    Dictionary<GameObject, bool> jars = new Dictionary<GameObject, bool>();
+    bool success;
     void Start()
     {
-        current = GameState.beginning;
+        current = GameState.summer;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+        if (jars != null)
+        {
+            checkJarStatus();
+        }
+        if (success)
+        {
+            ChangeState(GameState.end);
+            success = false;
+        }
     }
 
     public void ChangeState(GameState state)
@@ -29,16 +42,69 @@ public class GameManager : MonoBehaviour
         {
             case GameState.summer:
                 //allow 
-                Debug.Log("turnning off fridge");
+                
                 break;
             case GameState.winter:
                 break;
             case GameState.rotting:
                 //if objects get reseted with parent and it is summer.
                 //turn on fail scene.
+                rotScreen.SetActive(true);
+
                 break;
             case GameState.end:
                 break;
         }
+    }
+
+    public void addJars(GameObject jar)
+    {
+        if (!jars.ContainsKey(jar))
+        {
+            jars.Add(jar, false);
+            Debug.Log("have added jar");
+        }
+    }
+
+    public void Updatejars(GameObject jar)
+    {
+        
+        
+        if (jars.ContainsKey(jar))
+        {
+            jars[jar] = true; // Mark it 
+        }
+       
+    }
+
+    public void checkJarStatus()
+    {
+        //Debug.Log("Checking");
+
+        int count = 0;
+        if (!success)
+        {
+            foreach (var status in jars)
+            {
+                bool correct = status.Value;
+                 GameObject ky = status.Key;
+                //Debug.Log(ky.name + correct);
+            if (!correct)
+            {
+                return;
+            }
+            else
+            {
+                count++;
+                if(count >= 2)
+                {   
+                    success = true;
+                    break;
+                }
+            }
+        }
+        
+        }
+       
     }
 }

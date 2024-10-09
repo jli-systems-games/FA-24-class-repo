@@ -22,7 +22,7 @@ public class FridgeAnimation : MonoBehaviour
         if (tryingtoOpen)
         {
             //play door animation if the state is not closing 
-            Debug.Log("trying to open");
+            //Debug.Log("trying to open");
             if (doorAnimate.GetCurrentAnimatorStateInfo(0).IsName("close"))
             {
                 doorAnimate.ResetTrigger("close");

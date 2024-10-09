@@ -28,7 +28,7 @@ public class PickUpNRotate : MonoBehaviour
         if (pickedUP && hit.transform != null)
         {
             Vector3 rotationDirection = new Vector3(inputVect.y, inputVect.x, 0);
-            Debug.Log(rotationDirection);
+            //Debug.Log(rotationDirection);
             hit.transform.Rotate(rotationDirection);
         }
 
@@ -66,6 +66,7 @@ public class PickUpNRotate : MonoBehaviour
             }
             else
             {
+                Debug.Log("dropping");
                 _grabbable.Drop();
                 pickedUP = false;
                 turningKnob = false;
