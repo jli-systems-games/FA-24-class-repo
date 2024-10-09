@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
@@ -18,6 +19,7 @@ public class BattleSystem : MonoBehaviour
     Unit enemyUnit;
 
     public TextMeshProUGUI dialogueText;
+    public Button RestartButton;
 
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
@@ -137,11 +139,18 @@ public class BattleSystem : MonoBehaviour
             else
             {
                 dialogueText.text = "Victory! +18LP";
+                ShowRestartButton();
             }
         } else if (state == BattleState.LOST)
         {
             dialogueText.text = "Defeat. -25LP";
+            ShowRestartButton();
         }
+    }
+
+    void ShowRestartButton()
+    {
+        RestartButton.gameObject.SetActive(true);
     }
 
     IEnumerator NextBattle()
@@ -170,7 +179,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator PlayerHeal()
     {
-        playerUnit.Heal(5);
+        playerUnit.Heal(10);
 
         state = BattleState.ENEMYTURN;
 
@@ -196,5 +205,10 @@ public class BattleSystem : MonoBehaviour
             return;
 
         StartCoroutine(PlayerHeal());
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
