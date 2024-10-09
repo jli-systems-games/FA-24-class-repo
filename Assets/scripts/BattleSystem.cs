@@ -39,6 +39,15 @@ public class BattleSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
+        playerGO.transform.position = new Vector3(5, 1, 0);
+        enemyGO.transform.position = new Vector3(4, 3, 0);
+
+        playerUnit = playerGO.GetComponent<Unit>();
+        enemyUnit = enemyGO.GetComponent<Unit>();
+
+        Debug.Log("Player Position: " + playerGO.transform.position);
+        Debug.Log("Enemy Position: " + enemyGO.transform.position);
+
         dialogueText.text = "Challenger " + enemyUnit.unitName + " approaches...";
 
         playerHUD.SetHUD(playerUnit);
