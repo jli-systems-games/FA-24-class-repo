@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.UI;
 public class PickUpNRotate : MonoBehaviour
 {
     Ray ray;
@@ -12,6 +14,7 @@ public class PickUpNRotate : MonoBehaviour
     [SerializeField] Transform holdPoint;
     [SerializeField] Transform plyCamera;
     [SerializeField] LayerMask pickUplayermask;
+    [SerializeField] TMP_Text instruction;
 
     Vector2 inputVect;
     bool pickedUP, turningKnob, allowtoTurn;
@@ -28,8 +31,19 @@ public class PickUpNRotate : MonoBehaviour
         if (pickedUP && hit.transform != null)
         {
             Vector3 rotationDirection = new Vector3(inputVect.y, inputVect.x, 0);
-            //Debug.Log(rotationDirection);
+            Debug.Log("inputY" + inputVect.y);
             hit.transform.Rotate(rotationDirection);
+        }
+        if (Physics.Raycast(ray, out hit, 15f, pickUplayermask))
+        {
+            if(hit.transform.TryGetComponent(out _grabbable)){
+                //regular object
+                instruction.text = "press f to pick up";
+
+            }else if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
+            {
+                instruction.text = "press f to open and g to close";
+            }
         }
 
     }
@@ -40,8 +54,8 @@ public class PickUpNRotate : MonoBehaviour
             if(!pickedUP)
             {
                 if (Physics.Raycast(ray, out hit, 15f, pickUplayermask))
-                {   
-                    Debug.Log("trying to pickup" + hit.transform.name);
+                {
+                    
                     if (hit.transform.TryGetComponent(out _grabbable))
                     {
 
@@ -54,12 +68,14 @@ public class PickUpNRotate : MonoBehaviour
                     else if (hit.transform.TryGetComponent(out _seasons) && allowtoTurn)
                     {
                         //turn on ui saying to use d pad to turn.
-                        Debug.Log("turning");
+                        //Debug.Log("turning"); 
+                        instruction.text = "use arrow keys to rotate";
                         turningKnob = true;
                     }
                     else if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
                     {
                         bool opening = true;
+                        
                         _fridge.doorOpens(opening);
                     }
                 }
@@ -67,6 +83,7 @@ public class PickUpNRotate : MonoBehaviour
             else
             {
                 Debug.Log("dropping");
+                instruction.text = string.Empty;
                 _grabbable.Drop();
                 pickedUP = false;
                 turningKnob = false;
@@ -80,6 +97,7 @@ public class PickUpNRotate : MonoBehaviour
         if (pickedUP)
         {
             Debug.Log("trying to rotate");
+           
             inputVect = context.ReadValue<Vector2>();
         }
         else if (turningKnob)
@@ -87,8 +105,9 @@ public class PickUpNRotate : MonoBehaviour
            
             if (context.performed)
             {
+                instruction.text = "use left and right arrows to turn left and right";
                 float turns  = context.ReadValue<Vector2>().x;
-                //Debug.Log("x: " + turns);
+                
                 _seasons.seasonSwitch(turns);
             
             }
@@ -102,9 +121,10 @@ public class PickUpNRotate : MonoBehaviour
         if (context.started)
         {
             if (Physics.Raycast(ray, out hit, 15f, pickUplayermask))
-            {
+            {   
                 if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
-                {
+                {   
+                    
                     bool opening = false;
                     _fridge.doorOpens(opening);
                 }
