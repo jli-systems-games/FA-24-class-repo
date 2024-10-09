@@ -9,7 +9,7 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 public class BattleSystem : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefabs;
 
     public Transform playerBattleStation;
     public Transform enemyBattleStation;
@@ -21,6 +21,8 @@ public class BattleSystem : MonoBehaviour
 
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
+
+    private int battleCount = 0;
 
     public BattleState state;
 
@@ -36,17 +38,16 @@ public class BattleSystem : MonoBehaviour
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
         playerUnit = playerGO.GetComponent<Unit>();
 
-        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
-        enemyUnit = enemyGO.GetComponent<Unit>();
+        /*GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
+        enemyUnit = enemyGO.GetComponent<Unit>();*/
+
+        SpawnEnemy();
 
         playerGO.transform.position = new Vector3(5, 1, 0);
-        enemyGO.transform.position = new Vector3(4, 3, 0);
+        /*enemyGO.transform.position = new Vector3(4, 3, 0);*/
 
         playerUnit = playerGO.GetComponent<Unit>();
-        enemyUnit = enemyGO.GetComponent<Unit>();
-
-        Debug.Log("Player Position: " + playerGO.transform.position);
-        Debug.Log("Enemy Position: " + enemyGO.transform.position);
+        /*enemyUnit = enemyGO.GetComponent<Unit>();*/
 
         dialogueText.text = "Challenger " + enemyUnit.unitName + " approaches...";
 
@@ -57,6 +58,20 @@ public class BattleSystem : MonoBehaviour
 
         state = BattleState.PLAYERTURN;
         PlayerTurn();
+    }
+
+    void SpawnEnemy()
+    {
+        if (battleCount < enemyPrefabs.Length)
+        {
+            GameObject enemyGo = Instantiate(enemyPrefabs[battleCount]);
+            enemyUnit = enemyGo.GetComponent<Unit>();
+            enemyGo.transform.position = new Vector3(4, 3, 0);
+        }
+        else
+        {
+            dialogueText.text = "No more enemies!";
+        }
     }
 
     IEnumerator PlayerAttack()
@@ -112,12 +127,40 @@ public class BattleSystem : MonoBehaviour
     {
         if(state == BattleState.WON)
         {
-            dialogueText.text = "You won the battle!";
+            dialogueText.text = "An enemy has been slain!";
+            battleCount++;
+
+            if (battleCount < 3)
+            {
+                StartCoroutine(NextBattle());
+            }
+            else
+            {
+                dialogueText.text = "Victory! +18LP";
+            }
         } else if (state == BattleState.LOST)
         {
-            dialogueText.text = "Defeat.";
+            dialogueText.text = "Defeat. -25LP";
         }
+    }
 
+    IEnumerator NextBattle()
+    {
+        yield return new WaitForSeconds(2f);
+
+        dialogueText.text = "Another challenger approaches...";
+
+        Destroy(enemyUnit.gameObject);
+
+        SpawnEnemy();
+
+        playerUnit.currentHP = playerUnit.maxHP;
+        playerHUD.SetHP(playerUnit.currentHP);
+
+        enemyHUD.SetHUD(enemyUnit);
+
+        state = BattleState.PLAYERTURN;
+        PlayerTurn();
     }
 
     void PlayerTurn()
