@@ -45,7 +45,7 @@ public class BattleSystem : MonoBehaviour
 
         SpawnEnemy();
 
-        playerGO.transform.position = new Vector3(5, 1, 0);
+        playerGO.transform.position = new Vector3(0, 0, 0);
         /*enemyGO.transform.position = new Vector3(4, 3, 0);*/
 
         playerUnit = playerGO.GetComponent<Unit>();
