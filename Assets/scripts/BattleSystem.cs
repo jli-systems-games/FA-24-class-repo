@@ -64,22 +64,22 @@ public class BattleSystem : MonoBehaviour
         // dmg enemy
         bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
 
-        enemyHUD.SetHP(enemyUnit.currentHP);
-        dialogueText.text = "Your attack was successful!";
-
-        yield return new WaitForSeconds(2f);
-
         // check if enemy is dead
         if (isDead)
         {
             // end battle
             state = BattleState.WON;
+            enemyHUD.SetHP(enemyUnit.currentHP = 0);
             EndBattle();
         }
         else
         {
             // enemy turn
             state = BattleState.ENEMYTURN;
+            enemyHUD.SetHP(enemyUnit.currentHP);
+            dialogueText.text = "You dealt " + playerUnit.damage + " damage...";
+
+            yield return new WaitForSeconds(2f);
             StartCoroutine(EnemyTurn());
         }
     }
@@ -129,12 +129,13 @@ public class BattleSystem : MonoBehaviour
     {
         playerUnit.Heal(5);
 
+        state = BattleState.ENEMYTURN;
+
         playerHUD.SetHP(playerUnit.currentHP);
         dialogueText.text = "You used a potion!";
 
         yield return new WaitForSeconds(2f);
 
-        state = BattleState.ENEMYTURN;
         StartCoroutine(EnemyTurn());
     }
 
