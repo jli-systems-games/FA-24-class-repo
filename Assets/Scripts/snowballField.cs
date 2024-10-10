@@ -13,6 +13,8 @@ public class snowballField : MonoBehaviour
 
     public float throwForce = 500f;
 
+    public bool thrown;
+
     void Update()
     {
         if(Input.GetMouseButtonDown(1) && PickUpArea == true)
@@ -24,6 +26,7 @@ public class snowballField : MonoBehaviour
     
     private IEnumerator snowballTriggerDetection()
     {
+        thrown = false;
         GameObject varGameObject = GameObject.FindWithTag("Player");
 		varGameObject.GetComponent<Player>().enabled = false;
         yield return new WaitForSeconds(1f);
@@ -48,6 +51,7 @@ public class snowballField : MonoBehaviour
         snowBall.transform.parent = null;
         snowBallrb.AddForce(transform.forward * throwForce);
         snowBall = null;
+        thrown = true;
     }
 
     private void OnTriggerEnter(Collider other)
