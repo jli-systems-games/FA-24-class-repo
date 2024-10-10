@@ -18,8 +18,8 @@ public class PickUpInspect : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI pickupText; // Text element for display
     [SerializeField] private TextMeshProUGUI pocketMessageText; // Text element to show pocket message
-    [SerializeField] private FirstPersonMovement playerMovement; // Reference to player movement script
-    [SerializeField] private FirstPersonLook cameraLook; // Reference to the camera look script
+    [SerializeField] private PlayerMovement playerMovement; // Reference to player movement script
+    [SerializeField] private PlayerCamera cameraLook; // Reference to the camera look script
 
     private bool pickedUp; // Flag to check if an item is picked up
     private Transform pickedObjectTransform; // Store reference to the picked object transform
