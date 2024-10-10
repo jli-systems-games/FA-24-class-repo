@@ -7,21 +7,69 @@ public class ClickDrag : MonoBehaviour
     private Vector3 screenPoint;
     private Vector3 offset;
 
-    void OnMouseDown()
+    //public GameObject rocks;
+
+    public bool selected;
+
+    private SpriteRenderer spriteRenderer;
+
+    public bool rock;
+    public bool carrot;
+
+    private void Start()
     {
-        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+        selected = true;
 
+        if (rock == true)
+        {
+            transform.rotation = Quaternion.AngleAxis((Random.Range(0, 360)), Vector3.forward);
+
+            float randomScale = Random.Range(0.3f, 0.5f);
+            transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+        }
     }
 
-    void OnMouseDrag()
+    private void Update()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+        if (selected == true)
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        transform.position = curPosition;
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        }
 
+        if (carrot == true && transform.position.x < 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+        else if (carrot == true && transform.position.x > 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+    }
+
+    //https://discussions.unity.com/t/drag-gameobject-with-mouse/1798
+    void OnMouseDown()
+    {
+        if (selected == true)
+        {
+            //object is selected, deselect and place object
+            selected = false;
+        }
+        else if (selected == false)
+        {
+            //object is not selected, select and pick up object
+            selected = true;
+
+            if (carrot == false)
+            {
+                //picking up anything not a carrot, random rotation
+                transform.rotation = Quaternion.AngleAxis((Random.Range(0, 360)), Vector3.forward);
+            }
+        }
+        Debug.Log("move object");
     }
 }
 
