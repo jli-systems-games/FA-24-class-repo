@@ -13,7 +13,7 @@ public class Grabbable : MonoBehaviour
     private Transform holdPointTransform;
     private GameObject specialParent;
     private Rigidbody rb;
-    Vector3 ogPosition;
+    Vector3 ogPosition, newScale,ogScale;
     Quaternion ogRotation;
     bool parentChange = false;
     GameManager gManage;
@@ -23,6 +23,7 @@ public class Grabbable : MonoBehaviour
          //rb = GetComponent<Rigidbody>();
          ogPosition = transform.position;
          ogRotation = transform.rotation;
+        ogScale = transform.localScale;
         newParent = transform.parent;
         specialParent = GameObject.Find("Event1Object");
         gManage = GameObject.FindGameObjectWithTag("gamerManager").GetComponent<GameManager>();
@@ -40,6 +41,10 @@ public class Grabbable : MonoBehaviour
         transform.SetParent(holdPoint);
         transform.localPosition = holdPoint.localPosition;
         transform.position = holdPoint.position;
+        if(newScale != null)
+        {
+            transform.localScale = ogScale;
+        }
         //rb.useGravity = false;
     }
 
@@ -56,10 +61,12 @@ public class Grabbable : MonoBehaviour
             transform.position = ogPosition;
             transform.rotation = ogRotation;
         }
-        else if (transform.tag == "organs" || parentChange)
+        else if (transform.tag == "organs" && parentChange)
         {
             transform.SetParent(newParent);
-            transform.position = newParent.position;
+            transform.localScale = newScale;
+            transform.localPosition = Vector3.zero;
+            transform.localPosition = new Vector3(0, transform.localPosition.y + 2.5f, 0);
             transform.rotation = newParent.rotation;
             parentChange = false;
             //gManage.checkJarStatus();
@@ -83,11 +90,15 @@ public class Grabbable : MonoBehaviour
     }
     private void assignParent(Transform _nparent)
     {
-        if (!parentChange)
-        {
-            newParent = _nparent;
-            parentChange = true;
-        }
+       
+          newParent = _nparent;
+          newScale = new Vector3(
+            0.2f/ newParent.lossyScale.x,
+            0.2f / newParent.lossyScale.y,
+            0.2f / newParent.lossyScale.z
+            );
+          parentChange = true;
+     
         
     }
 }

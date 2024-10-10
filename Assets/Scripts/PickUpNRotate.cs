@@ -17,7 +17,8 @@ public class PickUpNRotate : MonoBehaviour
     bool pickedUP, turningKnob, allowtoTurn;
     void Start()
     {
-        EventManager.enableThermoStat += EnableKnob; 
+        EventManager.enableThermoStat += EnableKnob;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     // Update is called once per frame
@@ -66,7 +67,7 @@ public class PickUpNRotate : MonoBehaviour
             }
             else
             {
-                Debug.Log("dropping");
+                //Debug.Log("dropping");
                 _grabbable.Drop();
                 pickedUP = false;
                 turningKnob = false;

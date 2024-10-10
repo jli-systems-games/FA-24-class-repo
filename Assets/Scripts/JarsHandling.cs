@@ -18,7 +18,7 @@ public class JarsHandling : MonoBehaviour
     void Update()
     {
         //restrict to 2 bc there will a sign and an organ at the end
-        if(transform.childCount == 2)
+        if(transform.childCount == 3)
         {
             Transform child = transform.GetChild(1);
             //disable its collider
@@ -39,7 +39,7 @@ public class JarsHandling : MonoBehaviour
     {
         if (other.gameObject.CompareTag("organs"))
         {
-            Debug.Log("assigning p");
+            //Debug.Log("parent is" + transform.name);
             EventManager.assignParent(transform);
             /*manage.checkJarStatus();*/
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public enum GameState 
 { 
     beginning, winter, rotting, summer, end,
@@ -11,7 +12,7 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public GameState current;
-    [SerializeField] GameObject rotScreen;
+    [SerializeField] GameObject rotScreen, plyr;
     Dictionary<GameObject, bool> jars = new Dictionary<GameObject, bool>();
     bool success;
     void Start()
@@ -32,6 +33,10 @@ public class GameManager : MonoBehaviour
             ChangeState(GameState.end);
             success = false;
         }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Reset();
+        }
     }
 
     public void ChangeState(GameState state)
@@ -50,7 +55,7 @@ public class GameManager : MonoBehaviour
                 //if objects get reseted with parent and it is summer.
                 //turn on fail scene.
                 rotScreen.SetActive(true);
-
+                plyr.SetActive(false);
                 break;
             case GameState.end:
                 break;
@@ -106,5 +111,10 @@ public class GameManager : MonoBehaviour
         
         }
        
+    }
+
+    private void Reset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
