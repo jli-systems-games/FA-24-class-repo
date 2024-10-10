@@ -26,7 +26,6 @@ public class snowballField : MonoBehaviour
     
     private IEnumerator snowballTriggerDetection()
     {
-        thrown = false;
         GameObject varGameObject = GameObject.FindWithTag("Player");
 		varGameObject.GetComponent<Player>().enabled = false;
         yield return new WaitForSeconds(1f);
@@ -46,7 +45,7 @@ public class snowballField : MonoBehaviour
 
     void ThrowSnowball()
     {
-        snowBall.layer = 0;
+        //snowBall.layer = 0;
         snowBallrb.isKinematic = false;
         snowBall.transform.parent = null;
         snowBallrb.AddForce(transform.forward * throwForce);
@@ -61,6 +60,8 @@ public class snowballField : MonoBehaviour
             PickUpArea = true;
             snowBall = other.gameObject;
             snowBallrb = snowBall.GetComponent<Rigidbody>();
+            snowBallrb.isKinematic = true;
+            thrown = false;
         }
     }
 
