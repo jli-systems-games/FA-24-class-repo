@@ -6,6 +6,7 @@ public class snowballTrigger : MonoBehaviour
 {
     public Animator animator;
 
+
     private IEnumerator snowballTriggerDetection()
     {
         GameObject varGameObject = GameObject.FindWithTag("Player");
@@ -14,34 +15,12 @@ public class snowballTrigger : MonoBehaviour
         varGameObject.GetComponent<Player>().enabled = true;
     }
 
-    private IEnumerator snowballAim()
-    {
-        yield return new WaitForSeconds(2f);
-        animator.speed = 0;
-    }
-
-    public void snowballRelease()
-    {
-        Debug.Log("called");
-        animator.speed = 1;
-    }
-
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(1))
         {
             StartCoroutine(snowballTriggerDetection());
             animator.SetTrigger("throw");
-        }
-
-        if (Input.GetMouseButton(0))
-        {
-            StartCoroutine(snowballAim());
-        }
-
-        if(Input.GetMouseButtonUp(0))
-        {
-            snowballRelease();
         }
     }
 }
