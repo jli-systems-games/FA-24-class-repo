@@ -4,23 +4,14 @@ using UnityEngine;
 
 public class AudioZoneTrigger : MonoBehaviour
 {
-    public AudioClip[] newMusicClips; // Array for new music clips for this zone
-    public AudioClip[] newAmbientClips; // Array for new ambient sounds for this zone
-
-    private AudioManager audioManager; // Reference to the AudioManager
-
-    private void Start()
-    {
-        audioManager = FindObjectOfType<AudioManager>(); // Find the AudioManager in the scene
-    }
+    public int zoneNumber;  // Zone identifier (1, 2, or 3)
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Ensure the colliding object is the player
+        if (other.CompareTag("Player"))
         {
-            Debug.Log($"Entered audio zone: {gameObject.name} - Changing music and ambient sounds.");
-            audioManager.ChangeMusic(newMusicClips); // Change music for this zone
-            audioManager.ChangeAmbient(newAmbientClips); // Change ambient sound for this zone
+            // Swap to the new ambient track based on the zone number
+            AudioManager.instance.SwapAmbientTrack(zoneNumber);
         }
     }
 }

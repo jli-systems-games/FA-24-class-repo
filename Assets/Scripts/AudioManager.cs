@@ -4,143 +4,106 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource[] musicSources; // Array of music AudioSources
-    public AudioSource[] ambientSources; // Array of ambient AudioSources
-    public float fadeDuration = 2.0f; // Duration for the fade effect
+    public AudioClip backgroundMusic;  // Main background music
+    public AudioClip zone1Ambience;    // Ambient track for Zone 1
+    public AudioClip zone2Ambience;    // Ambient track for Zone 2
+    public AudioClip zone3Ambience;    // Ambient track for Zone 3
+
+    private AudioSource backgroundSource, track01, track02, track03;
+    private AudioSource activeTrack;   // Currently playing ambient track
+
+    public static AudioManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     private void Start()
     {
-        // Ensure all audio sources start silent
-        foreach (var source in musicSources)
-        {
-            source.volume = 0;
-        }
+        // Set up the AudioSources
+        backgroundSource = gameObject.AddComponent<AudioSource>();
+        track01 = gameObject.AddComponent<AudioSource>();
+        track02 = gameObject.AddComponent<AudioSource>();
+        track03 = gameObject.AddComponent<AudioSource>();
 
-        foreach (var source in ambientSources)
+        // Configure background music
+        backgroundSource.clip = backgroundMusic;
+        backgroundSource.loop = true;
+        backgroundSource.volume = 0.5f;  // Adjust volume if needed
+        backgroundSource.Play();
+
+        // Configure ambient tracks
+        track01.clip = zone1Ambience;
+        track02.clip = zone2Ambience;
+        track03.clip = zone3Ambience;
+        track01.loop = track02.loop = track03.loop = true;
+
+        // Start with no active ambient track
+        activeTrack = null;
+    }
+
+    // Method to swap to a new ambient track based on the zone
+    public void SwapAmbientTrack(int zoneNumber)
+    {
+        Debug.Log("Attempting to swap ambient track for zone: " + zoneNumber);  // Add debug log here
+        StopAllCoroutines();
+
+        AudioSource newTrack = GetTrackForZone(zoneNumber);
+
+        if (newTrack != null && newTrack != activeTrack)
         {
-            source.volume = 0;
+            Debug.Log("Swapping to new track for zone: " + zoneNumber);  // Add debug log here
+            StartCoroutine(FadeAmbientTrack(newTrack));
         }
     }
 
-    // Method to change music tracks dynamically
-    public void ChangeMusic(AudioClip[] newMusicClips)
+    // Returns the appropriate ambient track for the specified zone number
+    private AudioSource GetTrackForZone(int zoneNumber)
     {
-        StartCoroutine(FadeOutMusic(newMusicClips)); // Fade out current music and pass new clips to load
+        switch (zoneNumber)
+        {
+            case 1:
+                return track01;
+            case 2:
+                return track02;
+            case 3:
+                return track03;
+            default:
+                return null;  // Invalid zone
+        }
     }
 
-    // Coroutine to fade out current music
-    private IEnumerator FadeOutMusic(AudioClip[] newMusicClips)
+    // Coroutine to fade out the current track and fade in the new one
+    private IEnumerator FadeAmbientTrack(AudioSource newTrack)
     {
-        float startVolume = musicSources[0].volume;
+        float timeToFade = 0.5f;  // Duration for fade-out and fade-in
+        float timeElapsed = 0;
 
-        while (musicSources[0].volume > 0)
+        // Fade out the currently active track, if any
+        if (activeTrack != null)
         {
-            foreach (var source in musicSources)
+            while (timeElapsed < timeToFade)
             {
-                source.volume -= startVolume * Time.deltaTime / fadeDuration;
+                activeTrack.volume = Mathf.Lerp(1, 0, timeElapsed / timeToFade);
+                timeElapsed += Time.deltaTime;
+                yield return null;
             }
+            activeTrack.Stop();
+        }
+
+        // Start the new track and fade it in
+        newTrack.Play();
+        timeElapsed = 0;
+        while (timeElapsed < timeToFade)
+        {
+            newTrack.volume = Mathf.Lerp(0, 1, timeElapsed / timeToFade);
+            timeElapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Assign new music clips and start playing
-        for (int i = 0; i < musicSources.Length; i++)
-        {
-            if (i < newMusicClips.Length)
-            {
-                musicSources[i].clip = newMusicClips[i];
-                musicSources[i].Play();
-            }
-            else
-            {
-                musicSources[i].Stop(); // Stop sources not being used
-            }
-        }
-
-        StartCoroutine(FadeInMusic());
-    }
-
-    // Coroutine to fade in the music
-    private IEnumerator FadeInMusic()
-    {
-        float elapsedTime = 0.0f;
-
-        while (elapsedTime < fadeDuration)
-        {
-            foreach (var source in musicSources)
-            {
-                if (source.isPlaying) // Only increase volume for sources with clips
-                {
-                    source.volume = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
-                }
-            }
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        foreach (var source in musicSources)
-        {
-            source.volume = 1; // Ensure final volume is set correctly
-        }
-    }
-
-    // Method to change ambient sounds dynamically
-    public void ChangeAmbient(AudioClip[] newAmbientClips)
-    {
-        StartCoroutine(FadeOutAmbient(newAmbientClips));
-    }
-
-    // Coroutine to fade out current ambient sound
-    private IEnumerator FadeOutAmbient(AudioClip[] newAmbientClips)
-    {
-        float startVolume = ambientSources[0].volume;
-
-        while (ambientSources[0].volume > 0)
-        {
-            foreach (var source in ambientSources)
-            {
-                source.volume -= startVolume * Time.deltaTime / fadeDuration;
-            }
-            yield return null;
-        }
-
-        // Assign new ambient clips and start playing
-        for (int i = 0; i < ambientSources.Length; i++)
-        {
-            if (i < newAmbientClips.Length)
-            {
-                ambientSources[i].clip = newAmbientClips[i];
-                ambientSources[i].Play();
-            }
-            else
-            {
-                ambientSources[i].Stop(); // Stop sources not being used
-            }
-        }
-
-        StartCoroutine(FadeInAmbient());
-    }
-
-    // Coroutine to fade in the ambient sound
-    private IEnumerator FadeInAmbient()
-    {
-        float elapsedTime = 0.0f;
-
-        while (elapsedTime < fadeDuration)
-        {
-            foreach (var source in ambientSources)
-            {
-                if (source.isPlaying) // Only increase volume for sources with clips
-                {
-                    source.volume = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
-                }
-            }
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        foreach (var source in ambientSources)
-        {
-            source.volume = 1; // Ensure final volume is set correctly
-        }
+        // Set the new track as the currently active track
+        activeTrack = newTrack;
     }
 }
