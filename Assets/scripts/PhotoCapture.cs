@@ -8,7 +8,7 @@ public class PhotoCapture : MonoBehaviour
     private WebCamTexture webCamTexture;
     private Texture2D capturedTexture;
 
-    public float zoomFactor = 4.5f;  // Zoom factor to control the level of zoom
+    public float zoomFactor = 3.5f;  // Zoom factor to control the level of zoom
     public float cutSizeFactor = 1.5f; // Factor to reduce the captured square size
 
     void Start()
@@ -19,7 +19,7 @@ public class PhotoCapture : MonoBehaviour
         webCamTexture.Play();  // Start the camera feed
         
         // Flip the camera view horizontally to mirror the image
-        cameraView.rectTransform.localScale = new Vector3(-4, 2, 1);  // Flip horizontally
+        cameraView.rectTransform.localScale = new Vector3(-8, 4, 1);  // Flip horizontally
     }
 
     // Capture a square portion of the image inside the RawImage's area
