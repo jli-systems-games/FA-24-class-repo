@@ -41,6 +41,7 @@ public class JarsHandling : MonoBehaviour
         {
             //Debug.Log("parent is" + transform.name);
             EventManager.assignParent(transform);
+            //other.gameObject.GetComponent<SphereCollider>().enabled = false;
             /*manage.checkJarStatus();*/
         }
     }

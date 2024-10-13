@@ -12,8 +12,8 @@ public class Grabbable : MonoBehaviour
     Transform newParent;
     private Transform holdPointTransform;
     private GameObject specialParent;
-    private Rigidbody rb;
-    Vector3 ogPosition, newScale,ogScale;
+    private SphereCollider col;
+    Vector3 ogPosition, newScale,ogScale,holdingObj;
     Quaternion ogRotation;
     bool parentChange = false;
     GameManager gManage;
@@ -27,6 +27,7 @@ public class Grabbable : MonoBehaviour
         newParent = transform.parent;
         specialParent = GameObject.Find("Event1Object");
         gManage = GameObject.FindGameObjectWithTag("gamerManager").GetComponent<GameManager>();
+        col = GetComponent<SphereCollider>();
         EventManager.attachingObject += assignParent;
     }
 
@@ -44,42 +45,51 @@ public class Grabbable : MonoBehaviour
         if(newScale != null)
         {
             transform.localScale = ogScale;
+            holdingObj = transform.localScale;
         }
         //rb.useGravity = false;
     }
 
-    public void Drop()
+    public bool Drop(Transform hitted)
     {
         bool attached = false;
+        Debug.Log(transform.tag);
+      
         if (!parentChange)
         {
-            if (transform.tag == "Untagged")
+            if (hitted.tag == "Untagged")
             {
                 newParent = specialParent.transform;
             }
-            transform.SetParent(newParent);
-            transform.position = ogPosition;
-            transform.rotation = ogRotation;
+            hitted.SetParent(newParent);
+            Debug.Log("nP" + newParent);
+            hitted.position = ogPosition;
+            hitted.rotation = ogRotation;
+            return attached;
         }
-        else if (transform.tag == "organs" && parentChange)
+       if (hitted.tag == "organs")
         {
-            transform.SetParent(newParent);
-            transform.localScale = newScale;
-            transform.localPosition = Vector3.zero;
-            transform.localPosition = new Vector3(0, transform.localPosition.y + 2.5f, 0);
-            transform.rotation = newParent.rotation;
+            hitted.SetParent(newParent);
+            Debug.Log("nP" + newParent);
+            hitted.localScale = newScale;
+            hitted.localPosition = Vector3.zero;
+            hitted.localPosition = new Vector3(0, hitted.localPosition.y + 2.5f, 0);
+            hitted.rotation = newParent.rotation;
+
+           
             parentChange = false;
-            //gManage.checkJarStatus();
+            return attached;
         }
-        else if (transform.tag == "jar" || attached)
+        else if (hitted.tag == "jar" || attached)
         {
-            transform.SetParent(null);
-            transform.position = ogPosition;
-            transform.rotation = ogRotation;
+            hitted.SetParent(null);
+            hitted.position = ogPosition;
+            hitted.rotation = ogRotation;
             attached = false;
+            return attached;
         }
-        
-        ChangeState(objectState.setDown);
+        return true;
+
     }
 
     public void ChangeState(objectState state)
@@ -92,10 +102,14 @@ public class Grabbable : MonoBehaviour
     {
        
           newParent = _nparent;
+       
+        float desiredScale = 0.5f;
+      
+        Debug.Log(desiredScale);
           newScale = new Vector3(
-            0.2f/ newParent.lossyScale.x,
-            0.2f / newParent.lossyScale.y,
-            0.2f / newParent.lossyScale.z
+            desiredScale / newParent.lossyScale.x,
+            desiredScale / newParent.lossyScale.y,
+            desiredScale / newParent.lossyScale.z
             );
           parentChange = true;
      

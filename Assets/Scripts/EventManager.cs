@@ -7,6 +7,7 @@ public class EventManager : MonoBehaviour
 {
     public static event Action enableThermoStat;
     public static event Action<Transform> attachingObject;
+    
     void Start()
     {
         

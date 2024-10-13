@@ -9,12 +9,16 @@ public class ChangeSeason : MonoBehaviour
     [SerializeField] GameObject knob, WinterSet, SummerSet;
     [SerializeField] PickUpNRotate pick;
     [SerializeField] GameManager manage;
+    [SerializeField] Material sky1, sky2;
     Animator anim;
+    AudioSource _sounds;
 
     bool animateDone = false;
+
     void Start()
     {
         anim = knob.GetComponent<Animator>();
+        _sounds = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -60,13 +64,17 @@ public class ChangeSeason : MonoBehaviour
         {
             WinterSet.SetActive(true);
             SummerSet.SetActive(false);
+            RenderSettings.skybox = sky1;
             manage.ChangeState(GameState.winter);
+            _sounds.Pause();
 
         }else if (direction < 0)
         {
             WinterSet.SetActive(false);
             SummerSet.SetActive(true);
+            RenderSettings.skybox = sky2;
             manage.ChangeState(GameState.summer);
+            _sounds.Play();
         }
         yield break;
 

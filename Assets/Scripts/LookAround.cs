@@ -10,6 +10,12 @@ public class LookAround : MonoBehaviour
     [SerializeField] float xClamp = 65f;
     float inputX, inputY;
     float xRotation = 0f;
+
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
     void Start()
     {
         
@@ -19,6 +25,7 @@ public class LookAround : MonoBehaviour
     void Update()
     {
         //Debug.Log("xroate :" + inputX);
+        
         transform.Rotate(Vector3.up, inputX *  Time.deltaTime);
 
         //Debug.Log("yroate :" + inputY);
@@ -29,7 +36,8 @@ public class LookAround : MonoBehaviour
         plyrCam.eulerAngles = plyRotation;
     }
     public void TurnInputX(InputAction.CallbackContext context)
-    {
+    {   
+        Cursor.lockState = CursorLockMode.Locked;
         inputX = context.ReadValue<float>() * sensitivityX;
 
     }

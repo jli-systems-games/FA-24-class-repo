@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.UI;
 public class PickUpNRotate : MonoBehaviour
 {
     Ray ray;
@@ -12,33 +14,35 @@ public class PickUpNRotate : MonoBehaviour
     [SerializeField] Transform holdPoint;
     [SerializeField] Transform plyCamera;
     [SerializeField] LayerMask pickUplayermask;
-
+    [SerializeField] TMP_Text instruct;
     Vector2 inputVect;
-    bool pickedUP, turningKnob, allowtoTurn;
+    
+    bool pickedUP, turningKnob, allowtoTurn, opening;
     void Start()
     {
         EventManager.enableThermoStat += EnableKnob;
-        Cursor.lockState = CursorLockMode.Confined;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         ray = new Ray(plyCamera.position, plyCamera.forward);
-        Debug.DrawRay(plyCamera.position, plyCamera.forward * 15, Color.green);
+        //Debug.DrawRay(plyCamera.position, plyCamera.forward * 15, Color.green);
         if (pickedUP && hit.transform != null)
         {
             Vector3 rotationDirection = new Vector3(inputVect.y, inputVect.x, 0);
             //Debug.Log(rotationDirection);
             hit.transform.Rotate(rotationDirection);
         }
-
+        Debug.Log(holdPoint.childCount);
+        displayUI(ray);
     }
     public void PickUpInput(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            if(!pickedUP)
+            if(!pickedUP && holdPoint.childCount == 0)
             {
                 if (Physics.Raycast(ray, out hit, 15f, pickUplayermask))
                 {   
@@ -55,21 +59,21 @@ public class PickUpNRotate : MonoBehaviour
                     else if (hit.transform.TryGetComponent(out _seasons) && allowtoTurn)
                     {
                         //turn on ui saying to use d pad to turn.
-                        Debug.Log("turning");
+                        //Debug.Log("turning");
                         turningKnob = true;
                     }
                     else if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
                     {
-                        bool opening = true;
+                        opening = true;
                         _fridge.doorOpens(opening);
                     }
                 }
             }
             else
             {
-                //Debug.Log("dropping");
-                _grabbable.Drop();
-                pickedUP = false;
+                Debug.Log("pickingUP" + pickedUP);
+                pickedUP = _grabbable.Drop(hit.transform);
+                Debug.Log("pickingUP then" + pickedUP);
                 turningKnob = false;
             }
             
@@ -106,7 +110,7 @@ public class PickUpNRotate : MonoBehaviour
             {
                 if (hit.transform.TryGetComponent(out _fridge) && allowtoTurn)
                 {
-                    bool opening = false;
+                    opening = false;
                     _fridge.doorOpens(opening);
                 }
             }
@@ -120,5 +124,62 @@ public class PickUpNRotate : MonoBehaviour
     public void DisableKnob()
     {
         turningKnob = false;
+    }
+
+    void displayUI(Ray _facing)
+    {
+        if(Physics.Raycast(_facing, out RaycastHit _outHit, 15f, pickUplayermask))
+        {
+
+            if(_outHit.transform.TryGetComponent(out _grabbable))
+            {
+                if (!pickedUP)
+                {
+                    instruct.text = "F to pick up";
+                }
+               
+                
+
+            }else if(_outHit.transform.TryGetComponent(out _seasons))
+            {
+
+                if (!turningKnob && allowtoTurn)
+                {
+                    instruct.text = "F to start turning";
+                }
+                else
+                {
+                    instruct.text = "use left and right arrow to turn";
+                }
+
+            }
+            else if (_outHit.transform.TryGetComponent(out _fridge))
+            {
+                if (!opening && allowtoTurn)
+                {
+                    instruct.text = "F to open";
+                }
+                else
+                {
+                    instruct.text = "G to close";
+                }
+            }
+            
+
+
+
+
+        }else
+        {
+            if (!pickedUP)
+            {
+                instruct.text = string.Empty;
+            }
+            else
+            {
+                instruct.text = "use Arrows to rotate";
+            }
+                
+        }
     }
 }

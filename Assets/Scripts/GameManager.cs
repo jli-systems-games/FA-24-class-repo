@@ -12,7 +12,7 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public GameState current;
-    [SerializeField] GameObject rotScreen, plyr;
+    [SerializeField] GameObject rotScreen, plyr, endscrn;
     Dictionary<GameObject, bool> jars = new Dictionary<GameObject, bool>();
     bool success;
     void Start()
@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
                 plyr.SetActive(false);
                 break;
             case GameState.end:
+                endscrn.SetActive(true);
                 break;
         }
     }
