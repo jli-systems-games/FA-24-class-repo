@@ -8,35 +8,50 @@ public class PhotoCapture : MonoBehaviour
     private WebCamTexture webCamTexture;
     private Texture2D capturedTexture;
 
+    public float zoomFactor = 4.5f;  // Zoom factor to control the level of zoom
+    public float cutSizeFactor = 1.5f; // Factor to reduce the captured square size
+
     void Start()
     {
         // Initialize the webcam texture
         webCamTexture = new WebCamTexture();
         cameraView.texture = webCamTexture;
         webCamTexture.Play();  // Start the camera feed
+        
+        // Flip the camera view horizontally to mirror the image
+        cameraView.rectTransform.localScale = new Vector3(-4, 2, 1);  // Flip horizontally
     }
 
-    // Capture the image inside the RawImage's area
+    // Capture a square portion of the image inside the RawImage's area
     public void CapturePhoto()
     {
-        // Use the camera's actual resolution for the Texture2D
-        int cameraWidth = webCamTexture.width;
-        int cameraHeight = webCamTexture.height;
-
-        // Log the camera resolution for debugging
-        Debug.Log($"Camera resolution: {cameraWidth} x {cameraHeight}");
-
-        // Create a Texture2D with the camera's resolution
-        capturedTexture = new Texture2D(cameraWidth, cameraHeight);
+        // Calculate the size for the square portion (smaller of width or height)
+        int squareSize = Mathf.Min(webCamTexture.width, webCamTexture.height);
         
-        // Capture the full pixels from the webcam texture
-        capturedTexture.SetPixels(webCamTexture.GetPixels());
+        // Calculate the center position for the square region
+        int xOffset = (webCamTexture.width - squareSize) / 2;
+        int yOffset = (webCamTexture.height - squareSize) / 2;
+
+        // Adjust the offset for zooming in
+        int zoomedSquareSize = Mathf.FloorToInt(squareSize / zoomFactor);
+        
+        // Further reduce the size of the captured square
+        int finalSquareSize = Mathf.FloorToInt(zoomedSquareSize / cutSizeFactor);
+        
+        int zoomedXOffset = xOffset + (squareSize - finalSquareSize) / 2;
+        int zoomedYOffset = yOffset + (squareSize - finalSquareSize) / 2;
+
+        // Set the size of the Texture2D to be square
+        capturedTexture = new Texture2D(finalSquareSize, finalSquareSize);
+
+        // Capture the square portion from the webcam texture
+        capturedTexture.SetPixels(webCamTexture.GetPixels(zoomedXOffset, zoomedYOffset, finalSquareSize, finalSquareSize));
         capturedTexture.Apply();
-        
-        // Adjust texture settings to prevent tiling or repetition
-        capturedTexture.wrapMode = TextureWrapMode.Clamp;
 
-        // Apply the captured texture to the Cube's material
+        // Adjust texture settings
+        capturedTexture.wrapMode = TextureWrapMode.Clamp;  // Prevent tiling or repetition
+
+        // Apply the captured square texture to the Cube's material
         Material cubeMaterial = targetCube.GetComponent<Renderer>().material;
         cubeMaterial.mainTexture = capturedTexture;
         cubeMaterial.mainTextureScale = new Vector2(1, 1);  // Ensure full coverage on each face without repetition
