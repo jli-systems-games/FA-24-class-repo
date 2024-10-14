@@ -5,8 +5,11 @@ public class PhotoCapture : MonoBehaviour
 {
     public RawImage cameraView;  // UI element to display the camera feed
     public GameObject targetCube;  // The Cube where the texture will be applied
+    public GameObject photoCanvas; // Reference to the PhotoCanvas UICanvas
     private WebCamTexture webCamTexture;
     private Texture2D capturedTexture;
+
+   // public GameObject photoPos;
 
     public float zoomFactor = 3.5f;  // Zoom factor to control the level of zoom
     public float cutSizeFactor = 1.5f; // Factor to reduce the captured square size
@@ -17,6 +20,8 @@ public class PhotoCapture : MonoBehaviour
         webCamTexture = new WebCamTexture();
         cameraView.texture = webCamTexture;
         webCamTexture.Play();  // Start the camera feed
+
+       // photoPos.SetActive(false);
         
         // Flip the camera view horizontally to mirror the image
         cameraView.rectTransform.localScale = new Vector3(-8, 4, 1);  // Flip horizontally
@@ -55,6 +60,10 @@ public class PhotoCapture : MonoBehaviour
         Material cubeMaterial = targetCube.GetComponent<Renderer>().material;
         cubeMaterial.mainTexture = capturedTexture;
         cubeMaterial.mainTextureScale = new Vector2(1, 1);  // Ensure full coverage on each face without repetition
+
+        // Close the PhotoCanvas after capturing the photo
+        photoCanvas.SetActive(false);
+       // photoPos.SetActive(true);
     }
 
     void OnDisable()
