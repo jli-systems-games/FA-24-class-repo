@@ -15,19 +15,43 @@ public class ClickDrag : MonoBehaviour
 
     public bool rock;
     public bool carrot;
+    public bool clothes;
+
+    public bool dontRotate;
+
+    AudioSource audiosource;
+    public AudioClip pickUpSound;
+    public List<AudioClip> placingSounds = new List<AudioClip>();
 
     private void Start()
     {
+        audiosource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        selected = true;
+        if (clothes == true)
+        {
+            selected = false;
+        }
+        else
+        {
+            selected = true;
+        }
 
         if (rock == true)
         {
             transform.rotation = Quaternion.AngleAxis((Random.Range(0, 360)), Vector3.forward);
 
-            float randomScale = Random.Range(0.3f, 0.5f);
+            float randomScale = Random.Range(0.005f, 0.013f);
             transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+
+            audiosource.clip = pickUpSound;
+            audiosource.Play();
+        }
+
+        if (carrot)
+        {
+            audiosource.clip = pickUpSound;
+            audiosource.Play();
         }
     }
 
@@ -40,11 +64,11 @@ public class ClickDrag : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
 
-        if (carrot == true && transform.position.x < 0)
+        if (carrot == true && transform.position.x < 4)
         {
             spriteRenderer.flipX = true;
         }
-        else if (carrot == true && transform.position.x > 0)
+        else if (carrot == true && transform.position.x > 4)
         {
             spriteRenderer.flipX = false;
         }
@@ -57,13 +81,21 @@ public class ClickDrag : MonoBehaviour
         {
             //object is selected, deselect and place object
             selected = false;
+
+            int randomIndex = Random.Range(0, placingSounds.Count);
+            audiosource.clip = placingSounds[randomIndex];
+            audiosource.Play();
         }
         else if (selected == false)
         {
             //object is not selected, select and pick up object
             selected = true;
 
-            if (carrot == false)
+            audiosource.clip = pickUpSound;
+            audiosource.Play();
+
+
+            if (dontRotate == false)
             {
                 //picking up anything not a carrot, random rotation
                 transform.rotation = Quaternion.AngleAxis((Random.Range(0, 360)), Vector3.forward);
@@ -72,4 +104,3 @@ public class ClickDrag : MonoBehaviour
         Debug.Log("move object");
     }
 }
-

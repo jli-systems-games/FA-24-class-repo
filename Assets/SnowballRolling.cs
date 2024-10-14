@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class SnowballRolling : MonoBehaviour
 {
+    public bool small;
+
     private Vector3 screenPoint;
     private Vector3 offset;
     private Vector3 initialScale;
@@ -16,35 +18,118 @@ public class SnowballRolling : MonoBehaviour
 
     public float mouseY;
 
-    //https://discussions.unity.com/t/drag-gameobject-with-mouse/1798
+    public static float finalSnowballScale = 1f;
+    public GameObject button;
+    public AudioClip ding;
+
+    public AudioSource rollingaudiosource;
+    public AudioSource dingaudiosource;
+    public AudioClip rollingSound;
+
+    public GameObject text;
+
+    public bool play;
+
+    public void Start()
+    {
+        //audiosource = GetComponent<AudioSource>();
+
+        play = true;
+    }
+
+    public void Update()
+    {
+        if (play == false)
+        {
+            if (rollingaudiosource.isPlaying)
+            {
+                rollingaudiosource.Pause();
+            }
+        }
+    }
+
     void OnMouseDown()
     {
-        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        if (play == true)
+        {
+            if (text.activeSelf)
+            {
+                text.SetActive(false);
+            }
 
-        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+            screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
 
-        initialScale = transform.localScale;
+            offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+
+            initialScale = transform.localScale;
+
+
+            if (!rollingaudiosource.isPlaying)
+            {
+                rollingaudiosource.Play();
+            }
+        }
     }
 
     void OnMouseDrag()
     {
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-
-        float dragDistanceY = curPosition.y - transform.position.y;
-        Debug.Log(dragDistanceY);
-
-        if (dragDistanceY > 0)
+        if (play == true)
         {
-            float scaleFactor = 1 + dragDistanceY * 0.05f;
-            transform.localScale = new Vector3(initialScale.x * scaleFactor, initialScale.y * scaleFactor, initialScale.z * scaleFactor);
+            Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
 
-            HandRolling();
+            Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
+
+            float dragDistanceY = curPosition.y - transform.position.y;
+            Debug.Log(dragDistanceY);
+
+            if (dragDistanceY > 0)
+            {
+                float scaleFactor = 1 + dragDistanceY * 0.05f;
+                transform.localScale = new Vector3(initialScale.x * scaleFactor, initialScale.y * scaleFactor, initialScale.z * scaleFactor);
+
+                HandRolling();
+            }
         }
     }
 
-    //https://discussions.unity.com/t/how-to-move-a-game-object-up-and-down-in-a-loop/238607
+
+    void OnMouseUp()
+    {
+
+        if (play == true)
+        {
+            finalSnowballScale = transform.localScale.x;
+
+            if (finalSnowballScale >= 2.7f && small == false)
+            {
+                StartCoroutine(PlayDing());
+                button.SetActive(true);
+
+                play = false;
+            }
+
+            if (finalSnowballScale >= 1.65f && small == true)
+            {
+                StartCoroutine(PlayDing());
+                button.SetActive(true);
+
+                play = false;
+            }
+
+            if (rollingaudiosource.isPlaying)
+            {
+                rollingaudiosource.Pause();
+            }
+        }
+        Debug.Log("Final snowball size: " + finalSnowballScale);
+    }
+
+    private IEnumerator PlayDing()
+    {
+        yield return null;
+        dingaudiosource.PlayOneShot(ding);
+    }
+
     public void HandRolling()
     {
         elapsedTime += Time.deltaTime;

@@ -20,8 +20,23 @@ public class SceneChange : MonoBehaviour
         SceneManager.LoadScene(2, LoadSceneMode.Single);
     }
 
-    public void ZSDecorate()
+    public void ZSBackyardTwo()
     {
         SceneManager.LoadScene(3, LoadSceneMode.Single);
+    }
+
+    public void ZSRollingTwo()
+    {
+        SceneManager.LoadScene(4, LoadSceneMode.Single);
+    }
+
+    public void ZSBackyardThree()
+    {
+        SceneManager.LoadScene(5, LoadSceneMode.Single);
+    }
+
+    public void ZSDecorate()
+    {
+        SceneManager.LoadScene(6, LoadSceneMode.Single);
     }
 }
