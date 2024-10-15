@@ -16,7 +16,10 @@ public class Pet_AI : MonoBehaviour
 
     public bool asleep;
 
+    bool clicked;
+
     public GameObject mouseLoc;
+    private Vector3 targetPos;
     private Vector2 petToMouseVector;
     private Vector2 directionToMouse;
 
@@ -32,6 +35,7 @@ public class Pet_AI : MonoBehaviour
 
         stomache = 10;
         criticalHit = 1;
+        clicked = false;
     }
 
     // Update is called once per frame
@@ -47,12 +51,37 @@ public class Pet_AI : MonoBehaviour
             asleep = true;
         }
 
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseLoc.transform.position = new Vector3(mousePos.x,mousePos.y,0);
-        petToMouseVector = mouseLoc.transform.position - transform.position;
+        if (!clicked)
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseLoc.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
+            petToMouseVector = mouseLoc.transform.position - transform.position;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            clicked = true;
+            targetPos = mouseLoc.transform.position;
+            petToMouseVector = targetPos - transform.position;
+            speed = speed + 3;
+            Invoke("resumeFollow", 2);
+        }
+        
         directionToMouse = petToMouseVector.normalized;
 
+        if(petToMouseVector.magnitude < .025)
+        {
+            transform.position = mouseLoc.transform.position;
+        }
+
         Debug.Log(directionToMouse);
+        Debug.Log(petToMouseVector.magnitude);
+    }
+
+    void resumeFollow()
+    {
+        speed = speed - 3;
+        clicked = false;
     }
 
     private void FixedUpdate()
@@ -96,5 +125,13 @@ public class Pet_AI : MonoBehaviour
         }
 
         damage = (strength - hunger) * criticalHit;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("rock"))
+        {
+            gameManager.hitRock(other.gameObject);
+        }
     }
 }

@@ -23,14 +23,6 @@ public class Rock : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("pet"))
-        {
-            gameManager.hitRock(gameObject);
-        }
-    }
-
     public void takeDamage(int damage)
     {
         if (damage >= 0)
