@@ -8,6 +8,7 @@ public class PhotoCapture : MonoBehaviour
     public GameObject photoCanvas; // Reference to the PhotoCanvas UICanvas
     private WebCamTexture webCamTexture;
     private Texture2D capturedTexture;
+    public GameObject interactCanvas;
 
    // public GameObject photoPos;
 
@@ -16,6 +17,7 @@ public class PhotoCapture : MonoBehaviour
 
     void Start()
     {
+        interactCanvas.SetActive(false);
         // Initialize the webcam texture
         webCamTexture = new WebCamTexture();
         cameraView.texture = webCamTexture;
@@ -63,7 +65,7 @@ public class PhotoCapture : MonoBehaviour
 
         // Close the PhotoCanvas after capturing the photo
         photoCanvas.SetActive(false);
-       // photoPos.SetActive(true);
+        interactCanvas.SetActive(true);
     }
 
     void OnDisable()

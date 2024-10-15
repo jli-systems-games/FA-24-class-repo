@@ -16,7 +16,7 @@ public class AnimationController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SwitchAnimation());
+        StartCoroutine(SwitchAnimation()); // Start the random animation switching routine
     }
 
     // Coroutine to randomly switch between animations
@@ -24,14 +24,17 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
+            // Randomly choose an animation (either "Breath" or "Jump")
             currentAnimation = animations[Random.Range(0, animations.Length)];
 
+            // If "Jump" is selected, perform the jump and move logic
             if (currentAnimation == "Jump")
             {
                 yield return JumpAndMoveRoutine();
             }
             else
             {
+                // Otherwise, just play the "Breath" animation for a random duration
                 animator.Play(currentAnimation);
                 float randomTime = Random.Range(5f, 10f);
                 yield return new WaitForSeconds(randomTime);
@@ -54,6 +57,7 @@ public class AnimationController : MonoBehaviour
         targetPosition.x = Mathf.Clamp(targetPosition.x, startPosition.x - maxDistance, startPosition.x + maxDistance);
         targetPosition.z = Mathf.Clamp(targetPosition.z, startPosition.z - maxDistance, startPosition.z + maxDistance);
 
+        // Smoothly move the parent object to the target position
         while (elapsedTime < jumpDuration)
         {
             parentTransform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / jumpDuration);
@@ -71,10 +75,11 @@ public class AnimationController : MonoBehaviour
     // Public method to be called by the UI button to trigger a jump to a predefined target
     public void JumpToPredefinedTarget()
     {
-        if (!isJumping)
-        {
-            StartCoroutine(JumpToSpecificTarget(specificTargetPosition));
-        }
+        // Stop the random animation switching and jumping routines temporarily
+        StopAllCoroutines();
+        
+        // Start the jump to the specific target
+        StartCoroutine(JumpToSpecificTarget(specificTargetPosition));
     }
 
     // Coroutine to handle jumping to a specific target position
@@ -86,6 +91,7 @@ public class AnimationController : MonoBehaviour
         float elapsedTime = 0f;
         Vector3 startPosition = parentTransform.position;
 
+        // Smoothly move the parent object to the specific target position
         while (elapsedTime < jumpDuration)
         {
             parentTransform.position = Vector3.Lerp(startPosition, target, elapsedTime / jumpDuration);
@@ -95,5 +101,8 @@ public class AnimationController : MonoBehaviour
 
         parentTransform.position = target;
         isJumping = false;
+
+        // Resume the normal random movement and animation switching logic
+        StartCoroutine(SwitchAnimation());
     }
 }
