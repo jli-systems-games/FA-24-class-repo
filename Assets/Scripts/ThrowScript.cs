@@ -31,7 +31,8 @@ public class ThrowScript : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && !thrown)
         {
                  
-                    Throw();
+            Throw();
+            
         }
     }
     private void OnMouseDown()
@@ -71,6 +72,7 @@ public class ThrowScript : MonoBehaviour
         Vector3 addedForce = plyCam.transform.forward * throForce + transform.up * upwardForce;
         Debug.Log(addedForce);
         Rigidbody _rb = projectile.GetComponent<Rigidbody>();
+        _rb.isKinematic = false;
         _rb.AddForce(addedForce, ForceMode.Impulse);
 
 
