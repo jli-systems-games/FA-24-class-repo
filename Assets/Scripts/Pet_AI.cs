@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Pet_AI : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class Pet_AI : MonoBehaviour
 
     public float speed;
     public float rotationSpeed;
+
+    public Slider slider;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +39,8 @@ public class Pet_AI : MonoBehaviour
         stomache = 10;
         criticalHit = 1;
         clicked = false;
+
+        StartCoroutine(incrementHunger());
     }
 
     // Update is called once per frame
@@ -44,6 +49,7 @@ public class Pet_AI : MonoBehaviour
         if (!asleep)
         {
             stomache = 10 - hunger;
+            slider.value = stomache;
         }
 
         if(stomache <= 0)
@@ -74,8 +80,8 @@ public class Pet_AI : MonoBehaviour
             transform.position = mouseLoc.transform.position;
         }
 
-        Debug.Log(directionToMouse);
-        Debug.Log(petToMouseVector.magnitude);
+        //Debug.Log(directionToMouse);
+        //Debug.Log(petToMouseVector.magnitude);
     }
 
     void resumeFollow()
@@ -133,5 +139,13 @@ public class Pet_AI : MonoBehaviour
         {
             gameManager.hitRock(other.gameObject);
         }
+    }
+
+    private IEnumerator incrementHunger()
+    {
+        yield return new WaitForSeconds(60f);
+
+        hunger++;
+        Debug.Log("hunger: " + hunger);
     }
 }

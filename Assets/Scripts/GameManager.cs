@@ -48,6 +48,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("setting up pet manager");
     }
 
+    public void addToInventory(Inventory item)
+    {
+        player.updateInventory(item);
+    }
+
     public void hitRock(GameObject rockObj)
     {
         petAI.calculateDamage();

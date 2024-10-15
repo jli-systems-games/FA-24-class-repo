@@ -19,6 +19,7 @@ public class Rock : MonoBehaviour
     {
         if(HP <= 0)
         {
+            gameManager.addToInventory(item);
             Destroy(gameObject);
         }
     }

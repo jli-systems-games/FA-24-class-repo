@@ -23,4 +23,13 @@ public class Player : MonoBehaviour
     {
         
     }
+
+    public void updateInventory(Inventory item)
+    {
+        inventory.Add(item);
+        foreach (Inventory inventoryItem in inventory)
+        {
+            Debug.Log(inventoryItem.ToString());
+        }
+    }
 }
