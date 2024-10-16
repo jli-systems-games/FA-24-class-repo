@@ -13,10 +13,15 @@ public class GameManager : MonoBehaviour
     public Player player;
     public Rock[] rocks;
 
+    public GameObject mainCamera;
+
+    public GameState gameState;
+
     // Start is called before the first frame update
     void Start()
     {
         rocks = FindObjectsOfType<Rock>();
+        changeState(GameState.PetManager);
     }
 
     // Update is called once per frame
@@ -27,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public void changeState(GameState state)
     {
+        gameState = state;
         if (state == GameState.Overworld)
         {
             setUpOverworld();
@@ -45,6 +51,8 @@ public class GameManager : MonoBehaviour
 
     void setUpPetManager()
     {
+        petAI.gameObject.transform.position = Vector3.zero;
+        mainCamera.GetComponent<Camera>().orthographicSize = 2;
         Debug.Log("setting up pet manager");
     }
 

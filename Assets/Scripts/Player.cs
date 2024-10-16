@@ -35,17 +35,17 @@ public class Player : MonoBehaviour
     {
         inventory.Add(item);
 
-        //for (int i = 0; i < slotsTaken.Length; i++) 
-        //{
-        //    if (item == Inventory.Food)
-        //    {
-        //        Instantiate(foodPrefab, slots[i].transform);
-        //    }
+        for (int i = 0; i < slotsTaken.Length; i++) 
+        {
+            if (item == Inventory.Food)
+            {
+                //Instantiate(foodPrefab, slots[i].transform);
+            }
 
-        //    if(item == Inventory.Equipment)
-        //    {
-        //        Instantiate(foodPrefab,slots[i].transform);
-        //    }
-        //}
+            if(item == Inventory.Equipment)
+            {
+                //Instantiate(foodPrefab,slots[i].transform);
+            }
+        }
     }
 }
