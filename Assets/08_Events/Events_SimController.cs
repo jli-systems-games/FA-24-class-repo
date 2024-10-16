@@ -25,6 +25,11 @@ public class Events_SimController : MonoBehaviour
         onSimTakeDamage?.Invoke(2);
     }
 
+    void Hit()
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {
