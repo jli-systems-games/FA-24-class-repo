@@ -14,6 +14,8 @@ public class AnimationController : MonoBehaviour
     private string currentAnimation; // Current animation being played
     private bool isJumping = false; // Flag to indicate if jumping is in progress
 
+    private bool isEating = false; // Flag to indicate if eating animation is playing
+
     void Start()
     {
         StartCoroutine(SwitchAnimation()); // Start the random animation switching routine
@@ -24,6 +26,8 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
+            if (isEating) yield return null; // If eating, wait
+
             // Randomly choose an animation (either "Breath" or "Jump")
             currentAnimation = animations[Random.Range(0, animations.Length)];
 
@@ -105,4 +109,31 @@ public class AnimationController : MonoBehaviour
         // Resume the normal random movement and animation switching logic
         StartCoroutine(SwitchAnimation());
     }
+
+    // Public method to be called by the UI button to trigger the "Eat" animation
+    public void PlayEatAnimation()
+    {
+        // Stop all other animations
+        StopAllCoroutines();
+
+        // Start the Eat animation
+        StartCoroutine(EatRoutine());
+    }
+
+    // Coroutine to handle playing the Eat animation
+    IEnumerator EatRoutine()
+    {
+        isEating = true; // Set the eating flag to true
+
+        animator.Play("Eat"); // Play the "Eat" animation
+
+        // Assuming the eat animation duration is 2 seconds, wait for the animation to complete
+        yield return new WaitForSeconds(2f);
+
+        isEating = false; // Reset the eating flag
+
+        // Resume the normal random movement and animation switching logic
+        StartCoroutine(SwitchAnimation());
+    }
 }
+
