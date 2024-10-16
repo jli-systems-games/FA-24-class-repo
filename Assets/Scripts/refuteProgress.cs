@@ -2,34 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class StatsManager : MonoBehaviour
+public class refuteProgress : MonoBehaviour
 {
     Slider statsBar;
     bool filled;
     void Start()
     {
         statsBar = GetComponent<Slider>();
-        eventManager.resetAttack += resetSelf;
+        eventManager.resetAttack += reserItself;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(statsBar.value == 1 && !filled )
+        if (statsBar.value >= 1)
         {
-            Debug.Log(transform.name + "Reached the value");
-            eventManager.startAttack(this.gameObject);
+            Debug.Log("reseting");
+            eventManager.ResetAttk();
             filled = true;
         }
     }
-    public void UpdateStats(float currentValue, float maxValue)
+    public void UpdateProgress(float currentValue, float maxValue)
     {
         statsBar.value = currentValue / maxValue;
     }
-    void resetSelf()
+    void reserItself()
     {
-        filled = false;
-        UpdateStats(5f, 10f);
+        statsBar.value = 0;
     }
 }

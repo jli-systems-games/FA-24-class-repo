@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balls : MonoBehaviour
+public class FoodScript : MonoBehaviour
 {
+    [SerializeField] GameObject hungerBar;
     Rigidbody rb;
-    [SerializeField] GameObject boredomBar;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -19,19 +19,21 @@ public class Balls : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //invoke fetching events;
-       
+
         if (collision.transform.CompareTag("ground"))
         {
-             Debug.Log("start fethcing");
+            //Debug.Log("start fethcing");
             eventManager.startFetch(this.transform);
             rb.velocity = Vector3.zero;
 
-            Invoke("ResetSelf", 10f);
-        }else if (collision.transform.CompareTag("cryptid"))
-        { 
-            eventManager.decreaseB(boredomBar, "decrease");
+            Invoke("ResetSelf", 6f);
+        }
+        else if (collision.transform.CompareTag("cryptid"))
+        {
+            eventManager.calcHunger(hungerBar, "decrease");
+            //Debug.Log("fulfilling his tummy");
             eventManager.resetEnemy();
-           
+
         }
         //if the the entering object is Cryptids
         //Despawn itself;

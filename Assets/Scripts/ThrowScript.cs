@@ -21,6 +21,7 @@ public class ThrowScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         resetPos = transform.position;
+        eventManager.switchItems += Throw;
         //ResetBall();
     }
 
@@ -28,12 +29,12 @@ public class ThrowScript : MonoBehaviour
     void Update()
     {
         Debug.Log(thrown);
-        if(Input.GetMouseButtonDown(0) && !thrown)
+       /* if(Input.GetMouseButtonDown(0) && !thrown)
         {
                  
             Throw();
             
-        }
+        }*/
     }
     private void OnMouseDown()
     {  
@@ -63,14 +64,14 @@ public class ThrowScript : MonoBehaviour
 
         thrown = false;
     }
-    void Throw()
+    void Throw(GameObject obj)
     {
         thrown = true;
 
-        GameObject projectile = Instantiate(ball, holdingPoint.position, plyCam.rotation);
+        GameObject projectile = Instantiate(obj, holdingPoint.position, plyCam.rotation);
 
         Vector3 addedForce = plyCam.transform.forward * throForce + transform.up * upwardForce;
-        Debug.Log(addedForce);
+        //Debug.Log(addedForce);
         Rigidbody _rb = projectile.GetComponent<Rigidbody>();
         _rb.isKinematic = false;
         _rb.AddForce(addedForce, ForceMode.Impulse);

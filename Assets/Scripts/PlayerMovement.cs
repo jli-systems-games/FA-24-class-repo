@@ -12,11 +12,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float sensitivityY = 0.85f;
     [SerializeField] Transform plyrCam;
     [SerializeField] float xClamp = 65f;
+    [SerializeField] GameObject chicken, food, rebelProgress;
+    refuteProgress _progressStats;
     float inputX, inputY;
     float xRotation = 0f;
+    bool beingAttacked = false;
+    int progress = 0;
     void Start()
     {
-        
+        eventManager.triggerAttack += gettingLured;
+        eventManager.resetAttack += resetingPly;
+        _progressStats = rebelProgress.GetComponent<refuteProgress>();
     }
 
     // Update is called once per frame
@@ -25,13 +31,18 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = new Vector3(moveVector.x, 0, moveVector.y);
         direction.Normalize();
         transform.Translate(moveSpeed * direction * Time.deltaTime);
-        transform.Rotate(Vector3.up, inputX * Time.deltaTime);
 
-        xRotation -= inputY;
-        xRotation = Mathf.Clamp(xRotation, -xClamp, xClamp - 15f);
-        Vector3 plyRotation = transform.eulerAngles;
-        plyRotation.x = xRotation;
-        plyrCam.eulerAngles = plyRotation;
+        if (!beingAttacked)
+        {
+            transform.Rotate(Vector3.up, inputX * Time.deltaTime);
+
+            xRotation -= inputY;
+            xRotation = Mathf.Clamp(xRotation, -xClamp, xClamp - 15f);
+            Vector3 plyRotation = transform.eulerAngles;
+            plyRotation.x = xRotation;
+            plyrCam.eulerAngles = plyRotation;
+        }
+       
     }
     public void MovementInput(InputAction.CallbackContext context)
     {
@@ -47,5 +58,57 @@ public class PlayerMovement : MonoBehaviour
     public void TurnInputY(InputAction.CallbackContext context)
     {
         inputY = context.ReadValue<float>() * sensitivityY;
+    }
+    public void pickUpChicken(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (!beingAttacked)
+            {
+                eventManager.switchItem(chicken);
+            }
+            else
+            {
+                //call the refute function;
+                refuting();
+            }
+            
+        }
+    }
+    public void pickUpFood(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (!beingAttacked)
+            {
+                eventManager.switchItem(food);
+
+            }
+            
+        }
+    }
+    void gettingLured(GameObject trigger)
+    {
+        if (trigger.name == "hunger" || trigger.name == "irritation")
+        { 
+            beingAttacked = true;
+            rebelProgress.SetActive(true);
+        }
+        //beingAttacked and progress will both get reseted;
+    }
+    void refuting()
+    {
+
+        progress++;
+        //depend on input one rotate left (-) one rotate right (+) ;
+
+        transform.Rotate(Vector3.up, progress * sensitivityX);
+        _progressStats.UpdateProgress(progress, 10f);
+    }
+    void resetingPly()
+    {
+        beingAttacked = false;
+        progress = 0;
+        rebelProgress.SetActive(false);
     }
 }

@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
-    float timePassed = 0, lastCheckTimeBoredom = 0;
+    float timePassed = 0, lastCheckTimeBoredom = 0, lastHungerCheck = 0, lastIrritationCheck = 0;
     public TMP_Text counter;
-    [SerializeField] GameObject boredomBar;
+    int lastChickenCount;
+    [SerializeField] GameObject boredomBar, hungerBar, irritaBar;
+    [SerializeField] EnemyStates _statesM;
     void Start()
     {
         
@@ -20,14 +22,44 @@ public class TimeManager : MonoBehaviour
         timePassed += Time.deltaTime;
         //Debug.Log(timePassed);
         counter.text = timePassed.ToString();
-        if(Mathf.Round(timePassed) % 10  == 0 && timePassed >= 1)
+        if(_statesM.currentState == CryptidState.Roaming)
         {
-            Debug.Log("adding Hunger");
+            if(Mathf.FloorToInt(timePassed / 20) > Mathf.FloorToInt(lastHungerCheck / 20))
+            {
+            //Debug.Log("adding Hunger");
+                eventManager.calcHunger(hungerBar, "increase");
+                lastHungerCheck = timePassed;
 
-        }else if(Mathf.FloorToInt(timePassed / 15) > Mathf.FloorToInt(lastCheckTimeBoredom / 15))
-        {
-            eventManager.decreaseB(boredomBar, "increase");
-            lastCheckTimeBoredom = timePassed;
+            }
+            else if(Mathf.FloorToInt(timePassed / 25) > Mathf.FloorToInt(lastCheckTimeBoredom / 25))
+            {
+                eventManager.decreaseB(boredomBar, "increase");
+                lastCheckTimeBoredom = timePassed;
+
+            }
+            else if(Mathf.FloorToInt(timePassed /15) > Mathf.FloorToInt(lastIrritationCheck / 15))
+            {
+                //call event that check how many chickens are in the scene.
+                var chickens = FindObjectsOfType<Balls>();
+                int chickenCount = chickens.Length;
+                if(chickenCount >= 4 ) 
+                { 
+                    eventManager.countChicks(hungerBar, irritaBar, "increase");
+                }
+                else
+                {   
+                    if(chickenCount < lastChickenCount)
+                    {
+                        eventManager.countChicks(hungerBar, irritaBar, "decrease");
+                    }
+                
+                }
+                lastChickenCount = chickenCount;
+                lastIrritationCheck = timePassed;
+            }
+
         }
+        
+
     }
 }
