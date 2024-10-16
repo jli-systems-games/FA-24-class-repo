@@ -12,6 +12,13 @@ public class Player : MonoBehaviour
     private GameManager gameManager;
 
     public static List<Inventory> inventory = new List<Inventory>();
+
+    public GameObject[] slots;
+    public bool[] slotsTaken;
+
+    public GameObject foodPrefab;
+    public GameObject equipmentPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,9 +34,18 @@ public class Player : MonoBehaviour
     public void updateInventory(Inventory item)
     {
         inventory.Add(item);
-        foreach (Inventory inventoryItem in inventory)
-        {
-            Debug.Log(inventoryItem.ToString());
-        }
+
+        //for (int i = 0; i < slotsTaken.Length; i++) 
+        //{
+        //    if (item == Inventory.Food)
+        //    {
+        //        Instantiate(foodPrefab, slots[i].transform);
+        //    }
+
+        //    if(item == Inventory.Equipment)
+        //    {
+        //        Instantiate(foodPrefab,slots[i].transform);
+        //    }
+        //}
     }
 }
