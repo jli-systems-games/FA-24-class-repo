@@ -25,6 +25,13 @@ public class Event_Sim : MonoBehaviour
     public Slider energySlider;
     public Slider entertainmentSlider;
 
+    public Button feedButton;
+    public Button energyButton;
+    public Button entertainmentButton;
+    public float buttonCooldown = 2f;
+
+    public Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,8 +40,6 @@ public class Event_Sim : MonoBehaviour
         needEnergy = 100;
         needEntertainment = 100;
         alive = true;
-
-        onGetHungry.Invoke();
 
         hungerSlider.maxValue = 100;
         energySlider.maxValue = 100;
@@ -48,6 +53,10 @@ public class Event_Sim : MonoBehaviour
             StartCoroutine(PassiveEnergy(2f));
             StartCoroutine(PassiveEntertainment(.5f));
         }
+
+        feedButton.onClick.AddListener(Feed);
+        energyButton.onClick.AddListener(GiveEnergy);
+        entertainmentButton.onClick.AddListener(Entertain);
     }
 
     #region Update Behavior
@@ -125,23 +134,59 @@ public class Event_Sim : MonoBehaviour
     void NeedChangeHunger(float change)
     {
         needHunger += change;
+        needHunger = Mathf.Clamp(needHunger, 0, 100);
 
-        if(needHunger < 50 && state != SimState.Eating)
+        if (needHunger < 50 && state != SimState.Eating)
         {
             //onGetHungry.Invoke();
             //maybe music changes or you can't do certain things
             StateChanged(SimState.Hungry);
         }
+
+        UpdateSliders();
     }
 
     void NeedChangeEnergy(float change)
     {
         needEnergy += change;
+        needEnergy = Mathf.Clamp(needEnergy, 0, 100);
+        UpdateSliders();
     }
 
     void NeedChangeEntertainment(float change)
     {
         needEntertainment += change;
+        needEntertainment = Mathf.Clamp(needEntertainment, 0, 100);
+        UpdateSliders();
+    }
+
+    #endregion
+
+    #region Button Methods
+
+    public void Feed()
+    {
+        NeedChangeHunger(10f);
+        StartCoroutine(ButtonCooldown(feedButton));
+    }
+
+    public void GiveEnergy()
+    {
+        NeedChangeEnergy(10f);
+        StartCoroutine(ButtonCooldown(energyButton));
+    }
+
+    public void Entertain()
+    {
+        NeedChangeEntertainment(10f);
+        StartCoroutine(ButtonCooldown(entertainmentButton));
+    }
+
+    IEnumerator ButtonCooldown(Button button)
+    {
+        button.interactable = false;
+        yield return new WaitForSeconds(buttonCooldown);
+        button.interactable = true;
     }
 
     #endregion

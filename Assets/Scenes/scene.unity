@@ -798,7 +798,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 151713713}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -2168,7 +2168,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 251603837}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -4360,6 +4360,11 @@ MonoBehaviour:
   hungerSlider: {fileID: 1762803253}
   energySlider: {fileID: 74586563}
   entertainmentSlider: {fileID: 611456956}
+  feedButton: {fileID: 1636322782}
+  energyButton: {fileID: 1990225244}
+  entertainmentButton: {fileID: 1912290313}
+  buttonCooldown: 2
+  animator: {fileID: 0}
 --- !u!95 &1308313631
 Animator:
   serializedVersion: 5
@@ -6080,7 +6085,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 834814227}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1308313629}
+        m_TargetAssemblyTypeName: Event_Sim, Assembly-CSharp
+        m_MethodName: Feed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1636322783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6398,7 +6415,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 303877163}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -6973,7 +6990,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 729098655}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1308313629}
+        m_TargetAssemblyTypeName: Event_Sim, Assembly-CSharp
+        m_MethodName: Entertain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1912290314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7421,7 +7450,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990225242}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.96501607, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7432,7 +7461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -152.20001, y: 48.5}
+  m_AnchoredPosition: {x: -152.2001, y: 48.5}
   m_SizeDelta: {x: 90.9123, y: 78.4657}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1990225244
@@ -7478,7 +7507,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 70376458}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1308313629}
+        m_TargetAssemblyTypeName: Event_Sim, Assembly-CSharp
+        m_MethodName: GiveEnergy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1990225245
 MonoBehaviour:
   m_ObjectHideFlags: 0
