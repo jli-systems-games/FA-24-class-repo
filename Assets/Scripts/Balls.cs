@@ -6,6 +6,8 @@ public class Balls : MonoBehaviour
 {
     Rigidbody rb;
     [SerializeField] GameObject boredomBar;
+    [SerializeField] EnemyStates _eStates;
+    [SerializeField] GameManager _gManage;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,7 +32,15 @@ public class Balls : MonoBehaviour
         }else if (collision.transform.CompareTag("cryptid"))
         { 
             eventManager.decreaseB(boredomBar, "decrease");
-            eventManager.resetEnemy();
+            if(_eStates.currentState != CryptidState.Tutorial)
+            {
+                eventManager.resetEnemy();
+            }
+            else
+            {
+                _gManage.ChangeGState(GameState.Irritable);
+            }
+            
            
         }
         //if the the entering object is Cryptids

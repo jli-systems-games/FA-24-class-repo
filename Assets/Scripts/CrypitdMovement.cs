@@ -10,6 +10,7 @@ public class CrypitdMovement : MonoBehaviour
     [SerializeField] EnemyStates _enemyStates;
     [SerializeField] Transform _statsCanvas;
     [SerializeField] Transform plyr;
+    
     public List <Transform> moveLocations;
     bool reached;
     float startingValue =  5;
@@ -42,7 +43,7 @@ public class CrypitdMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
         if(_enemyStates.currentState == CryptidState.Roaming)
         {
               float remains = _agent.remainingDistance;
@@ -101,11 +102,17 @@ public class CrypitdMovement : MonoBehaviour
     {
         _agent.destination = ball.position;
         _agent.speed = 5f;
-        if(_enemyStates.currentState != CryptidState.Fetching)
-        {
-            _enemyStates.ChangeCryState(CryptidState.Fetching);
+
+        if(_enemyStates.currentState != CryptidState.Tutorial)
+        {   
+            if(_enemyStates.currentState != CryptidState.Fetching)
+            {
+                _enemyStates.ChangeCryState(CryptidState.Fetching);
             
+            }
+
         }
+        
         StartCoroutine(Chasing(ball));
     }
     IEnumerator Chasing(Transform target)
@@ -123,7 +130,7 @@ public class CrypitdMovement : MonoBehaviour
                 }
                 else
                 {
-                Debug.Log("break First");
+                    Debug.Log("break First");
                     eventManager.resetEnemy();
                     yield break;
                 }

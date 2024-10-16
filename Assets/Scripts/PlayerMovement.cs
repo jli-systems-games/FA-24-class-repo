@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     float inputX, inputY;
     float xRotation = 0f;
     bool beingAttacked = false;
+    public bool tuH, tuF,tuR;
     int progress = 0;
     void Start()
     {
@@ -63,11 +64,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.started)
         {
-            if (!beingAttacked)
+            if (!beingAttacked && !tuF)
             {
                 eventManager.switchItem(chicken);
             }
-            else
+            else if(!tuR)
             {
                 //call the refute function;
                 refuting();
@@ -77,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void pickUpFood(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !tuH)
         {
             if (!beingAttacked)
             {

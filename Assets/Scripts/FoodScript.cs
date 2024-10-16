@@ -5,6 +5,8 @@ using UnityEngine;
 public class FoodScript : MonoBehaviour
 {
     [SerializeField] GameObject hungerBar;
+    [SerializeField] EnemyStates _eStates;
+    [SerializeField] GameManager _gManage;
     Rigidbody rb;
     void Start()
     {
@@ -32,8 +34,17 @@ public class FoodScript : MonoBehaviour
         {
             eventManager.calcHunger(hungerBar, "decrease");
             //Debug.Log("fulfilling his tummy");
-            eventManager.resetEnemy();
+            if(_eStates.currentState != CryptidState.Tutorial)
+            {
+                eventManager.resetEnemy();
 
+            }
+            else
+            {
+                _gManage.ChangeGState(GameState.Fetch);
+                
+            }
+            
         }
         //if the the entering object is Cryptids
         //Despawn itself;

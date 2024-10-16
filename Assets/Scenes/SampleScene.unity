@@ -1911,6 +1911,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1170741524}
   - component: {fileID: 1170741523}
+  - component: {fileID: 1170741525}
   m_Layer: 0
   m_Name: EventManager
   m_TagString: Untagged
@@ -1945,6 +1946,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1170741525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170741522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1440a6ca18773d64c9bb419ab9819b73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyStates: {fileID: 1616577369}
+  plyr: {fileID: 1723290922}
+  currentState: 0
 --- !u!1 &1177371019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2315,6 +2331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hungerBar: {fileID: 482297361}
+  _eStates: {fileID: 1616577369}
+  _gManage: {fileID: 1170741525}
 --- !u!1 &1532907551
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,6 +2658,9 @@ MonoBehaviour:
   chicken: {fileID: 1781986907}
   food: {fileID: 1456889724}
   rebelProgress: {fileID: 315031785}
+  tuH: 1
+  tuF: 1
+  tuR: 1
 --- !u!114 &1723290923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3046,6 +3067,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boredomBar: {fileID: 90544372}
+  _eStates: {fileID: 1616577369}
+  _gManage: {fileID: 1170741525}
 --- !u!1 &2088528881
 GameObject:
   m_ObjectHideFlags: 0

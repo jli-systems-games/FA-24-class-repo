@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum CryptidState {
 
-    Roaming,Fetching,Attacking,Eating
+    Roaming,Fetching,Attacking,Eating,Tutorial
 }
 
 public class EnemyStates : MonoBehaviour
@@ -14,7 +14,7 @@ public class EnemyStates : MonoBehaviour
 
     void Start()
     {
-        currentState = CryptidState.Roaming;
+        currentState = CryptidState.Tutorial;
         eventManager.resetEnemyState += ReturnToDefault;
     }
 
