@@ -1,40 +1,38 @@
 using UnityEngine;
-using UnityEngine.UI; 
-using System.Collections; 
+using UnityEngine.UI;
+using System.Collections;
 
 public class AnimationController : MonoBehaviour
 {
     public Animator animator;
     public Transform parentTransform;
+    public GameObject wastePrefab;  // Waste prefab
+    public Transform wasteSpawnPoint;  // Reference to the empty GameObject's transform
     public float moveDistance = 3f;
     public float jumpDuration = 1f;
 
     public Vector3 specificTargetPosition;
-    public Vector3 roomCenter; 
-    public Vector3 roomSize;   
+    public Vector3 roomCenter;
+    public Vector3 roomSize;
 
     private string[] animations = { "Breath", "Jump" };
     private string currentAnimation;
     private bool isJumping = false;
     private bool isEating = false;
 
-    
-    public Slider hungerSlider; 
-    private int maxHunger = 10; 
-    private int currentHunger = 0; 
+    public Slider hungerSlider;
+    private int maxHunger = 10;
+    private int currentHunger = 0;
 
-    
-    public Slider moodSlider; 
+    public Slider moodSlider;
     private int maxMood = 20;
     private int currentMood = 5;
 
     void Start()
     {
-        
         hungerSlider.maxValue = maxHunger;
         hungerSlider.value = currentHunger;
 
-        
         moodSlider.maxValue = maxMood;
         moodSlider.value = currentMood;
 
@@ -100,7 +98,6 @@ public class AnimationController : MonoBehaviour
     {
         isJumping = true;
         animator.Play("Jump");
-        
 
         float elapsedTime = 0f;
         Vector3 startPosition = parentTransform.position;
@@ -148,13 +145,18 @@ public class AnimationController : MonoBehaviour
 
         if (currentHunger >= maxHunger)
         {
-           
             currentHunger = 0;
             hungerSlider.value = currentHunger;
+
+            // Instantiate wastePrefab at the empty GameObject's position (wasteSpawnPoint)
+            if (wasteSpawnPoint != null)
+            {
+                Instantiate(wastePrefab, wasteSpawnPoint.position, Quaternion.identity);
+                DecreaseMoodByP();
+            }
         }
     }
 
-    
     public void DecreaseMood()
     {
         if (currentMood > 0)
@@ -164,15 +166,21 @@ public class AnimationController : MonoBehaviour
         }
     }
 
+    public void DecreaseMoodByP()
+    {
+        if (currentMood > 0)
+        {
+            currentMood -= 2;
+            moodSlider.value = currentMood;
+        }
+    }
+
     public void IncreaseMood()
     {
         if (currentMood < maxMood)
         {
-             currentMood += 1;
-             moodSlider.value = currentMood;
+            currentMood += 1;
+            moodSlider.value = currentMood;
         }
     }
-
-    
-    
 }
