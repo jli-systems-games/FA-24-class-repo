@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public enum SimState
 {
@@ -20,6 +21,10 @@ public class Event_Sim : MonoBehaviour
 
     public UnityEvent onGetHungry;
 
+    public Slider hungerSlider;
+    public Slider energySlider;
+    public Slider entertainmentSlider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +35,12 @@ public class Event_Sim : MonoBehaviour
         alive = true;
 
         onGetHungry.Invoke();
+
+        hungerSlider.maxValue = 100;
+        energySlider.maxValue = 100;
+        entertainmentSlider.maxValue = 100;
+
+        UpdateSliders();
 
         if (alive == true)
         {
@@ -147,5 +158,12 @@ public class Event_Sim : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    void UpdateSliders()
+    {
+        hungerSlider.value = needHunger;
+        energySlider.value = needEnergy;
+        entertainmentSlider.value = needEntertainment;
     }
 }
