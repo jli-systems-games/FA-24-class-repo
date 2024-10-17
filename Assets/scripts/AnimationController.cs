@@ -170,7 +170,7 @@ public class AnimationController : MonoBehaviour
     {
         if (currentMood > 0)
         {
-            currentMood -= 2;
+            currentMood -= 10;
             moodSlider.value = currentMood;
         }
     }
