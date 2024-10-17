@@ -21,6 +21,8 @@ public class PetManager : MonoBehaviour
     public Button PlayButton;
     public Button CleanButton;
 
+    private AudioManager audioManager; // Reference to the AudioManager
+
     // Foliage image representing dirt/dead foliage
     public Image deadFoliage; // 2D sprite for dead foliage
 
@@ -30,9 +32,14 @@ public class PetManager : MonoBehaviour
     public Sprite neutralBugSprite; // Sprite for neutral bug
     public Sprite sadBugSprite; // Sprite for sad bug
 
-    public float hungerDecayRate = 1.5f; // Hunger decays faster
-    public float happinessDecayRate = 1f; // Happiness decays at a moderate rate
-    public float cleanlinessDecayRate = 0.5f; // Cleanliness decays slower
+    // Audio Clips for button sounds
+    public AudioClip feedSound;   // Sound for feeding
+    public AudioClip playSound;   // Sound for playing
+    public AudioClip cleanSound;  // Sound for cleaning
+
+    public float hungerDecayRate = 4f; // Hunger decays faster
+    public float happinessDecayRate = 3.2f; // Happiness decays at a moderate rate
+    public float cleanlinessDecayRate = 2.5f; // Cleanliness decays slower
 
     private float hunger = 100f;
     private float happiness = 100f;
@@ -43,6 +50,7 @@ public class PetManager : MonoBehaviour
     private bool canClean = true;
 
     private float actionCooldown = 1f; // Cooldown for actions
+    private float decayPauseDuration = 1.5f; // Duration to pause before decay starts
 
     private void Start()
     {
@@ -51,11 +59,8 @@ public class PetManager : MonoBehaviour
         playBubble.CrossFadeAlpha(0, 0.001f, true);
         cleanBubble.CrossFadeAlpha(0, 0.001f, true);
 
-        // Initial state for dead foliage (hidden at start)
-        deadFoliage.CrossFadeAlpha(0, 0.001f, true); // Hide dead foliage initially
-
-        // Set the default bug sprite to happy
-        //bugImage.sprite = happyBugSprite; // Set UI Image sprite
+        // Get the AudioManager component from the scene
+        audioManager = FindObjectOfType<AudioManager>();
 
         // Initialize button listeners
         FeedButton.onClick.AddListener(FeedThePet);
@@ -70,15 +75,32 @@ public class PetManager : MonoBehaviour
 
     private void Update()
     {
-        // Decrease the needs over time
+        // Base decay rates for hunger, happiness, and cleanliness
         hunger -= hungerDecayRate * Time.deltaTime;
-        happiness -= happinessDecayRate * Time.deltaTime;
         cleanliness -= cleanlinessDecayRate * Time.deltaTime;
 
-        hunger = Mathf.Clamp(hunger, 0, 100);
-        happiness = Mathf.Clamp(happiness, 0, 100);
-        cleanliness = Mathf.Clamp(cleanliness, 0, 100);
+        // Check conditions for faster happiness decay
+        float happinessDecayMultiplier = 1f; // Default multiplier
 
+        if (hunger < 60f) // When hunger is below %, increase happiness decay
+        {
+            happinessDecayMultiplier += 0.5f; // Increase happiness decay by 50%
+        }
+
+        if (cleanliness < 60f) // When cleanliness is below %, increase happiness decay
+        {
+            happinessDecayMultiplier += 0.5f; // Increase happiness decay by another 50%
+        }
+
+        // Apply faster decay to happiness based on current hunger and cleanliness levels
+        happiness -= happinessDecayRate * happinessDecayMultiplier * Time.deltaTime;
+
+        // Clamp values to ensure they stay within bounds
+        hunger = Mathf.Clamp(hunger, 0, 100);
+        cleanliness = Mathf.Clamp(cleanliness, 0, 100);
+        happiness = Mathf.Clamp(happiness, 0, 100);
+
+        // Update UI sliders
         UpdateHungerBar();
         UpdateHappinessBar();
         UpdateCleanlinessBar();
@@ -89,12 +111,13 @@ public class PetManager : MonoBehaviour
 
         // Update the bug sprite based on current happiness
         UpdateBugSprite();
+
     }
 
     private void HandleThoughtBubbles()
     {
-        // Show food thought bubble if hunger is below 50%
-        if (hunger < 50f)
+        // Show food thought bubble if hunger is below % 
+        if (hunger < 75f)
         {
             foodBubble.CrossFadeAlpha(1, 0.5f, true); // Fade in when hungry
         }
@@ -103,8 +126,8 @@ public class PetManager : MonoBehaviour
             foodBubble.CrossFadeAlpha(0, 0.5f, true); // Fade out when hunger is satisfied
         }
 
-        // Show play thought bubble if happiness is below 50%
-        if (happiness < 50f)
+        // Show play thought bubble if happiness is below %
+        if (happiness < 65f)
         {
             playBubble.CrossFadeAlpha(1, 0.5f, true); // Fade in when needs play
         }
@@ -113,8 +136,8 @@ public class PetManager : MonoBehaviour
             playBubble.CrossFadeAlpha(0, 0.5f, true); // Fade out when happy
         }
 
-        // Show clean thought bubble if cleanliness is below 50%
-        if (cleanliness < 50f)
+        // Show clean thought bubble if cleanliness is below %
+        if (cleanliness < 65f)
         {
             cleanBubble.CrossFadeAlpha(1, 0.5f, true); // Fade in when dirty
         }
@@ -126,8 +149,8 @@ public class PetManager : MonoBehaviour
 
     private void HandleFoliageAppearance()
     {
-        // Show dead foliage if cleanliness is below 50%
-        if (cleanliness < 50f)
+        // Show dead foliage if cleanliness is below %
+        if (cleanliness < 67f)
         {
             deadFoliage.CrossFadeAlpha(1, 0.5f, true); // Fade in dead foliage
         }
@@ -140,7 +163,7 @@ public class PetManager : MonoBehaviour
     private void UpdateBugSprite()
     {
         // Change bug sprite based on happiness
-        if (happiness > 60f)
+        if (happiness > 65f)
         {
             bugImage.sprite = happyBugSprite; // Set happy sprite
         }
@@ -159,10 +182,12 @@ public class PetManager : MonoBehaviour
     {
         if (canFeed)
         {
+            audioManager.PlaySound(feedSound); // Play feed sound
             hunger += 30f; // Increase hunger when feeding
             hunger = Mathf.Clamp(hunger, 0, 100); // Keep hunger within bounds
             UpdateHungerBar();
             StartCoroutine(CooldownFeed());
+            StartCoroutine(PauseDecay("hunger")); // Start the decay pause for hunger
         }
     }
 
@@ -170,10 +195,12 @@ public class PetManager : MonoBehaviour
     {
         if (canPlay)
         {
-            happiness += 30f; // Increase happiness when playing
+            audioManager.PlaySound(playSound); // Play play sound
+            happiness += 25f; // Increase happiness when playing
             happiness = Mathf.Clamp(happiness, 0, 100); // Keep happiness within bounds
             UpdateHappinessBar();
             StartCoroutine(CooldownPlay());
+            StartCoroutine(PauseDecay("happiness")); // Start the decay pause for happiness
         }
     }
 
@@ -181,10 +208,12 @@ public class PetManager : MonoBehaviour
     {
         if (canClean)
         {
-            cleanliness += 30f; // Increase cleanliness when cleaning
+            audioManager.PlaySound(cleanSound); // Play clean sound
+            cleanliness += 40f; // Increase cleanliness when cleaning
             cleanliness = Mathf.Clamp(cleanliness, 0, 100); // Keep cleanliness within bounds
             UpdateCleanlinessBar();
             StartCoroutine(CooldownClean());
+            StartCoroutine(PauseDecay("cleanliness")); // Start the decay pause for cleanliness
         }
     }
 
@@ -208,6 +237,32 @@ public class PetManager : MonoBehaviour
         canClean = false;
         yield return new WaitForSeconds(actionCooldown); // 1-second cooldown
         canClean = true;
+    }
+
+    // Coroutine to pause decay of specific need
+    private System.Collections.IEnumerator PauseDecay(string stat)
+    {
+        if (stat == "hunger")
+        {
+            float originalHungerDecayRate = hungerDecayRate;
+            hungerDecayRate = 0f;
+            yield return new WaitForSeconds(decayPauseDuration); // Wait for specified duration
+            hungerDecayRate = originalHungerDecayRate;
+        }
+        else if (stat == "happiness")
+        {
+            float originalHappinessDecayRate = happinessDecayRate;
+            happinessDecayRate = 0f;
+            yield return new WaitForSeconds(decayPauseDuration); // Wait for specified duration
+            happinessDecayRate = originalHappinessDecayRate;
+        }
+        else if (stat == "cleanliness")
+        {
+            float originalCleanlinessDecayRate = cleanlinessDecayRate;
+            cleanlinessDecayRate = 0f;
+            yield return new WaitForSeconds(decayPauseDuration); // Wait for specified duration
+            cleanlinessDecayRate = originalCleanlinessDecayRate;
+        }
     }
 
     private void UpdateHungerBar()
