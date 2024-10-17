@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum SimState
 {
@@ -28,9 +29,16 @@ public class Event_Sim : MonoBehaviour
     public Button feedButton;
     public Button energyButton;
     public Button entertainmentButton;
-    public float buttonCooldown = 2f;
+    public Button restartButton;
+    public float buttonCooldown = 3f;
 
-    public Animator animator;
+    public GameObject endPanel;
+    public GameObject character;
+
+    public AudioSource audioSource;
+    public AudioClip feedSound;
+    public AudioClip energySound;
+    public AudioClip entertainmentSound;
 
     // Start is called before the first frame update
     void Start()
@@ -49,14 +57,39 @@ public class Event_Sim : MonoBehaviour
 
         if (alive == true)
         {
-            StartCoroutine(PassiveHunger(3f));
-            StartCoroutine(PassiveEnergy(2f));
-            StartCoroutine(PassiveEntertainment(.5f));
+            StartCoroutine(PassiveHunger(.8f));
+            StartCoroutine(PassiveEnergy(.5f));
+            StartCoroutine(PassiveEntertainment(.3f));
         }
 
-        feedButton.onClick.AddListener(Feed);
-        energyButton.onClick.AddListener(GiveEnergy);
-        entertainmentButton.onClick.AddListener(Entertain);
+        feedButton.onClick.AddListener(PlayFeedAction);
+        energyButton.onClick.AddListener(PlayEnergyAction);
+        entertainmentButton.onClick.AddListener(PlayEntertainmentAction);
+
+        if (restartButton != null)
+        {
+            restartButton.onClick.AddListener(RestartGame);
+        }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void GameOver()
+    {
+        gameObject.SetActive(false);
+        SetButtonsInteractable(false);
+
+        endPanel.SetActive(true);
+    }
+
+    void SetButtonsInteractable(bool state)
+    {
+        feedButton.interactable = state;
+        energyButton.interactable = state;
+        entertainmentButton.interactable = state;
     }
 
     #region Update Behavior
@@ -72,6 +105,11 @@ public class Event_Sim : MonoBehaviour
                 break;
             default:
                 break;
+        }
+
+        if (hungerSlider.value <= 0 || energySlider.value <= 0 || entertainmentSlider.value <= 0)
+        {
+            GameOver();
         }
     }
 
@@ -96,14 +134,14 @@ public class Event_Sim : MonoBehaviour
         {
             if(state == SimState.Asleep)
             {
-                StartCoroutine(PassiveHunger(10f));
+                StartCoroutine(PassiveHunger(2.1f));
             }
             else if(state == SimState.Eating)
             {
                 // do smth
             }
             else
-                StartCoroutine(PassiveHunger(3f));
+                StartCoroutine(PassiveHunger(.7f));
         }
     }
 
@@ -114,7 +152,7 @@ public class Event_Sim : MonoBehaviour
         NeedChangeEnergy(-1f);
 
         if (alive == true)
-            StartCoroutine(PassiveEnergy(2f));
+            StartCoroutine(PassiveEnergy(.4f));
     }
 
     IEnumerator PassiveEntertainment(float waitTime)
@@ -124,7 +162,7 @@ public class Event_Sim : MonoBehaviour
         NeedChangeEntertainment(-1f);
 
         if (alive == true)
-            StartCoroutine(PassiveEntertainment(.5f));
+            StartCoroutine(PassiveEntertainment(.3f));
     }
 
     #endregion
@@ -166,19 +204,19 @@ public class Event_Sim : MonoBehaviour
 
     public void Feed()
     {
-        NeedChangeHunger(10f);
+        NeedChangeHunger(3f);
         StartCoroutine(ButtonCooldown(feedButton));
     }
 
     public void GiveEnergy()
     {
-        NeedChangeEnergy(10f);
+        NeedChangeEnergy(3f);
         StartCoroutine(ButtonCooldown(energyButton));
     }
 
     public void Entertain()
     {
-        NeedChangeEntertainment(10f);
+        NeedChangeEntertainment(5f);
         StartCoroutine(ButtonCooldown(entertainmentButton));
     }
 
@@ -210,5 +248,31 @@ public class Event_Sim : MonoBehaviour
         hungerSlider.value = needHunger;
         energySlider.value = needEnergy;
         entertainmentSlider.value = needEntertainment;
+    }
+
+    void PlayFeedAction()
+    {
+        PlaySound(feedSound);
+        Feed();
+    }
+
+    void PlayEnergyAction()
+    {
+        PlaySound(energySound);
+        GiveEnergy();
+    }
+
+    void PlayEntertainmentAction()
+    {
+        PlaySound(entertainmentSound);
+        Entertain();
+    }
+
+    void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }
