@@ -31,6 +31,11 @@ public class Stat3Game : MonoBehaviour
 
     private void CompleteMiniGame()
     {
+        if (PetManager.Instance == null)
+        {
+            Debug.LogError("PetManager.Instance null");
+            return;
+        }
         PetManager.Instance.CompleteMiniGame3();
     }
 }

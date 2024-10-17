@@ -33,18 +33,18 @@ public class PetManager : MonoBehaviour
     private bool stat2Low = false;
     private bool stat3Low = false;
 
-    //private void Awake()
-    //{
-    //    if (Instance == null)
-    //    {
-    //        Instance = this;
-    //        DontDestroyOnLoad(gameObject);
-    //    }
-    //    else
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -106,14 +106,18 @@ public class PetManager : MonoBehaviour
 
     public void ShowMiniGame1()
     {
-        mainCanvas.SetActive(false);
-        minigame1Canvas.SetActive(true);
+        //mainCanvas.SetActive(false);
+        //minigame1Canvas.SetActive(true);
+        ReplenishStat(stat1);
+        warningText.text = "There's no minigame yet. :(";
     }
 
     public void ShowMiniGame2()
     {
-        mainCanvas.SetActive(false);
-        minigame2Canvas.SetActive(true);
+        //mainCanvas.SetActive(false);
+        //minigame2Canvas.SetActive(true);
+        ReplenishStat(stat2);
+        warningText.text = "There's no minigame yet. :(";
     }
 
     public void ShowMiniGame3()
@@ -198,11 +202,13 @@ public class PetManager : MonoBehaviour
         statButtons.SetActive(false);
         gameOver.SetActive(true);
         ramenPet.sprite = deadSprite;
+        warningText.text = "Your ramen pet died. :(";
         Time.timeScale = 0;
     }
 
     public void ResetGame()
     {
+        Destroy(gameObject);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
