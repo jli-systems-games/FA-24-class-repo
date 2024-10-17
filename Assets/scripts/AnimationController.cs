@@ -22,11 +22,15 @@ public class AnimationController : MonoBehaviour
 
     public Slider hungerSlider;
     private int maxHunger = 10;
-    private int currentHunger = 0;
+    private int currentHunger = 5;  // Starting value for hunger
 
     public Slider moodSlider;
     private int maxMood = 20;
-    private int currentMood = 5;
+    private int currentMood = 6;
+
+    
+    public GameObject happyFace;   
+    public GameObject sadFace;     
 
     void Start()
     {
@@ -36,7 +40,36 @@ public class AnimationController : MonoBehaviour
         moodSlider.maxValue = maxMood;
         moodSlider.value = currentMood;
 
+       
+        StartCoroutine(AutoDecreaseHunger());
+
+        
         StartCoroutine(SwitchAnimation());
+    }
+
+    void Update()
+    {
+        UpdateFaceExpressions();
+    }
+
+    
+    private void UpdateFaceExpressions()
+    {
+        if (currentMood > 15)
+        {
+            happyFace.SetActive(true);
+            sadFace.SetActive(false);
+        }
+        else if (currentMood < 5)
+        {
+            happyFace.SetActive(false);
+            sadFace.SetActive(true);
+        }
+        else
+        {
+            happyFace.SetActive(false);
+            sadFace.SetActive(false);
+        }
     }
 
     IEnumerator SwitchAnimation()
@@ -135,6 +168,7 @@ public class AnimationController : MonoBehaviour
         StartCoroutine(SwitchAnimation());
     }
 
+    // Function to handle increasing hunger
     private void IncreaseHunger()
     {
         if (currentHunger < maxHunger)
@@ -154,6 +188,26 @@ public class AnimationController : MonoBehaviour
                 Instantiate(wastePrefab, wasteSpawnPoint.position, Quaternion.identity);
                 DecreaseMoodByP();
             }
+        }
+    }
+
+    // Function to handle decreasing hunger over time
+    private void DecreaseHunger()
+    {
+        if (currentHunger > 0)
+        {
+            currentHunger--;
+            hungerSlider.value = currentHunger;
+        }
+    }
+
+    // Coroutine for automatically decreasing hunger every 2 seconds
+    private IEnumerator AutoDecreaseHunger()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2f);  // Wait 2 seconds between each hunger decrease
+            DecreaseHunger();
         }
     }
 
