@@ -6,7 +6,7 @@ public class AnimationController : MonoBehaviour
 {
     public Animator animator;
     public Transform parentTransform;
-    public GameObject wastePrefab;  // Waste prefab
+    public GameObject wastePrefab;
     public Transform wasteSpawnPoint;  // Reference to the empty GameObject's transform
     public float moveDistance = 3f;
     public float jumpDuration = 1f;
@@ -22,15 +22,26 @@ public class AnimationController : MonoBehaviour
 
     public Slider hungerSlider;
     private int maxHunger = 10;
-    private int currentHunger = 5;  // Starting value for hunger
+    private int currentHunger = 5;
 
     public Slider moodSlider;
     private int maxMood = 20;
     private int currentMood = 6;
 
-    
+    public Slider fashionSlider;  
+    private int maxFashion = 10; 
+    private int currentFashion = 3; 
+
     public GameObject happyFace;   
     public GameObject sadFace;     
+
+    // References to the fill images of sliders
+    public Image hungerFillImage;
+    public Image moodFillImage;
+    public Image fashionFillImage;
+
+    // Reference to the foot GameObject
+    public GameObject footObject;  // Add this line
 
     void Start()
     {
@@ -40,19 +51,19 @@ public class AnimationController : MonoBehaviour
         moodSlider.maxValue = maxMood;
         moodSlider.value = currentMood;
 
-       
-        StartCoroutine(AutoDecreaseHunger());
+        fashionSlider.maxValue = maxFashion; 
+        fashionSlider.value = currentFashion; 
 
-        
         StartCoroutine(SwitchAnimation());
     }
 
     void Update()
     {
         UpdateFaceExpressions();
+        UpdateSliderColors(); // Update slider colors based on their values
+        UpdateFootVisibility(); // Update foot visibility based on fashion level
     }
 
-    
     private void UpdateFaceExpressions()
     {
         if (currentMood > 15)
@@ -70,6 +81,45 @@ public class AnimationController : MonoBehaviour
             happyFace.SetActive(false);
             sadFace.SetActive(false);
         }
+    }
+
+    private void UpdateSliderColors()
+    {
+        // Change hunger slider fill color
+        if (currentHunger < 3)
+        {
+            hungerFillImage.color = Color.red;
+        }
+        else
+        {
+            hungerFillImage.color = Color.white; // Or your default color
+        }
+
+        // Change mood slider fill color
+        if (currentMood < 4)
+        {
+            moodFillImage.color = Color.red;
+        }
+        else
+        {
+            moodFillImage.color = Color.white; // Or your default color
+        }
+
+        // Change fashion slider fill color
+        if (currentFashion < 3)
+        {
+            fashionFillImage.color = Color.red;
+        }
+        else
+        {
+            fashionFillImage.color = Color.white; // Or your default color
+        }
+    }
+
+    private void UpdateFootVisibility() // Add this method
+    {
+        // Set foot visibility based on fashion level
+        footObject.SetActive(currentFashion > 5);
     }
 
     IEnumerator SwitchAnimation()
@@ -168,7 +218,6 @@ public class AnimationController : MonoBehaviour
         StartCoroutine(SwitchAnimation());
     }
 
-    // Function to handle increasing hunger
     private void IncreaseHunger()
     {
         if (currentHunger < maxHunger)
@@ -182,7 +231,6 @@ public class AnimationController : MonoBehaviour
             currentHunger = 0;
             hungerSlider.value = currentHunger;
 
-            // Instantiate wastePrefab at the empty GameObject's position (wasteSpawnPoint)
             if (wasteSpawnPoint != null)
             {
                 Instantiate(wastePrefab, wasteSpawnPoint.position, Quaternion.identity);
@@ -191,23 +239,12 @@ public class AnimationController : MonoBehaviour
         }
     }
 
-    // Function to handle decreasing hunger over time
-    private void DecreaseHunger()
+    public void DecreaseHunger()
     {
         if (currentHunger > 0)
         {
             currentHunger--;
             hungerSlider.value = currentHunger;
-        }
-    }
-
-    // Coroutine for automatically decreasing hunger every 2 seconds
-    private IEnumerator AutoDecreaseHunger()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(2f);  // Wait 2 seconds between each hunger decrease
-            DecreaseHunger();
         }
     }
 
@@ -224,7 +261,7 @@ public class AnimationController : MonoBehaviour
     {
         if (currentMood > 0)
         {
-            currentMood -= 10;
+            currentMood -= 5;
             moodSlider.value = currentMood;
         }
     }
@@ -233,7 +270,7 @@ public class AnimationController : MonoBehaviour
     {
         if (currentMood < maxMood)
         {
-            currentMood += 1;
+            currentMood++;
             moodSlider.value = currentMood;
         }
     }
