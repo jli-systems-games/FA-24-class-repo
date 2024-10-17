@@ -34,7 +34,7 @@ public class FoodScript : MonoBehaviour
         {
             eventManager.calcHunger(hungerBar, "decrease");
             //Debug.Log("fulfilling his tummy");
-            if(_eStates.currentState != CryptidState.Tutorial)
+            if(EnemyStates.currentState != CryptidState.Tutorial)
             {
                 eventManager.resetEnemy();
 

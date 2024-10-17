@@ -9,7 +9,7 @@ public enum CryptidState {
 
 public class EnemyStates : MonoBehaviour
 {
-    public CryptidState currentState;
+    public static CryptidState currentState;
   
 
     void Start()

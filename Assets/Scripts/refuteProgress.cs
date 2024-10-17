@@ -6,6 +6,7 @@ public class refuteProgress : MonoBehaviour
 {
     Slider statsBar;
     bool filled;
+    [SerializeField] GameManager gManager;
     void Start()
     {
         statsBar = GetComponent<Slider>();
@@ -17,8 +18,9 @@ public class refuteProgress : MonoBehaviour
     {
         if (statsBar.value >= 1)
         {
-            Debug.Log("reseting");
+            //Debug.Log("reseting");
             eventManager.ResetAttk();
+           
             filled = true;
         }
     }
@@ -28,6 +30,10 @@ public class refuteProgress : MonoBehaviour
     }
     void reserItself()
     {
-        statsBar.value = 0;
+        statsBar.value = 0; 
+        if(EnemyStates.currentState == CryptidState.Tutorial)
+            {
+                gManager.ChangeGState(GameState.Game);
+            }
     }
 }

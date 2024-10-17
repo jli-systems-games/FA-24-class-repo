@@ -16,10 +16,16 @@ public class StatsManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(statsBar.value == 1 && !filled )
+        if(statsBar.value >= 0.9f && !filled )
         {
-            Debug.Log(transform.name + "Reached the value");
+            //Debug.Log(transform.name + "Reached the value");
             eventManager.startAttack(this.gameObject);
+
+            if(EnemyStates.currentState == CryptidState.Tutorial)
+            {
+                EnemyStates.currentState = CryptidState.Roaming;
+
+            }
             filled = true;
         }
     }
@@ -30,6 +36,8 @@ public class StatsManager : MonoBehaviour
     void resetSelf()
     {
         filled = false;
-        UpdateStats(5f, 10f);
+       
+        UpdateStats(5f, 10f); 
+        //Debug.Log(transform.name + statsBar.value);
     }
 }

@@ -10,7 +10,7 @@ public class CrypitdMovement : MonoBehaviour
     [SerializeField] EnemyStates _enemyStates;
     [SerializeField] Transform _statsCanvas;
     [SerializeField] Transform plyr;
-    
+    [SerializeField] AudioSource crys;
     public List <Transform> moveLocations;
     bool reached;
     float startingValue =  5;
@@ -44,7 +44,7 @@ public class CrypitdMovement : MonoBehaviour
     void Update()
     {
         
-        if(_enemyStates.currentState == CryptidState.Roaming)
+        if(EnemyStates.currentState == CryptidState.Roaming)
         {
               float remains = _agent.remainingDistance;
               //Debug.Log(remains);
@@ -55,7 +55,7 @@ public class CrypitdMovement : MonoBehaviour
           
               }
              //check and decrease speed;
-        }else if(_enemyStates.currentState == CryptidState.Attacking)
+        }else if(EnemyStates.currentState == CryptidState.Attacking)
         {
             transform.LookAt(plyr);
         }   
@@ -67,7 +67,7 @@ public class CrypitdMovement : MonoBehaviour
         yield return null;
 
         foreach(Transform statsBar in _statsCanvas)
-        {    Debug.Log(startingValue);
+        {    //Debug.Log(startingValue);
             StatsManager _statM = statsBar.GetComponent<StatsManager>();
             if (_statM != null)
             {
@@ -76,6 +76,7 @@ public class CrypitdMovement : MonoBehaviour
             }
         }
     }
+    #region DefaultBehavior
     void PickPos()
     {
         int index = 0 ;
@@ -103,9 +104,9 @@ public class CrypitdMovement : MonoBehaviour
         _agent.destination = ball.position;
         _agent.speed = 5f;
 
-        if(_enemyStates.currentState != CryptidState.Tutorial)
+        if(EnemyStates.currentState != CryptidState.Tutorial)
         {   
-            if(_enemyStates.currentState != CryptidState.Fetching)
+            if(EnemyStates.currentState != CryptidState.Fetching)
             {
                 _enemyStates.ChangeCryState(CryptidState.Fetching);
             
@@ -139,6 +140,8 @@ public class CrypitdMovement : MonoBehaviour
         
       
     }
+    #endregion
+    #region calculation for stats
     public void calBoredom(GameObject bBar, string sender)
     {
         StatsManager bStats = bBar.GetComponent<StatsManager>();
@@ -159,8 +162,11 @@ public class CrypitdMovement : MonoBehaviour
         StatsManager hStats = hBar.GetComponent<StatsManager>();
         if(sender == "increase")
         {
-            startingValue = startingValue + (maxStat * 0.2f);
+           /* Debug.Log("Hello");*/
+            startingValue = startingValue + (maxStat * 0.2f); 
+            //Debug.Log("Hunger added" +  startingValue);
             hStats.UpdateStats(startingValue, maxStat);
+
         }else if (sender == "decrease")
         {
             startingValue = startingValue - (maxStat * 0.3f);
@@ -172,12 +178,21 @@ public class CrypitdMovement : MonoBehaviour
         StatsManager iStat = irrt.GetComponent<StatsManager>();
         //atsManager hstat = h.GetComponent<StatsManager>();
 
-
+        //Debug.Log("puting in" + startingValue);
         if (sender == "increase")
         {
             // increase the irritation meter
             Debug.Log("calc stats");
-            startingValue = startingValue + (maxStat * 0.3f);
+            if(EnemyStates.currentState == CryptidState.Tutorial)
+            {
+                startingValue = 10f;
+            }
+            else
+            {
+                 startingValue = startingValue + (maxStat * 0.3f);
+
+            }
+           
             iStat.UpdateStats(startingValue, maxStat);
             calHunger(h, sender);
 
@@ -194,21 +209,35 @@ public class CrypitdMovement : MonoBehaviour
          
         
     }
+    #endregion
     void Attacking(GameObject trigger)
     {
-        Debug.Log("this is " + trigger.name);
+      //Debug.Log(EnemyStates.currentState);
         if(trigger.name == "hunger" || trigger.name == "irritation")
         {
-            _enemyStates.ChangeCryState(CryptidState.Attacking);
-            
-            //play crying baby sound;
+            if (EnemyStates.currentState != CryptidState.Tutorial)
+            {
+                _enemyStates.ChangeCryState(CryptidState.Attacking);
 
+            }
+
+
+            //play crying baby sound;
+            crys.Play();
         }
     }
     void Reseting()
     {
-        Debug.Log("you broke out of the hold");
+        //Debug.Log("you broke out of the hold");
+        //Debug.Log(EnemyStates.currentState);
+        if(startingValue > 10)
+        {
+            //Debug.Log("reset starting val");
+            startingValue = 2f;
+        }
+        crys.Stop();
         _enemyStates.ChangeCryState(CryptidState.Roaming);
+
             
     }
    

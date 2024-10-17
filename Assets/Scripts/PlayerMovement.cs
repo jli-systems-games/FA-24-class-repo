@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 1f;
     [SerializeField] float sensitivityX = 5f;
     [SerializeField] float sensitivityY = 0.85f;
-    [SerializeField] Transform plyrCam;
+    [SerializeField] Transform plyrCam, cryptid;
     [SerializeField] float xClamp = 65f;
     [SerializeField] GameObject chicken, food, rebelProgress;
     refuteProgress _progressStats;
@@ -43,6 +43,10 @@ public class PlayerMovement : MonoBehaviour
             plyRotation.x = xRotation;
             plyrCam.eulerAngles = plyRotation;
         }
+       /* else
+        {
+            transform.LookAt(cryptid);
+        }*/
        
     }
     public void MovementInput(InputAction.CallbackContext context)
@@ -51,8 +55,8 @@ public class PlayerMovement : MonoBehaviour
     }
     public void TurnInputX(InputAction.CallbackContext context)
     {
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         inputX = context.ReadValue<float>() * sensitivityX;
 
     }

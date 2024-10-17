@@ -24,7 +24,7 @@ public class Balls : MonoBehaviour
        
         if (collision.transform.CompareTag("ground"))
         {
-             Debug.Log("start fethcing");
+             //Debug.Log("start fethcing");
             eventManager.startFetch(this.transform);
             rb.velocity = Vector3.zero;
 
@@ -32,13 +32,15 @@ public class Balls : MonoBehaviour
         }else if (collision.transform.CompareTag("cryptid"))
         { 
             eventManager.decreaseB(boredomBar, "decrease");
-            if(_eStates.currentState != CryptidState.Tutorial)
+            if(EnemyStates.currentState != CryptidState.Tutorial)
             {
                 eventManager.resetEnemy();
             }
             else
             {
+               // Debug.Log("temporary change");
                 _gManage.ChangeGState(GameState.Irritable);
+                //trigger a temporary full value for irritation bar
             }
             
            

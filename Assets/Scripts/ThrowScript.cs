@@ -28,7 +28,7 @@ public class ThrowScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(thrown);
+        //Debug.Log(thrown);
        /* if(Input.GetMouseButtonDown(0) && !thrown)
         {
                  
