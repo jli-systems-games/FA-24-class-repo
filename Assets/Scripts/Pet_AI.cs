@@ -35,6 +35,9 @@ public class Pet_AI : MonoBehaviour
 
     public Slider slider;
     public TextMeshProUGUI confidenceMeter;
+    public TextMeshProUGUI strengthMeter;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,26 +59,33 @@ public class Pet_AI : MonoBehaviour
 
         if (gameManager.gameState == GameState.Overworld)
         {
-            if (!clicked)
+            if (asleep == false)
             {
-                petToMouseVector = mouseLoc.transform.position - transform.position;
-            }
+                if (!clicked)
+                {
+                    petToMouseVector = mouseLoc.transform.position - transform.position;
+                }
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                clicked = true;
-                targetPos = mouseLoc.transform.position;
-                petToMouseVector = targetPos - transform.position;
-                speed = speed + 3;
-                Invoke("resumeFollow", 2);
-            }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    clicked = true;
+                    targetPos = mouseLoc.transform.position;
+                    petToMouseVector = targetPos - transform.position;
+                    speed = speed + 3;
+                    Invoke("resumeFollow", 2);
+                }
 
-            directionToMouse = petToMouseVector.normalized;
+                directionToMouse = petToMouseVector.normalized;
 
-            if (petToMouseVector.magnitude < .025)
-            {
-                transform.position = mouseLoc.transform.position;
+                if (petToMouseVector.magnitude < .025)
+                {
+                    transform.position = mouseLoc.transform.position;
+                }
             }
+        }
+        else
+        {
+            transform.position = Vector2.zero;
         }
 
         //Debug.Log(directionToMouse);
@@ -137,14 +147,17 @@ public class Pet_AI : MonoBehaviour
         damage = (strength - hunger) * criticalHit;
     }
 
-    #endregion
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.CompareTag("rock"))
+        if (other.gameObject.CompareTag("rock"))
         {
             gameManager.hitRock(other.gameObject);
         }
+    }
 
+    #endregion
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (gameManager.gameState == GameState.PetManager)
         {
             if (other.gameObject.CompareTag("mouse"))
@@ -194,6 +207,7 @@ public class Pet_AI : MonoBehaviour
 
 
         pets = 0;
+        ConfidenceLevel();
 
         StartCoroutine(increaseConfidence());
     }
@@ -216,6 +230,7 @@ public class Pet_AI : MonoBehaviour
         if (stomache <= 0)
         {
             asleep = true;
+            confidenceMeter.text = "Feeling: Zzz...";
         }
     }
 
@@ -231,6 +246,14 @@ public class Pet_AI : MonoBehaviour
             }
         }
 
+        ConfidenceLevel();
+    }
+    #endregion
+
+    #region Increase Stats
+
+    public void ConfidenceLevel()
+    {
         if (confidence == 1)
         {
             confidenceMeter.text = "Feeling: :|";
@@ -280,7 +303,57 @@ public class Pet_AI : MonoBehaviour
             confidenceMeter.text = "Feeling: ;33 :DDDDDD !!!!";
         }
     }
+
+    public void AddStrength()
+    {
+        strength++;
+
+        StrengthLevel();
+    }
+
+    void StrengthLevel()
+    {
+        if(strength == 5)
+        {
+            strengthMeter.text = "Strength: Weak :(";
+        }
+
+        else if(strength == 6)
+        {
+            strengthMeter.text = "Strength: Getting there!";
+        }
+
+        else if (strength == 7)
+        {
+            strengthMeter.text = "Strength: Moderate";
+        }
+
+        else if(strength == 8)
+        {
+            strengthMeter.text = "Strength: Rather strong";
+        }
+        else if (strength == 9)
+        {
+            strengthMeter.text = "Strength: Strong!!";
+        }
+
+        else if ( strength == 10)
+        {
+            strengthMeter.text = "Strength: VERY STRONG!!!";
+        }
+    }
+
+    public void AddFood()
+    {
+        hunger--;
+        stomache = 10 - hunger;
+        slider.value = stomache;
+
+        if (asleep)
+        {
+            asleep = false;
+            ConfidenceLevel();
+        }
+    }
     #endregion
-
-
 }
