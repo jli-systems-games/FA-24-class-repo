@@ -2,82 +2,149 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class PetManager : MonoBehaviour
 {
-    public Slider stat1, stat2, stat3;
+    public static PetManager Instance;
 
+    [Header("Pet Sliders")]
+    public Slider stat1;
+    public Slider stat2;
+    public Slider stat3;
+
+    [Header("Low Stat")]
+    public Image ramenPet;
+    public Sprite normalSprite;
+    public Sprite stat1Sprite, stat2Sprite, stat3Sprite, deadSprite;
+    public TextMeshProUGUI warningText;
+
+    [Header("Game Canvas")]
+    public GameObject mainCanvas;
+    public GameObject minigame1Canvas, minigame2Canvas, minigame3Canvas;
+
+    [Header("Game Over UI")]
     public GameObject gameOver;
     public GameObject statButtons;
 
-    public Image ramenPet;
-    public Sprite normalSprite;
-    public Sprite stat1Sprite, stat2Sprite, stat3Sprite;
-    public TMP_Text text;
-
+    private float stat1Value, stat2Value, stat3Value;
     private bool stat1Low = false;
     private bool stat2Low = false;
     private bool stat3Low = false;
 
-    // Start is called before the first frame update
+    //private void Awake()
+    //{
+    //    if (Instance == null)
+    //    {
+    //        Instance = this;
+    //        DontDestroyOnLoad(gameObject);
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
+
     void Start()
     {
+        Time.timeScale = 1;
         StartCoroutine(DrainStat(stat1, 2.5f, 1f));
-        StartCoroutine(DrainStat(stat2, 1f, 1f));
+        StartCoroutine(DrainStat(stat2, 1.2f, 1f));
         StartCoroutine(DrainStat(stat3, 0.8f, 1f));
 
+        ShowMainCanvas();
         gameOver.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    IEnumerator DrainStat(Slider statBar,float interval, float amount)
+    IEnumerator DrainStat(Slider statBar, float interval, float amount)
     {
         while (true)
         {
             yield return new WaitForSeconds(interval);
 
-            // Decrease the stat value if above 0
-            if (statBar.value > 0)
+            if (mainCanvas.activeSelf && statBar.value > 0)
                 statBar.value -= amount;
-            Debug.Log($"{statBar.name} {statBar.value}");
 
             if (statBar.value <= 5 && !isLowStatTriggered(statBar))
-            {
                 LowStatWarning(statBar);
-            }
-            else if (statBar.value > 5 && isLowStatTriggered(statBar))
-            {
-                ResetSprite(statBar);
-            }
 
-            // Check if the stat is depleted (value <= 0)
+            else if (statBar.value > 5 && isLowStatTriggered(statBar))
+                ResetSprite(statBar);
+
             if (statBar.value <= 0)
             {
-                Debug.Log($"{statBar.name} empty");
                 GameOver();
                 yield break;
             }
         }
     }
 
-    public void ReplenishStat(Slider statBar, float amount)
+    public void ReplenishStat(Slider statBar)
     {
-        statBar.value = Mathf.Clamp(statBar.value + amount, 0, statBar.maxValue);
+        statBar.value = statBar.maxValue;
     }
 
-    void GameOver()
+    private void SaveStatValues()
     {
-        statButtons.SetActive(false);
-        gameOver.SetActive(true);
-        Time.timeScale = 0;
+        stat1Value = stat1.value;
+        stat2Value = stat2.value;
+        stat3Value = stat3.value;
     }
+
+    public void ShowMainCanvas()
+    {
+        SaveStatValues();
+
+        mainCanvas.SetActive(true);
+        minigame1Canvas.SetActive(false);
+        minigame2Canvas.SetActive(false);
+        minigame3Canvas.SetActive(false);
+    }
+
+    #region Show Canvas
+
+    public void ShowMiniGame1()
+    {
+        mainCanvas.SetActive(false);
+        minigame1Canvas.SetActive(true);
+    }
+
+    public void ShowMiniGame2()
+    {
+        mainCanvas.SetActive(false);
+        minigame2Canvas.SetActive(true);
+    }
+
+    public void ShowMiniGame3()
+    {
+        mainCanvas.SetActive(false);
+        minigame3Canvas.SetActive(true);
+    }
+
+    #endregion
+
+    #region Complete Minigame
+
+    public void CompleteMiniGame1()
+    {
+        ReplenishStat(stat1);
+        ShowMainCanvas();
+    }
+
+    public void CompleteMiniGame2()
+    {
+        ReplenishStat(stat2);
+        ShowMainCanvas();
+    }
+
+    public void CompleteMiniGame3()
+    {
+        ReplenishStat(stat3);
+        ShowMainCanvas();
+    }
+
+    #endregion
 
     #region Low Stat
 
@@ -98,35 +165,44 @@ public class PetManager : MonoBehaviour
 
     private void LowStatWarning(Slider statBar)
     {
-        setLowStat(statBar, true); // Mark warning as triggered
+        setLowStat(statBar, true);
 
         if (statBar == stat1)
         {
-            Debug.Log("too cold");
             ramenPet.sprite = stat1Sprite;
+            warningText.text = "Your pet is too cold!\nWarm it up.";
         }
         else if (statBar == stat2)
         {
-            Debug.Log("too oily");
             ramenPet.sprite = stat2Sprite;
+            warningText.text = "Your pet is too oily!\nAdd vinegar.";
         }
         else if (statBar == stat3)
         {
-            Debug.Log("freshness low");
             ramenPet.sprite = stat3Sprite;
+            warningText.text = "Your pet is too stale!\nAdd veggies.";
         }
     }
 
     void ResetSprite(Slider statBar)
     {
         ramenPet.sprite = normalSprite;
+        warningText.text = "";
         setLowStat(statBar, false);
     }
 
     #endregion
 
-    void RestartGame()
+    void GameOver()
     {
+        statButtons.SetActive(false);
+        gameOver.SetActive(true);
+        ramenPet.sprite = deadSprite;
+        Time.timeScale = 0;
+    }
 
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
