@@ -86,4 +86,8 @@ public class RobotMovement : MonoBehaviour
         return isMoving;
     }
 
+    public void SetIsMoving(bool moving)
+    {
+        isMoving = moving;
+    }
 }
