@@ -83,6 +83,6 @@ public class Stat1Game : MonoBehaviour
     private void CompleteMiniGame()
     {
         ResetInput();
-        PetManager.Instance.CompleteMiniGame3();
+        PetManager.Instance.CompleteMiniGame1();
     }
 }
