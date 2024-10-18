@@ -31,9 +31,9 @@ public class refuteProgress : MonoBehaviour
     void reserItself()
     {
         statsBar.value = 0; 
-        if(EnemyStates.currentState == CryptidState.Tutorial)
+      /*  if(EnemyStates.currentState == CryptidState.Tutorial)
             {
                 gManager.ChangeGState(GameState.Game);
-            }
+            }*/
     }
 }

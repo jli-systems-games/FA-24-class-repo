@@ -15,15 +15,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject chicken, food, rebelProgress;
     refuteProgress _progressStats;
     float inputX, inputY;
+    public float zoomedFov, normalFov;
     float xRotation = 0f;
     bool beingAttacked = false;
     public bool tuH, tuF,tuR;
+    Camera pCam;
     int progress = 0;
     void Start()
     {
         eventManager.triggerAttack += gettingLured;
         eventManager.resetAttack += resetingPly;
         _progressStats = rebelProgress.GetComponent<refuteProgress>();
+        pCam = plyrCam.GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -115,5 +118,14 @@ public class PlayerMovement : MonoBehaviour
         beingAttacked = false;
         progress = 0;
         rebelProgress.SetActive(false);
+    }
+    public void viewStats()
+    {
+        plyrCam.LookAt(cryptid);
+        pCam.fieldOfView = zoomedFov;
+    }
+    public void resetCam()
+    {
+        pCam.fieldOfView = normalFov;
     }
 }

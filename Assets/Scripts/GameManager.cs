@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Experimental.Rendering.Universal;
+
 public enum GameState {
     begin, Hunger, Fetch, Irritable, Game, End
 }
@@ -12,10 +14,11 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] EnemyStates enemyStates;
     [SerializeField] PlayerMovement plyr;
-    [SerializeField] GameObject hBar, iBar, _instructText, button, endscreen;
-    [SerializeField] TMP_Text instruct,keys;
+    [SerializeField] GameObject hBar, iBar, _instructText, button, endscreen, cracks;
+    [SerializeField] TMP_Text instruct, keys;
+    [SerializeField] AudioSource cracking;
     public static GameState currentState;
-    bool ended;
+    bool ended, knowHunger, knowFetch, knowAttack;
     void Start()
     {
         currentState = GameState.begin;
@@ -47,13 +50,23 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Fetch:
                 // Debug.Log("Entertain it");
-                StartCoroutine(fetchInstruct());
-                plyr.tuF = false;
+                if (!knowFetch)
+                {
+                    StartCoroutine(fetchInstruct());
+                    plyr.tuF = false;
+                    knowFetch = true;
+                }
+              
                 break;
             case GameState.Irritable:
                 //disable plyr turn and throw controll;
                 //Debug.Log("fight");
-                StartCoroutine(attacking());
+                if (!knowAttack)
+                {
+                    StartCoroutine(attacking());
+                    knowAttack = true;
+                }
+                
                 break;
             case GameState.Game:
                 // Debug.Log("Gamingg");
@@ -72,11 +85,17 @@ public class GameManager : MonoBehaviour
         instruct.text = "Welcome! Here at Cryptid ResearchTM we like to keep our specimen content and fed";
         yield return new WaitForSeconds(2f);
 
-        instruct.text = "So let's maintain that shall we.";
+        plyr.viewStats();
+        instruct.text = "You see them?";
 
         yield return new WaitForSeconds(4f);
+        instruct.text = "Don't let those fill up";
 
-        ChangeGState(GameState.Hunger);
+        yield return new WaitForSeconds(2f);
+        plyr.resetCam();
+
+        yield return new WaitForSeconds(2f);
+        ChangeGState(GameState.Irritable);
     }
     IEnumerator fetchInstruct()
     {
@@ -90,28 +109,33 @@ public class GameManager : MonoBehaviour
         instruct.text = "You should entertain it";
         keys.text = "E";
 
+        yield return new WaitForSeconds(2f);
+
+        _instructText.SetActive(false);
+
     }
     IEnumerator attacking()
     {
-        instruct.text = "ah probably should teach you defense mechanism as well";
-
-        yield return new WaitForSeconds(3f);
-
-        instruct.text = "Let's just show you that";
-
-        yield return new WaitForSeconds(2f);
-
-        instruct.text = "Try not to die ;) ";
-
+        
         //play snap sound;
         yield return new WaitForSeconds(1.5f);
 
         plyr.tuR = false;
         eventManager.countChicks(hBar, iBar, "increase");
 
-        yield return new WaitForSeconds(2f);
 
-        _instructText.SetActive(false);
+        yield return new WaitForSeconds(1f);
+
+        cracks.SetActive(true);
+        cracking.Play();
+        instruct.text = "ah";
+
+        yield return new WaitForSeconds(1.5f);
+        instruct.text = "You should try breakout of this.";
+
+       
+
+        //_instructText.SetActive(false);
     }
 
     private void Reset()

@@ -11,6 +11,8 @@ public class CrypitdMovement : MonoBehaviour
     [SerializeField] Transform _statsCanvas;
     [SerializeField] Transform plyr;
     [SerializeField] AudioSource crys;
+    [SerializeField] GameManager gManage;
+
     public List <Transform> moveLocations;
     bool reached;
     float startingValue =  5;
@@ -25,7 +27,9 @@ public class CrypitdMovement : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
 
         currentPos = moveLocations[Random.Range(0, moveLocations.Count)].position;
+        
         _agent.destination = currentPos;
+        Debug.Log(_agent.SetDestination(currentPos));
         eventManager.goFetch += Fetching;
         eventManager.decreaseBoredom += calBoredom;
         eventManager.manageHunger += calHunger;
@@ -131,9 +135,18 @@ public class CrypitdMovement : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("break First");
-                    eventManager.resetEnemy();
-                    yield break;
+                    if(EnemyStates.currentState != CryptidState.Tutorial)
+                    {
+                        Debug.Log("break First");
+                        eventManager.resetEnemy();
+                        yield break;
+                    }
+                    else
+                    {
+                            Debug.Log("lost the item");
+                            yield break;
+                    }
+                    
                 }
                 
            }
@@ -200,9 +213,9 @@ public class CrypitdMovement : MonoBehaviour
         {
              
                  //decrease the meter slightly;
-                Debug.Log("lessen irritations");
+                //Debug.Log("lessen irritations");
                 startingValue = startingValue - (startingValue * 0.15f);
-                Debug.Log("decreased" + startingValue);
+                //Debug.Log("decreased" + startingValue);
                 iStat.UpdateStats(startingValue, maxStat);
             
         }
@@ -236,7 +249,15 @@ public class CrypitdMovement : MonoBehaviour
             startingValue = 2f;
         }
         crys.Stop();
-        _enemyStates.ChangeCryState(CryptidState.Roaming);
+        if (EnemyStates.currentState != CryptidState.Tutorial)
+        {
+            _enemyStates.ChangeCryState(CryptidState.Roaming);
+        }
+        else
+        {
+            gManage.ChangeGState(GameState.Hunger);
+
+        }
 
             
     }

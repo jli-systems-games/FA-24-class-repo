@@ -7,6 +7,8 @@ public class StatsManager : MonoBehaviour
 {
     Slider statsBar;
     bool filled;
+    [SerializeField] Camera plyC;
+
     void Start()
     {
         statsBar = GetComponent<Slider>();
@@ -21,13 +23,14 @@ public class StatsManager : MonoBehaviour
             //Debug.Log(transform.name + "Reached the value");
             eventManager.startAttack(this.gameObject);
 
-            if(EnemyStates.currentState == CryptidState.Tutorial)
+           /* if(EnemyStates.currentState == CryptidState.Tutorial)
             {
                 EnemyStates.currentState = CryptidState.Roaming;
 
-            }
+            }*/
             filled = true;
         }
+        transform.LookAt(plyC.transform);
     }
     public void UpdateStats(float currentValue, float maxValue)
     {

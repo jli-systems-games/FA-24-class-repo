@@ -67,7 +67,7 @@ public class ThrowScript : MonoBehaviour
     void Throw(GameObject obj)
     {
         thrown = true;
-
+        //Debug.Log("throwing" + obj.name);
         GameObject projectile = Instantiate(obj, holdingPoint.position, plyCam.rotation);
 
         Vector3 addedForce = plyCam.transform.forward * throForce + transform.up * upwardForce;

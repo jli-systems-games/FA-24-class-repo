@@ -8,6 +8,7 @@ public class FoodScript : MonoBehaviour
     [SerializeField] EnemyStates _eStates;
     [SerializeField] GameManager _gManage;
     Rigidbody rb;
+    bool changedState = false;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -33,7 +34,7 @@ public class FoodScript : MonoBehaviour
         else if (collision.transform.CompareTag("cryptid"))
         {
             eventManager.calcHunger(hungerBar, "decrease");
-            //Debug.Log("fulfilling his tummy");
+            
             if(EnemyStates.currentState != CryptidState.Tutorial)
             {
                 eventManager.resetEnemy();
@@ -41,11 +42,22 @@ public class FoodScript : MonoBehaviour
             }
             else
             {
-                _gManage.ChangeGState(GameState.Fetch);
+                if (!changedState)
+                {
+                    _gManage.ChangeGState(GameState.Fetch);
+                    changedState = true;
+                }
+                
                 
             }
-            
+
+
         }
+        else
+        {
+            Invoke("ResetSelf", 2f);
+        }
+        Debug.Log(collision.transform.name);
         //if the the entering object is Cryptids
         //Despawn itself;
     }

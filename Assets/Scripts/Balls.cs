@@ -32,18 +32,14 @@ public class Balls : MonoBehaviour
         }else if (collision.transform.CompareTag("cryptid"))
         { 
             eventManager.decreaseB(boredomBar, "decrease");
-            if(EnemyStates.currentState != CryptidState.Tutorial)
-            {
-                eventManager.resetEnemy();
-            }
-            else
-            {
-               // Debug.Log("temporary change");
-                _gManage.ChangeGState(GameState.Irritable);
-                //trigger a temporary full value for irritation bar
-            }
-            
            
+            eventManager.resetEnemy();
+
+
+        }
+        else
+        {
+            Invoke("ResetSelf", 2f);
         }
         //if the the entering object is Cryptids
         //Despawn itself;
