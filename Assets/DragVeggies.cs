@@ -5,8 +5,6 @@ using UnityEngine.EventSystems;
 
 public class DragVeggies : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public static DragVeggies Instance;
-
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     private Vector3 originalPosition;

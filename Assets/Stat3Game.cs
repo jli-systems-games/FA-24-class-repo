@@ -10,6 +10,15 @@ public class Stat3Game : MonoBehaviour
     private int veggiesPlaced = 0;
     public int totalVeggies = 6;
 
+    private AudioSource audioSource;
+    public AudioClip confirmSound;
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,13 +34,22 @@ public class Stat3Game : MonoBehaviour
     public void AddVeggie()
     {
         veggiesPlaced++;
+        PlayConfirmSound();
         if (veggiesPlaced >= totalVeggies)
         {
             CompleteMiniGame();
         }
     }
 
-    private void CompleteMiniGame()
+    private void PlayConfirmSound()
+    {
+        if (audioSource != null && confirmSound != null)
+        {
+            audioSource.PlayOneShot(confirmSound);
+        }
+    }
+
+        private void CompleteMiniGame()
     {
         if (PetManager.Instance == null)
         {

@@ -92,6 +92,8 @@ public class PetManager : MonoBehaviour
         stat3Value = stat3.value;
     }
 
+    #region Show Canvas
+
     public void ShowMainCanvas()
     {
         SaveStatValues();
@@ -101,8 +103,6 @@ public class PetManager : MonoBehaviour
         minigame2Canvas.SetActive(false);
         minigame3Canvas.SetActive(false);
     }
-
-    #region Show Canvas
 
     public void ShowMiniGame1()
     {
@@ -114,10 +114,10 @@ public class PetManager : MonoBehaviour
 
     public void ShowMiniGame2()
     {
-        //mainCanvas.SetActive(false);
-        //minigame2Canvas.SetActive(true);
-        ReplenishStat(stat2);
-        warningText.text = "There's no minigame yet. :(";
+        mainCanvas.SetActive(false);
+        minigame2Canvas.SetActive(true);
+        //ReplenishStat(stat2);
+        //warningText.text = "There's no minigame yet. :(";
     }
 
     public void ShowMiniGame3()
@@ -196,6 +196,16 @@ public class PetManager : MonoBehaviour
     }
 
     #endregion
+
+    public void ResetMiniGame(GameObject canvas)
+    {
+        foreach (Transform child in canvas.transform)
+        {
+
+        }
+        canvas.SetActive(false);
+    }
+
 
     void GameOver()
     {
