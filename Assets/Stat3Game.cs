@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Stat3Game : MonoBehaviour
 {
+    public DragVeggies[] dragVeggieArray;
+
     private int veggiesPlaced = 0;
     public int totalVeggies = 6;
 
@@ -37,5 +39,20 @@ public class Stat3Game : MonoBehaviour
             return;
         }
         PetManager.Instance.CompleteMiniGame3();
+
+        veggiesPlaced = 0;
+
+        foreach (var veggie in dragVeggieArray)
+        {
+            if (veggie != null)
+            {
+                veggie.ResetVeggie();
+                Debug.Log("veggie reset successfully.");
+            }
+            else
+            {
+                Debug.LogError("DragVeggies component is null.");
+            }
+        }
     }
 }

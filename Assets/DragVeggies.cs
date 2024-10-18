@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class DragVeggies : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public static DragVeggies Instance;
+
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     private Vector3 originalPosition;
@@ -66,5 +68,13 @@ public class DragVeggies : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup.interactable = false;
 
         GameObject.FindObjectOfType<Stat3Game>().AddVeggie();
+    }
+
+    public void ResetVeggie()
+    {
+        rectTransform.position = originalPosition;
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
     }
 }
