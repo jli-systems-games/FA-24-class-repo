@@ -37,10 +37,10 @@ public class Balls : MonoBehaviour
 
 
         }
-        else
+       /* else
         {
             Invoke("ResetSelf", 2f);
-        }
+        }*/
         //if the the entering object is Cryptids
         //Despawn itself;
     }

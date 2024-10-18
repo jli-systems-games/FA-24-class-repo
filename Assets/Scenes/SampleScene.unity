@@ -545,7 +545,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 575999c2764f96c439f78f0a61328f40, type: 2}
     - target: {fileID: 919132149155446097, guid: 36bfe90523fb56347bfab818d339ef87, type: 3}
       propertyPath: m_Name
-      value: editedStomach
+      value: Stomach
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36bfe90523fb56347bfab818d339ef87, type: 3}
@@ -3229,8 +3229,8 @@ MonoBehaviour:
   hungerBar: {fileID: 618619919}
   _eStates: {fileID: 1616577369}
   _gManage: {fileID: 1170741525}
---- !u!65 &1089301906
-BoxCollider:
+--- !u!135 &1089301910
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3240,8 +3240,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.14190742, y: 0.117020614, z: 0.11509373}
-  m_Center: {x: -0.023917506, y: 0.0044250414, z: -0.010303866}
+  m_Radius: 0.0585103
+  m_Center: {x: -0.026230175, y: 0.004425043, z: 0.0001233071}
 --- !u!1 &1093812397
 GameObject:
   m_ObjectHideFlags: 0
@@ -4974,8 +4974,8 @@ MonoBehaviour:
   holdingPoint: {fileID: 1773698862}
   plyCam: {fileID: 963194228}
   ball: {fileID: 0}
-  throForce: 10.51
-  upwardForce: 7.68
+  throForce: 6.69
+  upwardForce: 4.3
   MaxBallSpeed: 350
 --- !u!54 &1723290929
 Rigidbody:

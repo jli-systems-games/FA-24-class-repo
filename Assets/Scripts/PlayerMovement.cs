@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
         eventManager.resetAttack += resetingPly;
         _progressStats = rebelProgress.GetComponent<refuteProgress>();
         pCam = plyrCam.GetComponent<Camera>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame

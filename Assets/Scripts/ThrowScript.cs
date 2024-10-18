@@ -17,6 +17,7 @@ public class ThrowScript : MonoBehaviour
     private bool thrown, holding;
     private Vector3 newPosition, resetPos;
     Rigidbody rb;
+    GameObject projectile;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -65,19 +66,36 @@ public class ThrowScript : MonoBehaviour
         thrown = false;
     }
     void Throw(GameObject obj)
-    {
-        thrown = true;
+    {   
+        
         //Debug.Log("throwing" + obj.name);
-        GameObject projectile = Instantiate(obj, holdingPoint.position, plyCam.rotation);
+        if (obj.name == "Stomach")
+        {
+            if (!thrown)
+            {
+                 projectile= Instantiate(obj, holdingPoint.position, plyCam.rotation);
+                 
+            }
+        }
+        else
+        {
+            projectile = Instantiate(obj, holdingPoint.position, plyCam.rotation);
+        }
+        
 
-        Vector3 addedForce = plyCam.transform.forward * throForce + transform.up * upwardForce;
-        //Debug.Log(addedForce);
-        Rigidbody _rb = projectile.GetComponent<Rigidbody>();
-        _rb.isKinematic = false;
-        _rb.AddForce(addedForce, ForceMode.Impulse);
+        if(projectile != null && !thrown)
+        {
+            Vector3 addedForce = plyCam.transform.forward * throForce + transform.up * upwardForce;
+          
+            Rigidbody _rb = projectile.GetComponent<Rigidbody>();
+            _rb.isKinematic = false;
+             _rb.AddForce(addedForce, ForceMode.Impulse);
+        }
+        thrown = true;
+        
 
 
-        Invoke(nameof(ResetBall), 2f);
+        Invoke(nameof(ResetBall), 3f);
     }
    
    

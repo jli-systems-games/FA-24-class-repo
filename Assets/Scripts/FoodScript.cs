@@ -53,11 +53,11 @@ public class FoodScript : MonoBehaviour
 
 
         }
-        else
+     /*   else
         {
             Invoke("ResetSelf", 2f);
-        }
-        Debug.Log(collision.transform.name);
+        }*/
+       
         //if the the entering object is Cryptids
         //Despawn itself;
     }

@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
     IEnumerator _begin()
     {
         //Debug.Log("shatter glass");
+        yield return null;
         _instructText.SetActive(true);
         instruct.text = "Welcome! Here at Cryptid ResearchTM we like to keep our specimen content and fed";
         yield return new WaitForSeconds(2f);

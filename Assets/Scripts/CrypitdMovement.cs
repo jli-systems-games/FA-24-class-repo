@@ -137,13 +137,13 @@ public class CrypitdMovement : MonoBehaviour
                 {
                     if(EnemyStates.currentState != CryptidState.Tutorial)
                     {
-                        Debug.Log("break First");
+                        //Debug.Log("break First");
                         eventManager.resetEnemy();
                         yield break;
                     }
                     else
                     {
-                            Debug.Log("lost the item");
+                           // Debug.Log("lost the item");
                             yield break;
                     }
                     
@@ -195,7 +195,7 @@ public class CrypitdMovement : MonoBehaviour
         if (sender == "increase")
         {
             // increase the irritation meter
-            Debug.Log("calc stats");
+            //Debug.Log("calc stats");
             if(EnemyStates.currentState == CryptidState.Tutorial)
             {
                 startingValue = 10f;

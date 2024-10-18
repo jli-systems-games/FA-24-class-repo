@@ -31,7 +31,7 @@ public class EnemyStates : MonoBehaviour
             case CryptidState.Roaming:
                 break;
             case CryptidState.Fetching:
-                Debug.Log("it is fetching");
+                
                 break;
             case CryptidState.Attacking:
                 //disable plyr turn and throw controll;
