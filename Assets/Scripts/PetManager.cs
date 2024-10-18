@@ -33,6 +33,11 @@ public class PetManager : MonoBehaviour
     private bool stat2Low = false;
     private bool stat3Low = false;
 
+    private AudioSource audioSource;
+
+    [Header("Audio")]
+    public AudioClip twinkleSound;
+
     private void Awake()
     {
         if (Instance == null)
@@ -44,6 +49,8 @@ public class PetManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -55,6 +62,10 @@ public class PetManager : MonoBehaviour
 
         ShowMainCanvas();
         gameOver.SetActive(false);
+
+        PlayBackgroundMusic();
+
+        warningText.text = "This is your ramen pet! Don't let the status bars drop.";
     }
 
     IEnumerator DrainStat(Slider statBar, float interval, float amount)
@@ -106,10 +117,10 @@ public class PetManager : MonoBehaviour
 
     public void ShowMiniGame1()
     {
-        //mainCanvas.SetActive(false);
-        //minigame1Canvas.SetActive(true);
-        ReplenishStat(stat1);
-        warningText.text = "There's no minigame yet. :(";
+        mainCanvas.SetActive(false);
+        minigame1Canvas.SetActive(true);
+        //ReplenishStat(stat1);
+        //warningText.text = "There's no minigame yet. :(";
     }
 
     public void ShowMiniGame2()
@@ -134,18 +145,21 @@ public class PetManager : MonoBehaviour
     {
         ReplenishStat(stat1);
         ShowMainCanvas();
+        PlayTwinkleSound();
     }
 
     public void CompleteMiniGame2()
     {
         ReplenishStat(stat2);
         ShowMainCanvas();
+        PlayTwinkleSound();
     }
 
     public void CompleteMiniGame3()
     {
         ReplenishStat(stat3);
         ShowMainCanvas();
+        PlayTwinkleSound();
     }
 
     #endregion
@@ -197,15 +211,50 @@ public class PetManager : MonoBehaviour
 
     #endregion
 
-    public void ResetMiniGame(GameObject canvas)
-    {
-        foreach (Transform child in canvas.transform)
-        {
+    #region Audio
 
+    private void PlayTwinkleSound()
+    {
+        if (audioSource != null && twinkleSound != null)
+        {
+            audioSource.PlayOneShot(twinkleSound);
         }
-        canvas.SetActive(false);
     }
 
+    public void PlayBackgroundMusic()
+    {
+        if (audioSource != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
+
+    public void StopBackgroundMusic()
+    {
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+    }
+
+    public void SetVolume(float volume)
+    {
+        if (audioSource != null)
+        {
+            audioSource.volume = volume;
+        }
+    }
+
+    #endregion
+
+    //public void ResetMiniGame(GameObject canvas)
+    //{
+    //    foreach (Transform child in canvas.transform)
+    //    {
+
+    //    }
+    //    canvas.SetActive(false);
+    //}
 
     void GameOver()
     {
