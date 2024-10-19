@@ -19,10 +19,11 @@ public class z_Bools : MonoBehaviour
     static public bool MetWater; //med
     static public bool SedWater; //more
 
+    static public string rockName;
 
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         SedRock = false;
         IgnRock = false;

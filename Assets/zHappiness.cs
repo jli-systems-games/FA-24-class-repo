@@ -16,11 +16,11 @@ public class zHappiness : MonoBehaviour
     //public GameObject MetWater;
     //public GameObject SedWater;
 
-    public float Happiness = 0f;
+    public FloatScriptableObject Happiness;
 
     void Start()
     {
-        Happiness = 0f;
+        Happiness.value = 0f;
     }
 
     public void zCalculateHappiness()
@@ -31,7 +31,7 @@ public class zHappiness : MonoBehaviour
             {
                 if (item.activeSelf)
                 {
-                    Happiness++;
+                    Happiness.value++;
                 }
             }
         }
@@ -41,7 +41,7 @@ public class zHappiness : MonoBehaviour
             {
                 if (item.activeSelf)
                 {
-                    Happiness++;
+                    Happiness.value++;
                 }
             }
         }
@@ -51,10 +51,9 @@ public class zHappiness : MonoBehaviour
             {
                 if (item.activeSelf)
                 {
-                    Happiness++;
+                    Happiness.value++;
                 }
             }
         }
     }
-
 }
