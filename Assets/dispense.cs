@@ -7,29 +7,35 @@ public class dispense : MonoBehaviour
     public GameObject ice;
     public GameObject salt;
 
+    public GameObject icePrefab;
+    public GameObject saltPrefab;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Vector3 iceOrginalPosition = ice.gameObject.transform.position;
-        Vector3 saltOrginalPosition = salt.gameObject.transform.position;
-
-    }
 
     public void dispenseIce()
     {
-        ice.gameObject.SetActive(true);
+        Instantiate(icePrefab);
+        ice = GameObject.FindWithTag("ice");
+        StartCoroutine(delayIce());
+    }
+
+    private IEnumerator delayIce()
+    {
+        yield return new WaitForSeconds(4f);
+        Destroy(ice);
+        
     }
 
     public void dispenseSalt()
     {
-        salt.gameObject.SetActive(false);
+        Instantiate(saltPrefab);
+        salt = GameObject.FindWithTag("salt");
+        StartCoroutine(delaySalt());
     }
 
-
-    void Update()
+    private IEnumerator delaySalt()
     {
-        
-        //ice.gameObject.transform.position = orginalPosition;
+        yield return new WaitForSeconds(4f);
+        Destroy(salt);
     }
+
 }
