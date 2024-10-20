@@ -67,7 +67,7 @@ public class stats : MonoBehaviour
         dirtyWater.color = new Color (1f, 1f, 1f, (waterSlider.value)/100f);
         if (saltSlider.value > iceSlider.value)
         {
-            mossbrown.color = new Color (1f, 1f, 1f, (saltSlider.value)/100f);
+            mossbrown.color = new Color (253/255f, 219/255f, 135/255f, (saltSlider.value)/100f);
         }
         if (iceSlider.value > saltSlider.value)
         {
