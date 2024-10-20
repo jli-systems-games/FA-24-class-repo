@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class stats : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class stats : MonoBehaviour
 
     public SpriteRenderer dirtyWater;
     public SpriteRenderer mossbrown;
+
+    public GameObject gameOver;
     
     void Start()
     {
@@ -70,5 +73,15 @@ public class stats : MonoBehaviour
         {
             mossbrown.color = new Color (1f, 1f, 1f, (iceSlider.value)/100f);
         }
+
+        if (iceSlider.value == 100 || saltSlider.value == 100 || waterSlider.value == 100)
+        {
+            gameOver.gameObject.SetActive(true);
+        }
+    }
+
+    public void replay()
+    {
+    	SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
