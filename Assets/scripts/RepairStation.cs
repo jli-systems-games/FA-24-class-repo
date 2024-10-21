@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class RepairStation : MonoBehaviour
 {
-    public float repairAmount = 30f; // 修复的损坏程度值
-    public float cleanAmount = 50f; // 增加的干净值
+    public float repairAmount = 30f; 
+    public float cleanAmount = 50f; 
 
     private void OnTriggerEnter(Collider other)
     {

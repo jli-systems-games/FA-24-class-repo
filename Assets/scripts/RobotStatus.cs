@@ -13,10 +13,16 @@ public class RobotStatus : MonoBehaviour
 
     private bool isAlive = true; // 机器人是否存活
     private RobotMovement robotMovement; // 引用RobotMovement脚本
-
+    private UIManager uiManager;
     void Start()
     {
         robotMovement = GetComponent<RobotMovement>(); // 获取RobotMovement脚本
+
+        uiManager = FindObjectOfType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogError("UIManager not found!");
+        }
     }
 
     void Update()
@@ -70,9 +76,15 @@ public class RobotStatus : MonoBehaviour
 
     private void RobotDeath(string reason)
     {
-        isAlive = false; // 标记机器人为已死亡
-        Debug.Log("机器人死亡，原因：" + reason);
-        // 可以在这里添加机器人死亡后的逻辑，例如播放死亡动画、禁用组件等
+        isAlive = false;
+        Debug.Log("Robot has been destroyed. Reason: " + reason);
+
+        // 显示机器人坏掉的消息
+        if (uiManager != null)
+        {
+            uiManager.ShowMessage("Robot has been destroyed. Reason: " + reason, 3f);
+            uiManager.ShowFixItButton(); // 显示 Fix It 按钮
+        }
     }
 
     public bool IsAlive()

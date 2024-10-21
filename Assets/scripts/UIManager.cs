@@ -1,51 +1,78 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; 
+using System.Collections;
+using UnityEngine.SceneManagement; 
 
 public class UIManager : MonoBehaviour
 {
     public Slider batterySlider;
     public Slider cleanlinessSlider;
     public Slider damageSlider;
-    public Button recallToChargingButton;    // 召回到充电站的按钮
-    public Button recallToRepairButton;      // 召回到维修站的按钮
-
+    public Button recallToChargingButton;
+    public Button recallToRepairButton;
+    public TextMeshProUGUI statusText; 
+    public TextMeshProUGUI messageText; 
+    public Button fixItButton; 
     private RobotStatus robotStatus;
     private RobotRecall robotRecall;
+    private Coroutine messageCoroutine;
 
     void Start()
     {
-        // 获取RobotStatus脚本的引用
+        
         robotStatus = FindObjectOfType<RobotStatus>();
         if (robotStatus == null)
         {
-            Debug.LogError("未找到 RobotStatus 脚本！");
+            Debug.LogError("RobotStatus script not found!");
         }
 
-        // 获取RobotRecall脚本的引用
         robotRecall = FindObjectOfType<RobotRecall>();
         if (robotRecall == null)
         {
-            Debug.LogError("未找到 RobotRecall 脚本！");
+            Debug.LogError("RobotRecall script not found!");
         }
 
-        // 绑定召回到充电站按钮的点击事件
+       
         if (recallToChargingButton != null)
         {
             recallToChargingButton.onClick.AddListener(OnRecallToChargingButtonClicked);
         }
         else
         {
-            Debug.LogError("未绑定 recallToChargingButton！");
+            Debug.LogError("RecallToChargingButton is not assigned!");
         }
 
-        // 绑定召回到维修站按钮的点击事件
         if (recallToRepairButton != null)
         {
             recallToRepairButton.onClick.AddListener(OnRecallToRepairButtonClicked);
         }
         else
         {
-            Debug.LogError("未绑定 recallToRepairButton！");
+            Debug.LogError("RecallToRepairButton is not assigned!");
+        }
+
+        
+        if (messageText == null)
+        {
+            Debug.LogError("MessageText is not assigned!");
+        }
+        else
+        {
+            messageText.text = "";
+            messageText.enabled = false;
+        }
+       
+        if (fixItButton == null)
+        {
+            Debug.LogError("FixItButton is not assigned!");
+        }
+        else
+        {
+           
+            fixItButton.gameObject.SetActive(false);
+           
+            fixItButton.onClick.AddListener(OnFixItButtonClicked);
         }
     }
 
@@ -53,10 +80,46 @@ public class UIManager : MonoBehaviour
     {
         if (robotStatus != null)
         {
-            // 更新进度条的数值
+            
             batterySlider.value = robotStatus.batteryLevel;
             cleanlinessSlider.value = robotStatus.cleanliness;
             damageSlider.value = robotStatus.damageLevel;
+
+           
+            UpdateStatusText();
+        }
+    }
+
+   
+    public void ShowMessage(string message, float duration)
+    {
+        if (messageCoroutine != null)
+        {
+            StopCoroutine(messageCoroutine);
+        }
+        messageCoroutine = StartCoroutine(ShowMessageCoroutine(message, duration));
+    }
+
+    private IEnumerator ShowMessageCoroutine(string message, float duration)
+    {
+        if (messageText != null)
+        {
+            messageText.text = message;
+            messageText.enabled = true;
+
+            yield return new WaitForSeconds(duration);
+
+            messageText.text = "";
+            messageText.enabled = false;
+        }
+    }
+
+    void UpdateStatusText()
+    {
+        if (statusText != null)
+        {
+            string status = $"Battery: {robotStatus.batteryLevel:F0}/200  |  Cleanliness: {robotStatus.cleanliness:F0}/100  |  Damage: {robotStatus.damageLevel:F0}/100";
+            statusText.text = status;
         }
     }
 
@@ -65,7 +128,7 @@ public class UIManager : MonoBehaviour
         if (robotRecall != null)
         {
             robotRecall.Recall(robotRecall.chargingStationPoint);
-            Debug.Log("召回到充电站已触发。");
+            ShowMessage("Robot is returning to the charging station", 2f);
         }
     }
 
@@ -74,7 +137,22 @@ public class UIManager : MonoBehaviour
         if (robotRecall != null)
         {
             robotRecall.Recall(robotRecall.repairStationPoint);
-            Debug.Log("召回到维修站已触发。");
+            ShowMessage("Robot is returning to the repair station", 2f);
         }
+    }
+
+    public void ShowFixItButton()
+    {
+        if (fixItButton != null)
+        {
+            fixItButton.gameObject.SetActive(true);
+        }
+    }
+
+    
+    void OnFixItButtonClicked()
+    {
+       
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
