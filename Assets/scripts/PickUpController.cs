@@ -68,8 +68,8 @@ public class PickUpController : MonoBehaviour
         // 启用枪的功能
         gunScript.enabled = true;
 
-        // 保存当前持有的枪
         GunManager.SetSelectedGun(gameObject);
+        Debug.Log("Picked up: " + gameObject.name); // 打印日志确认枪已被选中
     }
 
     private void Drop()

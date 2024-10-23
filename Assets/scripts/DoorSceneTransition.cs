@@ -12,6 +12,7 @@ public class DoorSceneTransition : MonoBehaviour
             // 检查玩家是否持有枪
             if (GunManager.selectedGun != null)
             {
+                Debug.Log("Player is carrying: " + GunManager.selectedGun.name); // 输出持有的枪名
                 SceneManager.LoadScene(nextSceneName); // 切换到下一个场景
             }
             else

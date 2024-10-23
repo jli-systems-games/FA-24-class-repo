@@ -6,7 +6,7 @@ public class GunManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject); // 保持GunManager在场景切换时不销毁
+        DontDestroyOnLoad(gameObject); // 保持GunManager在场景切换时不被销毁
     }
 
     // 保存玩家当前持有的枪
