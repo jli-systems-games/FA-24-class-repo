@@ -6,7 +6,7 @@ public class PaddleController : MonoBehaviour
 {
     [Header("Paddle Settings")]
     public KeyCode activateKey;
-    private float paddleForce = 1000f, restAngle = 0f, returnSpeed = 10f;
+    private float paddleForce = 2500f, restAngle = 0f, returnSpeed = 10f;
     public float hitAngle;
 
     private HingeJoint hinge;
