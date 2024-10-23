@@ -18,16 +18,19 @@ public class GameManager : MonoBehaviour
     public static PersonalityTrait trait2;
 
     public static int intelligence;
-    public static int charisma;
-    public static int strength;
-    public static int dexterity;
-
-    [SerializeField] private InputField InputField;
+    public static int cha;
+    public static int str;
+    public static int dex;
 
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+        intelligence = 1;
+        cha = 1;
+        str = 1;
+        dex = 1;
+
     }
 
     // Update is called once per frame
@@ -36,8 +39,4 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void ChangeName()
-    {
-        playerName = InputField.text;
-    }
 }
