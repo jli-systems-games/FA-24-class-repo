@@ -12,6 +12,7 @@ public class BallCustomizer : MonoBehaviour
     [Header("UI Elements")]
     public Slider[] sliders;
     public Button[] buttons;
+    public Button startButton;
 
     private bool[] isCycling;
     private int[] directions; // 1 for positive, -1 for negative
@@ -71,14 +72,21 @@ public class BallCustomizer : MonoBehaviour
 
     private void CycleSliders(Slider slider, ref int direction)
     {
-        slider.value += Time.deltaTime * direction;
+        float fixedTimeToMax = 2.0f;
+
+        float range = slider.maxValue - slider.minValue;
+        float speed = range / fixedTimeToMax;
+
+        slider.value += Time.deltaTime * direction * speed;
         if (slider.value >= slider.maxValue)
         {
             direction = -1;
+            slider.value = slider.maxValue;
         }
         else if (slider.value <= slider.minValue)
         {
             direction = 1;
+            slider.value = slider.minValue;
         }
     }
 
@@ -97,7 +105,6 @@ public class BallCustomizer : MonoBehaviour
             }
         }
     }
-
 
     private void OnDestroy()
     {
@@ -123,11 +130,17 @@ public class BallCustomizer : MonoBehaviour
             ball.transform.localScale = new Vector3(size, size, size);
         }
 
-        if (ballRigidbody != null && sliders[2].gameObject.activeSelf) // Gravity
+        //if (ballRigidbody != null && sliders[2].gameObject.activeSelf) // Gravity
+        //{
+        //    float gravityScale = sliders[2].value;
+        //    //ballRigidbody.useGravity = true;
+        //    Physics.gravity = new Vector3(0, -gravityScale, 0);
+        //}
+
+        if (ballRigidbody != null && sliders[2].gameObject.activeSelf) // Mass
         {
-            float gravityScale = sliders[2].value;
-            ballRigidbody.useGravity = true;
-            Physics.gravity = new Vector3(0, -gravityScale, 0);
+            float massValue = sliders[2].value;
+            ballRigidbody.mass = Mathf.Clamp(massValue, 0.1f, 10f);
         }
 
         if (ballCollider != null && sliders[3].gameObject.activeSelf) // Bounciness
