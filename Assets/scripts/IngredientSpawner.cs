@@ -6,47 +6,44 @@ public class IngredientSpawner : MonoBehaviour
 {
     public GameObject cheesePrefab;
     public GameObject lettucePrefab;
-    public GameObject meatPrefab;
+    public GameObject baconPrefab;
     public GameObject peppersPrefab;
-
-    private GameObject cheeseInstance;
-    private GameObject lettuceInstance;
-    private GameObject meatInstance;
-    private GameObject peppersInstance;
+    public GameObject candyPrefab;
+    public GameObject honeyPrefab;
 
     public void SpawnCheese()
     {
-        if (cheeseInstance == null)
-        {
-            cheeseInstance = Instantiate(cheesePrefab, new Vector2(0, 0), Quaternion.identity); // controls where prefab spawns
-            cheeseInstance.AddComponent<MouseDrag>(); 
-        }
+        GameObject cheeseInstance = Instantiate(cheesePrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
+        cheeseInstance.AddComponent<MouseDrag>();
     }
 
     public void SpawnLettuce()
     {
-        if (lettuceInstance == null)
-        {
-            lettuceInstance = Instantiate(lettucePrefab, new Vector2(1, 0), Quaternion.identity);
-            lettuceInstance.AddComponent<MouseDrag>(); 
-        }
+        GameObject lettuceInstance = Instantiate(lettucePrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
+        lettuceInstance.AddComponent<MouseDrag>();
     }
 
     public void SpawnBacon()
     {
-        if (meatInstance == null)
-        {
-            meatInstance = Instantiate(meatPrefab, new Vector2(2, 0), Quaternion.identity);
-            meatInstance.AddComponent<MouseDrag>(); 
-        }
+        GameObject baconInstance = Instantiate(baconPrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
+        baconInstance.AddComponent<MouseDrag>();
     }
 
     public void SpawnPeppers()
     {
-        if (peppersInstance == null)
-        {
-            peppersInstance = Instantiate(peppersPrefab, new Vector2(3, 0), Quaternion.identity);
-            peppersInstance.AddComponent<MouseDrag>();
-        }
+        GameObject peppersInstance = Instantiate(peppersPrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
+        peppersInstance.AddComponent<MouseDrag>();
+    }
+
+    public void SpawnCandy()
+    {
+        GameObject candyInstance = Instantiate(candyPrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
+        candyInstance.AddComponent<MouseDrag>();
+    }
+
+    public void SpawnHoney()
+    {
+        GameObject honeyInstance = Instantiate(honeyPrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
+        honeyInstance.AddComponent<MouseDrag>();
     }
 }
