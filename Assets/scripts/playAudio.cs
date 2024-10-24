@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class playAudio : MonoBehaviour
 {
-    public AudioSource punch;
-    public AudioSource synth;
-    public AudioSource airhorn;
-    public AudioSource kick;
-    public AudioSource hihat;
-    public AudioSource snare;
-    public AudioSource clap;
+    public AudioSource spot1;
+    public AudioSource spot2;
+    public AudioSource spot3;
+    public AudioSource spot4;
+    public AudioSource spot5;
+    public AudioSource spot6;
 
     public AudioSource track;
 
@@ -25,10 +24,25 @@ public class playAudio : MonoBehaviour
     public pickTrack track2bool;
     public pickTrack track3bool;
 
+    public customToggleGroup samplesList;
+
+    public Animator people1;
+    public Animator people2;
+
     void SelectRandomClip()
     {
         int randomIndex = Random.Range(0, audioSources.Length);
         randomScratch = audioSources[randomIndex];
+    }
+
+    void Start()
+    {
+        spot1 = samplesList.pickedSamples[0];
+        spot2 = samplesList.pickedSamples[1];
+        spot3 = samplesList.pickedSamples[2];
+        spot4 = samplesList.pickedSamples[3];
+        spot5 = samplesList.pickedSamples[4];
+        spot6 = samplesList.pickedSamples[5];
     }
 
     void Update()
@@ -51,41 +65,38 @@ public class playAudio : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P) && !track.isPlaying)
         {
             track.Play();
+            people1.SetBool("musicPlaying", true);
+            people2.SetBool("musicPlaying", true);
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            punch.Play();
+            spot1.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            synth.Play();
+            spot2.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            airhorn.Play();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            kick.Play();
+            spot3.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            hihat.Play();
+            spot4.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            snare.Play();
+            spot5.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            clap.Play();
+            spot6.Play();
         }
 
         if (Input.GetMouseButton(0))
@@ -93,6 +104,8 @@ public class playAudio : MonoBehaviour
             if(!track.isPlaying)
             {
                 track.Play();
+                people1.SetBool("musicPlaying", true);
+                people2.SetBool("musicPlaying", true);
             }
 
             if (!randomScratch.isPlaying)
