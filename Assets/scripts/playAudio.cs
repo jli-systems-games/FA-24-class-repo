@@ -14,8 +14,16 @@ public class playAudio : MonoBehaviour
 
     public AudioSource track;
 
+    public AudioSource track1;
+    public AudioSource track2;
+    public AudioSource track3;
+
     public AudioSource randomScratch;
     public AudioSource[] audioSources;
+
+    public pickTrack track1bool;
+    public pickTrack track2bool;
+    public pickTrack track3bool;
 
     void SelectRandomClip()
     {
@@ -25,6 +33,21 @@ public class playAudio : MonoBehaviour
 
     void Update()
     {
+        if(track1bool.track1 == true)
+        {
+            track = track1;
+        }
+
+        if(track2bool.track2 == true)
+        {
+            track = track2;
+        }
+
+        if(track3bool.track3 == true)
+        {
+            track = track3;
+        }
+
         if (Input.GetKeyDown(KeyCode.P) && !track.isPlaying)
         {
             track.Play();

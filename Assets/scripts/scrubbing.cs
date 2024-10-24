@@ -11,6 +11,32 @@ public class scrubbing : MonoBehaviour
 
     private bool isScratching = false;
 
+    public AudioSource track1;
+    public AudioSource track2;
+    public AudioSource track3;
+
+    public pickTrack track1bool;
+    public pickTrack track2bool;
+    public pickTrack track3bool;
+
+    void Start()
+    {
+        if(track1bool.track1 == true)
+        {
+            audioSource = track1;
+        }
+
+        if(track2bool.track2 == true)
+        {
+            audioSource = track2;
+        }
+
+        if(track3bool.track3 == true)
+        {
+            audioSource = track3;
+        }
+    }
+
     void Update()
     {
         if (Input.GetMouseButton(0))
