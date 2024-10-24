@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;  // Import TextMeshPro namespace
+using TMPro;
 
 public class AudioRecorder : MonoBehaviour
 {
@@ -14,198 +14,192 @@ public class AudioRecorder : MonoBehaviour
 
     public Button backButton;                  // Button to go back to the recording UI
     public Button confirmButton;               // Button to confirm the composition
-    public Button composeButton;                // Button to start composing (hidden initially)
+    public Button composeButton;               // Button to start composing (hidden initially)
+    public Button deleteButton;                // New button for deleting the last note
 
     public Image[] inputImages;                // Images to show when a note is registered
-    private int currentInputIndex = 0;        // Tracks the current input position
+    private int currentInputIndex = 0;         // Tracks the current input position
     private AudioClip recordedClip;            // The recorded audio clip
     private bool isRecording = false;
 
+    public GameObject blank; 
+    public GameObject tryText; 
+
+    // Array to store the sequence of player input
+    private int[] noteSequence = new int[16];  // Array to store button indices for 16 notes
+
+    // Fixed frequency array for pitches
+    private float[] pitches = new float[] { 220f, 261.63f, 329.63f, 392.00f, 493.88f };
+
+    // Define color array corresponding to pitch (low to high = dark to light, e.g., black to white)
+    private Color[] noteColors = new Color[] {
+        Color.black,            // Corresponds to lowest pitch
+        new Color(0.25f, 0.25f, 0.25f), // Dark gray
+        Color.gray,             // Mid gray
+        new Color(0.75f, 0.75f, 0.75f), // Light gray
+        new Color(0.9f, 0.9f, 0.9f)  
+    };
+
     void Start()
     {
-        // Add listener to record button to trigger recording
         recordButton.onClick.AddListener(StartRecording);
-
-        // Ensure the composition UI is hidden at the start
         compositionUI.SetActive(false);
-
-        // Ensure the recording text is hidden at the start
         isRecordingText.gameObject.SetActive(false);
-
-        // Add listeners for back and confirm buttons
         backButton.onClick.AddListener(GoBack);
         confirmButton.onClick.AddListener(ConfirmComposition);
-
-        // Ensure back and confirm buttons are hidden at the start
         backButton.gameObject.SetActive(false);
         confirmButton.gameObject.SetActive(false);
-
-        // Ensure compose button is hidden at the start
         composeButton.gameObject.SetActive(false);
+        deleteButton.gameObject.SetActive(false);
 
-        // Initialize input images to be hidden
+        blank.SetActive(false);
+
         foreach (var img in inputImages)
         {
             img.gameObject.SetActive(false);
         }
 
-        // Add listeners for pitch buttons
+        // Add listener for the delete button
+        deleteButton.onClick.AddListener(DeleteLastNote);
+
         AssignAudioToButtons();
     }
 
-    // Coroutine to handle the recording process
     IEnumerator StartRecordingProcess()
     {
         if (!isRecording)
         {
             isRecording = true;
+            recordedClip = Microphone.Start(null, false, 3, 44100);
+            isRecordingText.gameObject.SetActive(true);  // Show "Recording..." text
 
-            // Start recording
-            recordedClip = Microphone.Start(null, false, 5, 44100);
-            isRecordingText.gameObject.SetActive(true);  // Show "Recording..." text immediately after starting recording
-
-            // Wait for the duration of the recording
-            yield return new WaitForSeconds(5f);
-
-            // Stop recording after 5 seconds
+            yield return new WaitForSeconds(3f);         // Wait for recording to complete
             StopRecording();
         }
     }
 
-    // Method to start the recording coroutine
     void StartRecording()
     {
         StartCoroutine(StartRecordingProcess());
     }
 
-    // Method to stop recording and switch UI
     void StopRecording()
     {
         if (isRecording)
         {
-            Microphone.End(null);                    // Stop recording
-            audioSource.clip = recordedClip;         // Assign the recorded clip
+            Microphone.End(null);
+            audioSource.clip = recordedClip;
             isRecording = false;
-            isRecordingText.gameObject.SetActive(false);  // Hide the "Recording..." text
+            isRecordingText.gameObject.SetActive(false);
 
-            // Close the recording UI and open the composition UI
             recordingUI.SetActive(false);
             OpenInstrumentUICanvas();
         }
     }
 
-    // Function to open the composition UI after recording is finished
     void OpenInstrumentUICanvas()
     {
-        compositionUI.SetActive(true); // Open the UI for composing music
+        compositionUI.SetActive(true);
         backButton.gameObject.SetActive(true);
         confirmButton.gameObject.SetActive(true);
     }
 
-    // Method to handle the back button functionality
     void GoBack()
     {
-        // Hide the composition UI and show the recording UI again
         compositionUI.SetActive(false);
         recordingUI.SetActive(true);
     }
 
-    // Method to handle the confirm button functionality
     void ConfirmComposition()
     {
-        // Hide back and confirm buttons
         backButton.gameObject.SetActive(false);
         confirmButton.gameObject.SetActive(false);
-
-        // Show the compose button 
         composeButton.gameObject.SetActive(true);
-        //StartCompositionMode();
+        tryText.SetActive(false);
     }
 
-    // Method to start composition mode when compose button is clicked
     public void StartCompositionMode()
     {
-        Debug.Log("Entering Composition Mode");
-        composeButton.gameObject.SetActive(false); // Hide compose button
-        currentInputIndex = 0; // Reset input index
+        composeButton.gameObject.SetActive(false);
+        currentInputIndex = 0;
+        deleteButton.gameObject.SetActive(true);
+        blank.SetActive(true);
 
-        // Hide all input images initially
         foreach (var img in inputImages)
         {
             img.gameObject.SetActive(false);
         }
 
-        // Add listeners for pitch buttons to allow note input
         foreach (var pitchButton in pitchButtons)
         {
             pitchButton.onClick.AddListener(() => RegisterNoteInput(pitchButton));
         }
     }
 
-    // Method to register note input
     void RegisterNoteInput(Button pitchButton)
     {
-        if (currentInputIndex < inputImages.Length)
+        if (currentInputIndex < noteSequence.Length)
         {
-            inputImages[currentInputIndex].gameObject.SetActive(true); // Show corresponding image
+            inputImages[currentInputIndex].gameObject.SetActive(true);
+            int index = System.Array.IndexOf(pitchButtons, pitchButton);
+
+            // Ensure the index is within bounds of the pitches array
+            if (index >= 0 && index < pitches.Length)
+            {
+                noteSequence[currentInputIndex] = index;  // Store the index of the pressed button
+
+                // Set the corresponding image color based on the note
+                inputImages[currentInputIndex].color = noteColors[index];  // Change image color
+            }
+
             currentInputIndex++;
-
-            // Play the corresponding audio for the button pressed
-            float pitch = 1f + (System.Array.IndexOf(pitchButtons, pitchButton) * 0.1f);
-            PlayRecordedAudio(pitch);
-
-            // Check if the maximum notes have been registered
-            if (currentInputIndex >= inputImages.Length)
+            if (currentInputIndex >= noteSequence.Length)
             {
                 StartCoroutine(PlayComposition());
             }
         }
     }
 
-    // Coroutine to play the composition in order
+    // New method to handle deleting the last registered note
+    void DeleteLastNote()
+    {
+        if (currentInputIndex > 0)
+        {
+            currentInputIndex--; // Move back one step in the input sequence
+            inputImages[currentInputIndex].gameObject.SetActive(false); // Hide the last registered image
+        }
+    }
+
     private IEnumerator PlayComposition()
     {
-        yield return new WaitForSeconds(1f); // Optional delay before starting playback
+        yield return new WaitForSeconds(0.5f);
 
-        // Play the recorded audio clips in the order registered
-        foreach (var img in inputImages)
+        for (int i = 0; i < currentInputIndex; i++)
         {
-            if (img.gameObject.activeSelf)
-            {
-                float pitch = 1f + (System.Array.IndexOf(inputImages, img) * 0.1f);
-                PlayRecordedAudio(pitch);
-                yield return new WaitForSeconds(1f); // Adjust the delay between notes as needed
-            }
+            PlayRecordedAudio(pitches[noteSequence[i]]);  // Play the pitch based on the stored index
+            yield return new WaitForSeconds(1f);
         }
     }
 
-    // Assign the recorded audio clip to the buttons and modify the pitch
     void AssignAudioToButtons()
     {
-        if (pitchButtons.Length == 5) // Ensure there are 5 buttons
+        for (int i = 0; i < pitchButtons.Length; i++)
         {
-            for (int i = 0; i < pitchButtons.Length; i++)
+            int buttonIndex = i;
+            pitchButtons[buttonIndex].onClick.AddListener(() =>
             {
-                // Calculate pitch for each button (index 0 has pitch 1, index 4 has pitch 1.4, etc.)
-                float pitch = 1f + (i * 0.1f);  // Increase pitch progressively (1.0, 1.1, 1.2, ...)
-
-                // Assign behavior to each button
-                int buttonIndex = i; // Capture the index for use in the lambda
-                pitchButtons[buttonIndex].onClick.AddListener(() =>
-                {
-                    PlayRecordedAudio(pitch);  // Play the recorded audio with the corresponding pitch
-                });
-            }
+                PlayRecordedAudio(pitches[buttonIndex]);
+            });
         }
     }
 
-    // Play the recorded audio with a specific pitch
+    // Apply a multiplier to the pitch to make the differences more pronounced
     void PlayRecordedAudio(float pitch)
     {
         if (recordedClip != null)
         {
-            audioSource.pitch = pitch;   // Adjust the pitch
-            audioSource.Play();          // Play the recorded clip with the set pitch
+            audioSource.pitch = pitch / 250f;  // Multiply pitch for more noticeable differences
+            audioSource.Play();
         }
     }
 }
