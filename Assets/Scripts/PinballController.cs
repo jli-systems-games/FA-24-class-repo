@@ -25,10 +25,9 @@ public class PinballController : MonoBehaviour
 
     public void StartGame()
     {
-        ball.transform.position = new Vector3(0, 6, 31);
+        ball.transform.position = new Vector3(0, 4, 31.5f);
         LaunchBall();
 
-        customizer.SetActive(false);
         barrier.SetActive(true);
         gameUI.SetActive(true);
     }

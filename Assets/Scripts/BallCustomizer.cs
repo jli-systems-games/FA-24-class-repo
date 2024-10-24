@@ -41,6 +41,8 @@ public class BallCustomizer : MonoBehaviour
             buttons[i].onClick.AddListener(() => OnSliderStop?.Invoke(index));
         }
 
+        startButton.interactable = false;
+
         if (sliders.Length > 0 && buttons.Length > 0)
         {
             sliders[0].gameObject.SetActive(true);
@@ -72,7 +74,7 @@ public class BallCustomizer : MonoBehaviour
 
     private void CycleSliders(Slider slider, ref int direction)
     {
-        float fixedTimeToMax = 2.0f;
+        float fixedTimeToMax = 1.2f;
 
         float range = slider.maxValue - slider.minValue;
         float speed = range / fixedTimeToMax;
@@ -103,7 +105,24 @@ public class BallCustomizer : MonoBehaviour
                 sliders[nextIndex].gameObject.SetActive(true);
                 buttons[nextIndex].gameObject.SetActive(true);
             }
+
+            if (AllAttributesSelected())
+            {
+                startButton.interactable = true;
+            }
         }
+    }
+
+    private bool AllAttributesSelected()
+    {
+        foreach (bool cycling in isCycling)
+        {
+            if (cycling)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void OnDestroy()
@@ -122,6 +141,8 @@ public class BallCustomizer : MonoBehaviour
             float hue = sliders[0].value;
             Color color = Color.HSVToRGB(hue, 1, 1);
             ballRenderer.material.color = color;
+            ballRenderer.material.SetFloat("_Metallic", 1.0f);
+            ballRenderer.material.SetFloat("_Glossiness", 0.6f);
         }
 
         if (ball != null && sliders[1].gameObject.activeSelf) // Size
@@ -136,6 +157,7 @@ public class BallCustomizer : MonoBehaviour
         //    //ballRigidbody.useGravity = true;
         //    Physics.gravity = new Vector3(0, -gravityScale, 0);
         //}
+
 
         if (ballRigidbody != null && sliders[2].gameObject.activeSelf) // Mass
         {

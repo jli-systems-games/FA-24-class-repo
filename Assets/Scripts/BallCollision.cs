@@ -32,14 +32,14 @@ public class BallCollision : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("bottom"))
-        {
-            resetUI.SetActive(true);
-            resetText.text = "Your final score was " + score.ToString();
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("bottom"))
+    //    {
+    //        resetUI.SetActive(true);
+    //        resetText.text = "Your final score was " + score.ToString();
+    //    }
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -54,6 +54,11 @@ public class BallCollision : MonoBehaviour
         else if (collision.gameObject.CompareTag("point25"))
         {
             AddScore(25);
+        }
+        else if (collision.gameObject.CompareTag("bottom"))
+        {
+            resetUI.SetActive(true);
+            resetText.text = "Your final score was " + score.ToString();
         }
     }
 
