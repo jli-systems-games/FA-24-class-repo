@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerDoorController : MonoBehaviour
+public class TriggerDoorExitController : MonoBehaviour
 {
     [SerializeField] private Animator myDoor = null; // 动画控制器
     [SerializeField] private bool openTrigger = false; // 是否触发开门
     [SerializeField] private bool closeTrigger = false; // 是否触发关门
-
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,14 +18,14 @@ public class TriggerDoorController : MonoBehaviour
             {
                 if (openTrigger)
                 {
-                    // 播放开门动画
-                    myDoor.Play("door_open", 0, 0.0f);
+                    // 播放开门动画，使用正确的状态名称
+                    myDoor.Play("ExitDoorOpen", 0, 0.0f);
                     gameObject.SetActive(false); // 触发器禁用
                 }
                 else if (closeTrigger)
                 {
-                    // 播放关门动画
-                    myDoor.Play("door_close", 0, 0.0f);
+                    // 播放关门动画，使用正确的状态名称
+                    myDoor.Play("ExitDoorClose", 0, 0.0f);
                     gameObject.SetActive(false); // 触发器禁用
                 }
             }

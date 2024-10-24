@@ -15,14 +15,18 @@ public class PickUpController : MonoBehaviour
 
     private void Start()
     {
-        //Setup: 确定枪的初始状态
+        // 确保在每次开始时，静态变量和状态被正确初始化
+        equipped = false;
+        slotFull = false;
+
+        // 设置枪的初始状态
         if (!equipped)
         {
             gunScript.enabled = false;
             rb.isKinematic = false;
             coll.isTrigger = false;
         }
-        if (equipped)
+        else
         {
             gunScript.enabled = true;
             rb.isKinematic = true;
@@ -36,14 +40,14 @@ public class PickUpController : MonoBehaviour
 
     private void Update()
     {
-        // 检查是否可以捡起枪
+        // 检查玩家是否靠近并按下E键捡起枪
         Vector3 distanceToPlayer = player.position - transform.position;
         if (!equipped && distanceToPlayer.magnitude <= pickUpRange && Input.GetKeyDown(KeyCode.E) && !slotFull)
         {
             PickUp();
         }
 
-        // 如果玩家持有枪并且按下Q键则放下
+        // 检查玩家是否按下Q键放下枪
         if (equipped && Input.GetKeyDown(KeyCode.Q))
         {
             Drop();

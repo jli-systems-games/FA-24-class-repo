@@ -1,13 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private bool isHit = false; // 用于防止多次触发销毁
+
+    private void OnTriggerEnter(Collider other)
     {
-        // 检查是否与子弹碰撞
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (other.CompareTag("Bullet") && !isHit)
         {
-            Destroy(gameObject); // 销毁敌人
+            isHit = true; // 防止重复触发
+            StartCoroutine(DestroyEnemyAfterDelay(1f)); // 等待2秒再销毁敌人
         }
+    }
+
+    // 协程：延迟2秒销毁敌人
+    IEnumerator DestroyEnemyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject); // 销毁敌人
+        FindObjectOfType<EnemySpawner>().EnemyCleared(); // 通知 EnemySpawner，减少敌人数
     }
 }
