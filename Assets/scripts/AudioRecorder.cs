@@ -24,6 +24,7 @@ public class AudioRecorder : MonoBehaviour
 
     public GameObject blank; 
     public GameObject tryText; 
+    public GameObject hint; 
 
     // Array to store the sequence of player input
     private int[] noteSequence = new int[16];  // Array to store button indices for 16 notes
@@ -80,6 +81,7 @@ public class AudioRecorder : MonoBehaviour
 
     void StartRecording()
     {
+        hint.SetActive(false);
         StartCoroutine(StartRecordingProcess());
     }
 
@@ -172,7 +174,7 @@ public class AudioRecorder : MonoBehaviour
 
     private IEnumerator PlayComposition()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         for (int i = 0; i < currentInputIndex; i++)
         {
