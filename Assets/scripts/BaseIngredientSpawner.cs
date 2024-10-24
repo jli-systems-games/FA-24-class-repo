@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BaseIngredientSpawner : MonoBehaviour
 {
+    public FoodGrader foodGrader;
     public GameObject pizzaBasePrefab;
     public GameObject sandwichBasePrefab;
     public GameObject hotdogBasePrefab;
@@ -14,8 +15,9 @@ public class BaseIngredientSpawner : MonoBehaviour
     {
         if (!baseSpawned) 
         {
-            Instantiate(pizzaBasePrefab, new Vector2(-1, -1), Quaternion.identity);
-            baseSpawned = true; 
+            Instantiate(pizzaBasePrefab, new Vector2(0, -1), Quaternion.identity); // controls where prefab spawns
+            baseSpawned = true;
+            foodGrader.SetBase("Pizza");
         }
     }
 
@@ -23,7 +25,7 @@ public class BaseIngredientSpawner : MonoBehaviour
     {
         if (!baseSpawned) 
         {
-            Instantiate(sandwichBasePrefab, new Vector2(-1, -1), Quaternion.identity); 
+            Instantiate(sandwichBasePrefab, new Vector2(0, -1), Quaternion.identity); 
             baseSpawned = true; 
         }
     }
@@ -32,8 +34,9 @@ public class BaseIngredientSpawner : MonoBehaviour
     {
         if (!baseSpawned) 
         {
-            Instantiate(hotdogBasePrefab, new Vector2(-1, -1), Quaternion.identity); 
-            baseSpawned = true; 
+            Instantiate(hotdogBasePrefab, new Vector2(0, -1), Quaternion.identity); 
+            baseSpawned = true;
+            foodGrader.SetBase("HotDog");
         }
     }
 }
