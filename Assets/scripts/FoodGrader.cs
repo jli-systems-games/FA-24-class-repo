@@ -32,19 +32,19 @@ public class FoodGrader : MonoBehaviour
     {
         string grade;
 
-        if (selectedBase == "Pizza" && hasBadIngredients) // pizza + lettuce
+        if (selectedBase == "Pizza" && hasBadIngredients) // pizza + bad ingredients
         {
-            grade = "Grade C: Lettuce doesn't belong on pizza!";
+            grade = "Grade C: That doesn't belong on pizza!";
             Debug.Log("bad");
         }
         else if (selectedBase == "HotDog" && (hasBadIngredients || ingredientCount > 0)) // hot dog with cheese/lettuce
         {
-            grade = "Grade C: Hotdogs shouldn't have cheese or lettuce!";
+            grade = "Grade C: Hotdogs shouldn't have these ingredients!";
             Debug.Log("bad");
         }
-        else if (ingredientCount > 4 || hasBadIngredients)
+        else if (ingredientCount > 35 || hasBadIngredients)
         {
-            grade = "Grade F: Why would you add honey or candy?";
+            grade = "Grade F: This doesn't taste good :(";
             Debug.Log("bad");
         }
         else if (ingredientCount <= 0)
@@ -54,7 +54,7 @@ public class FoodGrader : MonoBehaviour
         }
         else
         {
-            grade = "Grade A: So yummy!";
+            grade = "Grade A: So yummy! Om nom nom";
             Debug.Log("good");
         }
 

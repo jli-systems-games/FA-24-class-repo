@@ -23,7 +23,7 @@ public class IngredientSpawner : MonoBehaviour
     {
         GameObject lettuceInstance = Instantiate(lettucePrefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-3f, 3f)), Quaternion.identity);
         lettuceInstance.AddComponent<MouseDrag>();
-        foodGrader.AddIngredient(true);
+        foodGrader.AddIngredient(false);
     }
 
     public void SpawnBacon()
