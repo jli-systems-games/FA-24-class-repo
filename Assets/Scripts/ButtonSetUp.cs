@@ -26,8 +26,9 @@ public class ButtonSetUp : MonoBehaviour
         assosciatedTrait = choice.dialogueTrait;
     }
 
-    void PickOption()
+    public void PickOption()
     {
         dialogueController.nextTree = nextDialogue;
+        dialogueController.BeginSect();
     }
 }
