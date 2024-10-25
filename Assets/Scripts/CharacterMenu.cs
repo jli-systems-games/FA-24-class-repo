@@ -4,6 +4,7 @@ using UnityEngine;
 using static UnityEngine.ParticleSystem;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CharacterMenu : MonoBehaviour
 {
@@ -21,10 +22,13 @@ public class CharacterMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI strDisplay;
     [SerializeField] private TextMeshProUGUI dexDisplay;
 
+    [SerializeField] private GameObject nextButton;
+
     // Start is called before the first frame update
     void Start()
     {
         skillPoints = 5;
+        nextButton.SetActive(false);
 
         ChangeName();
         ChangeTraitOne();
@@ -100,6 +104,10 @@ public class CharacterMenu : MonoBehaviour
             skillPoints--;
             skillPtDisplay.text = "Skill Points: " + skillPoints.ToString();
         }
+        if(skillPoints == 0)
+        {
+            nextButton.SetActive(true);
+        }
     }
 
     public void RemoveSkillPoint(int stat)
@@ -127,5 +135,15 @@ public class CharacterMenu : MonoBehaviour
 
         skillPoints++;
         skillPtDisplay.text = "Skill Points: " + skillPoints.ToString();
+        
+        if(skillPoints != 0 && nextButton.activeInHierarchy)
+        {
+            nextButton.SetActive(false);
+        }
+    }
+
+    public void NextScene()
+    {
+        SceneManager.LoadScene(1);
     }
 }
