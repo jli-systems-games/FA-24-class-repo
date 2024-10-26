@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +8,12 @@ public class Goal : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioClip soldSound;
+
+
+    private void Start()
+    {
+       // imageManager = GameObject.Find("ImageManager").GetComponent<ImageManager>(); // Ensure this GameObject is named "ImageManager"
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -19,11 +25,13 @@ public class Goal : MonoBehaviour
             {
                 Debug.Log("Player 1 Scored...");
                 GameObject.Find("GameManager").GetComponent<GameManager>().Player1Scored();
+                //imageManager.OnScore(); // Call OnScore method in ImageManager
             }
             else
             {
                 Debug.Log("Player 2 Scored...");
                 GameObject.Find("GameManager").GetComponent<GameManager>().Player2Scored();
+               //imageManager.OnScore(); // Call OnScore method in ImageManager
             }
         }
     }
@@ -34,17 +42,5 @@ public class Goal : MonoBehaviour
         {
             audioSource.PlayOneShot(soldSound);
         }
-
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
