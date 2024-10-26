@@ -5,7 +5,10 @@ using UnityEngine;
 public class limbCollision : MonoBehaviour
 {
     public PlayerController controller;
+    public bool isFeet;
 
+    [SerializeField] Rigidbody hip;
+    [SerializeField] AudioSource bounce;
     void Start()
     {
         
@@ -16,5 +19,13 @@ public class limbCollision : MonoBehaviour
     {
         
         controller.isGrounded = true;
+        if(isFeet)
+        {
+            if (collision.collider.CompareTag("trampline"))
+            {
+                hip.AddForce(Vector3.up * 1050f, ForceMode.Impulse);
+                bounce.Play();
+            }
+        }
     }
 }
