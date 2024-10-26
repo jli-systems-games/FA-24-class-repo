@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public static int dex;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         DontDestroyOnLoad(gameObject);
         intelligence = 1;
