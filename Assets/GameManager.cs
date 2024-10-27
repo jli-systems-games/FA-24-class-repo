@@ -103,7 +103,17 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaitAndSwitchScene()
     {
         yield return new WaitForSeconds(3);
-        SceneManager.LoadScene("Trade");
+        LoadTradeScene(); // Switch to LoadTradeScene method
+    }
+
+    // Method to load trade scene
+    public void LoadTradeScene()
+    {
+        // Check if the current scene is already the trade scene to avoid reloading
+        if (SceneManager.GetActiveScene().name != "Trade")
+        {
+            SceneManager.LoadScene("Trade");
+        }
     }
 
     // Method to be called in the new scene to update scores
