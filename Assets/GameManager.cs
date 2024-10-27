@@ -1,11 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // For scene management
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }  // Singleton instance
+
     [Header("Ball")]
     public GameObject ball;
 
@@ -28,68 +29,70 @@ public class GameManager : MonoBehaviour
     public GameObject Broke1Text;
     public GameObject Broke2Text;
 
-    private int Player1Score = 10; // Initial score for Player 1
-    private int Player2Score = 10; // Initial score for Player 2
-    private int BallPrice = 1; // Initial price for the ball
+    public static int Player1Score = 10;
+    public static int Player2Score = 10;
+    private int BallPrice = 1;
+
+    private void Awake()
+    {
+        // Implement singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Prevent destruction on scene load
+        }
+        else
+        {
+            Destroy(gameObject); // Destroy duplicate GameManager instances
+        }
+    }
 
     void Start()
     {
-        // Hide broke messages at the start
         Broke1Text.SetActive(false);
         Broke2Text.SetActive(false);
         
-        // Initialize ball price display
         BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
+        UpdateScoreUI();
+    }
+
+    private void UpdateScoreUI()
+    {
+        Player1Text.GetComponent<TextMeshProUGUI>().text = "$" + Player1Score.ToString();
+        Player2Text.GetComponent<TextMeshProUGUI>().text = "$" + Player2Score.ToString();
     }
 
     public void Player2Scored()
     {
-        // Deduct ball price from Player 1's score when Player 2 scores
         Player1Score -= BallPrice;
-        Player1Text.GetComponent<TextMeshProUGUI>().text = "$" + Player1Score.ToString();
+        UpdateScoreUI();
         ResetPosition();
     }
 
     public void Player1Scored()
     {
-        // Deduct ball price from Player 2's score when Player 1 scores
         Player2Score -= BallPrice;
-        Player2Text.GetComponent<TextMeshProUGUI>().text = "$" + Player2Score.ToString();
+        UpdateScoreUI();
         ResetPosition();
     }
 
     public void BallPriced()
     {
-        // Increase ball price and update the display
         BallPrice++;
         BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
     }
 
     private void ResetPosition()
     {
-        // Reset ball and paddle positions
         ball.GetComponent<Ball>().Reset();
         Player1Paddle.GetComponent<Paddle>().Reset();
         Player2Paddle.GetComponent<Paddle>().Reset();
 
-        // Update ball price display to current price
+        BallPrice = 1;
         BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
 
-        // Hide hands after reset
         LeftHand.SetActive(false);
         RightHand.SetActive(false);
-
-        // Check if any player is broke and display appropriate message
-       /* if (Player1Score <= 0)
-        {
-            Debug.Log("Player 1 is Broke");
-            Broke1Text.SetActive(true);
-        }
-        if (Player2Score <= 0)
-        {
-            Debug.Log("Player 2 is Broke");
-            Broke2Text.SetActive(true);
-        }*/
     }
 
     public void EndLevel()
@@ -99,10 +102,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitAndSwitchScene()
     {
-        // Wait for 3 seconds
         yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("Trade");
+    }
 
-        // Load the next scene (Level2)
-        SceneManager.LoadScene("Trade"); // Make sure the scene name matches the actual name
+    // Method to be called in the new scene to update scores
+    public void ApplyScoresInTradeScene(TextMeshProUGUI player1Text, TextMeshProUGUI player2Text)
+    {
+        player1Text.text = "$" + Player1Score.ToString();
+        player2Text.text = "$" + Player2Score.ToString();
     }
 }
