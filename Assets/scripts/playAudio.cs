@@ -125,12 +125,12 @@ public class playAudio : MonoBehaviour
 
         if (Input.GetKey(KeyCode.O))
         {
-            track.volume += 0.0008f;
+            track.volume += 0.0001f;
         }
 
         if (Input.GetKey(KeyCode.L))
         {
-            track.volume -= 0.0008f;
+            track.volume -= 0.0001f;
         }
 
     }
