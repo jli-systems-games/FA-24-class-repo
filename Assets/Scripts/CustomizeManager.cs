@@ -137,9 +137,16 @@ public class CustomizeManager : MonoBehaviour
     // Finalize and confirm selection
     public void OnConfirmButtonClick()
     {
-        // Handle confirmation logic here (saving choices, proceeding to gameplay, etc.)
-        Debug.Log($"Knife selected: {selectedKnifeIndex}, Color Overlay: {selectedColorIndex}, Engraving Overlay: {selectedEngravingIndex}");
-        SceneManager.LoadScene("Game Scene");
+        // Get the selected sprites for base knife, color overlay, and engraving
+        Sprite baseKnife = knives[selectedKnifeIndex].baseKnife;
+        Sprite colorOverlay = selectedColorIndex >= 0 ? knives[selectedKnifeIndex].colorOverlays[selectedColorIndex] : null;
+        Sprite engravingOverlay = selectedEngravingIndex >= 0 ? knives[selectedKnifeIndex].engravingOverlays[selectedEngravingIndex] : null;
+
+        // Pass the selected customization to CustomizationData, including knifeIndex as the first argument
+        CustomizationData.instance.SetCustomization(selectedKnifeIndex, baseKnife, colorOverlay, engravingOverlay);
+
+        // Load the Game Scene
+        SceneManager.LoadScene("Game Scene"); // Replace "Game Scene" with your actual scene name
     }
 
     private void ShowKnifeSelectionPanel()

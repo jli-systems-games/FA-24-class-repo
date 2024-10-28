@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MusicManager : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class MusicManager : MonoBehaviour
 
     [Range(0f, 1f)]
     public float maxVolume = 1f;       // The maximum volume for the music
-    public float fadeInDuration =5f;  // Duration of the fade-in effect, in seconds
+    public float fadeInDuration = 2f;  // Duration of the fade-in effect, in seconds
 
     private void Awake()
     {
