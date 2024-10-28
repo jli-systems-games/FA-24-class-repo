@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Pet_AI : MonoBehaviour
 {
     private GameManager gameManager;
+    private GameObject _player;
 
     public int hunger;
     public int strength;
@@ -41,6 +42,7 @@ public class Pet_AI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _player = GameObject.FindWithTag("Player");
         gameManager = FindObjectOfType<GameManager>();
         rb = GetComponent<Rigidbody2D>();
 
@@ -104,7 +106,7 @@ public class Pet_AI : MonoBehaviour
     private void FixedUpdate()
     {
         SetVelocity();
-        RotateTowardsTarget();
+        //RotateTowardsTarget();
     }
 
     void RotateTowardsTarget()

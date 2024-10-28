@@ -9,14 +9,12 @@ public class Rock : MonoBehaviour
 
     public int HP;
     public Inventory item;
-
-    public Slider[] healthSliders;
-
-    public Slider thisHealthSlider;
+    private Slider thisHealthSlider;
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        thisHealthSlider = GetComponentInChildren<Slider>();
         thisHealthSlider.maxValue = HP;
         thisHealthSlider.value = HP;
     }
@@ -27,15 +25,6 @@ public class Rock : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        for(int i = 0; i < healthSliders.Length; i++)
-        {
-            healthSliders[i].gameObject.SetActive(false);
-        }
-
-        thisHealthSlider.gameObject.SetActive(true);
-    }
     public void takeDamage(int damage)
     {
         if (damage >= 0)
@@ -52,7 +41,6 @@ public class Rock : MonoBehaviour
         if (HP <= 0)
         {
             gameManager.addToInventory(item);
-            thisHealthSlider.gameObject.SetActive(false);
             Destroy(gameObject);
         }
     }

@@ -40,10 +40,10 @@ public class Player : MonoBehaviour
             playerPos += new Vector3(0, speed, 0) * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            playerPos += new Vector3(0, -speed, 0) * Time.deltaTime;
-        }
+        //if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        //{
+        //    playerPos += new Vector3(0, -speed, 0) * Time.deltaTime;
+        //}
 
         if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
