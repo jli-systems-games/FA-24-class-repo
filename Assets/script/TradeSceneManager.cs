@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class TradeSceneManager : MonoBehaviour
 {
@@ -11,34 +13,55 @@ public class TradeSceneManager : MonoBehaviour
     public GameObject Player1Paddle;
     public KeyCode Player1LeftKey = KeyCode.A;
     public KeyCode Player1RightKey = KeyCode.D;
+    public KeyCode Player1DownKey = KeyCode.S;
 
     [Header("Player 2 Settings")]
     public GameObject Player2Paddle;
     public KeyCode Player2LeftKey = KeyCode.LeftArrow;
     public KeyCode Player2RightKey = KeyCode.RightArrow;
+    public KeyCode Player2DownKey = KeyCode.DownArrow;
 
     private float paddleAdjustment = 1f;
     private int minPaddleWidth = 1;
     private int maxPaddleWidth = 10;
 
+    // Flags to track each player's "down" key press
+    private bool isPlayer1Ready = false;
+    private bool isPlayer2Ready = false;
+
     private void Start()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.ApplyScoresInTradeScene(Player1ScoreText, Player2ScoreText);
-        }
-        else
-        {
-            Debug.LogWarning("GameManager instance not found.");
-        }
+        // Initialize scores from Data script
+        Player1ScoreText.text = "$" + Data.Player1Score.ToString();
+        Player2ScoreText.text = "$" + Data.Player2Score.ToString();
     }
 
     private void Update()
     {
-        if (GameManager.Instance != null)
+        // Handle player input and adjust paddles and scores
+        HandlePlayerInput(Player1Paddle, ref Data.Player1Score, Player1LeftKey, Player1RightKey, Player1ScoreText);
+        HandlePlayerInput(Player2Paddle, ref Data.Player2Score, Player2LeftKey, Player2RightKey, Player2ScoreText);
+
+        // Check if both players are ready to move to the next level
+        if (Input.GetKeyDown(Player1DownKey))
         {
-            HandlePlayerInput(Player1Paddle, ref GameManager.Player1Score, Player1LeftKey, Player1RightKey, Player1ScoreText);
-            HandlePlayerInput(Player2Paddle, ref GameManager.Player2Score, Player2LeftKey, Player2RightKey, Player2ScoreText);
+            isPlayer1Ready = true;
+        }
+
+        if (Input.GetKeyDown(Player2DownKey))
+        {
+            isPlayer2Ready = true;
+        }
+       
+        if (isPlayer1Ready && isPlayer2Ready)
+        {
+            Debug.Log("Both players are ready to proceed to the next level.");
+            SceneManager.LoadScene("Level2");
+            // Trigger the transition to the next level (to be implemented based on your project needs)
+
+            // Reset flags after confirming readiness
+            isPlayer1Ready = false;
+            isPlayer2Ready = false;
         }
     }
 
@@ -46,28 +69,50 @@ public class TradeSceneManager : MonoBehaviour
     {
         Vector3 currentScale = paddle.transform.localScale;
 
-        // Shrink paddle and increase score
+        
         if (Input.GetKeyDown(leftKey))
         {
-            if (currentScale.x > minPaddleWidth)
+            if (currentScale.y > minPaddleWidth)  
             {
-                paddle.transform.localScale = new Vector3(currentScale.x - paddleAdjustment, currentScale.y, currentScale.z);
+                paddle.transform.localScale = new Vector3(currentScale.x, currentScale.y - paddleAdjustment, currentScale.z);
                 playerScore++;
                 UpdateScoreText(scoreText, playerScore);
+
+                
+                if (paddle == Player1Paddle)
+                {
+                    Data.Player1Paddle = (int)paddle.transform.localScale.y;
+                }
+                else if (paddle == Player2Paddle)
+                {
+                    Data.Player2Paddle = (int)paddle.transform.localScale.y;
+                }
             }
         }
 
-        // Extend paddle and decrease score
+        
         if (Input.GetKeyDown(rightKey))
         {
-            if (currentScale.x < maxPaddleWidth && playerScore > 0)
+            if (currentScale.y < maxPaddleWidth && playerScore > 0)  
             {
-                paddle.transform.localScale = new Vector3(currentScale.x + paddleAdjustment, currentScale.y, currentScale.z);
+                paddle.transform.localScale = new Vector3(currentScale.x, currentScale.y + paddleAdjustment, currentScale.z);
                 playerScore--;
                 UpdateScoreText(scoreText, playerScore);
+
+                
+                if (paddle == Player1Paddle)
+                {
+                    Data.Player1Paddle = (int)paddle.transform.localScale.y;
+                }
+                else if (paddle == Player2Paddle)
+                {
+                    Data.Player2Paddle = (int)paddle.transform.localScale.y;
+                }
             }
         }
     }
+
+
 
     private void UpdateScoreText(TextMeshProUGUI scoreText, int score)
     {

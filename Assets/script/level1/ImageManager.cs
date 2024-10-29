@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ImageManager : MonoBehaviour
 {
-    public Ball ball; // Reference to the Ball script
+    public Ball ball; 
     public GameObject ballItem;
     public GameObject[] images; // Array of images to manage
 
     private void Update()
     {
-        // Check the reset count and update images accordingly
+       
         HandleImageVisibility();
         CheckForLevelEnd(); // Check if the level should end
     }
@@ -24,6 +24,7 @@ public class ImageManager : MonoBehaviour
         {
             if (i < resetCount / 1) 
             {
+               // GameObject.Find("GameManager").GetComponent<GameManager>().ResetPosition();
                 images[i].SetActive(false); // Disable image
             }
         }

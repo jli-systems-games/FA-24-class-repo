@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }  // Singleton instance
-
     [Header("Ball")]
     public GameObject ball;
 
@@ -29,51 +27,41 @@ public class GameManager : MonoBehaviour
     public GameObject Broke1Text;
     public GameObject Broke2Text;
 
-    public static int Player1Score = 10;
-    public static int Player2Score = 10;
     private int BallPrice = 1;
-
-    private void Awake()
-    {
-        // Implement singleton pattern
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Prevent destruction on scene load
-        }
-        else
-        {
-            Destroy(gameObject); // Destroy duplicate GameManager instances
-        }
-    }
 
     void Start()
     {
         Broke1Text.SetActive(false);
         Broke2Text.SetActive(false);
+
         
+        Player1Paddle.transform.localScale = new Vector3(Player1Paddle.transform.localScale.x, Data.Player1Paddle, Player1Paddle.transform.localScale.z);
+        Player2Paddle.transform.localScale = new Vector3(Player2Paddle.transform.localScale.x, Data.Player2Paddle, Player2Paddle.transform.localScale.z);
+
         BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
         UpdateScoreUI();
     }
 
     private void UpdateScoreUI()
     {
-        Player1Text.GetComponent<TextMeshProUGUI>().text = "$" + Player1Score.ToString();
-        Player2Text.GetComponent<TextMeshProUGUI>().text = "$" + Player2Score.ToString();
+        Player1Text.GetComponent<TextMeshProUGUI>().text = "$" + Data.Player1Score.ToString();
+        Player2Text.GetComponent<TextMeshProUGUI>().text = "$" + Data.Player2Score.ToString();
     }
 
     public void Player2Scored()
     {
-        Player1Score -= BallPrice;
+        Data.Player1Score -= BallPrice;
         UpdateScoreUI();
         ResetPosition();
+        ResetBallPrice();
     }
 
     public void Player1Scored()
     {
-        Player2Score -= BallPrice;
+        Data.Player2Score -= BallPrice;
         UpdateScoreUI();
         ResetPosition();
+        ResetBallPrice();
     }
 
     public void BallPriced()
@@ -82,44 +70,34 @@ public class GameManager : MonoBehaviour
         BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
     }
 
-    private void ResetPosition()
+    public void ResetBallPrice()
+    {
+        BallPrice = 1;
+        BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
+    }
+
+    public void ResetPosition()
     {
         ball.GetComponent<Ball>().Reset();
         Player1Paddle.GetComponent<Paddle>().Reset();
         Player2Paddle.GetComponent<Paddle>().Reset();
-
-        BallPrice = 1;
-        BallText.GetComponent<TextMeshProUGUI>().text = "Price: $" + BallPrice.ToString();
-
         LeftHand.SetActive(false);
         RightHand.SetActive(false);
     }
 
     public void EndLevel()
     {
-        StartCoroutine(WaitAndSwitchScene());
+        StartCoroutine(WaitAndSwitchToTradeScene());
     }
 
-    private IEnumerator WaitAndSwitchScene()
+    private IEnumerator WaitAndSwitchToTradeScene()
     {
         yield return new WaitForSeconds(3);
-        LoadTradeScene(); // Switch to LoadTradeScene method
+        LoadTradeScene();
     }
 
-    // Method to load trade scene
-    public void LoadTradeScene()
+    private void LoadTradeScene()
     {
-        // Check if the current scene is already the trade scene to avoid reloading
-        if (SceneManager.GetActiveScene().name != "Trade")
-        {
-            SceneManager.LoadScene("Trade");
-        }
-    }
-
-    // Method to be called in the new scene to update scores
-    public void ApplyScoresInTradeScene(TextMeshProUGUI player1Text, TextMeshProUGUI player2Text)
-    {
-        player1Text.text = "$" + Player1Score.ToString();
-        player2Text.text = "$" + Player2Score.ToString();
+        SceneManager.LoadScene("Trade");
     }
 }
