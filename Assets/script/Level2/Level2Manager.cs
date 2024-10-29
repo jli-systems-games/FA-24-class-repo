@@ -85,7 +85,7 @@ public class Level2Manager : MonoBehaviour
         RightHand.SetActive(false);
     }
 
-    public void EndLevel()
+    public void EndLevel2()
     {
         StartCoroutine(WaitAndSwitchToTradeScene());
     }

@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ImageManager : MonoBehaviour
+public class Level2ImageManager1 : MonoBehaviour
 {
-    public Ball ball; 
+    public Level2Ball ball; 
     public GameObject ballItem;
     public GameObject[] images; // Array of images to manage
-    
 
     private void Update()
     {
@@ -48,8 +47,7 @@ public class ImageManager : MonoBehaviour
         {
             // Call the EndLevel method from your GameManager
             ballItem.SetActive(false);
-            FindObjectOfType<GameManager>().EndLevel(); // Or your specific method to end the level
-            
+            FindObjectOfType<Level2Manager>().EndLevel2(); // Or your specific method to end the level
         }
     }
 }
