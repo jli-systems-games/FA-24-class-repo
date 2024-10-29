@@ -24,8 +24,8 @@ public class ProjectileGun : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         //*Quaternion.Euler(90, 90, 90)
 
-        // 调整子弹的朝向，确保子弹的Z轴与firePoint的前方一致
-        bullet.transform.rotation = Quaternion.LookRotation(firePoint.forward);
+       // 或者，如果想要直接设置特定的方向，也可以用以下方式：
+        bullet.transform.rotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 0); // 例如旋转180度
 
         // 获取子弹的Rigidbody并设置速度
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
