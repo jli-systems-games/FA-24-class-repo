@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Level2Manager : MonoBehaviour
+public class Level3Manager : MonoBehaviour
 {
     [Header("Ball")]
     public GameObject ball;
@@ -78,14 +78,14 @@ public class Level2Manager : MonoBehaviour
 
     public void ResetPosition()
     {
-        ball.GetComponent<Level2Ball>().Reset();
+        ball.GetComponent<Level3Ball>().Reset();
         Player1Paddle.GetComponent<Paddle>().Reset();
         Player2Paddle.GetComponent<Paddle>().Reset();
         LeftHand.SetActive(false);
         RightHand.SetActive(false);
     }
 
-    public void EndLevel2()
+    public void EndLevel3()
     {
         StartCoroutine(WaitAndSwitchToTradeScene());
     }
@@ -98,6 +98,6 @@ public class Level2Manager : MonoBehaviour
 
     private void LoadTradeScene()
     {
-        SceneManager.LoadScene("Trade2");
+       // SceneManager.LoadScene("Trade2");
     }
 }
