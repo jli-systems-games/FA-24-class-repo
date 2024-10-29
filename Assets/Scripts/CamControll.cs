@@ -24,11 +24,11 @@ public class CamControll : MonoBehaviour
     void CamBehavior()
     {
         mouseX += Input.GetAxis("Mouse X") * rotationSpeed;
-        mouseY -= Input.GetAxis("Mouse Y") * rotationSpeed;
+        mouseY += Input.GetAxis("Mouse Y") * rotationSpeed;
         mouseY = Mathf.Clamp(mouseY, -35, 60);
         //mouseX = Mathf.Clamp(mouseX, -35, 60);
 
-        Quaternion rootRotation = Quaternion.Euler(mouseY, mouseX , 0);
+        Quaternion rootRotation = Quaternion.Euler(mouseY * -1f, mouseX , 0);
         target.rotation = rootRotation;
 
         hipJoint.targetRotation = Quaternion.Euler(0, -mouseX *1.5f, 0);

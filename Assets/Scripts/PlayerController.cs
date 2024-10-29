@@ -13,16 +13,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Others")]
     [SerializeField] Rigidbody hip;
-    [SerializeField] Transform torso;
+    [SerializeField] Transform torso, COM;
     [SerializeField] Animator _animate;
     [SerializeField] Customization _custom;
     public bool isGrounded;
-    public float upwardForce;
+    public float upwardForce, backForce;
     Rigidbody torRb;
     float turnAng;
     void Start()
     {
         torRb = torso.GetComponent<Rigidbody>();
+       
     }
 
     // Update is called once per frame
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
                         {
                             hip.AddForce(hip.transform.forward * speed);
 
-                            torRb.AddForce(-hip.transform.forward * 450f);
+                            torRb.AddForce(-hip.transform.forward * backForce);
                         }
 
               }
@@ -85,7 +86,7 @@ public class PlayerController : MonoBehaviour
                     {
                         if (isGrounded)
                         {
-                             hip.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+                             hip.AddForce(new Vector3(0, jumpForce, transform.forward.z), ForceMode.Impulse);
                              isGrounded = false;
                         }
            
