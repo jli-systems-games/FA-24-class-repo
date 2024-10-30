@@ -5,7 +5,7 @@ using UnityEngine;
 public class GrabDetection : MonoBehaviour
 {
     ArmGrabbing _grab;
-    [SerializeField] GameObject signal;
+   // [SerializeField] GameObject signal;
     void Start()
     {
         _grab = GetComponentInParent<ArmGrabbing>();
@@ -21,17 +21,28 @@ public class GrabDetection : MonoBehaviour
     {
         if (other.CompareTag("grabble"))
         {
+            Debug.Log("grabbingON");
              _grab.grabbedON = true;
+            EventManager.climbing(_grab.mouseBttn);
             Rigidbody obj = other.gameObject.GetComponent<Rigidbody>();
-            FixedJoint fjint = transform.parent.gameObject.AddComponent<FixedJoint>();
-            _grab.grabbedObj = fjint;
-            fjint.connectedBody = obj;
-            signal.SetActive(true);
+            if(obj.TryGetComponent<FixedJoint>(out FixedJoint fj))
+            {
+                //destroy that joint;
+                Destroy(fj);
+            }
+            else
+            {
+                FixedJoint fjint = transform.parent.gameObject.AddComponent<FixedJoint>();
+                _grab.grabbedObj = fjint;
+                fjint.connectedBody = obj;
+            }
+            
+           // signal.SetActive(true);
         }
        
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         Debug.Log("exiting");
         /*_grab.grabbedON = false;

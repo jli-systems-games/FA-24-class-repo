@@ -7,18 +7,23 @@ public class CamControll : MonoBehaviour
     public float rotationSpeed = 1f;
     public Transform target;
     [SerializeField] Customization custom;
-    float mouseX, mouseY;
+    
+    float mouseX, mouseY, mouseSenstivity;
 
     public ConfigurableJoint hipJoint;
     void Start()
     {
         //Cursor.lockState = CursorLockMode.Locked;
+        mouseSenstivity = 1.5f;
+        EventManager.Climb += decreaseSensitivity;
+        EventManager.stopClimb += restoreSensitivity;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {  
         if(custom.done)CamBehavior();
+  
     }
 
     void CamBehavior()
@@ -31,7 +36,14 @@ public class CamControll : MonoBehaviour
         Quaternion rootRotation = Quaternion.Euler(mouseY * -1f, mouseX , 0);
         target.rotation = rootRotation;
 
-        hipJoint.targetRotation = Quaternion.Euler(0, -mouseX *1.5f, 0);
+        hipJoint.targetRotation = Quaternion.Euler(0, -mouseX * mouseSenstivity, 0);
     }
-
+    void decreaseSensitivity(int m)
+    {
+        mouseSenstivity = 1f;
+    }
+    void restoreSensitivity(int m)
+    {
+        mouseSenstivity = 1.5f;
+    }
 }

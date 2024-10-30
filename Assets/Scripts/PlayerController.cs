@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,13 +18,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform torso, COM;
     [SerializeField] Animator _animate;
     [SerializeField] Customization _custom;
-    public bool isGrounded;
+    public bool isGrounded, leftArmHeld, rigthArmHeld;
     public float upwardForce, backForce;
+    
+    [SerializeField] TMP_Text _debug, _deBugBOOL;
     Rigidbody torRb;
-    float turnAng;
+
+    bool isClimbing;
+    float ogSpeed,currVel,maxVelocity;
     void Start()
     {
         torRb = torso.GetComponent<Rigidbody>();
+        EventManager.Climb += startClimbing;
+        EventManager.stopClimb += checkClimb;
+        EventManager.Reset += Reset;
+
+        ogSpeed = speed;
        
     }
 
@@ -33,6 +44,15 @@ public class PlayerController : MonoBehaviour
         {
             Reset();
         }
+       
+        //for Debug;
+
+        float vel = torRb.velocity.y;
+        _debug.text = jumpForce.ToString();
+        _deBugBOOL.text = isGrounded.ToString();
+
+        Mathf.Clamp(vel, -0.5f, 5f);
+
         if (_custom.done)
         {
               float rotationDiff = Quaternion.Angle(hip.transform.rotation, torso.transform.rotation);
@@ -85,18 +105,71 @@ public class PlayerController : MonoBehaviour
                     if (Input.GetAxis("Jump") >0)
                     {
                         if (isGrounded)
-                        {
-                             hip.AddForce(new Vector3(0, jumpForce, transform.forward.z), ForceMode.Impulse);
-                             isGrounded = false;
+                        {   
+                            hip.AddForce(new Vector3(0, jumpForce, transform.forward.z), ForceMode.Impulse);
+                           
+                            if(!isClimbing)
+                            {   
+                                //Debug.Log("Climbing");
+                                
+                                isGrounded = false;
+
+                            }
+                  
+                             
+                             
                         }
            
 
-                    }
+                    } 
+            if (isClimbing)
+            {
+                //recalculate upwardForce and direction
+                        
+               jumpForce = Mathf.Clamp(jumpForce, 50f, 150f);
+               if(!leftArmHeld && !rigthArmHeld)
+                {
+                    endClimbing();
+                    isClimbing = false;
+                }
+         
+           }
         }
 
       
 
     } 
+    void startClimbing(int m)
+    {   
+        isClimbing = true;
+        jumpForce = jumpForce * 0.1f;
+        speed = speed * 0.75f;
+
+        if(m == 0)
+        {
+            leftArmHeld = true;
+        }else if (m == 1)
+        {
+            rigthArmHeld = true;
+        }
+    }
+    void checkClimb(int m)
+    {
+        if (m == 0)
+        {
+            leftArmHeld = false;
+        }
+        else if (m == 1)
+        {
+            rigthArmHeld = false;
+        }
+    }
+    void endClimbing()
+    {
+        
+        jumpForce = 760f;
+        speed = ogSpeed;
+    }
     private void Reset()
      {
         Cursor.lockState = CursorLockMode.None;

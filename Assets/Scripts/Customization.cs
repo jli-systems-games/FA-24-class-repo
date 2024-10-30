@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class Customization : MonoBehaviour
 {
     public characterObject Assets;
-    public bool done;
+    public bool done, customizing;
     [SerializeField] Transform hatParent, faceParent, Accessory;
     [SerializeField] GameObject hatHold, maskHold, _canvas;
     [SerializeField] Camera defaultCam, plyrCam;
@@ -23,10 +23,15 @@ public class Customization : MonoBehaviour
     MeshRenderer replaceMat;
     void Start()
     {
-        ogHatPos = hatHold.transform.position;
+        if (customizing)
+        {   
+            ogHatPos = hatHold.transform.position;
         
-        hatFill = hatHold.GetComponent<MeshFilter>();
-        mFill = maskHold.GetComponent<MeshFilter>();
+            hatFill = hatHold.GetComponent<MeshFilter>();
+            mFill = maskHold.GetComponent<MeshFilter>();
+
+        }
+        
         
     }
     public void increaseSelection()
@@ -81,57 +86,61 @@ public class Customization : MonoBehaviour
    
     void SelectAccessory()
     {   //find all objects in the accessory parent
-        foreach(Transform t in Accessory)
-        {   // clone them and attach them to correct body parts so they move along the movement of the ragdoll;
-            item =  Instantiate(t.gameObject);
+        if (customizing)
+        {
+            foreach(Transform t in Accessory)
+                    {   // clone them and attach them to correct body parts so they move along the movement of the ragdoll;
+                        item =  Instantiate(t.gameObject);
            
-            MeshRenderer _mesh = item.GetComponent<MeshRenderer>();
+                        MeshRenderer _mesh = item.GetComponent<MeshRenderer>();
            
-            switch (t.tag)
-            {
-                case "hats":
-                    if(_mesh.sharedMaterial != null)
-                    {
-                      item.transform.parent = hatParent;
-                        if (maskON)
+                        switch (t.tag)
                         {
-                            Vector3 newPos = new Vector3(hatParent.transform.localPosition.x, 1.31f, hatParent.transform.localPosition.z);
-                            item.transform.localPosition = newPos;
-                        }
-                        else
-                        {
-                            item.transform.localPosition = hatParent.transform.localPosition;
-                        }
+                            case "hats":
+                                if(_mesh.sharedMaterial != null)
+                                {
+                                  item.transform.parent = hatParent;
+                                    if (maskON)
+                                    {
+                                        Vector3 newPos = new Vector3(hatParent.transform.localPosition.x, 1.31f, hatParent.transform.localPosition.z);
+                                        item.transform.localPosition = newPos;
+                                    }
+                                    else
+                                    {
+                                        item.transform.localPosition = hatParent.transform.localPosition;
+                                    }
                       
 
-                    }
-                    else
-                    {
-                        Destroy(item.gameObject);
-                    }
+                                }
+                                else
+                                {
+                                    Destroy(item.gameObject);
+                                }
                      
-                    break;
-                case "mask":
+                                break;
+                            case "mask":
 
-                    if (_mesh.sharedMaterial != null)
-                    {
-                        item.transform.parent = faceParent;
+                                if (_mesh.sharedMaterial != null)
+                                {
+                                    item.transform.parent = faceParent;
 
-                        item.transform.localPosition = faceParent.transform.localPosition;
-                    }
-                    else
-                    {
-                        Destroy(item.gameObject);
-                    }
+                                    item.transform.localPosition = faceParent.transform.localPosition;
+                                }
+                                else
+                                {
+                                    Destroy(item.gameObject);
+                                }
                     
                    
-                    break;
-                default:
-                    item.gameObject.SetActive(false);
-                    break;
-            }
+                                break;
+                            default:
+                                item.gameObject.SetActive(false);
+                                break;
+                        }
 
+                    }
         }
+        
         
        //disable whatever preview objects that is on;
         Accessory.gameObject.SetActive(false);

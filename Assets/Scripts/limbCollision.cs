@@ -6,7 +6,7 @@ public class limbCollision : MonoBehaviour
 {
     public PlayerController controller;
     public bool isFeet;
-
+    public bool detectable;
     [SerializeField] Rigidbody hip;
     [SerializeField] AudioSource bounce;
     void Start()
@@ -17,15 +17,29 @@ public class limbCollision : MonoBehaviour
     // Update is called once per frame
     private void OnCollisionEnter(Collision collision)
     {
-        
-        controller.isGrounded = true;
+        if (detectable)
+        {
+             controller.isGrounded = true;
+        }
+       
+        //Invoke("resetJump", 1f);
         if(isFeet)
         {
             if (collision.collider.CompareTag("trampline"))
             {
-                hip.AddForce(Vector3.up * 1050f, ForceMode.Impulse);
-                bounce.Play();
+                hip.AddForce(Vector3.up * 2650f, ForceMode.Impulse);
+               // bounce.Play();
             }
         }
+
+        if (collision.collider.CompareTag("Respawn"))
+        {
+            //execute reload event;
+            EventManager.reload();
+        }
+    }
+    void resetJump()
+    {
+        controller.isGrounded = true;
     }
 }
