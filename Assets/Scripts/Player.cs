@@ -22,9 +22,14 @@ public class Player : MonoBehaviour
 
     private Vector3 playerPos;
     public int speed;
+    public int jumpSpeed;
 
     private Animator _animator;
     private Rigidbody _rb;
+
+    public int numJumps;
+
+    private bool flying;
 
     // Start is called before the first frame update
     void Start()
@@ -42,18 +47,38 @@ public class Player : MonoBehaviour
     void Update()
     {
         Movement();
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            _rb.velocity = transform.up * jumpSpeed;
+            numJumps++;
+            if(numJumps == 2)
+            {
+                gameManager.Flying();
+            }
+        }
+
     }
 
     void Movement()
     {
         if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(speed, 0) * Time.deltaTime;
+            _rb.velocity = transform.right * speed;
         }
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.S))
+        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            transform.position += new Vector3(-speed, 0) * Time.deltaTime;
+            _rb.velocity = transform.right * -speed;
         }
+    }
+
+    IEnumerator Jump()
+    {
+        numJumps = 0;
+
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(Jump());
     }
 
     public void updateInventory(Inventory item)

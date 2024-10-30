@@ -25,11 +25,14 @@ public class Pet_AI : MonoBehaviour
     bool clicked;
 
     public GameObject mouseLoc;
-    private Vector3 targetPos;
+    public Transform targetPos;
     private Vector2 petToMouseVector;
     private Vector2 directionToMouse;
+    public Camera petCam;
 
-    private Rigidbody2D rb;
+    public Quaternion ogRotation;
+
+    private Rigidbody rb;
 
     public float speed;
     public float rotationSpeed;
@@ -44,7 +47,8 @@ public class Pet_AI : MonoBehaviour
     {
         _player = GameObject.FindWithTag("Player");
         gameManager = FindObjectOfType<GameManager>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
+        ogRotation = transform.rotation;
 
         stomache = 10;
         criticalHit = 1;
@@ -58,38 +62,15 @@ public class Pet_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseLoc.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
+        Vector2 mousePos = petCam.ScreenToWorldPoint(Input.mousePosition);
+        mouseLoc.transform.position = new Vector3(mousePos.x, mousePos.y, -petCam.transform.position.z);
 
         if (gameManager.gameState == GameState.Overworld)
         {
             if (asleep == false)
             {
-                if (!clicked)
-                {
-                    petToMouseVector = _player.transform.position - transform.position;
-                }
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    clicked = true;
-                    targetPos = _player.transform.position;
-                    petToMouseVector = targetPos - transform.position;
-                    speed = speed + 3;
-                    Invoke("resumeFollow", 2);
-                }
-
-                directionToMouse = petToMouseVector.normalized;
-
-                if (petToMouseVector.magnitude < .025)
-                {
-                    transform.position = _player.transform.position;
-                }
+                FollowPlayer();
             }
-        }
-        else
-        {
-            transform.position = Vector2.zero;
         }
 
         //Debug.Log(directionToMouse);
@@ -99,36 +80,10 @@ public class Pet_AI : MonoBehaviour
     
 
     #region Movement
-    void resumeFollow()
+
+    void FollowPlayer()
     {
-        speed = speed - 3;
-        clicked = false;
-    }
-
-    private void FixedUpdate()
-    {
-        SetVelocity();
-        //RotateTowardsTarget();
-    }
-
-    void RotateTowardsTarget()
-    {
-        Vector2 current = transform.forward;
-
-        transform.up = Vector3.RotateTowards(current, petToMouseVector, 20, rotationSpeed * Time.deltaTime);
-    }
-
-    void SetVelocity()
-    {
-        if(directionToMouse == Vector2.zero)
-        {
-            rb.velocity = Vector2.zero;
-        }
-
-        else
-        {
-            rb.velocity = transform.up * speed;
-        }
+        transform.position = targetPos.position;
     }
 
     #endregion

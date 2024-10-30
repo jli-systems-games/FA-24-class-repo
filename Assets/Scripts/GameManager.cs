@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public Item_Drag[] dragScript;
 
     public GameObject mainCamera;
+    public GameObject petCamera;
 
     public GameState gameState;
 
@@ -49,8 +50,12 @@ public class GameManager : MonoBehaviour
 
     void setUpOverworld()
     {
-        mainCamera.GetComponent<Camera>().orthographicSize = 5;
+        mainCamera.SetActive(true);
+        petCamera.SetActive(false);
+
         petAI.mouseLoc.SetActive(false);
+        petAI.gameObject.transform.rotation = petAI.ogRotation;
+
         for (int i = 0; i < dragScript.Length; i++)
         {
             dragScript[i].isDraggable = false;
@@ -60,9 +65,11 @@ public class GameManager : MonoBehaviour
 
     void setUpPetManager()
     {
-        petAI.gameObject.transform.position = Vector3.zero;
         petAI.mouseLoc.SetActive(true);
-        mainCamera.GetComponent<Camera>().orthographicSize = 2;
+        mainCamera.SetActive(false);
+        petCamera.SetActive(true);
+
+        petAI.gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
         for (int i = 0; i < dragScript.Length; i++)
         {
             dragScript[i].isDraggable = true;
@@ -97,5 +104,10 @@ public class GameManager : MonoBehaviour
     public void ReloadScene()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void Flying()
+    {
+
     }
 }
