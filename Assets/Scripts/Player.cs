@@ -48,11 +48,11 @@ public class Player : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.AddForce(0,0,speed);
+            transform.position += new Vector3(speed, 0) * Time.deltaTime;
         }
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.S))
         {
-            _rb.AddForce(0,0,-speed);
+            transform.position += new Vector3(-speed, 0) * Time.deltaTime;
         }
     }
 
