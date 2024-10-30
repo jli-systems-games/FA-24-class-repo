@@ -23,10 +23,16 @@ public class Player : MonoBehaviour
     private Vector3 playerPos;
     public int speed;
 
+    private Animator _animator;
+    private Rigidbody _rb;
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        _animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
+
         slotNum = 0;
 
         playerPos = transform.position;
@@ -35,27 +41,19 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-        {
-            playerPos += new Vector3(0, speed, 0) * Time.deltaTime;
-        }
+        Movement();
+    }
 
-        //if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        //{
-        //    playerPos += new Vector3(0, -speed, 0) * Time.deltaTime;
-        //}
-
-        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            playerPos += new Vector3(-speed, 0, 0) * Time.deltaTime;
-        }
-
+    void Movement()
+    {
         if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            playerPos += new Vector3(speed, 0, 0) * Time.deltaTime;
+            _rb.AddForce(0,0,speed);
         }
-
-        transform.position = playerPos;
+        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.S))
+        {
+            _rb.AddForce(0,0,-speed);
+        }
     }
 
     public void updateInventory(Inventory item)

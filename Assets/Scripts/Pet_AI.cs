@@ -50,6 +50,8 @@ public class Pet_AI : MonoBehaviour
         criticalHit = 1;
         clicked = false;
 
+        mouseLoc.SetActive(false);
+
         StartCoroutine(incrementHunger());
     }
 
@@ -65,13 +67,13 @@ public class Pet_AI : MonoBehaviour
             {
                 if (!clicked)
                 {
-                    petToMouseVector = mouseLoc.transform.position - transform.position;
+                    petToMouseVector = _player.transform.position - transform.position;
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     clicked = true;
-                    targetPos = mouseLoc.transform.position;
+                    targetPos = _player.transform.position;
                     petToMouseVector = targetPos - transform.position;
                     speed = speed + 3;
                     Invoke("resumeFollow", 2);
@@ -81,7 +83,7 @@ public class Pet_AI : MonoBehaviour
 
                 if (petToMouseVector.magnitude < .025)
                 {
-                    transform.position = mouseLoc.transform.position;
+                    transform.position = _player.transform.position;
                 }
             }
         }

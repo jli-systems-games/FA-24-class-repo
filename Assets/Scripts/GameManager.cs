@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     void setUpOverworld()
     {
         mainCamera.GetComponent<Camera>().orthographicSize = 5;
+        petAI.mouseLoc.SetActive(false);
         for (int i = 0; i < dragScript.Length; i++)
         {
             dragScript[i].isDraggable = false;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
     void setUpPetManager()
     {
         petAI.gameObject.transform.position = Vector3.zero;
+        petAI.mouseLoc.SetActive(true);
         mainCamera.GetComponent<Camera>().orthographicSize = 2;
         for (int i = 0; i < dragScript.Length; i++)
         {
