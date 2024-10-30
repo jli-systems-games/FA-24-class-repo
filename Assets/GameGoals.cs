@@ -27,9 +27,10 @@ public class GameGoals : MonoBehaviour
     {
         if (collision.gameObject.name == "Player")
         {
+            Debug.Log("goaled");
             score++;
 
-            //Destroy(this);
+            Destroy(this);
 
             GameObject goal;
 
