@@ -1,82 +1,76 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Level3Ball : MonoBehaviour
 {
-    public float initialSpeed; 
-    public float speedIncreaseFactor; 
+    public float initialSpeed;
+    public float speedIncreaseFactor;
     public Rigidbody2D rb;
-    public Vector3 startPosition; 
+    public Vector3 startPosition;
 
-    private float currentSpeed; 
-    private float timeElapsed; 
-    private int triggerCollisionCount; 
-    private int resetCount; 
+    private float currentSpeed;
+    private float timeElapsed;
+    private int triggerCollisionCount;
+    private int resetCount;
 
-    
+    private Level3Manager level3Manager;
+
     void Start()
     {
-        startPosition = transform.position; 
+        startPosition = transform.position;
         currentSpeed = initialSpeed;
-        timeElapsed = 0; 
-        triggerCollisionCount = 0; 
-        resetCount = 0; 
-        StartCoroutine(LaunchAfterDelay()); 
-    }
-
-    
-    public void Reset()
-    {     
-        rb.velocity = Vector2.zero; 
-        transform.position = startPosition; 
-        currentSpeed = initialSpeed; 
         timeElapsed = 0;
-        triggerCollisionCount = 0; 
-        resetCount++; 
-        StartCoroutine(LaunchAfterDelay()); 
+        triggerCollisionCount = 0;
+        resetCount = 0;
+        level3Manager = GameObject.Find("Level3Manager").GetComponent<Level3Manager>();
+        StartCoroutine(LaunchAfterDelay());
     }
 
-    
+    public void Reset()
+    {
+        rb.velocity = Vector2.zero;
+        transform.position = startPosition;
+        currentSpeed = initialSpeed;
+        timeElapsed = 0;
+        triggerCollisionCount = 0;
+        resetCount++;
+        StartCoroutine(LaunchAfterDelay());
+    }
+
     public int GetResetCount()
     {
-        return resetCount; 
+        return resetCount;
     }
 
-    
     private IEnumerator LaunchAfterDelay()
     {
-        yield return new WaitForSeconds(0.6f); 
+        yield return new WaitForSeconds(0.6f);
         Launch();
     }
 
-    
     private void Launch()
     {
-        float x = Random.Range(0, 2) == 0 ? -1 : 1; 
-        float y = Random.Range(0, 2) == 0 ? -1 : 1; 
-        rb.velocity = new Vector2(currentSpeed * x, currentSpeed * y); 
+        float x = Random.Range(0, 2) == 0 ? -1 : 1;
+        float y = Random.Range(0, 2) == 0 ? -1 : 1;
+        rb.velocity = new Vector2(currentSpeed * x, currentSpeed * y);
     }
 
-    
     void Update()
     {
-        timeElapsed += Time.deltaTime; 
-        currentSpeed = initialSpeed + speedIncreaseFactor * timeElapsed; 
-        rb.velocity = rb.velocity.normalized * currentSpeed; 
+        timeElapsed += Time.deltaTime;
+        currentSpeed = initialSpeed + speedIncreaseFactor * timeElapsed;
+        rb.velocity = rb.velocity.normalized * currentSpeed;
     }
 
-    
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Trigger")) 
+        if (collision.CompareTag("Trigger"))
         {
-            triggerCollisionCount++; 
-            if (triggerCollisionCount >= 3) 
+            triggerCollisionCount++;
+            if (triggerCollisionCount >= 5)
             {
-                Reset(); 
-
-               GameObject.Find("Level3Manager").GetComponent<Level3Manager>().ResetBallPrice();
+                Reset();
+                level3Manager.ReduceHealth(); 
             }
         }
     }

@@ -72,7 +72,7 @@ public class Level2Ball : MonoBehaviour
         if (collision.CompareTag("Trigger")) 
         {
             triggerCollisionCount++; 
-            if (triggerCollisionCount >= 3) 
+            if (triggerCollisionCount >= 4) 
             {
                 Reset(); 
 

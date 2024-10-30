@@ -24,13 +24,13 @@ public class Level3Goal : MonoBehaviour
             if (!isPlayer1Goal)
             {
                 Debug.Log("Player 1 Scored...");
-                GameObject.Find("Level2Manager").GetComponent<Level3Manager>().Player1Scored();
+                GameObject.Find("Level3Manager").GetComponent<Level3Manager>().Player1Scored();
                
             }
             else
             {
                 Debug.Log("Player 2 Scored...");
-                GameObject.Find("Level2Manager").GetComponent<Level3Manager>().Player2Scored();
+                GameObject.Find("Level3Manager").GetComponent<Level3Manager>().Player2Scored();
               
             }
         }

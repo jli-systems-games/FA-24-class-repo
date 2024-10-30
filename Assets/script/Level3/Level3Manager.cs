@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Level3Manager : MonoBehaviour
 {
@@ -28,9 +29,13 @@ public class Level3Manager : MonoBehaviour
     public GameObject Broke2Text;
 
     private int BallPrice = 1;
+    public Slider healthBar;
 
     void Start()
     {
+        healthBar.maxValue = 1f;
+        healthBar.value = 1f;
+
         Broke1Text.SetActive(false);
         Broke2Text.SetActive(false);
 
@@ -83,6 +88,16 @@ public class Level3Manager : MonoBehaviour
         Player2Paddle.GetComponent<Paddle>().Reset();
         LeftHand.SetActive(false);
         RightHand.SetActive(false);
+    }
+
+    public void ReduceHealth()
+    {
+        healthBar.value -= 0.33f; 
+        if (healthBar.value <= 0)
+        {
+            
+            Debug.Log("Health depleted. Game Over.");
+        }
     }
 
     public void EndLevel3()
