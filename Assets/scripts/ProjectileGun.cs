@@ -8,6 +8,9 @@ public class ProjectileGun : MonoBehaviour
     public float fireRate = 0.5f; // 射击间隔时间
     private float nextFireTime = 0f; // 下一次可以射击的时间
 
+    // 新增的旋转偏移量，可以在 Inspector 中调整
+    public Vector3 rotationOffset;
+
     void Update()
     {
         // 检测按下鼠标左键并且达到射击时间间隔
@@ -22,15 +25,14 @@ public class ProjectileGun : MonoBehaviour
     {
         // 创建子弹对象并发射
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        //*Quaternion.Euler(90, 90, 90)
 
-       // 或者，如果想要直接设置特定的方向，也可以用以下方式：
-        bullet.transform.rotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 0); // 例如旋转180度
+        // 将 rotationOffset 应用到子弹旋转上
+        bullet.transform.rotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(rotationOffset);
 
-        // 获取子弹的Rigidbody并设置速度
+        // 获取子弹的 Rigidbody 并设置速度
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.velocity = firePoint.forward * bulletSpeed; // 子弹沿着firePoint的前方方向发射
+        rb.velocity = firePoint.forward * bulletSpeed; // 子弹沿着 firePoint 的前方方向发射
 
-        Debug.Log("Bullet fired in direction: " + firePoint.forward); // 输出调试信息
+        Debug.Log("Bullet fired with rotation: " + bullet.transform.rotation.eulerAngles);
     }
 }
