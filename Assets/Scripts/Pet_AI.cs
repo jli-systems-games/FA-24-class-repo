@@ -106,14 +106,6 @@ public class Pet_AI : MonoBehaviour
         damage = (strength - hunger) * criticalHit;
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("rock"))
-        {
-            gameManager.hitRock(other.gameObject);
-        }
-    }
-
     #endregion
     private void OnTriggerEnter2D(Collider2D other)
     {

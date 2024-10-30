@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public Rock[] rocks;
     public Item_Drag[] dragScript;
 
+    public Animator petTransformAnimator;
+
     public GameObject mainCamera;
     public GameObject petCamera;
 
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        mainCamera.GetComponent<Transform>().position = new Vector3(player.transform.position.x, player.transform.position.y + 2, -6.592003f);
     }
 
     public void changeState(int state)
@@ -95,19 +97,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void hitRock(GameObject rockObj)
-    {
-        petAI.calculateDamage();
-        rockObj.GetComponent<Rock>().takeDamage(petAI.damage);
-    }
-
     public void ReloadScene()
     {
         SceneManager.LoadScene(0);
     }
 
-    public void Flying()
+    public IEnumerator Flying()
     {
+        petTransformAnimator.Play("flying");
 
+        Debug.Log("running");
+
+        yield return new WaitForSeconds(.67f);
+        petAI.targetPos.position = new Vector3(0, 41.4f, 1.5f);
+        player.flying = true;
+        Debug.Log("player flies");
     }
 }

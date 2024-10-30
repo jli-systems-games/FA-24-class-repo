@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
 
     public int numJumps;
 
-    private bool flying;
+    public bool flying;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +41,9 @@ public class Player : MonoBehaviour
         slotNum = 0;
 
         playerPos = transform.position;
+
+        flying = false;
+        StartCoroutine(Jump());
     }
 
     // Update is called once per frame
@@ -48,13 +51,14 @@ public class Player : MonoBehaviour
     {
         Movement();
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             _rb.velocity = transform.up * jumpSpeed;
             numJumps++;
-            if(numJumps == 2)
+
+            if (numJumps == 2)
             {
-                gameManager.Flying();
+                StartCoroutine(gameManager.Flying());
             }
         }
 
@@ -76,7 +80,7 @@ public class Player : MonoBehaviour
     {
         numJumps = 0;
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(.5f);
 
         StartCoroutine(Jump());
     }
