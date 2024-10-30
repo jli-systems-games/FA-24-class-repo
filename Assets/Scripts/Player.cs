@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
     public bool flying;
 
+    public bool canFall;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +45,8 @@ public class Player : MonoBehaviour
         playerPos = transform.position;
 
         flying = false;
-        StartCoroutine(Jump());
+        canFall = false;
+        //StartCoroutine(Jump());
     }
 
     // Update is called once per frame
@@ -53,14 +56,33 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            _rb.velocity = transform.up * jumpSpeed;
+                _rb.velocity = transform.up * jumpSpeed;
             numJumps++;
 
-            if (numJumps == 2)
+            if (flying == false)
             {
                 StartCoroutine(gameManager.Flying());
             }
+            if (numJumps > 5)
+            {
+                flying = false;
+                _rb.velocity = Vector3.zero;
+                gameManager.StopFlying();
+                numJumps = 0;
+            }
+            Debug.Log("flying: " + flying);
         }
+
+        if(_rb.velocity.y == 0)
+        {
+            flying = false;
+            numJumps = 0;
+        }
+        else
+        {
+            flying = true;
+        }
+        Debug.Log(numJumps);
 
     }
 
@@ -68,11 +90,30 @@ public class Player : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.velocity = transform.right * speed;
+            //transform.Rotate(new Vector3(0, -1, 0) * Time.deltaTime * speed, Space.World);
+            //_rb.velocity = transform.right * speed;
+            transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
         }
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            _rb.velocity = transform.right * -speed;
+            // transform.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * speed, Space.World);
+            //_rb.velocity = transform.right * -speed;
+            transform.position += new Vector3(-speed, 0, 0) * Time.deltaTime;
+        }
+    }
+
+    public void Fly()
+    {
+        if (numJumps > 5)
+        {
+            flying = false;
+            _rb.velocity = Vector3.zero;
+            gameManager.StopFlying();
+            numJumps = 0;
+        }
+        else
+        {
+            _rb.velocity = transform.up * jumpSpeed;
         }
     }
 

@@ -18,7 +18,7 @@ public class Pet_AI : MonoBehaviour
     private float criticalChance;
     private int criticalHit;
 
-    private float pets;
+    public float pets;
 
     public bool asleep;
 
@@ -41,6 +41,10 @@ public class Pet_AI : MonoBehaviour
     public TextMeshProUGUI confidenceMeter;
     public TextMeshProUGUI strengthMeter;
 
+    public Animator animator;
+
+    public bool flying;
+
 
     // Start is called before the first frame update
     void Start()
@@ -50,11 +54,14 @@ public class Pet_AI : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         ogRotation = transform.rotation;
 
+        animator = GetComponent<Animator>();
+
         stomache = 10;
         criticalHit = 1;
         clicked = false;
 
         mouseLoc.SetActive(false);
+        flying = false;
 
         StartCoroutine(incrementHunger());
     }
@@ -62,15 +69,12 @@ public class Pet_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 mousePos = petCam.ScreenToWorldPoint(Input.mousePosition);
-        mouseLoc.transform.position = new Vector3(mousePos.x, mousePos.y, -petCam.transform.position.z);
+        
 
         if (gameManager.gameState == GameState.Overworld)
         {
-            if (asleep == false)
-            {
                 FollowPlayer();
-            }
+            
         }
 
         //Debug.Log(directionToMouse);
@@ -146,7 +150,7 @@ public class Pet_AI : MonoBehaviour
         }
     }
 
-    private IEnumerator increaseConfidence()
+    public IEnumerator increaseConfidence()
     {
         yield return new WaitForSeconds(5f);
 
