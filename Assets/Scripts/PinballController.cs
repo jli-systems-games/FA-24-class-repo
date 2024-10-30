@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PinballController : MonoBehaviour
 {
+    public CameraController cameraController;
     public GameObject ball, barrier;
 
     [Header("UI Elements")]
@@ -48,11 +49,6 @@ public class PinballController : MonoBehaviour
         ballRigidbody.AddForce(randomForce, ForceMode.Impulse);
     }
 
-    public void ScreenShake()
-    {
-
-    }
-
     private void OnButtonClick()
     {
         if (!cooldown)
@@ -64,7 +60,7 @@ public class PinballController : MonoBehaviour
     public void ShakeMachine()
     {
         LaunchBall();
-        ScreenShake();
+        StartCoroutine(cameraController.Shake(0.1f, 0.1f));
     }
 
     public IEnumerator ButtonCooldown()

@@ -1933,6 +1933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7846ddd3258e44feb6394e3e11397d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraController: {fileID: 963194229}
   ball: {fileID: 429743952}
   barrier: {fileID: 1865200614}
   customizer: {fileID: 1673408896}
@@ -3115,23 +3116,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 366824241}
         m_TargetAssemblyTypeName: PinballController, Assembly-CSharp
-        m_MethodName: LaunchBall
+        m_MethodName: ShakeMachine
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 366824240}
-        m_TargetAssemblyTypeName: PinballController, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4292,7 +4281,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1bbc80a6cecc4997a072b2f5fd0099a, type: 3}
+  m_Script: {fileID: 11500000, guid: 703eb96f6d3ad466abd0bb9b59696a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationDuration: 1
@@ -7581,7 +7570,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 963194229}
-        m_TargetAssemblyTypeName: CameraRotation, Assembly-CSharp
+        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
         m_MethodName: StartRotation
         m_Mode: 1
         m_Arguments:
