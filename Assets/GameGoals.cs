@@ -15,6 +15,7 @@ public class GameGoals : MonoBehaviour
     void Start()
     {
         score = 0;
+        SpawnGoal();
     }
 
     // Update is called once per frame
@@ -23,18 +24,13 @@ public class GameGoals : MonoBehaviour
 
     }
 
-    public void OnCollisionEnter(Collision collision)
+
+    public void SpawnGoal()
     {
-        if (collision.gameObject.name == "Player")
-        {
-            Debug.Log("goaled");
-            score++;
+        GameObject goal;
 
-            Destroy(this);
-
-            GameObject goal;
-
-            goal = Instantiate(goalPrefab, goalLocations[Random.Range(0, goalLocations.Count)].position, Quaternion.identity);
-        }
+        goal = Instantiate(goalPrefab, goalLocations[Random.Range(0, goalLocations.Count)].position, Quaternion.identity);
     }
+
+
 }
