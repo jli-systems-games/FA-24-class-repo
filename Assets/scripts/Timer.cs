@@ -10,7 +10,7 @@ public class Timer : MonoBehaviour
 
     [SerializeField] GameObject partyModeButton;
     [SerializeField] float partyTime = 30f;
-    [SerializeField] float buttonDisplayTime = 1.5f;
+    [SerializeField] float buttonDisplayTime = 2f;
 
     private bool partyModeActive = false;
     private bool buttonDisplayedOnce = false;
@@ -18,6 +18,7 @@ public class Timer : MonoBehaviour
     public GameObject winningPanel;
     public GameObject endingPanel;
     public Event_Sim simScript;
+    public GameObject discoBall;
 
     // Update is called once per frame
     void Update()
@@ -60,7 +61,7 @@ public class Timer : MonoBehaviour
     {
         partyModeActive = true;
         partyModeButton.SetActive(false);
-        // disco ball
+        discoBall.SetActive(true);
     }
 
     void CheckGameResult()
@@ -70,12 +71,14 @@ public class Timer : MonoBehaviour
             if (simScript.needHunger > 0 && simScript.needEnergy > 0 && simScript.needEntertainment > 0)
             {
                 winningPanel.SetActive(true);
+                endingPanel.SetActive(false);
             }
-            else
+
+            else if (simScript.needHunger == 0 || simScript.needEnergy == 0 || simScript.needEntertainment == 0)
             {
                 endingPanel.SetActive(true);
+                winningPanel.SetActive(false);
             }
         }
     }
-
 }

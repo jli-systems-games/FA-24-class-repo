@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public enum SimState
 {
@@ -39,6 +40,7 @@ public class Event_Sim : MonoBehaviour
     public AudioClip feedSound;
     public AudioClip energySound;
     public AudioClip entertainmentSound;
+    public TextMeshProUGUI timerText;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +59,7 @@ public class Event_Sim : MonoBehaviour
 
         if (alive == true)
         {
-            StartCoroutine(PassiveHunger(.8f));
+            StartCoroutine(PassiveHunger(.08f));
             StartCoroutine(PassiveEnergy(.5f));
             StartCoroutine(PassiveEntertainment(.3f));
         }
@@ -81,6 +83,7 @@ public class Event_Sim : MonoBehaviour
     {
         gameObject.SetActive(false);
         SetButtonsInteractable(false);
+        timerText.enabled = false;
 
         endPanel.SetActive(true);
     }
@@ -134,14 +137,14 @@ public class Event_Sim : MonoBehaviour
         {
             if(state == SimState.Asleep)
             {
-                StartCoroutine(PassiveHunger(2.1f));
+                StartCoroutine(PassiveHunger(.021f * (needEnergy + 10)));
             }
             else if(state == SimState.Eating)
             {
                 // do smth
             }
             else
-                StartCoroutine(PassiveHunger(.7f));
+                StartCoroutine(PassiveHunger(.007f * (needEnergy + 10)));
         }
     }
 
@@ -152,7 +155,7 @@ public class Event_Sim : MonoBehaviour
         NeedChangeEnergy(-1f);
 
         if (alive == true)
-            StartCoroutine(PassiveEnergy(.4f));
+            StartCoroutine(PassiveEnergy(.004f * (needEnergy + 10)));
     }
 
     IEnumerator PassiveEntertainment(float waitTime)
@@ -162,7 +165,7 @@ public class Event_Sim : MonoBehaviour
         NeedChangeEntertainment(-1f);
 
         if (alive == true)
-            StartCoroutine(PassiveEntertainment(.3f));
+            StartCoroutine(PassiveEntertainment(.003f * (needEnergy + 5)));
     }
 
     #endregion
