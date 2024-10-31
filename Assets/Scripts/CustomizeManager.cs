@@ -38,19 +38,30 @@ public class CustomizeManager : MonoBehaviour
     public Button[] knifeButtons;             // Buttons for selecting knives
     public Button backButton;                 // Button to go back to knife selection
 
+    [Header("Audio")]
+    public AudioSource buttonSound;           // Audio source for button click sound
+
     void Start()
     {
-        ShowKnifeSelectionPanel();  // Start with knife selection
-        InitializeButtons();        // Set up button listeners
-        SetupKnifeButtons();        // Setup knife selection buttons
+        ShowKnifeSelectionPanel();
+        InitializeButtons();
+        SetupKnifeButtons();
 
-        selectedKnifeIndex = 0;      // Ensure we're showing the first knife
-        UpdatePreview();             // Display the first knife in the preview
-        UpdateCustomizationButtons(); // Set up the customization buttons for the first knife
+        selectedKnifeIndex = 0;
+        UpdatePreview();
+        UpdateCustomizationButtons();
 
         // Hide overlays initially
         colorOverlay.enabled = false;
         engravingOverlay.enabled = false;
+    }
+
+    private void PlayButtonSound()
+    {
+        if (buttonSound != null)
+        {
+            buttonSound.Play();
+        }
     }
 
     private void InitializeButtons()
@@ -58,39 +69,52 @@ public class CustomizeManager : MonoBehaviour
         for (int i = 0; i < colorButtons.Length; i++)
         {
             int index = i; // Capture the index for the listener
-            colorButtons[i].onClick.AddListener(() => OnColorButtonClick(index));
+            colorButtons[i].onClick.AddListener(() => {
+                OnColorButtonClick(index);
+                PlayButtonSound(); // Ensure sound plays on color selection
+            });
         }
 
         for (int i = 0; i < engravingButtons.Length; i++)
         {
             int index = i; // Capture the index for the listener
-            engravingButtons[i].onClick.AddListener(() => OnEngravingButtonClick(index));
+            engravingButtons[i].onClick.AddListener(() => {
+                OnEngravingButtonClick(index);
+                PlayButtonSound(); // Ensure sound plays on engraving selection
+            });
         }
 
-        confirmButton.onClick.AddListener(OnConfirmButtonClick);
-        nextButton.onClick.AddListener(OnNextButtonClick);
-        backButton.onClick.AddListener(OnBackButtonClick);  // Set up Back button listener
+        confirmButton.onClick.AddListener(() => {
+            OnConfirmButtonClick();
+            PlayButtonSound();
+        });
+        nextButton.onClick.AddListener(() => {
+            OnNextButtonClick();
+            PlayButtonSound();
+        });
+        backButton.onClick.AddListener(() => {
+            OnBackButtonClick();
+            PlayButtonSound();
+        });
     }
 
     private void SetupKnifeButtons()
     {
         for (int i = 0; i < knives.Count; i++)
         {
-            int index = i; // Capture index for the listener
-            knifeButtons[i].onClick.AddListener(() => OnKnifeButtonClick(index));
+            int index = i;
+            knifeButtons[i].onClick.AddListener(() => {
+                OnKnifeButtonClick(index);
+                PlayButtonSound();  // Play sound on knife selection
+            });
         }
     }
 
-    // Knife Selection
     public void OnKnifeButtonClick(int knifeIndex)
     {
         selectedKnifeIndex = knifeIndex;
-
-        // Reset color and engraving indices to -1 for the new knife
         selectedColorIndex = -1;
         selectedEngravingIndex = -1;
-
-        // Hide the overlays until a color or engraving is selected
         colorOverlay.enabled = false;
         engravingOverlay.enabled = false;
 
@@ -100,32 +124,32 @@ public class CustomizeManager : MonoBehaviour
 
     public void OnNextButtonClick()
     {
-        knifeSelectionPanel.SetActive(false); // Hide knife selection panel
-        customizationPanel.SetActive(true);   // Show customization options
+        knifeSelectionPanel.SetActive(false);
+        customizationPanel.SetActive(true);
         UpdatePreview();
     }
 
     public void OnBackButtonClick()
     {
-        customizationPanel.SetActive(false); // Hide customization panel
-        knifeSelectionPanel.SetActive(true); // Show knife selection panel
+        customizationPanel.SetActive(false);
+        knifeSelectionPanel.SetActive(true);
     }
 
-    // Color Selection (handles sprite overlay for color)
     public void OnColorButtonClick(int colorIndex)
     {
+        PlayButtonSound();
         selectedColorIndex = colorIndex;
         colorOverlay.sprite = knives[selectedKnifeIndex].colorOverlays[selectedColorIndex];
-        colorOverlay.enabled = true; // Enable color overlay only after selection
+        colorOverlay.enabled = true;
         UpdatePreview();
     }
 
-    // Engraving Selection (handles sprite overlay for engraving)
     public void OnEngravingButtonClick(int engravingIndex)
     {
+        PlayButtonSound();
         selectedEngravingIndex = engravingIndex;
         engravingOverlay.sprite = knives[selectedKnifeIndex].engravingOverlays[selectedEngravingIndex];
-        engravingOverlay.enabled = true; // Enable engraving overlay only after selection
+        engravingOverlay.enabled = true;
         UpdatePreview();
     }
 
@@ -136,7 +160,7 @@ public class CustomizeManager : MonoBehaviour
         Sprite engravingOverlay = selectedEngravingIndex >= 0 ? knives[selectedKnifeIndex].engravingOverlays[selectedEngravingIndex] : null;
 
         CustomizationData.instance.SetCustomization(selectedKnifeIndex, baseKnife, colorOverlay, engravingOverlay);
-        SceneManager.LoadScene("Game Scene"); // Replace "Game Scene" with your actual scene name
+        SceneManager.LoadScene("Game Scene"); // Replace with actual scene name
     }
 
     private void ShowKnifeSelectionPanel()
@@ -148,8 +172,6 @@ public class CustomizeManager : MonoBehaviour
     private void UpdatePreview()
     {
         knifePreview.sprite = knives[selectedKnifeIndex].baseKnife;
-
-        // Only enable overlays if a selection is made
         colorOverlay.enabled = selectedColorIndex >= 0;
         engravingOverlay.enabled = selectedEngravingIndex >= 0;
     }

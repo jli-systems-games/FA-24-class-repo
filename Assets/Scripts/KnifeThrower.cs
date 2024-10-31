@@ -92,7 +92,7 @@ public class KnifeThrower : MonoBehaviour
 
     private void ThrowKnife(Vector3 start, Vector3 end, float dragDistance)
     {
-        rb.isKinematic = false;
+        rb.isKinematic = false; // Make sure the knife can be affected by physics
 
         Vector2 throwDirection = (end - start).normalized;
         float throwForce = Mathf.Clamp(dragDistance, minThrowForce, maxThrowForce);
@@ -101,7 +101,11 @@ public class KnifeThrower : MonoBehaviour
 
         float baseSpinSpeed = 720f;
         rb.angularVelocity = baseSpinSpeed;
-        rb.AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.down * 9.8f, ForceMode2D.Force); // Adjust force for stronger gravity effect
+
+        // Simulate air resistance by reducing angular velocity over time
+        rb.drag = 0.1f;           // Linear drag for slowing down motion
+        rb.angularDrag = 1.0f;     // Angular drag for slowing rotation
     }
 
     public void StopKnife()
