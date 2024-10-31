@@ -4,29 +4,30 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    public GameGoals gg;
+    public GameObject parent;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        parent = GameObject.Find("Canvas2");
     }
 
-    // Update is called once per frame
+    // Update is called once p//er frame
     void Update()
     {
 
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Player")
-        {
-            Debug.Log("goaled");
-            gg.score++;
 
-            gg.SpawnGoal();
-            Destroy(this);
-        }
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("goaled");
+        GameGoals.score++;
+
+        parent.GetComponent<GameGoals>().SpawnGoal();
+        //parent.GetComponent<GameGoals>().Collected();
+
+        Destroy(gameObject);
+
     }
 }

@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     //dashing
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 35f;
+    private float dashingPower = 50f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 0.3f;
 
@@ -59,10 +59,6 @@ public class PlayerMovement : MonoBehaviour
     private bool colorOne;
     private bool colorTwo;
 
-    //2 floors
-    public List<GameObject> walls = new();
-    public GameObject cam1;
-    public GameObject cam2;
 
     private void Start()
     {
@@ -76,9 +72,6 @@ public class PlayerMovement : MonoBehaviour
 
         sr.color = new Color(1, 1, 1);
         sr2.color = new Color(1, 1, 1);
-
-        cam1.SetActive(true);
-        cam2.SetActive(false);
     }
 
     void Update()
@@ -88,18 +81,13 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (IsGrounded())
-        {
-            Debug.Log("grounded");
-        }
-
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (Input.GetButton("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
-        if (Input.GetButtonDown("Jump") && IsCeilinged())
+        if (Input.GetButton("Jump") && IsCeilinged())
         {
             rb.velocity = new Vector2(rb.velocity.x, -jumpingPower);
         }
@@ -137,16 +125,7 @@ public class PlayerMovement : MonoBehaviour
 
         Flip();
 
-        if (rb.position.y < -10f)
-        {
-            cam1.SetActive(false);
-            cam2.SetActive(true);
 
-            foreach (GameObject item in walls)
-            {
-                item.SetActive(true);
-            }
-        }
 
     }
     private void FixedUpdate()
@@ -179,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(1f, 0.627f, 0.063f);
 
@@ -194,6 +174,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(0.612f, 1f, 0.016f);
 
@@ -208,6 +189,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = -3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(0.106f, 0.631f, 0.82f);
 
@@ -221,7 +203,8 @@ public class PlayerMovement : MonoBehaviour
             pink = true;
 
             rb.gravityScale = 3f;
-            speed = 16f;
+            speed = 12f;
+            jumpingPower = 14f;
 
             sr.color = new Color(0.898f, 0.478f, 0.961f);
 
@@ -236,6 +219,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(1, 1, 1);
         }
@@ -273,6 +257,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(1f, 0.627f, 0.063f);
 
@@ -288,6 +273,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(0.612f, 1f, 0.016f);
 
@@ -302,6 +288,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = -3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(0.106f, 0.631f, 0.82f);
 
@@ -316,6 +303,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 16f;
+            jumpingPower = 15f;
 
             sr.color = new Color(0.898f, 0.478f, 0.961f);
 
@@ -330,6 +318,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.gravityScale = 3f;
             speed = 8f;
+            jumpingPower = 10f;
 
             sr.color = new Color(1, 1, 1);
         }
@@ -580,21 +569,4 @@ public class PlayerMovement : MonoBehaviour
         twoPink = true;
     }
 
-    //entrance
-
-    public void Entrance()
-    {
-        foreach (GameObject item in walls)
-        {
-            item.SetActive(false);
-        }
-    }
-
-    public void Closure()
-    {
-        foreach (GameObject item in walls)
-        {
-            item.SetActive(true);
-        }
-    }
 }
