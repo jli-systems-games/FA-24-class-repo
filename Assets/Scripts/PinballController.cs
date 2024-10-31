@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PinballController : MonoBehaviour
 {
-    public CameraController cameraController;
+    private CameraController cameraController;
+
     public GameObject ball, barrier;
 
     [Header("UI Elements")]
@@ -19,6 +20,8 @@ public class PinballController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cameraController = FindObjectOfType<CameraController>();
+
         shakeButton.onClick.AddListener(OnButtonClick);
     }
 
@@ -30,7 +33,7 @@ public class PinballController : MonoBehaviour
 
     public void StartGame()
     {
-        ball.transform.position = new Vector3(0, 4, 31.5f);
+        ball.transform.position = new Vector3(0, 3.5f, 31.5f);
         LaunchBall();
 
         barrier.SetActive(true);
@@ -49,6 +52,8 @@ public class PinballController : MonoBehaviour
         Vector3 randomForce = new Vector2(randomX, randomY).normalized * 10;
         ballRigidbody.AddForce(randomForce, ForceMode.Impulse);
     }
+
+    #region Shake Machine
 
     private void OnButtonClick()
     {
@@ -75,6 +80,7 @@ public class PinballController : MonoBehaviour
         cooldown = false;
     }
 
+    #endregion
 
     public void ResetGame()
     {
