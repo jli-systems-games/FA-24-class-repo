@@ -22,6 +22,10 @@ public class KnifeThrower : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     private bool isStopped = false;
+    private Target targetScript;
+
+    // Public property for access
+    public bool IsStopped => isStopped;
 
     private void Start()
     {
@@ -31,12 +35,14 @@ public class KnifeThrower : MonoBehaviour
         initialPosition = transform.position;
         initialRotation = transform.rotation;
 
+        targetScript = FindObjectOfType<Target>();
+
         bladeColliderKnife1.SetActive(false);
         bladeColliderKnife2.SetActive(false);
         bladeColliderKnife3.SetActive(false);
 
         int knifeIndex = CustomizationData.instance != null ? CustomizationData.instance.selectedKnifeIndex : 0;
-        SetSelectedKnife(knifeIndex);  // Activates the correct blade collider
+        SetSelectedKnife(knifeIndex);
     }
 
     public void SetSelectedKnife(int knifeIndex)
@@ -80,68 +86,66 @@ public class KnifeThrower : MonoBehaviour
                     ThrowKnife(startDragPosition, endDragPosition, dragDistance);
                 }
             }
-
-            // Restrict rotation to the Z-axis only
             transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z);
         }
     }
 
     private void ThrowKnife(Vector3 start, Vector3 end, float dragDistance)
     {
-        rb.isKinematic = false; // Make sure the knife can be affected by physics
+        rb.isKinematic = false;
 
         Vector2 throwDirection = (end - start).normalized;
         float throwForce = Mathf.Clamp(dragDistance, minThrowForce, maxThrowForce);
 
-        // Apply forward velocity based on throw force
         rb.velocity = throwDirection * throwForce;
 
-        // Set a moderate spin speed for the knife
-        float baseSpinSpeed = 720f; // 720 degrees per second for 2 full rotations
-        rb.angularVelocity = baseSpinSpeed; // Apply the initial spin
-
-        // Adjust the knife’s trajectory
-        rb.AddForce(Vector2.down * 5f, ForceMode2D.Impulse); // Apply a downward force to counteract floatiness
+        float baseSpinSpeed = 720f;
+        rb.angularVelocity = baseSpinSpeed;
+        rb.AddForce(Vector2.down * 5f, ForceMode2D.Impulse);
     }
 
     public void StopKnife()
     {
-        if (isStopped) return; // Prevent multiple calls
+        if (isStopped) return;
 
-        isStopped = true; // Mark knife as stopped
+        isStopped = true;
 
         Debug.Log("Stopping knife...");
 
-        // Stop all movement and rotation
-        rb.velocity = Vector2.zero;            // Stop linear movement
-        rb.angularVelocity = 0;                // Stop rotation
-        rb.isKinematic = true;                 // Disable further physics interactions
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
+        rb.isKinematic = true;
 
-        // Optionally, reset immediately or after a delay
+        if (targetScript != null)
+        {
+            targetScript.SetPaused(true);
+        }
+
         StartCoroutine(WaitAndReset());
     }
 
     private IEnumerator WaitAndReset()
     {
-        yield return new WaitForSeconds(1f); // Wait for a moment before resetting
-        ResetKnife(); // Call the reset method
+        yield return new WaitForSeconds(1f);
+        ResetKnife();
     }
 
-    // Method to reset the knife's position and state
     public void ResetKnife()
     {
-        // Reset the knife's position and rotation
-        transform.position = initialPosition; // Reset to initial position
-        transform.rotation = initialRotation; // Reset rotation
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
 
-        // Reset Rigidbody2D properties
-        rb.isKinematic = true; // Set Rigidbody to kinematic to stop all movement
-        rb.velocity = Vector2.zero; // Ensure velocity is zero
-        rb.angularVelocity = 0; // Ensure angular velocity is zero
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
 
-        // Reset the isStopped flag
-        isStopped = false; // Allow the knife to be thrown again
+        isStopped = false;
 
         Debug.Log("Knife has been reset.");
+
+        if (targetScript != null)
+        {
+            targetScript.SetPaused(false);
+        }
     }
 }

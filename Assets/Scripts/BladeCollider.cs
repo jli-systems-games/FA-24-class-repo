@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BladeCollider : MonoBehaviour
 {
-    private KnifeThrower knifeThrower;
+     private KnifeThrower knifeThrower;
 
     private void Start()
     {
@@ -17,20 +17,22 @@ public class BladeCollider : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log($"Collided with: {collision.gameObject.name}"); // Debug log
+        Debug.Log($"Collided with: {collision.gameObject.name}");
 
-        if (collision.gameObject.CompareTag("Target")) // If it hits the target
+        if (collision.gameObject.CompareTag("OuterTarget") || collision.gameObject.CompareTag("Bullseye"))
         {
-            Debug.Log("Blade collider touched the target");  // Confirm collision with target
-            knifeThrower.StopKnife(); // Stop the knife
-            transform.SetParent(collision.transform); // Stick to the target
-            transform.localPosition = Vector3.zero; // Align knife to target
-            transform.localRotation = Quaternion.identity; // Reset rotation
+            Debug.Log("Blade collider touched the target");
+            knifeThrower.StopKnife();
         }
-        else // If it hits walls or other colliders
+        else if (collision.gameObject.CompareTag("Wall")) // Check if it collides with a wall
         {
-            Debug.Log("Knife hit a wall or other collider. Resetting...");
-            knifeThrower.ResetKnife(); // Reset the knife immediately
+            Debug.Log("Knife hit a wall. Resetting...");
+            knifeThrower.ResetKnife(); // Reset the knife when it hits a wall
+        }
+        else
+        {
+            Debug.Log("Knife hit an unknown object. Resetting...");
+            knifeThrower.ResetKnife(); // Reset for any other unexpected collision
         }
     }
 }
