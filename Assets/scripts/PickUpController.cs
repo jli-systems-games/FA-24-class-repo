@@ -15,6 +15,10 @@ public class PickUpController : MonoBehaviour
 
     private Vector3 originalScale; // 保存原始缩放值
 
+    // 上膛音效
+    public AudioClip reloadSound;
+    private AudioSource audioSource;
+
     private void Start()
     {
         // 初始化静态变量和状态
@@ -23,6 +27,10 @@ public class PickUpController : MonoBehaviour
 
         // 保存枪的初始缩放值
         originalScale = transform.localScale;
+
+        // 添加 AudioSource 组件并设置初始参数
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
 
         // 初始化枪的状态
         if (!equipped)
@@ -76,6 +84,12 @@ public class PickUpController : MonoBehaviour
 
         // 启用枪的脚本功能
         gunScript.enabled = true;
+
+        // 播放上膛音效
+        if (reloadSound != null)
+        {
+            audioSource.PlayOneShot(reloadSound);
+        }
 
         // 更新当前选中的枪
         GunManager.SetSelectedGun(gameObject);

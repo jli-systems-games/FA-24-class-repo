@@ -8,7 +8,16 @@ public class TriggerDoorController : MonoBehaviour
     [SerializeField] private bool openTrigger = false; // 是否触发开门
     [SerializeField] private bool closeTrigger = false; // 是否触发关门
 
+    public AudioClip closeSound; // 关门音效
+    private AudioSource audioSource; // 音频播放器
 
+    private void Start()
+    {
+        // 添加 AudioSource 组件并设置
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.clip = closeSound;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -29,6 +38,13 @@ public class TriggerDoorController : MonoBehaviour
                     // 播放关门动画
                     myDoor.Play("door_close", 0, 0.0f);
                     gameObject.SetActive(false); // 触发器禁用
+
+                    // 启用音频源并播放关门音效
+                    if (closeSound != null)
+                    {
+                        audioSource.enabled = true; // 确保 AudioSource 启用
+                        audioSource.PlayOneShot(closeSound);
+                    }
                 }
             }
             else

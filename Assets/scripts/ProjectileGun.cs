@@ -11,6 +11,18 @@ public class ProjectileGun : MonoBehaviour
     // 新增的旋转偏移量，可以在 Inspector 中调整
     public Vector3 rotationOffset;
 
+    // 射击音效
+    public AudioClip shootSound;
+    private AudioSource audioSource; // 音频播放器
+
+    void Start()
+    {
+        // 创建 AudioSource 组件并设置
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.clip = shootSound;
+    }
+
     void Update()
     {
         // 检测按下鼠标左键并且达到射击时间间隔
@@ -32,6 +44,13 @@ public class ProjectileGun : MonoBehaviour
         // 获取子弹的 Rigidbody 并设置速度
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.velocity = firePoint.forward * bulletSpeed; // 子弹沿着 firePoint 的前方方向发射
+
+
+        // 播放射击音效
+        if (shootSound != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
 
         Debug.Log("Bullet fired with rotation: " + bullet.transform.rotation.eulerAngles);
     }

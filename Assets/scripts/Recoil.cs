@@ -30,8 +30,11 @@ public class Recoil : MonoBehaviour
     {
         isRecoiling = true;
 
-        // 应用后坐力
-        Vector3 recoilOffset = Vector3.back * recoilAmount; // 后坐力方向
+        // 随机选择向右或向上偏移
+        Vector3 recoilDirection = Random.Range(0, 2) == 0 ? Vector3.right : Vector3.up;
+        Vector3 recoilOffset = recoilDirection * recoilAmount;
+
+        // 将后坐力方向应用到枪的当前位置
         gunTransform.localPosition += recoilOffset;
 
         yield return new WaitForSeconds(0.05f); // 短暂停留时间以增强效果
