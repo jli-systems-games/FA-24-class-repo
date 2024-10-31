@@ -22,12 +22,15 @@ public class GameManager : MonoBehaviour
 
     public GameState gameState;
 
+    public bool flyingTransition;
+
     // Start is called before the first frame update
     void Start()
     {
         rocks = FindObjectsOfType<Rock>();
         dragScript = FindObjectsOfType<Item_Drag>();
         //changeState(1);
+        flyingTransition = false;
     }
 
     // Update is called once per frame
@@ -112,8 +115,9 @@ public class GameManager : MonoBehaviour
     #region flying
     public IEnumerator Flying()
     {
+        flyingTransition = true;
         petAI.animator.Play("Fly");
-        petTransformAnimator.Play("flying");
+        //petTransformAnimator.Play("flying");
         player.flying = true;
 
         Debug.Log("running");
@@ -124,8 +128,10 @@ public class GameManager : MonoBehaviour
         //while(player.flying == true)
         //{
         petAI.flying = true;
-        petAI.targetPos.position = new Vector3(0, 41.4f, 1.5f);
+        //petAI.targetPos.position = new Vector3(0, 41.4f, 1.5f);
         //}
+        flyingTransition = false;
+        player.canFall = true;
         Debug.Log("player flies");
     }
 
@@ -133,7 +139,7 @@ public class GameManager : MonoBehaviour
     {
         petAI.animator.Play("Bounce");
         //Debug.Log("hello");
-        petAI.targetPos.position = new Vector3(0, .3f, -24.2f);
+        //petAI.targetPos.position = new Vector3(0, .3f, -24.2f);
         petAI.flying = false;
     }
     #endregion

@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
 
     public bool canFall;
 
+    public Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,23 +61,27 @@ public class Player : MonoBehaviour
                 _rb.velocity = transform.up * jumpSpeed;
             numJumps++;
 
-            if (flying == false)
+            if (canFall == false && gameManager.flyingTransition == false)
             {
                 StartCoroutine(gameManager.Flying());
             }
+            else
+            {
+
+            }
             if (numJumps > 5)
             {
-                flying = false;
                 _rb.velocity = Vector3.zero;
                 gameManager.StopFlying();
-                numJumps = 0;
             }
             Debug.Log("flying: " + flying);
         }
 
-        if(_rb.velocity.y == 0)
+        if(_rb.velocity.y == 0 && canFall == true)
         {
             flying = false;
+            gameManager.StopFlying();
+            canFall = false;
             numJumps = 0;
         }
         Debug.Log(numJumps);
@@ -91,6 +97,7 @@ public class Player : MonoBehaviour
             Vector3 rotationVector = new Vector3(0, 90, 0);
             Quaternion rotation = Quaternion.Euler(rotationVector);
             transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
+            animator.Play("walking");
         }
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
@@ -99,6 +106,12 @@ public class Player : MonoBehaviour
             Vector3 rotationVector = new Vector3(0, 270, 0);
             Quaternion rotation = Quaternion.Euler(rotationVector);
             transform.position += new Vector3(-speed, 0, 0) * Time.deltaTime;
+            animator.Play("walking");
+        }
+
+        if(Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
+        {
+            animator.Play("still");
         }
     }
 
