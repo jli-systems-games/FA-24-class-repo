@@ -62,10 +62,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        Begin();
+    }
+
+    private void Begin()
+    {
         orange = false;
+        oneOrange = false;
+        twoOrange = false;
         green = false;
+        oneGreen = false;
+        twoGreen = false;
         blue = false;
+        oneBlue = false;
+        twoBlue = false;
         pink = false;
+        onePink = false;
+        twoPink = false;
 
         rb.gravityScale = 3f;
         speed = 8f;

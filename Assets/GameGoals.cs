@@ -16,14 +16,18 @@ public class GameGoals : MonoBehaviour
     //2 floors
     public List<GameObject> walls = new();
     public List<GameObject> walls2 = new();
+    public List<GameObject> walls3 = new();
 
     //DISPLAY SCORE
 
     public static int score = 0;
+    public static int highscore = 0;
+
     public GameObject csText;
+    public GameObject hsText;
 
     public GameObject player;
-    public GameObject board;
+    //public GameObject board;
 
     //SPAWN GOALS
     private int random;
@@ -45,23 +49,32 @@ public class GameGoals : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        BeginRoom3();
+        highscore = 0;
+    }
+
+    private void BeginRoom3()
+    {
         score = 0;
+
         spawning = false;
-        room1Begin = false;
+        room1Begin = true;
         room2Begin = false;
         room3Begin = false;
         //reset bools when restarting game
 
-        cam1.SetActive(true);
-        cam2.SetActive(false);
-        cam3.SetActive(false);
+        //cam1.SetActive(true);
+        //cam2.SetActive(false);
+        //cam3.SetActive(false);
     }
 
     void Update()
     {
         DisplayScore();
+        HighScore();
         DisplayTime();
 
+        //player fals into room 2
         if (player.transform.position.y < -10f && !room2Begin)
         {
             TimerBegin();
@@ -78,13 +91,35 @@ public class GameGoals : MonoBehaviour
             }
         }
 
+        //player falls into room 3
         if (player.transform.position.y < -32f && !room3Begin)
         {
             cam2.SetActive(false);
             cam3.SetActive(true);
+
+
+
             room3Begin = true;
 
             foreach (GameObject item in walls2)
+            {
+                item.SetActive(true);
+            }
+        }
+
+        //player plays again
+        if (player.transform.position.y < -51f)
+        {
+            player.transform.position = new Vector3(-12.61f, 6f, 0f);
+        }
+
+        if (player.transform.position.y < 4f && !room1Begin)
+        {
+            BeginRoom3();
+            cam1.SetActive(true);
+            cam3.SetActive(false);
+            room1Begin = true;
+            foreach (GameObject item in walls3)
             {
                 item.SetActive(true);
             }
@@ -96,6 +131,7 @@ public class GameGoals : MonoBehaviour
     void DisplayScore()
     {
         csText.GetComponent<TextMeshProUGUI>().text = score.ToString();
+        hsText.GetComponent<TextMeshProUGUI>().text = highscore.ToString();
     }
 
     //GOALS
@@ -157,9 +193,20 @@ public class GameGoals : MonoBehaviour
             item.SetActive(false);
         }
 
-        board.GetComponent<Leaderboard>().GetScore();
+        //board.GetComponent<Leaderboard>().GetScore();
     }
 
+    private void HighScore()
+    {
+        if (score > highscore)
+        {
+            highscore = score;
+        }
+        //else
+        //{
+        //    highscore = highscore;
+        //}
+    }
 
     //entrance
 
@@ -176,6 +223,16 @@ public class GameGoals : MonoBehaviour
         foreach (GameObject item in walls)
         {
             item.SetActive(true);
+        }
+    }
+
+    //play again
+    public void PlayAgain()
+    {
+        room1Begin = false;
+        foreach (GameObject item in walls3)
+        {
+            item.SetActive(false);
         }
     }
 }
