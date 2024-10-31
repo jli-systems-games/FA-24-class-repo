@@ -177,14 +177,14 @@ public class BallCustomizer : MonoBehaviour
             if (material != null)
             {
                 material.bounciness = sliders[2].value;
-                material.bounciness = Mathf.Clamp(material.bounciness, 0f, 1f);
+                material.bounciness = Mathf.Clamp(material.bounciness, 0f, 10f);
             }
         }
 
         if (ballRigidbody != null && sliders[3].gameObject.activeSelf) // Drag
         {
             float dragValue = sliders[3].value;
-            ballRigidbody.drag = Mathf.Clamp(dragValue, 0f, 10f);
+            ballRigidbody.drag = Mathf.Clamp(dragValue, 0f, 0.5f);
         }
 
         if (ballRenderer != null && sliders[4].gameObject.activeSelf) // Color

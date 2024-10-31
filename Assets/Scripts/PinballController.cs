@@ -41,6 +41,7 @@ public class PinballController : MonoBehaviour
     {
         Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
         ballRigidbody.useGravity = true;
+
         float randomX = Random.Range(-1f, 1f);
         float randomY = Random.Range(0.5f, 1f);
         //float randomZ = Random.Range(-1f, 1f);
