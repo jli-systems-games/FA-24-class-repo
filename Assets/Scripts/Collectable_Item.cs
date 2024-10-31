@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class Collectable_Item : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Inventory item;
+    public GameObject eIndicator;
 }

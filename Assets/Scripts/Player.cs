@@ -78,10 +78,6 @@ public class Player : MonoBehaviour
             flying = false;
             numJumps = 0;
         }
-        else
-        {
-            flying = true;
-        }
         Debug.Log(numJumps);
 
     }
@@ -92,12 +88,16 @@ public class Player : MonoBehaviour
         {
             //transform.Rotate(new Vector3(0, -1, 0) * Time.deltaTime * speed, Space.World);
             //_rb.velocity = transform.right * speed;
+            Vector3 rotationVector = new Vector3(0, 90, 0);
+            Quaternion rotation = Quaternion.Euler(rotationVector);
             transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
         }
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             // transform.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * speed, Space.World);
             //_rb.velocity = transform.right * -speed;
+            Vector3 rotationVector = new Vector3(0, 270, 0);
+            Quaternion rotation = Quaternion.Euler(rotationVector);
             transform.position += new Vector3(-speed, 0, 0) * Time.deltaTime;
         }
     }
@@ -142,5 +142,24 @@ public class Player : MonoBehaviour
             slots[slotNum].gameObject.GetComponent<Image>().sprite = equipmentPrefab;
         }
         slotNum++;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        other.gameObject.GetComponent<Collectable_Item>().eIndicator.SetActive(true);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            updateInventory(other.gameObject.GetComponent<Collectable_Item>().item);
+            Destroy(other.gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        other.gameObject.GetComponent<Collectable_Item>().eIndicator.SetActive(false);
     }
 }

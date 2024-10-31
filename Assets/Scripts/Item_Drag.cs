@@ -82,6 +82,7 @@ public class Item_Drag : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndD
     public void OnTriggerEnter2D(Collider2D collision)
     {
         canGiveToPet = true;
+        Debug.Log("triggered slot");
     }
 
     public void OnTriggerStay2D(Collider2D other)
