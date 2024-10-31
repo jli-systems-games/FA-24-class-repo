@@ -44,7 +44,7 @@ public class GrabDetection : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("exiting");
+        //Debug.Log("exiting");
         /*_grab.grabbedON = false;
        signal.SetActive(false);*/
     }

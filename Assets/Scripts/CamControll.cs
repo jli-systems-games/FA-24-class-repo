@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CamControll : MonoBehaviour
 {
@@ -13,7 +14,13 @@ public class CamControll : MonoBehaviour
     public ConfigurableJoint hipJoint;
     void Start()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
+        Scene scene = SceneManager.GetActiveScene();
+        if(scene.name == "Climb")
+        {
+            //Debug.Log("locking"); 
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+       
         mouseSenstivity = 1.5f;
         EventManager.Climb += decreaseSensitivity;
         EventManager.stopClimb += restoreSensitivity;
@@ -22,7 +29,7 @@ public class CamControll : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {  
-        if(custom.done)CamBehavior();
+        CamBehavior();
   
     }
 

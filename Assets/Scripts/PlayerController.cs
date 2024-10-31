@@ -48,13 +48,12 @@ public class PlayerController : MonoBehaviour
         //for Debug;
 
         float vel = torRb.velocity.y;
-        _debug.text = jumpForce.ToString();
-        _deBugBOOL.text = isGrounded.ToString();
+       /* _debug.text = jumpForce.ToString();
+        _deBugBOOL.text = isGrounded.ToString();*/
 
         Mathf.Clamp(vel, -0.5f, 5f);
 
-        if (_custom.done)
-        {
+       
               float rotationDiff = Quaternion.Angle(hip.transform.rotation, torso.transform.rotation);
               torRb.AddForce(new Vector3(0, upwardForce,0));
 
@@ -63,16 +62,19 @@ public class PlayerController : MonoBehaviour
                   //Debug.Log("it is rotating " + rotationDiff + "degree");
                  _animate.SetBool("walking", true);
                  if (Input.GetKey(KeyCode.LeftShift))
-                    {
+                  {
                     hip.AddForce(hip.transform.forward * speed * 1.5f);
                     torRb.AddForce(-hip.transform.forward * 100f);
-                    }
-                        else
-                        {
-                            hip.AddForce(hip.transform.forward * speed);
+                    _animate.SetFloat("RunSpeed", 1.5f);
 
-                            torRb.AddForce(-hip.transform.forward * backForce);
-                        }
+                  }
+                else
+                  {
+                     hip.AddForce(hip.transform.forward * speed);
+                    _animate.SetFloat("RunSpeed", 1f);
+
+                     torRb.AddForce(-hip.transform.forward * backForce);
+                   }
 
               }
              else
@@ -95,11 +97,23 @@ public class PlayerController : MonoBehaviour
                     if (Input.GetKey(KeyCode.D))
                     {
                         hip.AddForce(hip.transform.right * strafeSpeed);
+                        _animate.SetBool("RightSteping", true);
+
+                    }
+                    else
+                    {
+                        _animate.SetBool("RightSteping", false);
                     }
 
                     if (Input.GetKey(KeyCode.A))
                     {
                         hip.AddForce(-hip.transform.right * strafeSpeed);
+                        _animate.SetBool("LeftSteping", true);
+                    }
+                    else
+                    {
+                       _animate.SetBool("LeftSteping", false);
+
                     }
 
                     if (Input.GetAxis("Jump") >0)
@@ -134,7 +148,7 @@ public class PlayerController : MonoBehaviour
                 }
          
            }
-        }
+        
 
       
 

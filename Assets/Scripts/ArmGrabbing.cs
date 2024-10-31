@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -52,13 +50,13 @@ public class ArmGrabbing : MonoBehaviour
             Vector3 direction = new Vector3 (-Input.GetAxis("Mouse X"), 0, -Input.GetAxis("Mouse Y")) ;
             hand.AddForce(direction * moveForce);
 
-            Vector3 rayDirection = new Vector3(Input.GetAxis("Mouse X"), 0, Input.GetAxis("Mouse Y"));
+            Vector3 rayDirection = new Vector3(transform.right.x, 0, -transform.up.y);
             rayDirection = transform.TransformDirection(rayDirection.normalized);
              _ray = new Ray(transform.position, rayDirection);
             //need to stop the copmotion script;
             shoulderJnt.targetRotation = Quaternion.Euler(0, 0, -Input.GetAxis("Mouse Y") * 180f);
-            Debug.DrawRay(transform.position, rayDirection *100f, Color.yellow);
-            if (Physics.Raycast(_ray,out _hit, 150f, _layer))
+            //Debug.DrawRay(transform.position, rayDirection *50f, Color.yellow);
+            if (Physics.Raycast(_ray,out _hit, 50f, _layer))
             {
                 Highlighting(_hit.transform);
                 _hitObj = _hit.transform;
@@ -77,7 +75,7 @@ public class ArmGrabbing : MonoBehaviour
            
             if (ismovingArm)
             { 
-                Debug.Log("letting go");
+                //Debug.Log("letting go");
                 stoppedGrabbing();
             }
 
