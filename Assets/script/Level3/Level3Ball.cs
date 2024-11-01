@@ -70,6 +70,7 @@ public class Level3Ball : MonoBehaviour
             if (triggerCollisionCount >= 5)
             {
                 Reset();
+                GameObject.Find("Level3Manager").GetComponent<Level3Manager>().ResetBallPrice();
                 level3Manager.ReduceHealth(); 
             }
         }

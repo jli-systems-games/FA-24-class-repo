@@ -7,7 +7,10 @@ public class Level2Ball : MonoBehaviour
     public float initialSpeed; 
     public float speedIncreaseFactor; 
     public Rigidbody2D rb;
-    public Vector3 startPosition; 
+    public Vector3 startPosition;
+
+    public List<Sprite> images;
+    private SpriteRenderer spriteRenderer;
 
     private float currentSpeed; 
     private float timeElapsed; 
@@ -21,7 +24,8 @@ public class Level2Ball : MonoBehaviour
         currentSpeed = initialSpeed;
         timeElapsed = 0; 
         triggerCollisionCount = 0; 
-        resetCount = 0; 
+        resetCount = 0;
+        spriteRenderer = GetComponent<SpriteRenderer>();
         StartCoroutine(LaunchAfterDelay()); 
     }
 
@@ -71,7 +75,13 @@ public class Level2Ball : MonoBehaviour
     {
         if (collision.CompareTag("Trigger")) 
         {
-            triggerCollisionCount++; 
+            triggerCollisionCount++;
+
+            if (triggerCollisionCount - 1 < images.Count)
+            {
+                spriteRenderer.sprite = images[triggerCollisionCount - 1];
+            }
+
             if (triggerCollisionCount >= 4) 
             {
                 Reset(); 

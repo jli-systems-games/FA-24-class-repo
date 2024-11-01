@@ -11,6 +11,12 @@ public class playGame : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     void Start()
     {
         

@@ -39,7 +39,6 @@ public class Level3Manager : MonoBehaviour
         Broke1Text.SetActive(false);
         Broke2Text.SetActive(false);
 
-        // Set the paddle scales based on saved data
         Player1Paddle.transform.localScale = new Vector3(Player1Paddle.transform.localScale.x, Data.Player1Paddle, Player1Paddle.transform.localScale.z);
         Player2Paddle.transform.localScale = new Vector3(Player2Paddle.transform.localScale.x, Data.Player2Paddle, Player2Paddle.transform.localScale.z);
 
@@ -92,27 +91,34 @@ public class Level3Manager : MonoBehaviour
 
     public void ReduceHealth()
     {
-        healthBar.value -= 0.33f; 
+        healthBar.value -= 0.33f;
         if (healthBar.value <= 0)
         {
-            
             Debug.Log("Health depleted. Game Over.");
         }
     }
 
     public void EndLevel3()
     {
-        StartCoroutine(WaitAndSwitchToTradeScene());
+        StartCoroutine(WaitAndSwitchToEndScene());
     }
 
-    private IEnumerator WaitAndSwitchToTradeScene()
+    private IEnumerator WaitAndSwitchToEndScene()
     {
         yield return new WaitForSeconds(3);
-        LoadTradeScene();
+        LoadEndScene();
     }
 
-    private void LoadTradeScene()
+    private void LoadEndScene()
     {
-       // SceneManager.LoadScene("Trade2");
+        // Check healthBar value to decide which end scene to load
+        if (healthBar.value <= 0.1)
+        {
+            SceneManager.LoadScene("HE"); // Load HE scene if health is depleted
+        }
+        else
+        {
+            SceneManager.LoadScene("BE"); // Load BE scene otherwise
+        }
     }
 }

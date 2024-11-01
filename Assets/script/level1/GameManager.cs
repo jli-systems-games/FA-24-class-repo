@@ -31,6 +31,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Data.Player1Score = 10;
+        Data.Player2Score = 10;
+
+        Data.Player1Paddle = 3;
+        Data.Player2Paddle = 3;
+
         Broke1Text.SetActive(false);
         Broke2Text.SetActive(false);
 
