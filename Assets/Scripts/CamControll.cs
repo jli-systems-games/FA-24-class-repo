@@ -8,8 +8,9 @@ public class CamControll : MonoBehaviour
     public float rotationSpeed = 1f;
     public Transform target;
     [SerializeField] Customization custom;
-    
-    float mouseX, mouseY, mouseSenstivity;
+
+    float mouseX, mouseY;
+    public float mouseSenstivity;
 
     public ConfigurableJoint hipJoint;
     void Start()
@@ -30,12 +31,13 @@ public class CamControll : MonoBehaviour
     void FixedUpdate()
     {  
         CamBehavior();
-  
+        Debug.Log(mouseSenstivity);
     }
 
     void CamBehavior()
     {
-        mouseX += Input.GetAxis("Mouse X") * rotationSpeed;
+        Cursor.lockState = CursorLockMode.Locked;
+        mouseX += Input.GetAxis("Mouse X");
         mouseY += Input.GetAxis("Mouse Y") * rotationSpeed;
         mouseY = Mathf.Clamp(mouseY, -35, 60);
         //mouseX = Mathf.Clamp(mouseX, -35, 60);
@@ -47,7 +49,7 @@ public class CamControll : MonoBehaviour
     }
     void decreaseSensitivity(int m)
     {
-        mouseSenstivity = 1f;
+        mouseSenstivity = 0.7f;
     }
     void restoreSensitivity(int m)
     {
