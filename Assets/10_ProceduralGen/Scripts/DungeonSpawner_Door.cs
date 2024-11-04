@@ -21,8 +21,12 @@ public class DungeonSpawner_Door : MonoBehaviour
                 temp = Random.Range(0, roomList.Count);
             }
 
-            GameObject tempRoom = Instantiate(roomList[temp], connectingTransform);
-            tempRoom.transform.SetParent(dungeonSpawner.transform,true);
+            //GameObject tempRoom = Instantiate(roomList[temp], connectingTransform);
+            GameObject tempRoom = Instantiate(roomList[temp]);
+            tempRoom.transform.position = connectingTransform.position;
+            //Debug.Log("1: "+ tempRoom.transform.localPosition);
+            //tempRoom.transform.SetParent(dungeonSpawner.transform,true);
+            //Debug.Log("2: " + tempRoom.transform.localPosition);
 
             foreach (Vector3 spawnedRoom in DungeonSpawner.spawnedRooms)
             {
@@ -37,7 +41,7 @@ public class DungeonSpawner_Door : MonoBehaviour
             if (canSpawn == true)
             {
                 DungeonSpawner.spawnedRooms.Add(tempRoom.transform.localPosition);
-                Debug.Log(tempRoom.transform.localPosition);
+                //Debug.Log(tempRoom.transform.localPosition);
             }
         }
     }
