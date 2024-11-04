@@ -111,6 +111,8 @@ public class GameGoals : MonoBehaviour
         if (player.transform.position.y < -51f)
         {
             player.transform.position = new Vector3(-12.61f, 6f, 0f);
+            room1Begin = false;
+
         }
 
         if (player.transform.position.y < 4f && !room1Begin)
@@ -229,7 +231,6 @@ public class GameGoals : MonoBehaviour
     //play again
     public void PlayAgain()
     {
-        room1Begin = false;
         foreach (GameObject item in walls3)
         {
             item.SetActive(false);
