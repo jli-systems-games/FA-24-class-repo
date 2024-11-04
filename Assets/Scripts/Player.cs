@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
     public bool flying;
 
+    public bool falling;
+
     public bool canFall;
 
     public Animator animator;
@@ -48,6 +50,7 @@ public class Player : MonoBehaviour
 
         flying = false;
         canFall = false;
+        falling = false;
         //StartCoroutine(Jump());
     }
 
@@ -56,7 +59,7 @@ public class Player : MonoBehaviour
     {
         Movement();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && falling == false)
         {
                 _rb.velocity = transform.up * jumpSpeed;
             numJumps++;
@@ -76,6 +79,15 @@ public class Player : MonoBehaviour
             }
             Debug.Log("flying: " + flying);
         }
+
+        //if(_rb.velocity.y < 0)
+        //{
+        //    falling = true;
+        //}
+        //else
+        //{
+        //    falling = false;   
+        //}
 
         if(_rb.velocity.y == 0 && canFall == true)
         {
