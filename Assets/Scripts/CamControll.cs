@@ -11,18 +11,14 @@ public class CamControll : MonoBehaviour
 
     float mouseX, mouseY;
     public float mouseSenstivity;
-
+    Scene scene;
     public ConfigurableJoint hipJoint;
     void Start()
     {
-        Scene scene = SceneManager.GetActiveScene();
-        if(scene.name == "Climb")
-        {
-            //Debug.Log("locking"); 
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        scene = SceneManager.GetActiveScene();
+      
        
-        mouseSenstivity = 1.5f;
+        mouseSenstivity = 0.75f;
         EventManager.Climb += decreaseSensitivity;
         EventManager.stopClimb += restoreSensitivity;
     }
@@ -35,10 +31,15 @@ public class CamControll : MonoBehaviour
     }
 
     void CamBehavior()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
+    {  
+        if(scene.name == "Climb")
+        {
+            //Debug.Log("locking"); 
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        //Cursor.lockState = CursorLockMode.Locked;
         mouseX += Input.GetAxis("Mouse X");
-        mouseY += Input.GetAxis("Mouse Y") * rotationSpeed;
+        mouseY += Input.GetAxis("Mouse Y") * (rotationSpeed / 2);
         mouseY = Mathf.Clamp(mouseY, -35, 60);
         //mouseX = Mathf.Clamp(mouseX, -35, 60);
 
