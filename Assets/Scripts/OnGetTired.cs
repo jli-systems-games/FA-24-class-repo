@@ -7,7 +7,7 @@ public class OnGetTired : MonoBehaviour
     public Color tiredSkyboxColor = Color.red;
     private Color defaultSkyboxColor;
     private Camera mainCamera;
-    private Event_Sim sim;
+    private NewEventSim sim;
 
     void Start()
     {
@@ -17,7 +17,7 @@ public class OnGetTired : MonoBehaviour
             defaultSkyboxColor = mainCamera.backgroundColor; 
         }
 
-        sim = FindObjectOfType<Event_Sim>();
+        sim = FindObjectOfType<NewEventSim>();
 
         if (sim != null)
         {

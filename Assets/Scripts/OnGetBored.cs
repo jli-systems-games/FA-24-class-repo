@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnGetHungry : MonoBehaviour
+public class OnGetBored : MonoBehaviour
 {
-    public Color hungrySkyboxColor = Color.red;
+    public Color boredSkyboxColor = Color.red;
     private Color defaultSkyboxColor;
     private Camera mainCamera;
     private NewEventSim sim;
@@ -21,7 +21,7 @@ public class OnGetHungry : MonoBehaviour
 
         if (sim != null)
         {
-            sim.onGetHungry.AddListener(ChangeSkyboxColor); 
+            sim.onGetBored.AddListener(ChangeSkyboxColor); 
         }
         else
         {
@@ -33,7 +33,7 @@ public class OnGetHungry : MonoBehaviour
     {
         if (mainCamera != null)
         {
-            mainCamera.backgroundColor = hungrySkyboxColor; 
+            mainCamera.backgroundColor = boredSkyboxColor; 
         }
     }
 
@@ -41,7 +41,7 @@ public class OnGetHungry : MonoBehaviour
     {
         if (mainCamera != null)
         {
-            mainCamera.backgroundColor = defaultSkyboxColor; 
+            mainCamera.backgroundColor = boredSkyboxColor; 
         }
     }
 
@@ -49,7 +49,7 @@ public class OnGetHungry : MonoBehaviour
     {
         if (sim != null)
         {
-            sim.onGetHungry.RemoveListener(ChangeSkyboxColor); 
+            sim.onGetBored.RemoveListener(ChangeSkyboxColor); 
         }
     }
 }
