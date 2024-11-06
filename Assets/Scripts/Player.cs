@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public float gravity;  // Gravity applied when in the air
     public Vector2 velocity;  // Player's movement speed and direction
-    public float jumpVelocity = 15;  // Initial speed when jumping
-    public float groundHeight = -1.5f;  // Y-coordinate for ground level
+    public float maxXVelocity = 100; // Cap on horizontal speed to prevent infinite acceleration
+    public float maxAcceleration = 10; // Maximum rate of acceleration for player movement
+    public float acceleration = 10; // Current acceleration value used for horizontal movement
+    public float distance = 0; // Tracks the total horizontal distance traveled by the player
+    public float jumpVelocity = 12;  // Initial speed when jumping
+
+    public float groundHeight = -2.5f;  // Y-coordinate for ground level
     public bool isGrounded = false;  // Tracks if player is on the ground
 
     public bool isHoldingJump = false;  // Tracks if jump key is held
@@ -76,6 +82,24 @@ public class Player : MonoBehaviour
                 pos.y = groundHeight;  // Reset to ground level
                 isGrounded = true;  // Set grounded status
                 holdJumpTimer = 0;  // Reset jump hold timer
+            }
+        }
+       
+        // Distance Tracking: Increment total horizontal distance based on current velocity
+        distance += velocity.x * Time.fixedDeltaTime;
+
+        // Horizontal Movement Logic: Accelerate and cap speed when grounded
+        if (isGrounded)
+        {
+            float velocityRatio = velocity.x / maxXVelocity;  // Ratio of current speed to max speed
+            acceleration = maxAcceleration * (1 - velocityRatio);  // Decrease acceleration as speed increases
+
+            velocity.x += acceleration * Time.fixedDeltaTime;  // Update horizontal velocity
+
+            // Cap horizontal speed to prevent exceeding max velocity
+            if (velocity.x >= maxXVelocity)
+            {
+                velocity.x = maxXVelocity;
             }
         }
 
