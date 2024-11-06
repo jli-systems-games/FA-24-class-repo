@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
     {
         flyingTransition = true;
         petAI.animator.Play("Fly");
+        player.animator.Play("flailing");
         //petTransformAnimator.Play("flying");
         player.flying = true;
 
@@ -141,6 +142,7 @@ public class GameManager : MonoBehaviour
     public void StopFlying()
     {
         petAI.animator.Play("Bounce");
+        player.animator.Play("still");
         //Debug.Log("hello");
         //petAI.targetPos.position = new Vector3(0, .3f, -24.2f);
         petAI.flying = false;
