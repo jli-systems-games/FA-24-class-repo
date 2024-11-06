@@ -1,18 +1,15 @@
 using UnityEngine;
+using TMPro; // 引入 TextMeshPro 命名空间
 
 public class WeedInteraction : MonoBehaviour
 {
     private bool isPlayerNearby = false; // 玩家是否靠近
-    public GameObject interactUI; // UI提示（例如“按E拔除”）
-    private WeedManager weedManager; // 引用杂草管理器
+    public TMP_Text interactUI; // 使用 TextMeshPro 的文本组件
 
     void Start()
     {
         if (interactUI != null)
-            interactUI.SetActive(false); // 初始隐藏提示
-
-        // 获取场景中的 WeedManager
-        weedManager = FindObjectOfType<WeedManager>();
+            interactUI.gameObject.SetActive(false); // 初始隐藏提示
     }
 
     void Update()
@@ -31,7 +28,10 @@ public class WeedInteraction : MonoBehaviour
         {
             isPlayerNearby = true;
             if (interactUI != null)
-                interactUI.SetActive(true); // 显示提示
+            {
+                interactUI.text = "按E拔除"; // 设置提示文字
+                interactUI.gameObject.SetActive(true); // 显示提示
+            }
         }
     }
 
@@ -42,7 +42,9 @@ public class WeedInteraction : MonoBehaviour
         {
             isPlayerNearby = false;
             if (interactUI != null)
-                interactUI.SetActive(false); // 隐藏提示
+            {
+                interactUI.gameObject.SetActive(false); // 隐藏提示
+            }
         }
     }
 
@@ -51,10 +53,11 @@ public class WeedInteraction : MonoBehaviour
         // 清理杂草（销毁对象）
         Destroy(gameObject);
 
-        // 通知 WeedManager 更新计数
-        if (weedManager != null)
-        {
-            weedManager.UpdateWeedCount();
-        }
+        // 隐藏提示UI
+        if (interactUI != null)
+            interactUI.gameObject.SetActive(false);
+
+        // 如果需要通知计数器，可以添加相关逻辑
+        Debug.Log("杂草已拔除！");
     }
 }
