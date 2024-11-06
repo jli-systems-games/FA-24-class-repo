@@ -11,10 +11,7 @@ public class UIController : MonoBehaviour
 
     private void Awake()
     {
-        // Finds the Player GameObject and gets its Player component for accessing player properties
         player = GameObject.Find("Player").GetComponent<Player>();
-
-        // Finds the Distance Text UI element in the scene to update it with the player's distance
         distanceText = GameObject.Find("Distance Text").GetComponent<TextMeshProUGUI>();
     }
 
