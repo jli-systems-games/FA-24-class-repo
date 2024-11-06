@@ -15,11 +15,26 @@ public class spawn : MonoBehaviour
     public float animationDuration = 1f;
 
     private List<GameObject> spawnedObjects = new List<GameObject>();
+    public List<SpriteRenderer> groundImages = new List<SpriteRenderer>();
 
     private void Start()
     {
         InvokeRepeating("ManageObjects", 0f, checkInterval);
+       // FindGroundImages();
     }
+
+   /* private void FindGroundImages()
+    {
+        GameObject[] groundObjects = GameObject.FindGameObjectsWithTag("Ground");
+        foreach (GameObject ground in groundObjects)
+        {
+            SpriteRenderer spriteRenderer = ground.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                groundImages.Add(spriteRenderer);
+            }
+        }
+    }*/
 
     private void ManageObjects()
     {
@@ -36,11 +51,12 @@ public class spawn : MonoBehaviour
         {
             SpawnObjectAroundPlayer();
         }
+
+        // UpdateGroundImages(); 
     }
 
     private void SpawnObjectAroundPlayer()
     {
-        
         GameObject[] selectedPrefabs;
         if (player.position.z < -10)
         {
@@ -55,7 +71,6 @@ public class spawn : MonoBehaviour
             selectedPrefabs = prefabsZone2;
         }
 
-       
         GameObject prefab = selectedPrefabs[Random.Range(0, selectedPrefabs.Length)];
         Vector2 randomPoint = Random.insideUnitCircle * spawnRadius;
         Vector3 spawnPosition = new Vector3(player.position.x + randomPoint.x, player.position.y, player.position.z + randomPoint.y);
@@ -95,4 +110,49 @@ public class spawn : MonoBehaviour
             Destroy(obj);
         }
     }
+
+    /*
+    private void UpdateGroundImages()
+    {
+        Color[] colorPalette = GetColorPaletteBasedOnZ();
+
+        foreach (SpriteRenderer groundImage in groundImages)
+        {
+            groundImage.color = colorPalette[Random.Range(0, colorPalette.Length)];
+        }
+    }
+
+    private Color[] GetColorPaletteBasedOnZ()
+    {
+        float brightnessFactor = 0.5f; 
+        if (player.position.z < -10)
+        {
+            return new Color[]
+            {
+                new Color(1f * brightnessFactor, 0.75f * brightnessFactor, 0.8f * brightnessFactor),
+                new Color(1f * brightnessFactor, 0.5f * brightnessFactor, 0.7f * brightnessFactor),
+                new Color(1f * brightnessFactor, 0.3f * brightnessFactor, 0.5f * brightnessFactor)
+            };
+        }
+        else if (player.position.z > 10)
+        {
+            return new Color[]
+            {
+                new Color(1f * brightnessFactor, 1f * brightnessFactor, 1f * brightnessFactor), 
+                new Color(0f, 0f, 0f), 
+                new Color(0.5f * brightnessFactor, 0.5f * brightnessFactor, 0.5f * brightnessFactor) 
+            };
+        }
+        else
+        {
+            return new Color[]
+            {
+                new Color(0f * brightnessFactor, 1f * brightnessFactor, 0f * brightnessFactor), 
+                new Color(0.5f * brightnessFactor, 1f * brightnessFactor, 0.5f * brightnessFactor),
+                new Color(0.2f * brightnessFactor, 0.8f * brightnessFactor, 0.2f * brightnessFactor)
+            };
+        }
+    }
+    */
+
 }
