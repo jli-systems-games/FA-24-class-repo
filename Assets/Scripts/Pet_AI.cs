@@ -268,31 +268,31 @@ public class Pet_AI : MonoBehaviour
 
     void StrengthLevel()
     {
-        if(strength == 5)
+        if(strength == 1)
         {
             strengthMeter.text = "Strength: Weak :(";
         }
 
-        else if(strength == 6)
+        else if(strength == 2)
         {
             strengthMeter.text = "Strength: Getting there!";
         }
 
-        else if (strength == 7)
+        else if (strength == 3)
         {
             strengthMeter.text = "Strength: Moderate";
         }
 
-        else if(strength == 8)
+        else if(strength == 4)
         {
             strengthMeter.text = "Strength: Rather strong";
         }
-        else if (strength == 9)
+        else if (strength == 5)
         {
             strengthMeter.text = "Strength: Strong!!";
         }
 
-        else if ( strength == 10)
+        else if ( strength == 6)
         {
             strengthMeter.text = "Strength: VERY STRONG!!!";
         }

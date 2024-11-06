@@ -178,7 +178,11 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            updateInventory(other.gameObject.GetComponent<Collectable_Item>().item);
+            //updateInventory(other.gameObject.GetComponent<Collectable_Item>().item);
+            if(other.gameObject.GetComponent<Collectable_Item>().item == Inventory.Equipment)
+            {
+                addStrength();
+            }
             Destroy(other.gameObject);
         }
     }
@@ -186,5 +190,10 @@ public class Player : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         other.gameObject.GetComponent<Collectable_Item>().eIndicator.SetActive(false);
+    }
+
+    private void addStrength()
+    {
+        gameManager.updateStats(Inventory.Equipment);
     }
 }

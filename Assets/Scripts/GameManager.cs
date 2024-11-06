@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
 
     public bool flyingTransition;
 
+    public List<GameObject> platformSections = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -104,6 +106,7 @@ public class GameManager : MonoBehaviour
         else if(item == Inventory.Equipment)
         {
             petAI.AddStrength();
+            player.jumpSpeed++;
         }
     }
 
