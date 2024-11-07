@@ -7,17 +7,18 @@ public class Player : MonoBehaviour
 {
     public float gravity;  // Gravity applied when in the air
     public Vector2 velocity;  // Player's movement speed and direction
-    public float maxXVelocity = 100; // Cap on horizontal speed to prevent infinite acceleration
-    public float maxAcceleration = 10; // Maximum rate of acceleration for player movement
-    public float acceleration = 10; // Current acceleration value used for horizontal movement
+    public float maxXVelocity = 30; // Cap on horizontal speed to prevent infinite acceleration
+    public float maxAcceleration = 5; // Maximum rate of acceleration for player movement
+    public float acceleration = 5; // Current acceleration value used for horizontal movement
     public float distance = 0; // Tracks the total horizontal distance traveled by the player
-    public float jumpVelocity = 12;  // Initial speed when jumping
+    public float jumpVelocity = 50;  // Initial speed when jumping
 
     public float groundHeight = -2.5f;  // Y-coordinate for ground level
     public bool isGrounded = false;  // Tracks if player is on the ground
 
     public bool isHoldingJump = false;  // Tracks if jump key is held
     public float maxHoldJumpTime = 0.4f;  // Maximum time jump key can affect jump height
+    public float maxMaxHoldJumpTime = 0.04f;
     public float holdJumpTimer = 0.0f;  // Timer to track how long jump is held
 
     public float jumpGroundThreshold = 1;  // Distance from ground where player can still jump
@@ -76,13 +77,24 @@ public class Player : MonoBehaviour
                 velocity.y += gravity * Time.fixedDeltaTime;
             }
 
-            // Check if player reached or fell below ground level
-            if (pos.y <= groundHeight)
+            Vector2 rayOrigin = new Vector2(pos.x + 0.5f, pos.y);
+            Vector2 rayDirection = Vector2.up;
+            float rayDistance = velocity.y * Time.fixedDeltaTime;
+            RaycastHit2D hit2D = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance);
+            if (hit2D.collider != null)
             {
-                pos.y = groundHeight;  // Reset to ground level
-                isGrounded = true;  // Set grounded status
-                holdJumpTimer = 0;  // Reset jump hold timer
+                Ground ground = hit2D.collider.GetComponent<Ground>();
+                if (ground != null)
+                {
+                    groundHeight = ground.groundHeight;
+                    pos.y = groundHeight;  // Reset to ground level
+                    velocity.y = 0;
+                    isGrounded = true;  // Set grounded status
+                    holdJumpTimer = 0;  // Reset jump hold timer
+                }
             }
+            Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.red);
+            
         }
        
         // Distance Tracking: Increment total horizontal distance based on current velocity
@@ -93,6 +105,7 @@ public class Player : MonoBehaviour
         {
             float velocityRatio = velocity.x / maxXVelocity;  // Ratio of current speed to max speed
             acceleration = maxAcceleration * (1 - velocityRatio);  // Decrease acceleration as speed increases
+            maxHoldJumpTime = maxMaxHoldJumpTime * velocityRatio;
 
             velocity.x += acceleration * Time.fixedDeltaTime;  // Update horizontal velocity
 
@@ -101,6 +114,17 @@ public class Player : MonoBehaviour
             {
                 velocity.x = maxXVelocity;
             }
+
+            Vector2 rayOrigin = new Vector2(pos.x - 0.5f, pos.y);
+            Vector2 rayDirection = Vector2.up;
+            float rayDistance = velocity.y * Time.fixedDeltaTime;
+            RaycastHit2D hit2D = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance);
+            if (hit2D.collider == null)
+            {
+                isGrounded = false;  // Set grounded status
+            }
+            Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.yellow);
+
         }
 
         transform.position = pos;  // Update player position
