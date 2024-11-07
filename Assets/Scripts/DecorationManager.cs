@@ -8,6 +8,8 @@ public class DecorationManager : MonoBehaviour
     private GameObject currentDecoration; // 当前生成的装饰物
     public LayerMask placementMask; // 可放置的层
 
+    public float rotationSpeed = 100.0f; // 旋转速度
+
     void Update()
     {
         // 检测数字键选择物品
@@ -21,21 +23,24 @@ public class DecorationManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SelectDecoration(2); // 按键3选择第二个物品
+            SelectDecoration(2); // 按键4选择第三个物品
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            SelectDecoration(3); // 按键3选择第二个物品
+            SelectDecoration(3); // 按键5选择第四个物品
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            SelectDecoration(4); // 按键3选择第二个物品
+            SelectDecoration(4); // 按键6选择第五个物品
         }
 
         // 如果有当前物品
         if (currentDecoration != null)
         {
             PreviewDecoration();
+
+            // 使用 Q 和 E 旋转物品
+            RotateDecoration();
 
             // 按下鼠标左键确认放置
             if (Input.GetMouseButtonDown(0))
@@ -78,6 +83,19 @@ public class DecorationManager : MonoBehaviour
 
             // 面朝地形或目标的法线方向
             currentDecoration.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+        }
+    }
+
+    private void RotateDecoration()
+    {
+        // 按 Q 逆时针旋转，按 E 顺时针旋转
+        if (Input.GetKey(KeyCode.Q))
+        {
+            currentDecoration.transform.Rotate(Vector3.up, -rotationSpeed * Time.deltaTime, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            currentDecoration.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
         }
     }
 
