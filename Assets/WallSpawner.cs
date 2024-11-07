@@ -6,10 +6,10 @@ using UnityEngine;
 public class WallSpawner : MonoBehaviour
 {
     public GameObject wall;
-    public GameObject spawns, grips,sGrips;
+    public GameObject spawns, grips,sGrips, sG;
     int width, height;
-    int count;
     List<Vector3> locations = new List<Vector3>();
+    int count;
     List<Vector3> locations2 = new List<Vector3>();
     List<Vector3> existingLoc = new List<Vector3>();
 
@@ -201,20 +201,21 @@ public class WallSpawner : MonoBehaviour
 
         foreach (Pair l in pairs)
         {
-           RowSpawn(l.End, l.Start, sGrips);
+            GenerateSmallGrips(l.End, l.Start);
+           /*RowSpawn(l.End, l.Start, sGrips);*/
            // Debug.Log("org" + l.End + " & End" + l.Start);
         }
     }
-
-    void RowSpawn(Vector3 origin, Vector3 endPoint, GameObject sHold)
+    void GenerateSmallGrips(Vector3 Spawn, Vector3 End)
     {
-        float _x = UnityEngine.Random.Range(origin.x -1f, origin.x + 2f);
-        float _y = origin.y - 1f;
 
-        GameObject child = Instantiate(sHold);
-        sHold.transform.position = new Vector3(_x, _y, origin.z);
-        //Debug.Log("fin" + sHold.transform.position.x);
+        if (Spawn.y < End.y + 2) return;
 
-        if (Vector3.Distance(origin, endPoint) < 3) Debug.Log("stopping");
+        SmallGrips grip = new SmallGrips(Spawn,End);
+        GameObject Grips = Instantiate(sG);
+        Grips.transform.position = new Vector3(grip.GenerateChildrenX()[0], grip.GenerateChildrenY(), Spawn.z);
+
+        GenerateSmallGrips(Grips.transform.position, End);
+
     }
 }

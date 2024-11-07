@@ -27,7 +27,7 @@ public class CamControll : MonoBehaviour
     void FixedUpdate()
     {  
         CamBehavior();
-        Debug.Log(mouseSenstivity);
+        //Debug.Log(mouseSenstivity);
     }
 
     void CamBehavior()
@@ -38,7 +38,7 @@ public class CamControll : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
         //Cursor.lockState = CursorLockMode.Locked;
-        mouseX += Input.GetAxis("Mouse X");
+        mouseX += Input.GetAxis("Mouse X") * mouseSenstivity;
         mouseY += Input.GetAxis("Mouse Y") * (rotationSpeed / 2);
         mouseY = Mathf.Clamp(mouseY, -35, 60);
         //mouseX = Mathf.Clamp(mouseX, -35, 60);
@@ -46,7 +46,7 @@ public class CamControll : MonoBehaviour
         Quaternion rootRotation = Quaternion.Euler(mouseY * -1f, mouseX , 0);
         target.rotation = rootRotation;
 
-        hipJoint.targetRotation = Quaternion.Euler(0, -mouseX * mouseSenstivity, 0);
+        hipJoint.targetRotation = Quaternion.Euler(0, -mouseX, 0);
     }
     void decreaseSensitivity(int m)
     {

@@ -17,13 +17,13 @@ public class limbCollision : MonoBehaviour
     // Update is called once per frame
     private void OnCollisionEnter(Collision collision)
     {
-        if (detectable)
+        if (detectable && !collision.collider.CompareTag("Environment"))
         {
-             controller.isGrounded = true;
+            controller.isGrounded = true;
         }
-       
+
         //Invoke("resetJump", 1f);
-        if(isFeet)
+        if (isFeet)
         {
             if (collision.collider.CompareTag("trampline"))
             {
