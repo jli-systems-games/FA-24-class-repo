@@ -25,6 +25,8 @@ public class WallSpawner : MonoBehaviour
         int goal = 2;
 
         GameObject WallP = Instantiate(wall);
+        GameObject platForms = new GameObject("platformFolder");
+
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height + 1; j++)
@@ -51,12 +53,14 @@ public class WallSpawner : MonoBehaviour
         GameObject obj = Instantiate(spawns);
         obj.transform.position = locations[startIn];
         Transform x1 = obj.transform;
+        obj.transform.SetParent(platForms.transform);
         existingLoc.Add(x1.position);
 
         int endIn = UnityEngine.Random.Range(0, locations2.Count - 1);
         //Debug.Log(endIn);
         GameObject _eobj = Instantiate(spawns);
         _eobj.transform.position = locations2[endIn];
+        _eobj.transform.SetParent(platForms.transform);
         Transform y1 = _eobj.transform;
         
         //added the location into the list
@@ -73,11 +77,12 @@ public class WallSpawner : MonoBehaviour
         }
         float intercept = x1.localPosition.y - (slope * x1.localPosition.x);
 
-        spawnBigGrips(slope, intercept, x1.position, x1.position, y1.position,goal);
+        GameObject BGrips = new GameObject("bigGripsFolder");
+        spawnBigGrips(slope, intercept, x1.position, x1.position, y1.position,goal,BGrips.transform);
         findGap();
 
     }
-    void spawnBigGrips(float m, float b, Vector3 currStart, Vector3 prevStart, Vector3 End, int goal)
+    void spawnBigGrips(float m, float b, Vector3 currStart, Vector3 prevStart, Vector3 End, int goal, Transform parent)
     {
         count++;
 
@@ -123,8 +128,9 @@ public class WallSpawner : MonoBehaviour
         GameObject obj = Instantiate(grips);
         obj.transform.position = new Vector3(X, Y, wall.transform.localPosition.z + 1);
         existingLoc.Add(obj.transform.position);
+        obj.transform.SetParent(parent);
 
-        spawnBigGrips(m, b, obj.transform.position, Range[0], Range[1], goal);
+        spawnBigGrips(m, b, obj.transform.position, Range[0], Range[1], goal,parent);
         
     }
     Vector3[] chooseSpawnDirection(Vector3 CurrentStartSpawn, Vector3 LastStartSpawn, Vector3 EndSpawn)
@@ -173,6 +179,8 @@ public class WallSpawner : MonoBehaviour
     void findGap()
     {
         existingLoc.Sort((x,y) => x.y.CompareTo(y.y));
+        GameObject sGrips = new GameObject("smallGripsFolder");
+
         int max = 0;
         float delta = 0;
         List<Pair> pairs = new List<Pair>();
@@ -201,12 +209,12 @@ public class WallSpawner : MonoBehaviour
 
         foreach (Pair l in pairs)
         {
-            GenerateSmallGrips(l.End, l.Start);
-           /*RowSpawn(l.End, l.Start, sGrips);*/
+            GenerateSmallGrips(l.End, l.Start,sGrips.transform);
+          
            // Debug.Log("org" + l.End + " & End" + l.Start);
         }
     }
-    void GenerateSmallGrips(Vector3 Spawn, Vector3 End)
+    void GenerateSmallGrips(Vector3 Spawn, Vector3 End,Transform parent)
     {
 
         if (Spawn.y < End.y + 2) return;
@@ -214,8 +222,9 @@ public class WallSpawner : MonoBehaviour
         SmallGrips grip = new SmallGrips(Spawn,End);
         GameObject Grips = Instantiate(sG);
         Grips.transform.position = new Vector3(grip.GenerateChildrenX()[0], grip.GenerateChildrenY(), Spawn.z);
+        Grips.transform.SetParent(parent);
 
-        GenerateSmallGrips(Grips.transform.position, End);
+        GenerateSmallGrips(Grips.transform.position, End,parent);
 
     }
 }
