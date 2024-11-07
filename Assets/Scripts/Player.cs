@@ -23,6 +23,9 @@ public class Player : MonoBehaviour
 
     public float jumpGroundThreshold = 1;  // Distance from ground where player can still jump
 
+    public bool isDead = false;
+
+
     void Start()
     {
 
@@ -55,6 +58,16 @@ public class Player : MonoBehaviour
     {
         Vector2 pos = transform.position;  // Current position
 
+        if (isDead)
+        {
+            return;
+        }
+
+        if (pos.y < -7)
+        {
+            isDead = true;
+        }
+
         if (!isGrounded)
         {
             // Increase hold timer if jump key is still held
@@ -86,17 +99,33 @@ public class Player : MonoBehaviour
                 Ground ground = hit2D.collider.GetComponent<Ground>();
                 if (ground != null)
                 {
-                    groundHeight = ground.groundHeight;
-                    pos.y = groundHeight;  // Reset to ground level
-                    velocity.y = 0;
-                    isGrounded = true;  // Set grounded status
-                    holdJumpTimer = 0;  // Reset jump hold timer
+                    if (pos.y >= ground.groundHeight)
+                    {
+                        groundHeight = ground.groundHeight;
+                        pos.y = groundHeight;  // Reset to ground level
+                        velocity.y = 0;
+                        isGrounded = true;  // Set grounded status
+                        holdJumpTimer = 0;  // Reset jump hold timer
+                    }
+                }
+                Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.red);
+
+                Vector2 wallOrigin = new Vector2(pos.x, pos.y);
+                RaycastHit2D wallHit = Physics2D.Raycast(wallOrigin, Vector2.right, velocity.x * Time.fixedDeltaTime);
+                if (wallHit.collider != null)
+                {
+                    Ground wallGround = wallHit.collider.GetComponent<Ground>();  // Renamed variable
+                    if (wallGround != null)
+                    {
+                        if (pos.y < wallGround.groundHeight)
+                        {
+                            velocity.x = 0;
+                        }
+                    }
                 }
             }
-            Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.red);
-            
         }
-       
+
         // Distance Tracking: Increment total horizontal distance based on current velocity
         distance += velocity.x * Time.fixedDeltaTime;
 
@@ -124,9 +153,41 @@ public class Player : MonoBehaviour
                 isGrounded = false;  // Set grounded status
             }
             Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.yellow);
+        }
 
+        // Obstacle Detection (Horizontal)
+        Vector2 obstOrigin = new Vector2(pos.x, pos.y);
+        float rayDistanceX = Mathf.Max(velocity.x * Time.fixedDeltaTime, 1.0f); // Minimum ray length of 1.0f
+        RaycastHit2D obstHitX = Physics2D.Raycast(obstOrigin, Vector2.right, rayDistanceX);
+
+        if (obstHitX.collider != null)
+        {
+            Obstacle obstacle = obstHitX.collider.GetComponent<Obstacle>();
+            if (obstacle != null)
+            {
+                hitObstacle(obstacle);
+            }
+        }
+
+        // Obstacle Detection (Vertical)
+        RaycastHit2D obstHitY = Physics2D.Raycast(obstOrigin, Vector2.up, velocity.y * Time.fixedDeltaTime);
+        if (obstHitY.collider != null)
+        {
+            Obstacle obstacle = obstHitY.collider.GetComponent<Obstacle>();
+            if (obstacle != null)
+            {
+                hitObstacle(obstacle);
+            }
         }
 
         transform.position = pos;  // Update player position
+    }
+
+    void hitObstacle(Obstacle obstacle)
+    {
+        Debug.Log("Obstacle hit! Reducing velocity.");
+        Destroy(obstacle.gameObject);
+        velocity.x *= 0.6f;
+
     }
 }
