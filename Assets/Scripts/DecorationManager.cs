@@ -19,6 +19,18 @@ public class DecorationManager : MonoBehaviour
         {
             SelectDecoration(1); // 按键3选择第二个物品
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SelectDecoration(2); // 按键3选择第二个物品
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            SelectDecoration(3); // 按键3选择第二个物品
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            SelectDecoration(4); // 按键3选择第二个物品
+        }
 
         // 如果有当前物品
         if (currentDecoration != null)
