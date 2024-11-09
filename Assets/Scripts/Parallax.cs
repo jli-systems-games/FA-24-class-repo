@@ -30,8 +30,8 @@ public class Parallax : MonoBehaviour
         pos.x -= realVelocity * Time.fixedDeltaTime;
 
         // Loop the background position if it moves too far left, creating a seamless effect
-        if (pos.x <= -20)
-            pos.x = 20;
+        if (pos.x <= -15)
+            pos.x = 15;
 
         // Update the position of the object to create the parallax effect
         transform.position = pos;

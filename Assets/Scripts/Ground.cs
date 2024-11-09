@@ -31,8 +31,7 @@ public class Ground : MonoBehaviour
 
     public Obstacle obstacleTemplate;
 
-
-    void Start()
+    void Awake()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
 
@@ -40,9 +39,12 @@ public class Ground : MonoBehaviour
 
         // Set the collider size to always be 16.5 x and 10 y
         groundCollider.size = new Vector2(16.5f, 10.0f);
-
-        groundHeight = transform.position.y + (groundCollider.size.y / 2);
         screenRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+    }
+
+    void Update()
+    {
+        groundHeight = transform.position.y + (groundCollider.size.y / 2);
     }
 
     private void FixedUpdate()
@@ -139,6 +141,20 @@ public class Ground : MonoBehaviour
         // Store placed obstacle positions to avoid overlap
         List<float> placedObstacleXPositions = new List<float>();
 
+        GroundFall fall = go.GetComponent<GroundFall>();
+        if (fall != null)
+        {
+            Destroy(fall);
+            fall = null;
+        }
+
+        if (Random.Range(0, 3) == 0)
+        {
+            fall = go.AddComponent<GroundFall>();
+            fall.fallSpeed = Random.Range(0.5f, 2.0f);
+        }
+
+
         // Randomly determine the number of obstacles to spawn
         int obstacleNum = Random.Range(0, 2);
         for (int i = 0; i < obstacleNum; i++)
@@ -176,6 +192,12 @@ public class Ground : MonoBehaviour
             // Set the position for the obstacle just above the platform
             Vector2 boxPos = new Vector2(x, platformTopY + 0.1f); // Slight offset above the platform
             box.transform.position = boxPos;
+
+            if (fall != null)
+            {
+                Obstacle o = box.GetComponent<Obstacle>();
+                fall.obstacles.Add(o);
+            }
         }
     }
 }

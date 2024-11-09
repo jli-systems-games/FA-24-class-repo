@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public float gravity;  // Gravity applied when in the air
     public Vector2 velocity;  // Player's movement speed and direction
-    public float maxXVelocity = 30; // Cap on horizontal speed to prevent infinite acceleration
+    public float maxXVelocity = 32;// Cap on horizontal speed to prevent infinite acceleration
     public float maxAcceleration = 5; // Maximum rate of acceleration for player movement
     public float acceleration = 5; // Current acceleration value used for horizontal movement
     public float distance = 0; // Tracks the total horizontal distance traveled by the player
@@ -25,10 +25,15 @@ public class Player : MonoBehaviour
 
     public bool isDead = false;
 
+    public LayerMask groundLayerMask;
+    public LayerMask obstacleLayerMask;
+
+    GroundFall fall;
+    CameraController cameraController;
 
     void Start()
     {
-
+        cameraController = Camera.main.GetComponent<CameraController>();
     }
 
     void Update()
@@ -44,6 +49,13 @@ public class Player : MonoBehaviour
                 isGrounded = false;
                 velocity.y = jumpVelocity;  // Set upward speed
                 isHoldingJump = true;  // Start holding jump
+
+                if (fall != null)
+                {
+                    fall.player = null;
+                    fall = null;
+                    cameraController.StopShaking();
+                }
             }
         }
 
@@ -93,7 +105,7 @@ public class Player : MonoBehaviour
             Vector2 rayOrigin = new Vector2(pos.x + 0.5f, pos.y);
             Vector2 rayDirection = Vector2.up;
             float rayDistance = velocity.y * Time.fixedDeltaTime;
-            RaycastHit2D hit2D = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance);
+            RaycastHit2D hit2D = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance, groundLayerMask);
             if (hit2D.collider != null)
             {
                 Ground ground = hit2D.collider.GetComponent<Ground>();
@@ -107,11 +119,18 @@ public class Player : MonoBehaviour
                         isGrounded = true;  // Set grounded status
                         holdJumpTimer = 0;  // Reset jump hold timer
                     }
+
+                    fall = ground.GetComponent<GroundFall>();
+                    if (fall != null)
+                    {
+                        fall.player = this;
+                        cameraController.StartShaking();
+                    }
                 }
                 Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.red);
 
                 Vector2 wallOrigin = new Vector2(pos.x, pos.y);
-                RaycastHit2D wallHit = Physics2D.Raycast(wallOrigin, Vector2.right, velocity.x * Time.fixedDeltaTime);
+                RaycastHit2D wallHit = Physics2D.Raycast(wallOrigin, Vector2.right, velocity.x * Time.fixedDeltaTime, groundLayerMask);
                 if (wallHit.collider != null)
                 {
                     Ground wallGround = wallHit.collider.GetComponent<Ground>();  // Renamed variable
@@ -147,6 +166,10 @@ public class Player : MonoBehaviour
             Vector2 rayOrigin = new Vector2(pos.x - 0.5f, pos.y);
             Vector2 rayDirection = Vector2.up;
             float rayDistance = velocity.y * Time.fixedDeltaTime;
+            if (fall != null)
+            {
+                rayDistance = -fall.fallSpeed * Time.fixedDeltaTime;
+            }
             RaycastHit2D hit2D = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance);
             if (hit2D.collider == null)
             {
@@ -158,7 +181,7 @@ public class Player : MonoBehaviour
         // Obstacle Detection (Horizontal)
         Vector2 obstOrigin = new Vector2(pos.x, pos.y);
         float rayDistanceX = Mathf.Max(velocity.x * Time.fixedDeltaTime, 1.0f); // Minimum ray length of 1.0f
-        RaycastHit2D obstHitX = Physics2D.Raycast(obstOrigin, Vector2.right, rayDistanceX);
+        RaycastHit2D obstHitX = Physics2D.Raycast(obstOrigin, Vector2.right, rayDistanceX, obstacleLayerMask);
 
         if (obstHitX.collider != null)
         {
@@ -170,7 +193,7 @@ public class Player : MonoBehaviour
         }
 
         // Obstacle Detection (Vertical)
-        RaycastHit2D obstHitY = Physics2D.Raycast(obstOrigin, Vector2.up, velocity.y * Time.fixedDeltaTime);
+        RaycastHit2D obstHitY = Physics2D.Raycast(obstOrigin, Vector2.up, velocity.y * Time.fixedDeltaTime, obstacleLayerMask);
         if (obstHitY.collider != null)
         {
             Obstacle obstacle = obstHitY.collider.GetComponent<Obstacle>();
