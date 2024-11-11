@@ -30,7 +30,7 @@ public class SmallGrips
         {
             //float range = this.direction.y - this.origin.y;
             float _x = (y -this.intercept) / this.slope;
-            _x = Random.Range(_x -2f, _x + 2f);
+            _x = Random.Range(_x -2f, _x + 4f);
 
             if (!_X.Contains(_x))
             {
@@ -42,7 +42,7 @@ public class SmallGrips
     public float GenerateChildrenY()
     {   
         
-        float _y = this.origin.y - 2f;
+        float _y = this.origin.y - Random.Range(2.5f, 4f);
         return _y;
 
     }

@@ -6,7 +6,8 @@ using UnityEngine;
 public class WallSpawner : MonoBehaviour
 {
     public GameObject wall;
-    public GameObject spawns, grips,sGrips, sG;
+    public GameObject spawns, grips;
+    public GameObject [] sG;
     int width, height;
     List<Vector3> locations = new List<Vector3>();
     int count;
@@ -53,6 +54,7 @@ public class WallSpawner : MonoBehaviour
         GameObject obj = Instantiate(spawns);
         obj.transform.position = locations[startIn];
         Transform x1 = obj.transform;
+        obj.transform.localScale = obj.transform.localScale + Vector3.right * UnityEngine.Random.Range(3f, 5f);
         obj.transform.SetParent(platForms.transform);
         existingLoc.Add(x1.position);
 
@@ -60,6 +62,7 @@ public class WallSpawner : MonoBehaviour
         //Debug.Log(endIn);
         GameObject _eobj = Instantiate(spawns);
         _eobj.transform.position = locations2[endIn];
+        _eobj.transform.localScale = obj.transform.localScale + Vector3.right * UnityEngine.Random.Range(2f, 5f);
         _eobj.transform.SetParent(platForms.transform);
         Transform y1 = _eobj.transform;
         
@@ -78,6 +81,8 @@ public class WallSpawner : MonoBehaviour
         float intercept = x1.localPosition.y - (slope * x1.localPosition.x);
 
         GameObject BGrips = new GameObject("bigGripsFolder");
+        
+
         spawnBigGrips(slope, intercept, x1.position, x1.position, y1.position,goal,BGrips.transform);
         findGap();
 
@@ -122,8 +127,9 @@ public class WallSpawner : MonoBehaviour
         {
             Y = adjustY(diffY, Y);
             X = (Y - b) / m;
-            /*int[] ybounds = GreaterLesser((int)Range[0].y, (int)Range[1].y);
-            Y = Mathf.Clamp(Y, ybounds[0] + 2, ybounds[1] - 2);*/
+            int[] ybounds = GreaterLesser((int)Range[0].y, (int)Range[1].y);
+            if(Y < ybounds[0] || Y > ybounds[1]) Y = Mathf.Clamp(Y, ybounds[0] + 2, ybounds[1] - 2);
+            
         }
         GameObject obj = Instantiate(grips);
         obj.transform.position = new Vector3(X, Y, wall.transform.localPosition.z + 1);
@@ -217,10 +223,11 @@ public class WallSpawner : MonoBehaviour
     void GenerateSmallGrips(Vector3 Spawn, Vector3 End,Transform parent)
     {
 
-        if (Spawn.y < End.y + 2) return;
+        if (Spawn.y < End.y + 4) return;
 
         SmallGrips grip = new SmallGrips(Spawn,End);
-        GameObject Grips = Instantiate(sG);
+        int i = Mathf.FloorToInt(UnityEngine.Random.Range(0, sG.Length));
+        GameObject Grips = Instantiate(sG[i]);
         Grips.transform.position = new Vector3(grip.GenerateChildrenX()[0], grip.GenerateChildrenY(), Spawn.z);
         Grips.transform.SetParent(parent);
 
