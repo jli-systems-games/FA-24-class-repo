@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
-  
+
 	public float speed = 3f;
 	public Rigidbody2D playerRb;
 	Animator animator;
@@ -20,7 +20,6 @@ public class playerMovement : MonoBehaviour
 	void Start()
 	    {
 	        animator = gameObject.GetComponent<Animator>();
-        
 	    }
 
 
@@ -35,9 +34,10 @@ public class playerMovement : MonoBehaviour
 		{
 			spriteRenderer.flipX = false;
 		}
+		
 
+		
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
-            //transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
 			
 			animator.SetBool("isWalking", true);
 		}
@@ -47,7 +47,6 @@ public class playerMovement : MonoBehaviour
 		}
 		
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
-            //transform.position += new Vector3(-speed, 0, 0) * Time.deltaTime;
 			
 			animator.SetBool("isWalking", true);
 		}
@@ -56,12 +55,6 @@ public class playerMovement : MonoBehaviour
 			animator.SetBool("isWalking", false);
 		}
         
-        /*
-        if (Input.GetKey(KeyCode.Space))
-        {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
-        }
-        */
 
         if (Input.GetKeyUp(KeyCode.E)) {
 			animator.SetTrigger("kicked");
@@ -74,7 +67,14 @@ public class playerMovement : MonoBehaviour
 		{
 			playerRb.velocity = Vector2.up * jumpForce;
 		}
-		
+
+		/*
+		if (animator.getBool("isWalking") == true && isGrounded == false)
+		{
+			animator.SetBool("isWalking", false);
+		}
+		*/
+
 	}
 
 	void FixedUpdate()
