@@ -17,6 +17,8 @@ public class playerMovement : MonoBehaviour
 	public Transform feetPosition;
 	public float groundCheckCircle;
 
+	public AudioSource jumpSFX;
+
 	void Start()
 	    {
 	        animator = gameObject.GetComponent<Animator>();
@@ -65,6 +67,7 @@ public class playerMovement : MonoBehaviour
 
 		if (isGrounded == true && Input.GetButtonDown("Jump"))
 		{
+			jumpSFX.Play();
 			playerRb.velocity = Vector2.up * jumpForce;
 		}
 
