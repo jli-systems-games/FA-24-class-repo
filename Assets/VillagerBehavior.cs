@@ -24,13 +24,13 @@ public class VillagerBehavior : MonoBehaviour
     {
         if(requestid == id)
         {   
-            this.currentHealth--;
-            this._healthUI.text = currentHealth.ToString();
-            if(this.currentHealth == 0)
-                    {
-                        gameObject.SetActive(false);
-                        return;
-                    }
+            currentHealth--;
+            _healthUI.text = currentHealth.ToString();
+            if(currentHealth == 0)
+           {
+               gameObject.SetActive(false);
+               return;
+            }
                    
         }
         

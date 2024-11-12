@@ -9,6 +9,7 @@ public class EnemyAttack : MonoBehaviour
     public float speed = 2f;
     [SerializeField] Transform[] targets;
     List<string> targetIDs = new List<string>();
+    List<string> _targets = new List<string>();
     float steps;
     int index = 0;
     void Start()
@@ -21,6 +22,7 @@ public class EnemyAttack : MonoBehaviour
 
        targets = Array.ConvertAll<VillagerBehavior,Transform>(villagers, (item) => item.transform);
         EventManager.changeTarget += ChangingTarget;
+        _targets = villagers[0]._stats.ids;
     }
 
     // Update is called once per frame
@@ -35,14 +37,43 @@ public class EnemyAttack : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         
-        if(other.CompareTag("villager")) EventManager.harming(targetIDs[index]);
+        //List<string> targets = new List<string>();
+        
+        if (other.CompareTag("villager"))
+        {
+            EventManager.harming(targetIDs[index]);
+           /* VillagerStats stat = other.GetComponent<VillagerBehavior>()._stats;
+            targets = stat.ids;*/
+
+        }
+        
+        Debug.Log(_targets.Count);
        
-        gameObject.SetActive(false);
+        if(GameManager.enemies.Contains(gameObject)) GameManager.enemies.Remove(gameObject);
+
+        if (GameManager.enemies.Count <= 0)
+        {   
+            if(_targets.Count > 0)
+            {
+                EventManager.ChangeState(LevelState.End);
+            }
+          /*  else
+            {
+                EventManager.ChangeState(LevelState.Defeat);
+            }*/
+            
+        }else if(GameManager.enemies.Count > 0 && _targets.Count <= 0)
+        {
+            EventManager.ChangeState(LevelState.Defeat);
+        }
+
+
+            gameObject.SetActive(false);
         
     }
     private void ChangingTarget()
     {
-        if (index != targets.Length) index++;
+        if (index != targets.Length-1) index++;
         else return;
         
 

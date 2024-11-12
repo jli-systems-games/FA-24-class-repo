@@ -7,6 +7,8 @@ public class EventManager : MonoBehaviour
 {
     public static event Action<string> gotHit;
     public static event Action changeTarget;
+    public static event Action<LevelState> killedOff;
+
     void Start()
     {
         
@@ -19,5 +21,9 @@ public class EventManager : MonoBehaviour
     public static void newTarget()
     {
         changeTarget?.Invoke();
+    }
+    public static void ChangeState(LevelState state)
+    {
+        killedOff?.Invoke(state);
     }
 }
