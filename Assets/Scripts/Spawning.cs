@@ -9,21 +9,27 @@ public class Spawning : MonoBehaviour
     Vector3 pos, offset;
     float timer = 0;
     SpriteRenderer _sprite;
+    previewBehavior _prev;
+    public bool rotatible;
     void Start()
     {
         _sprite = GetComponent<SpriteRenderer>();
+        _prev = GetComponent<previewBehavior>();
+        offset = new Vector3(0, 0, 10);
     }
 
     // Update is called once per frame
     void Update()
     {
         timer -= Time.deltaTime;
+        _prev.followMouse(offset);
+        pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetMouseButtonDown(0))
         {
             
-            
+            rotatible = true;
             RaycastHit2D _hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, _sets);
-            if(_hit.collider != null && !_hit.collider.gameObject.TryGetComponent<previewBehavior>(out previewBehavior prev))
+            if(_hit.collider != null)
             {
                 _choice = _hit.collider.gameObject;
                 SpriteRenderer s = _hit.collider.gameObject.GetComponent<SpriteRenderer>();
@@ -31,26 +37,33 @@ public class Spawning : MonoBehaviour
                 _sprite.sprite = s.sprite;
              
                 
+            }else if(_hit.collider == null && _choice != null)
+            {
+                GameObject obj = spawning();
+                obj.transform.position = pos + offset;
+                obj.transform.rotation = transform.rotation;
             }
-            timer = 0.3f;
+            timer = 0.2f;
         }
 
         else if(Input.GetMouseButton(0) && timer<= 0)
         {
-             Debug.Log("start draging");
-             pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log("start draging");
+            //rotatible= false;
+            
             if(_choice != null)
             {
-                offset = new Vector3(0, 0, 10);
                 GameObject obj = spawning();
                 obj.transform.position = pos + offset;
+                obj.transform.rotation = transform.rotation;
             }
-            timer = 0.3f;
+            timer = 0.2f;
         }
     }
     GameObject spawning()
     {
-        GameObject spawn = Instantiate(_choice, pos + offset, Quaternion.identity);
+        GameObject spawn = Instantiate(_choice);
+        spawn.layer = 0;
         return spawn;
 
     }
