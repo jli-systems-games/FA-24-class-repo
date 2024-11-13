@@ -19,6 +19,7 @@ public enum GameStates
 }
 public class GameManager : MonoBehaviour
 {
+    // THINGS TO DO: fix up pooping mech, add feeding system, add death functionality, fix movement, add ending screen
     public static GameStates state;
 
     public List<GameObject> teamOne = new List<GameObject>();
@@ -39,7 +40,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameStates state = GameStates.selectScreen;
+        state = GameStates.selectScreen;
     }
 
     // Update is called once per frame
@@ -56,18 +57,29 @@ public class GameManager : MonoBehaviour
 
     public void AddToTeams()
     {
+        state = GameStates.preppingBattle;
         //insert maybe 10 or so, (if time permits, let the player select how many pigeons) into the teamOne[] list w/ Add
         for(int i = 0; i < 11; i++)
         {
             //instantiate here to a local GameObject variable, then add that variable to the list
-            GameObject pigeonObj = Instantiate(pigeonPrefabs[0], Random.insideUnitSphere * 10 + teamSpawners[0].position, Quaternion.identity);
+            GameObject pigeonObj = Instantiate(pigeonPrefabs[0], Random.insideUnitSphere * 10 + teamSpawners[0].position, Random.rotation);
+
+            // setting bowels temporarily before I add the feeding system
+            pigeonObj.GetComponent<PigeonController>().pigeonState = PigeonStates.regularBowels;
+
             teamOne.Add(pigeonObj);
         }
         for (int i = 0; i < 11; i++)
         {
-            GameObject pigeonObj = Instantiate(pigeonPrefabs[1], Random.insideUnitSphere * 10 + teamSpawners[1].position, Quaternion.identity);
+            GameObject pigeonObj = Instantiate(pigeonPrefabs[1], Random.insideUnitSphere * 10 + teamSpawners[1].position, Random.rotation);
+
+            // setting bowels temporarily before I add the feeding system
+            pigeonObj.GetComponent<PigeonController>().pigeonState = PigeonStates.regularBowels;
+
             teamTwo.Add(pigeonObj);
         }
+
+        state = GameStates.actingBattle;
     }
 
     public void CycleColors(int index)
