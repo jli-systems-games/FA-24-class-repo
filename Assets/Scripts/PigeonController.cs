@@ -21,7 +21,7 @@ public class PigeonController : MonoBehaviour
 
     public Pigeon_Stats_Base pigeonBase;
 
-    private Transform poopPosition;
+    private Vector3 poopPosition;
 
     private Vector3 targetPos;
     private Vector3 pigeonToTargetVector;
@@ -42,7 +42,7 @@ public class PigeonController : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(Pooping());
+        //StartCoroutine(Pooping());
     }
 
     private void Update()
@@ -50,13 +50,21 @@ public class PigeonController : MonoBehaviour
         pigeonToTargetVector = targetPos - transform.position;
         directionToMouse = pigeonToTargetVector.normalized;
 
+        if(GameManager.state == GameStates.actingBattle)
+        {
+            pigeonState = PigeonStates.regularBowels;
+        }
+
         // have some sort of event that calls a function when Dead to play the dead animation
     }
 
     private void FixedUpdate()
     {
-        SetVelocity();
-        RotateTowardsTarget();
+        if (GameManager.state == GameStates.actingBattle && pigeonState != PigeonStates.dead)
+        {
+            SetVelocity();
+            RotateTowardsTarget();
+        }
     }
 
     void RotateTowardsTarget()
@@ -68,12 +76,12 @@ public class PigeonController : MonoBehaviour
 
     void SetVelocity()
     {
-        if (directionToMouse == Vector3.zero)
+        //Debug.Log(directionToMouse);
+        if (directionToMouse.x < 0.1f && directionToMouse.z < .1f) //directionToMouse.x == 
         {
             rb.velocity = Vector3.zero;
             nextPosition();
         }
-
         else
         {
             rb.velocity = transform.up * speed;
@@ -83,15 +91,27 @@ public class PigeonController : MonoBehaviour
     void nextPosition()
     {
         targetPos = new Vector3(Random.Range(-30, 35), 0, Random.Range(-20, 24));
+
+        poopPosition = gameObject.transform.position;
+        GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
+        paintSplatter.transform.Rotate(90, 0, 0);
+
+        Debug.Log("Hello");
+        //rb.velocity = transform.up * speed;
     }
 
     private IEnumerator Pooping()
     {
         if(pigeonState == PigeonStates.regularBowels)
         {
-            poopPosition = gameObject.transform;
-            Instantiate(pigeonBase.splatter, poopPosition);
+            poopPosition = gameObject.transform.position;
+            GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
+            paintSplatter.transform.Rotate(90,0,0);
+
+            Debug.Log("pooping");
         }
+
+        Debug.Log("pigeon state: " + pigeonState);
         yield return new WaitForSeconds(5);
 
         StartCoroutine(Pooping());
@@ -102,11 +122,13 @@ public class PigeonController : MonoBehaviour
         if (other.gameObject.CompareTag("Team1Poop") && TeamNum == 2)
         {
             pigeonState = PigeonStates.dead;
+            //StopCoroutine(Pooping());
         }
 
         if(other.gameObject.CompareTag("Team2Poop") && TeamNum == 1)
         {
             pigeonState = PigeonStates.dead;
+            //StopCoroutine(Pooping());
         }
     }
 }

@@ -64,22 +64,17 @@ public class GameManager : MonoBehaviour
             //instantiate here to a local GameObject variable, then add that variable to the list
             GameObject pigeonObj = Instantiate(pigeonPrefabs[0], Random.insideUnitSphere * 10 + teamSpawners[0].position, Random.rotation);
 
-            // setting bowels temporarily before I add the feeding system
-            pigeonObj.GetComponent<PigeonController>().pigeonState = PigeonStates.regularBowels;
-
             teamOne.Add(pigeonObj);
         }
         for (int i = 0; i < 11; i++)
         {
             GameObject pigeonObj = Instantiate(pigeonPrefabs[1], Random.insideUnitSphere * 10 + teamSpawners[1].position, Random.rotation);
 
-            // setting bowels temporarily before I add the feeding system
-            pigeonObj.GetComponent<PigeonController>().pigeonState = PigeonStates.regularBowels;
-
             teamTwo.Add(pigeonObj);
         }
 
         state = GameStates.actingBattle;
+        Debug.Log("state: " + state);
     }
 
     public void CycleColors(int index)
@@ -100,7 +95,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void FeedPigeon()
+    public void FeedPigeon(int team)
     {
         //add a function that loops through each pigeon, turns a camera that focuses on that pigeon on, and allows you to feed that specific pigeon
     }
