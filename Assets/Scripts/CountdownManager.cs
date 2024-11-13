@@ -9,11 +9,13 @@ using UnityEngine.SceneManagement;
 public class CountdownManager : MonoBehaviour
 {
     public TextMeshProUGUI countdownText; // Reference to the countdown text
-    public string battleSceneName = "BattleScene"; // Name of the battle scene
-    public Button continueButton; // Reference to the continue button
+    public string battleSceneName = "Battle Scene"; // Name of the battle scene
+    public Button continueButton; // Reference to the Continue button
 
     private void Start()
     {
+        // Ensure the button is initially disabled (just a safeguard)
+        continueButton.interactable = false;
         continueButton.onClick.AddListener(StartCountdown); // Assign the button listener
     }
 

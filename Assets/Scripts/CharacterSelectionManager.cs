@@ -15,6 +15,7 @@ public class CharacterSelectionManager : MonoBehaviour
     public Button meleeButton;
     public Button rangedButton;
     public Button magicButton;
+    public Button continueButton; // Reference to the Continue button
 
     private Character selectedCharacter; // Track the selected player character
     private CharacterType opponentCharacterType; // Track the opponent's character type
@@ -33,6 +34,9 @@ public class CharacterSelectionManager : MonoBehaviour
 
         // Show the default preview panel initially
         ShowDefaultPlayerPreview();
+
+        // Initially disable the Continue button
+        continueButton.interactable = false;
     }
 
     // Method to show the default preview panel
@@ -82,6 +86,9 @@ public class CharacterSelectionManager : MonoBehaviour
         // Show the selected character's preview and hide the default panel
         defaultPreviewPanel.SetActive(false);
         playerPreview.ShowCharacterPreview(character, isOpponent: false, flipSprite: false);
+
+        // Enable the Continue button since a character has been selected
+        continueButton.interactable = true;
 
         // Re-enable the previously disabled button if any
         if (currentlyDisabledButton != null)
