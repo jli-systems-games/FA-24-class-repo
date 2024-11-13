@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 3953194067628192967}
   - component: {fileID: 9200207188092218608}
   - component: {fileID: 629899566714816845}
+  - component: {fileID: 3291362002752288194}
   - component: {fileID: 8092122293904468044}
   m_Layer: 3
   m_Name: Barrier
-  m_TagString: Untagged
+  m_TagString: deflecting
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,7 +97,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -114,6 +115,20 @@ PolygonCollider2D:
     - - {x: 0, y: 0.5773587}
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
+--- !u!114 &3291362002752288194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807636638337190727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf8136847533b8e478fbe5f91db7abfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stats: {fileID: 11400000, guid: 05903aa716bbeeb4498d166489e72bb2, type: 2}
+  id: 
 --- !u!50 &8092122293904468044
 Rigidbody2D:
   serializedVersion: 4

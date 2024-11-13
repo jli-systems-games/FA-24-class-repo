@@ -59,7 +59,7 @@ public class HeavyEnemy : EnemyAttack
     {
         
 
-        if (currentState != SelfState.Breaking && state == SelfState.Breaking)
+        if (state == SelfState.Breaking)
         {
             StartCoroutine(BreakingThrough());
         }
@@ -68,6 +68,7 @@ public class HeavyEnemy : EnemyAttack
     }
     IEnumerator BreakingThrough()
     {
+        Debug.Log(health);
         while(health > 0)
         {
             Debug.Log("breaking");

@@ -40,13 +40,30 @@ public class EnemyAttack : MonoBehaviour
     }
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("blocks"))
+      
+        if (collision.gameObject.TryGetComponent<ObstacleBase>(out ObstacleBase obs)) 
         {
-            string _id = collision.gameObject.GetComponent<ObstacleBase>().id;
-             EventManager.harming(_id, _stats.damage);
-            health--;
-            if (health <= 0) gameObject.SetActive(false);
-        }
+            
+                
+            if (collision.collider.CompareTag("blocks"))
+            {
+                string _id = obs.id;
+                EventManager.harming(_id, _stats.damage);
+                deductHealth(1);
+            }else if (collision.collider.CompareTag("deflecting"))
+            {
+                int damage = obs._stats.Deflect;
+                string _id = obs.id;
+                deductHealth(damage);
+                EventManager.harming(_id, _stats.damage);
+
+            } 
+                
+                
+         };
+      
+
+      
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -73,10 +90,15 @@ public class EnemyAttack : MonoBehaviour
             EventManager.ChangeState(LevelState.Defeat);
         }
 
-        health--;
-        if(health <= 0) gameObject.SetActive(false);
+        deductHealth(1);
+
            
         
+    }
+    void deductHealth(int i)
+    {
+        health -= i;
+        if (health <= 0) gameObject.SetActive(false);
     }
     private void ChangingTarget()
     {

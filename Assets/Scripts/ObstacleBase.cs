@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ObstacleBase : MonoBehaviour
 {
-    public VillagerStats _stats;
+    public ObstaclesStats _stats;
     public string id;
 
     Image healthBar;
