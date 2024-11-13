@@ -29,6 +29,16 @@ public class Bullet : MonoBehaviour
         transform.position = Movement(timer);
     }
 
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        //change p 2 2
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+            //PlayerOne.health--;
+            Destroy(this.gameObject);
+        }
+    }
+
 
     private Vector2 Movement(float timer)
     {
