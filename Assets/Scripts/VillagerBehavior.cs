@@ -20,13 +20,13 @@ public class VillagerBehavior : MonoBehaviour
         EventManager.gotHit += DeductHealth;
     }
 
-    void DeductHealth(string requestid)
+    void DeductHealth(string requestid, int d)
     {
         if(requestid == id)
         {   
-            currentHealth--;
+            currentHealth-= d;
             _healthUI.text = currentHealth.ToString();
-            if(currentHealth == 0)
+            if(currentHealth <= 0)
            {
                gameObject.SetActive(false);
                return;

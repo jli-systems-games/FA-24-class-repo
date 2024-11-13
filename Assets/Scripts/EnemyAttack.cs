@@ -7,12 +7,15 @@ using UnityEngine;
 public class EnemyAttack : MonoBehaviour
 {
     public float speed = 2f;
+    public EnemyInfo _stats;
     [SerializeField] Transform[] targets;
     List<string> targetIDs = new List<string>();
     List<string> _targets = new List<string>();
+    
     float steps;
     int index = 0;
-    void Start()
+    protected int health;
+    protected virtual void Start()
     {   
         VillagerBehavior[] villagers = FindObjectsByType<VillagerBehavior>(FindObjectsSortMode.None);
         foreach(var villager in villagers)
@@ -23,16 +26,27 @@ public class EnemyAttack : MonoBehaviour
        targets = Array.ConvertAll<VillagerBehavior,Transform>(villagers, (item) => item.transform);
         EventManager.changeTarget += ChangingTarget;
         _targets = villagers[0]._stats.ids;
+        health = _stats.Health;
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
 
         steps = speed * Time.deltaTime;
-
+        
         transform.position = Vector2.MoveTowards(transform.position, targets[index].position, steps);
         
+    }
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("blocks"))
+        {
+            string _id = collision.gameObject.GetComponent<ObstacleBase>().id;
+             EventManager.harming(_id, _stats.damage);
+            health--;
+            if (health <= 0) gameObject.SetActive(false);
+        }
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -41,13 +55,9 @@ public class EnemyAttack : MonoBehaviour
         
         if (other.CompareTag("villager"))
         {
-            EventManager.harming(targetIDs[index]);
-           /* VillagerStats stat = other.GetComponent<VillagerBehavior>()._stats;
-            targets = stat.ids;*/
+            EventManager.harming(targetIDs[index], _stats.damage);
 
         }
-        
-        Debug.Log(_targets.Count);
        
         if(GameManager.enemies.Contains(gameObject)) GameManager.enemies.Remove(gameObject);
 
@@ -57,18 +67,15 @@ public class EnemyAttack : MonoBehaviour
             {
                 EventManager.ChangeState(LevelState.End);
             }
-          /*  else
-            {
-                EventManager.ChangeState(LevelState.Defeat);
-            }*/
             
         }else if(GameManager.enemies.Count > 0 && _targets.Count <= 0)
         {
             EventManager.ChangeState(LevelState.Defeat);
         }
 
-
-            gameObject.SetActive(false);
+        health--;
+        if(health <= 0) gameObject.SetActive(false);
+           
         
     }
     private void ChangingTarget()

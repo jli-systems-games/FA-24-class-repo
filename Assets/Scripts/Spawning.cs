@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spawning : MonoBehaviour
 {
     GameObject _choice;
-    public LayerMask _sets;
+    public LayerMask _sets, obs;
     Vector3 pos, offset;
     float timer = 0;
     SpriteRenderer _sprite;
@@ -63,7 +63,11 @@ public class Spawning : MonoBehaviour
     GameObject spawning()
     {
         GameObject spawn = Instantiate(_choice);
-        spawn.layer = 0;
+        int m = LayerMask.NameToLayer("obstacle");
+        spawn.layer = m;
+        //add a way for them to be all unique later;
+
+        spawn.GetComponent<ObstacleBase>().id = Random.Range(0,10).ToString();
         return spawn;
 
     }

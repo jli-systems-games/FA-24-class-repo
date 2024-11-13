@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-    public static event Action<string> gotHit;
+    public static event Action<string,int> gotHit;
     public static event Action changeTarget;
     public static event Action<LevelState> killedOff;
 
@@ -14,9 +14,9 @@ public class EventManager : MonoBehaviour
         
     }
 
-    public static void harming(string id)
+    public static void harming(string id, int damage)
     {
-        gotHit?.Invoke(id);
+        gotHit?.Invoke(id,damage);
     }
     public static void newTarget()
     {
