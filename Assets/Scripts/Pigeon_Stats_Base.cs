@@ -6,4 +6,5 @@ using UnityEngine;
 public class Pigeon_Stats_Base : ScriptableObject
 {
     public GameObject splatter;
+    public Food stomachItems;
 }

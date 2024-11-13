@@ -13,7 +13,7 @@ public class PigeonController : MonoBehaviour
 {
     public int TeamNum;
 
-    public int stomach, speed;
+    public int stomachLevel, speed;
 
     public GameManager _gameManager;
 
@@ -55,6 +55,8 @@ public class PigeonController : MonoBehaviour
             pigeonState = PigeonStates.regularBowels;
         }
 
+        //check whats in the stomach and if there's chocolate, have the the "bomb" go off at a random time within the time limit
+
         // have some sort of event that calls a function when Dead to play the dead animation
     }
 
@@ -93,6 +95,8 @@ public class PigeonController : MonoBehaviour
         targetPos = new Vector3(Random.Range(-30, 35), 0, Random.Range(-20, 24));
 
         poopPosition = gameObject.transform.position;
+        poopPosition.y = 0.01f;
+
         GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
         paintSplatter.transform.Rotate(90, 0, 0);
 
