@@ -5,25 +5,25 @@ public class PlayerBallController : MonoBehaviour
     public Renderer ballRenderer; // 球的材质渲染器
     public PhysicMaterial ballPhysicMaterial; // 球的物理材质
 
-    private float currentSize = 1.0f; // 初始大小
+    private float currentSize = 0.3f; // 初始大小
     private float currentBounciness = 0.5f; // 初始弹性
 
     // 更新大小
     public void IncreaseSize()
     {
-        currentSize += 0.1f;
+        currentSize = Mathf.Min(0.5f, currentSize + 0.05f); // 防止大小超过 0.5
         UpdateSize();
     }
 
     public void DecreaseSize()
     {
-        currentSize = Mathf.Max(0.5f, currentSize - 0.1f); // 防止大小低于 0.5
+        currentSize = Mathf.Max(0.2f, currentSize - 0.05f); // 防止大小低于 0.2
         UpdateSize();
     }
 
     private void UpdateSize()
     {
-        transform.localScale = Vector3.one * currentSize;
+        transform.localScale = Vector3.one * currentSize; // 根据 currentSize 调整球大小
     }
 
     // 更新弹性
