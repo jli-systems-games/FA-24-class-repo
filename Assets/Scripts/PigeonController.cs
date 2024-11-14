@@ -206,6 +206,7 @@ public class PigeonController : MonoBehaviour
 
         pigeonState = PigeonStates.dead;
         _gameManager.poopBombText.SetActive(true);
+        _gameManager.bombSound.Play();
 
         yield return new WaitForSeconds(1f);
 

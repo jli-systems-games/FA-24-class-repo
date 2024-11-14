@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject poopBombText;
 
+    public AudioSource bombSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +76,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void SetUpSelectScreen()
+    public void SetUpSelectScreen()
     {
         state = GameStates.selectScreen;
 
@@ -272,5 +275,10 @@ public class GameManager : MonoBehaviour
             chocolate.GetComponent<RectTransform>().localPosition = foodPos;
             TeamTwoInventory.Add(Food.chocolate);
         }
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }
