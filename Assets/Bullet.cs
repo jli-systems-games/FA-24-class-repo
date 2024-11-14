@@ -9,7 +9,6 @@ public class Bullet : MonoBehaviour
     public float rotation = 0f;
     public float speed = 1f;
 
-
     private Vector2 spawnPoint;
     private float timer = 0f;
 
@@ -24,20 +23,61 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timer > bulletLife) Destroy(this.gameObject);
+        if (timer > bulletLife) Destroy(gameObject);
         timer += Time.deltaTime;
         transform.position = Movement(timer);
+
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    //public void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    //Debug.Log("Collision detected with: " + collision.gameObject.name);
+    //    if (collision.gameObject.CompareTag("Walls"))
+    //    {
+    //        Destroy(gameObject);
+    //    }
+
+    //    if (gameObject.CompareTag("B1") && collision.gameObject.CompareTag("2"))
+    //    {
+    //        Debug.Log("hit p2");
+    //        Destroy(gameObject);
+    //    }
+
+
+    //    if (gameObject.CompareTag("B2") && collision.gameObject.CompareTag("1"))
+    //    {
+    //        Debug.Log("hit p1");
+    //        Destroy(gameObject);
+    //    }
+    //}
+
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        //change p 2 2
+        //Debug.Log("Collision detected with: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Walls"))
         {
-            //PlayerOne.health--;
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+        }
+
+        if (gameObject.CompareTag("B1") && collision.gameObject.CompareTag("2"))
+        {
+            Debug.Log("hit p2");
+            Destroy(gameObject);
+
+            GameObject.Find("player 2").GetComponent<PlayerOne>().p1_hp--;
+
+        }
+
+
+        if (gameObject.CompareTag("B2") && collision.gameObject.CompareTag("1"))
+        {
+            Debug.Log("hit p1");
+            Destroy(gameObject);
+
+            GameObject.Find("player 1").GetComponent<PlayerOne>().p1_hp--;
         }
     }
+
 
 
     private Vector2 Movement(float timer)

@@ -14,6 +14,9 @@ public class BulletSpawner : MonoBehaviour
     public float speed = 1f;
 
 
+    public List<GameObject> children = new();
+
+
     [Header("Spawner Attributes")]
     [SerializeField] private SpawnerType spawnerType;
     [SerializeField] private float firingRate = 1f;
@@ -45,10 +48,14 @@ public class BulletSpawner : MonoBehaviour
     {
         if (bullet)
         {
-            spawnedBullet = Instantiate(bullet, transform.position, Quaternion.identity);
-            spawnedBullet.GetComponent<Bullet>().speed = speed;
-            spawnedBullet.GetComponent<Bullet>().bulletLife = bulletLife;
-            spawnedBullet.transform.rotation = transform.rotation;
+            foreach (GameObject item in children)
+            {
+                spawnedBullet = Instantiate(bullet, item.transform.position, Quaternion.identity);
+                spawnedBullet.GetComponent<Bullet>().speed = speed;
+                spawnedBullet.GetComponent<Bullet>().bulletLife = bulletLife;
+                spawnedBullet.transform.rotation = transform.rotation;
+            }
+
         }
     }
 }
