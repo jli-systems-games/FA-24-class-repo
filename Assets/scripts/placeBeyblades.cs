@@ -60,6 +60,7 @@ public class placeBeyblades : MonoBehaviour
         
         GameObject beyblade1 = GameObject.FindWithTag("Beyblade1");
         GameObject beyblade2 = GameObject.FindWithTag("Beyblade2");
+        
         bb1RB = beyblade1.GetComponent<Rigidbody2D>();
         bb2RB = beyblade2.GetComponent<Rigidbody2D>();
 
