@@ -31,6 +31,8 @@ public class PigeonController : MonoBehaviour
 
     private Rigidbody rb;
 
+    private bool instantiated;
+
     private void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
@@ -38,6 +40,7 @@ public class PigeonController : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         targetPos = new Vector3 (Random.Range(-30, 35), 0, Random.Range(-20, 24));
+        instantiated = false;
     }
 
     private void Awake()
@@ -94,13 +97,26 @@ public class PigeonController : MonoBehaviour
     {
         targetPos = new Vector3(Random.Range(-30, 35), 0, Random.Range(-20, 24));
 
-        poopPosition = gameObject.transform.position;
-        poopPosition.y = 0.01f;
+        if (instantiated)
+        {
+            poopPosition = gameObject.transform.position;
+            poopPosition.y = 0.01f;
 
-        GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
-        paintSplatter.transform.Rotate(90, 0, 0);
+            GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
+            paintSplatter.transform.Rotate(90, 0, 0);
 
-        Debug.Log("Hello");
+            if (TeamNum == 1)
+            {
+                GameManager.teamOneSplatters.Add(paintSplatter);
+            }
+
+            else if (TeamNum == 2)
+            {
+                GameManager.teamTwoSplatters.Add(paintSplatter);
+            }
+        }
+            Debug.Log("Hello");
+        instantiated = true;
         //rb.velocity = transform.up * speed;
     }
 
@@ -120,8 +136,9 @@ public class PigeonController : MonoBehaviour
 
         StartCoroutine(Pooping());
     }
+    
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Team1Poop") && TeamNum == 2)
         {
