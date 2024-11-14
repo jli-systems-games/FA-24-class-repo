@@ -1,7 +1,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
+
 using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
@@ -32,10 +32,14 @@ public class EnemyAttack : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-
-        steps = speed * Time.deltaTime;
+        //during start State;
+        if(GameManager.currState == LevelState.Start)
+        {
+          steps = speed * Time.deltaTime;
         
-        transform.position = Vector2.MoveTowards(transform.position, targets[index].position, steps);
+          transform.position = Vector2.MoveTowards(transform.position, targets[index].position, steps);
+        }
+      
         
     }
     protected virtual void OnCollisionEnter2D(Collision2D collision)
@@ -47,15 +51,16 @@ public class EnemyAttack : MonoBehaviour
                 
             if (collision.collider.CompareTag("blocks"))
             {
-                string _id = obs.id;
-                EventManager.harming(_id, _stats.damage);
+                obs.DeductHealth( _stats.damage);
+                //EventManager.harming(_id, _stats.damage);
                 deductHealth(1);
             }else if (collision.collider.CompareTag("deflecting"))
-            {
+            {   
+                
                 int damage = obs._stats.Deflect;
-                string _id = obs.id;
+                
                 deductHealth(damage);
-                EventManager.harming(_id, _stats.damage);
+                obs.DeductHealth(_stats.damage);
 
             } 
                 
@@ -72,33 +77,29 @@ public class EnemyAttack : MonoBehaviour
         
         if (other.CompareTag("villager"))
         {
-            EventManager.harming(targetIDs[index], _stats.damage);
-
-        }
-       
-        if(GameManager.enemies.Contains(gameObject)) GameManager.enemies.Remove(gameObject);
-
-        if (GameManager.enemies.Count <= 0)
-        {   
-            if(_targets.Count > 0)
-            {
-                EventManager.ChangeState(LevelState.End);
-            }
-            
-        }else if(GameManager.enemies.Count > 0 && _targets.Count <= 0)
-        {
-            EventManager.ChangeState(LevelState.Defeat);
-        }
-
-        deductHealth(1);
-
            
-        
+            VillagerBehavior v = other.GetComponent<VillagerBehavior>();
+            v.DeductHealth(targetIDs[index], _stats.damage);
+            //EventManager.harming(targetIDs[index], _stats.damage);
+
+        }
+
+        determine();
+
+
+
     }
     void deductHealth(int i)
     {
         health -= i;
-        if (health <= 0) gameObject.SetActive(false);
+        if (health <= 0)
+        {   
+            if(GameManager.enemies.Contains(gameObject)) GameManager.enemies.Remove(gameObject);
+            
+            gameObject.SetActive(false);
+        }
+        determine();
+            
     }
     private void ChangingTarget()
     {
@@ -106,5 +107,21 @@ public class EnemyAttack : MonoBehaviour
         else return;
         
 
+    }
+    void determine()
+    {
+
+        if (GameManager.enemies.Count <= 0)
+        {
+            if (_targets.Count > 0)
+            {
+                EventManager.ChangeState(LevelState.End);
+            }
+
+        }
+        else if (GameManager.enemies.Count > 0 && _targets.Count <= 0)
+        {
+            EventManager.ChangeState(LevelState.Defeat);
+        }
     }
 }

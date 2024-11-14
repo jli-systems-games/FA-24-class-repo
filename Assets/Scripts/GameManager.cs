@@ -4,37 +4,45 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum LevelState {
-    Start,End,Defeat
+    Preparing,Start,End,Defeat
 }
 
 public class GameManager : MonoBehaviour
 {
-    LevelState currState;
+    public static LevelState currState;
     public static List<GameObject> enemies = new List<GameObject>();
+    public static List<ToolObstacle> tools = new List<ToolObstacle>();
+    [SerializeField] GameObject nextButton, Failure;
+    //[SerializeField] EventManager _event;
+    List<Level> levels = new List<Level> { new Level(4, 2)};
+    string[] sceneNames = { "Level2", "SampleScene" };
+    int index = -1;
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneUnloaded += OnSceneUnloaded;
         EventManager.killedOff += ChangeLevelState;
-        currState = LevelState.Start;
-        GameObject[] ens = Array.ConvertAll<EnemyAttack,GameObject>( FindObjectsByType<EnemyAttack>(FindObjectsSortMode.None), (item) => item.gameObject);
-        enemies = ens.OfType<GameObject>().ToList();
+
+        //ChangeLevelState(LevelState.Preparing);
+        StartCoroutine(setUp());
+
 
     }
     private void OnSceneUnloaded(Scene current)
     {
         Debug.Log("OnSceneUnloaded: " + current.name);
-        ChangeLevelState(LevelState.Start);
+        ChangeLevelState(LevelState.Preparing);
     }
 
     void Update()
     {
         if (Input.GetKey("space"))
         {
-            Debug.Log("Quitting Scene1");
-            ChangeScene();
+
+            beginLevel();
         }
     }
     void ChangeLevelState(LevelState state)
@@ -43,28 +51,62 @@ public class GameManager : MonoBehaviour
         
         switch (currState)
         {
+            case LevelState.Preparing:
+                //show ui of the limits of the number of the tools allow to use;
+
+              EventManager.fetchTools(levels[0]);
+                
+              nextButton.SetActive(false);
+
+                break;
             case LevelState.Start:
                 //grab all the enemies in the scene
                 GameObject[] ens = Array.ConvertAll<EnemyAttack, GameObject>(FindObjectsByType<EnemyAttack>(FindObjectsSortMode.None), (item) => item.gameObject);
                 enemies = ens.OfType<GameObject>().ToList();
-                Debug.Log("yyee");
+                //disable the tool objects;
+                if (tools.Count > 0)
+                {
+                    foreach (ToolObstacle t in tools)
+                    {
+                        t.gameObject.SetActive(false);
+                    }
+                }
                 break;
             case LevelState.End:
                 //showing passing achievement
-                Debug.Log("yay you killed them");
+                nextButton.SetActive(true);
                 break;
             case LevelState.Defeat:
-                Debug.Log("Aw you lost");
+                Failure.SetActive(true);
                 break;
         }
     }
-    void ChangeScene()
+    public void ChangeScene()
     {
         //clear the static list of enemies
         if(enemies.Count > 0) { enemies.Clear(); }
+        //clear tools list 
+        if(tools.Count > 0) { tools.Clear(); }
 
+        SceneManager.LoadScene(sceneNames[index + 1]);
+    }
 
+    public void beginLevel()
+    {
+        ChangeLevelState(LevelState.Start);
 
-        SceneManager.LoadScene("Level2");
+    }
+    IEnumerator setUp()
+    {   
+        yield return new WaitForEndOfFrame();
+
+        if(FindAnyObjectByType<ToolObstacle>() == null)
+        {
+            Debug.Log("waitin");
+        }
+        else
+        {
+            ChangeLevelState(LevelState.Preparing);
+        }
     }
 }

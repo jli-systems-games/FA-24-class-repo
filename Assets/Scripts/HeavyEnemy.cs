@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 
 enum SelfState {
@@ -73,10 +72,7 @@ public class HeavyEnemy : EnemyAttack
         {
             Debug.Log("breaking");
             results =  Physics2D.BoxCastAll(origin, size, 0, transform.right, Mathf.Infinity ,mask);
-            foreach (RaycastHit2D hit in results)
-            {
-                Debug.Log(hit.collider.name);
-            }
+           
             if (results.Length > 0) {
                 rb.AddForce(-transform.right * 2f,ForceMode2D.Impulse);
 

@@ -8,10 +8,12 @@ public class EventManager : MonoBehaviour
     public static event Action<string,int> gotHit;
     public static event Action changeTarget;
     public static event Action<LevelState> killedOff;
+    public static event Action<Level> decideCount;
 
     void Start()
     {
-        
+        //DontDestroyOnLoad(gameObject);
+
     }
 
     public static void harming(string id, int damage)
@@ -26,4 +28,18 @@ public class EventManager : MonoBehaviour
     {
         killedOff?.Invoke(state);
     }
+    public static void fetchTools(Level L)
+    {
+
+        if(decideCount != null)
+        {
+            decideCount(L);
+        }
+        else
+        {
+            Debug.Log("0");
+        }
+
+    }
+  
 }
