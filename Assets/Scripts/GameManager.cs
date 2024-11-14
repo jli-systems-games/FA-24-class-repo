@@ -114,8 +114,6 @@ public class GameManager : MonoBehaviour
         {
             GameObject pigeonObj = Instantiate(pigeonPrefabs[1], Random.insideUnitSphere * 10 + teamSpawners[1].position, Random.rotation);
             pigeonObj.GetComponent<PigeonController>().TeamNum = 2;
-            pigeonObj.GetComponent<PigeonController>().SetPoopingState();
-
 
             teamTwo.Add(pigeonObj);
         }
