@@ -89,6 +89,19 @@ public class EnemyAttack : MonoBehaviour
 
 
     }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("villager"))
+        {
+
+            VillagerBehavior v = collision.GetComponent<VillagerBehavior>();
+            v.DeductHealth(targetIDs[index], _stats.damage);
+            //EventManager.harming(targetIDs[index], _stats.damage);
+
+        }
+
+        determine();
+    }
     void deductHealth(int i)
     {
         health -= i;

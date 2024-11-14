@@ -20,7 +20,7 @@ public class HeavyEnemy : EnemyAttack
         currentState = SelfState.Moving;
         rb = GetComponent<Rigidbody2D>();
         
-        size = new Vector2(transform.localScale.x, transform.localScale.y);
+        size = new Vector2(transform.localScale.x, transform.localScale.y *10f);
     }
     protected override void Update()
     {   
@@ -31,7 +31,7 @@ public class HeavyEnemy : EnemyAttack
         else
         {
             transform.position = transform.position;
-            Debug.Log("breakthrough");
+            Debug.Log("currently" + currentState);
         }
         
         origin = new Vector2(transform.position.x + transform.localScale.x, transform.position.y);
