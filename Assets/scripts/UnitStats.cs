@@ -9,6 +9,6 @@ public class UnitStats : ScriptableObject
     public int health;
     public int attackPower;
     public float attackSpeed;
-    public int team;
+    public int team; // 0 for candy, 1 for dentist
 }
 
