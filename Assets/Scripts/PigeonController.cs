@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum PigeonStates
 {
     idle,
+    emptyBowels,
     regularBowels,
     diarrhea,
     dead
@@ -32,6 +34,10 @@ public class PigeonController : MonoBehaviour
     private Rigidbody rb;
 
     private bool instantiated;
+    public List<Food> stomachItems = new List<Food>();
+
+    private int bombTime;
+    private bool setOffBomb;
 
     private void Start()
     {
@@ -41,6 +47,7 @@ public class PigeonController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         targetPos = new Vector3 (Random.Range(-30, 35), 0, Random.Range(-20, 24));
         instantiated = false;
+        setOffBomb = false;
     }
 
     private void Awake()
@@ -60,6 +67,7 @@ public class PigeonController : MonoBehaviour
 
         //check whats in the stomach and if there's chocolate, have the the "bomb" go off at a random time within the time limit
 
+
         // have some sort of event that calls a function when Dead to play the dead animation
     }
 
@@ -69,6 +77,13 @@ public class PigeonController : MonoBehaviour
         {
             SetVelocity();
             RotateTowardsTarget();
+        }
+
+        if (bombTime == _gameManager.timer && setOffBomb == false)
+        {
+            Debug.Log("GO OFF");
+            StartCoroutine(PoopBomb());
+            setOffBomb = true;
         }
     }
 
@@ -97,7 +112,7 @@ public class PigeonController : MonoBehaviour
     {
         targetPos = new Vector3(Random.Range(-30, 35), 0, Random.Range(-20, 24));
 
-        if (instantiated)
+        if (instantiated && (pigeonState == PigeonStates.regularBowels || pigeonState == PigeonStates.diarrhea))
         {
             poopPosition = gameObject.transform.position;
             poopPosition.y = 0.01f;
@@ -120,24 +135,7 @@ public class PigeonController : MonoBehaviour
         //rb.velocity = transform.up * speed;
     }
 
-    private IEnumerator Pooping()
-    {
-        if(pigeonState == PigeonStates.regularBowels)
-        {
-            poopPosition = gameObject.transform.position;
-            GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
-            paintSplatter.transform.Rotate(90,0,0);
-
-            Debug.Log("pooping");
-        }
-
-        Debug.Log("pigeon state: " + pigeonState);
-        yield return new WaitForSeconds(5);
-
-        StartCoroutine(Pooping());
-    }
     
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Team1Poop") && TeamNum == 2)
@@ -151,5 +149,66 @@ public class PigeonController : MonoBehaviour
             pigeonState = PigeonStates.dead;
             //StopCoroutine(Pooping());
         }
+    }
+
+    public void SetPoopingState()
+    {
+        if(stomachLevel == 0)
+        {
+            pigeonState = PigeonStates.emptyBowels;
+            speed = 2;
+        }
+
+        else if(stomachLevel > 3)
+        {
+            pigeonState = PigeonStates.regularBowels;
+            speed = 2;
+        }
+
+        else
+        {
+            pigeonState = PigeonStates.regularBowels; 
+        }
+
+        foreach(Food fooditem in stomachItems)
+        {
+            if(fooditem == Food.chocolate)
+            {
+                pigeonState = PigeonStates.diarrhea;
+                bombTime = Random.Range(0, 59);
+                Debug.Log("Bomb Time: " + bombTime);
+            }
+        }
+
+        Debug.Log(pigeonState);
+    }
+
+    private IEnumerator PoopBomb()
+    {
+        for(int i = 0; i < 50; i++)
+        {
+            poopPosition = gameObject.transform.position + new Vector3(Random.Range(-3,3),0,Random.Range(-3,3));
+            poopPosition.y = 0.01f;
+
+            GameObject paintSplatter = Instantiate(pigeonBase.splatter, poopPosition, Quaternion.identity);
+            paintSplatter.transform.Rotate(90, 0, 0);
+
+            if (TeamNum == 1)
+            {
+                GameManager.teamOneSplatters.Add(paintSplatter);
+            }
+
+            else if (TeamNum == 2)
+            {
+                GameManager.teamTwoSplatters.Add(paintSplatter);
+            }
+        }
+
+        pigeonState = PigeonStates.dead;
+        _gameManager.poopBombText.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        _gameManager.poopBombText.SetActive(false);
     }
 }

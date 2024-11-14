@@ -24,13 +24,11 @@ public class GameManager : MonoBehaviour
     public static GameStates state;
 
     public List<GameObject> teamOne = new List<GameObject>();
-    public List<Food> TeamOneChocolate = new List<Food>();
-    public List<Food> TeamOneGrains = new List<Food>();
+    public List<Food> TeamOneInventory = new List<Food>();
     public static List<GameObject> teamOneSplatters = new List<GameObject>();
 
     public List<GameObject> teamTwo = new List<GameObject>();
-    public List<Food> TeamTwoChocolate = new List<Food>();
-    public List<Food> TeamTwoGrains = new List<Food>();
+    public List<Food> TeamTwoInventory = new List<Food>();
     public static List<GameObject> teamTwoSplatters = new List<GameObject>();
 
     public GameObject[] inventoryBoxes;
@@ -58,9 +56,13 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI winnerText;
     public TextMeshProUGUI[] scores;
 
+    public GameObject poopBombText;
+
     // Start is called before the first frame update
     void Start()
     {
+        poopBombText.SetActive(false);
+
         SetUpSelectScreen();
         
     }
@@ -109,9 +111,22 @@ public class GameManager : MonoBehaviour
         {
             GameObject pigeonObj = Instantiate(pigeonPrefabs[1], Random.insideUnitSphere * 10 + teamSpawners[1].position, Random.rotation);
             pigeonObj.GetComponent<PigeonController>().TeamNum = 2;
+            pigeonObj.GetComponent<PigeonController>().SetPoopingState();
 
 
             teamTwo.Add(pigeonObj);
+        }
+
+        AddToStomachs();
+
+        foreach(GameObject pigeonObj in teamOne)
+        {
+            pigeonObj.GetComponent<PigeonController>().SetPoopingState();
+        }
+
+        foreach (GameObject pigeonObj in teamTwo)
+        {
+            pigeonObj.GetComponent<PigeonController>().SetPoopingState();
         }
 
         state = GameStates.actingBattle;
@@ -154,6 +169,8 @@ public class GameManager : MonoBehaviour
 
         teamTwo.Clear();
 
+        poopBombText.SetActive(false);
+
         winnerText.gameObject.SetActive(true);
         scores[0].gameObject.SetActive(true);
         scores[1].gameObject.SetActive(true);
@@ -169,14 +186,32 @@ public class GameManager : MonoBehaviour
 
     public void AddToStomachs()
     {
+        //Debug.Log(TeamOneInventory.Count);
+        //Debug.Log("team 1 count: " + teamOne.Count);
         //cycle through each pigeon, add food from the inventory one at a time, return back to the first pigeon if there's more food than pigeons, remove item from the inventory once "fed"
-        for(int i = 0; i < TeamOneGrains.Count; i++)
+        for(int i = 0; i < teamOne.Count; i++)
         {
-            if (teamOne[i] != null)
+            if( i < TeamOneInventory.Count)
             {
                 teamOne[i].GetComponent<PigeonController>().stomachLevel++;
-                teamOne[i].GetComponent<PigeonController>().pigeonBase.stomachItems = Food.grains;
+                teamOne[i].GetComponent<PigeonController>().stomachItems.Add(TeamOneInventory[i]);
+                TeamOneInventory.RemoveAt(i);
             }
+        }
+
+        for(int i = 0; i < teamTwo.Count; i++)
+        {
+            if (i < TeamTwoInventory.Count)
+            {
+                teamTwo[i].GetComponent<PigeonController>().stomachLevel++;
+                teamTwo[i].GetComponent<PigeonController>().stomachItems.Add(TeamTwoInventory[i]);
+                TeamTwoInventory.RemoveAt(i);
+            }
+        }
+
+        if(TeamOneInventory.Count > 0 && TeamTwoInventory.Count > 0)
+        {
+            AddToStomachs();
         }
     }
 
@@ -206,7 +241,7 @@ public class GameManager : MonoBehaviour
             GameObject grain = Instantiate(grainPrefab, inventoryBoxes[0].transform);
             grain.GetComponent<RectTransform>().localPosition = foodPos;
 
-            TeamOneGrains.Add(Food.grains);
+            TeamOneInventory.Add(Food.grains);
         }
 
         if(food == "chocolate")
@@ -215,7 +250,7 @@ public class GameManager : MonoBehaviour
             GameObject chocolate = Instantiate(chocolatePrefab, inventoryBoxes[0].transform);
             chocolate.GetComponent<RectTransform>().localPosition = foodPos;
             
-            TeamOneChocolate.Add(Food.chocolate);
+            TeamOneInventory.Add(Food.chocolate);
         }
     }
 
@@ -227,7 +262,7 @@ public class GameManager : MonoBehaviour
             GameObject grain = Instantiate(grainPrefab, inventoryBoxes[1].transform);
             grain.GetComponent<RectTransform>().localPosition = foodPos;
 
-            TeamTwoGrains.Add(Food.grains);
+            TeamTwoInventory.Add(Food.grains);
         }
 
         if (food == "chocolate")
@@ -235,7 +270,7 @@ public class GameManager : MonoBehaviour
             Vector3 foodPos = new Vector3(Random.Range(-200, 200), Random.Range(-300, 300), 0);
             GameObject chocolate = Instantiate(chocolatePrefab, inventoryBoxes[1].transform);
             chocolate.GetComponent<RectTransform>().localPosition = foodPos;
-            TeamTwoChocolate.Add(Food.chocolate);
+            TeamTwoInventory.Add(Food.chocolate);
         }
     }
 }
