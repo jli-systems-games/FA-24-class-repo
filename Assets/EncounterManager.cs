@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class EncounterManager : MonoBehaviour
@@ -11,28 +10,21 @@ public class EncounterManager : MonoBehaviour
     private EnemyRoller enemyRoller;
 
     public GameObject enemyPrefab;
-    private Transform spawnPoint;
+    public Transform spawnPoint;
+    public int spawnCount = 4; 
+    public Vector2 spawnAreaSize = new Vector2(14f, 8f);
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         diceRoller = GetComponent<DiceRoller>();
+
+        // Spawn initial set of enemies
+        for (int i = 0; i < spawnCount; i++)
+        {
+            SpawnNewEnemy();
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (enemyRoller != null && Input.GetKeyDown(KeyCode.E))
@@ -41,7 +33,7 @@ public class EncounterManager : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
@@ -49,17 +41,17 @@ public class EncounterManager : MonoBehaviour
             if (enemy != null)
             {
                 enemyRoller = enemy;
-                Debug.Log("enemy in range");
+                Debug.Log("Enemy in range");
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy") && enemyRoller != null)
+        if (other.CompareTag("Enemy") && enemyRoller != null && other.GetComponent<EnemyRoller>() == enemyRoller)
         {
             enemyRoller = null;
-            Debug.Log("enemy leaving range");
+            Debug.Log("Enemy out of range");
         }
     }
 
@@ -70,9 +62,9 @@ public class EncounterManager : MonoBehaviour
             Debug.Log("Encounter started with enemy!");
 
             diceRoller.RollPlayer();
+            enemyRoller.RollEnemy();
             int enemyRoll = enemyRoller.ResultEnemy();
             int playerRoll = diceRoller.ResultPlayer();
-
 
             ResolveEncounter(playerRoll, enemyRoll);
         }
@@ -94,7 +86,14 @@ public class EncounterManager : MonoBehaviour
 
     private void SpawnNewEnemy()
     {
-        GameObject newEnemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-        enemyRoller = newEnemy.GetComponent<EnemyRoller>();
+        // Calculate a random position within the spawn area
+        Vector2 randomPosition = new Vector2(
+            spawnPoint.position.x + Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
+            spawnPoint.position.y + Random.Range(-spawnAreaSize.y / 2, spawnAreaSize.y / 2)
+        );
+
+        // Instantiate enemy at the random position
+        GameObject newEnemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
+        newEnemy.GetComponent<EnemyRoller>(); // Access and configure if needed
     }
 }

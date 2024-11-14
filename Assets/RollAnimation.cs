@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class RollAnimation : MonoBehaviour
 {
-    public TextMeshProUGUI numberDisplay;
+    public TextMeshPro numberDisplay;
     public float animationDuration = 1.0f;
     public int finalValue;
 
