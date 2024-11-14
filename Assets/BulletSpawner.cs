@@ -53,7 +53,7 @@ public class BulletSpawner : MonoBehaviour
                 spawnedBullet = Instantiate(bullet, item.transform.position, Quaternion.identity);
                 spawnedBullet.GetComponent<Bullet>().speed = speed;
                 spawnedBullet.GetComponent<Bullet>().bulletLife = bulletLife;
-                spawnedBullet.transform.rotation = transform.rotation;
+                spawnedBullet.transform.rotation = item.transform.rotation;
             }
 
         }

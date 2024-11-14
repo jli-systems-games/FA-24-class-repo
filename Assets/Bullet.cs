@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
     private Vector2 spawnPoint;
     private float timer = 0f;
 
+    [SerializeField] PlayerOne p1_Script;
+
 
     // Start is called before the first frame update
     void Start()
@@ -61,20 +63,29 @@ public class Bullet : MonoBehaviour
 
         if (gameObject.CompareTag("B1") && collision.gameObject.CompareTag("2"))
         {
-            Debug.Log("hit p2");
-            Destroy(gameObject);
+            if (collision.isTrigger) // Only proceed if colliding with the trigger collider
+            {
+                Debug.Log("hit p2");
+                Destroy(gameObject);
 
-            GameObject.Find("player 2").GetComponent<PlayerOne>().p1_hp--;
-
+                PlayerOne playerOne = GameObject.Find("player 2").GetComponent<PlayerOne>();
+                playerOne.p1_hp--;
+                playerOne.UpdateBar(playerOne.p1_hp, playerOne.maxHp);
+            }
         }
 
 
         if (gameObject.CompareTag("B2") && collision.gameObject.CompareTag("1"))
         {
-            Debug.Log("hit p1");
-            Destroy(gameObject);
+            if (collision.isTrigger) // Only proceed if colliding with the trigger collider
+            {
+                Debug.Log("hit p1");
+                Destroy(gameObject);
 
-            GameObject.Find("player 1").GetComponent<PlayerOne>().p1_hp--;
+                PlayerOne playerOne = GameObject.Find("player 1").GetComponent<PlayerOne>();
+                playerOne.p1_hp--;
+                playerOne.UpdateBar(playerOne.p1_hp, playerOne.maxHp);
+            }
         }
     }
 
