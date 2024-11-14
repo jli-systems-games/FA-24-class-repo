@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
-     // UI elements for player stats
+    // UI elements for player stats
     public Slider playerHealthBar;
     public Slider playerAttackPowerBar;
     public Slider playerDefenseBar;
@@ -30,6 +30,13 @@ public class BattleManager : MonoBehaviour
     private Character playerCharacter;
     private Character opponentCharacter;
 
+    // Track special power usage for player and opponent
+    private int playerSpecialTurnsUsed = 0;
+    private int opponentSpecialTurnsUsed = 0;
+
+    // Reference to the BattleUIManager for displaying action text
+    public BattleUIManager uiManager;
+
     private void Start()
     {
         // Get the characters from the GameManager
@@ -39,45 +46,35 @@ public class BattleManager : MonoBehaviour
         // Initialize health, attack, and defense bars for the player
         playerHealthBar.maxValue = playerCharacter.health;
         playerHealthBar.value = playerCharacter.health;
-
         playerAttackPowerBar.maxValue = playerCharacter.attackPower;
         playerAttackPowerBar.value = playerCharacter.attackPower;
-
         playerDefenseBar.maxValue = playerCharacter.defense;
         playerDefenseBar.value = playerCharacter.defense;
 
         // Initialize health, attack, and defense bars for the opponent
         opponentHealthBar.maxValue = opponentCharacter.health;
         opponentHealthBar.value = opponentCharacter.health;
-
         opponentAttackPowerBar.maxValue = opponentCharacter.attackPower;
         opponentAttackPowerBar.value = opponentCharacter.attackPower;
-
         opponentDefenseBar.maxValue = opponentCharacter.defense;
         opponentDefenseBar.value = opponentCharacter.defense;
 
-        // Instantiate the player character facing right
-        playerCharacterInstance = Instantiate(playerCharacter.characterPrefab, playerSpawnPoint.position, Quaternion.identity, playerSpawnPoint);
+        // Instantiate the player and opponent characters
+        Vector3 playerPosition = playerSpawnPoint.position + playerCharacter.playerPositionOffset;
+        playerCharacterInstance = Instantiate(playerCharacter.characterPrefab, playerPosition, Quaternion.identity, playerSpawnPoint);
+        Vector3 opponentPosition = opponentSpawnPoint.position + opponentCharacter.opponentPositionOffset;
+        opponentCharacterInstance = Instantiate(opponentCharacter.characterPrefab, opponentPosition, Quaternion.Euler(0, 180, 0), opponentSpawnPoint);
 
-        // Instantiate the opponent character facing left (flipped 180 degrees on Y-axis)
-        opponentCharacterInstance = Instantiate(opponentCharacter.characterPrefab, opponentSpawnPoint.position, Quaternion.Euler(0, 180, 0), opponentSpawnPoint);
-
-        // Instantiate face icons
         InstantiateFaceIcons();
-
-        // Start the battle routine
         StartCoroutine(BattleRoutine());
     }
 
     private void InstantiateFaceIcons()
     {
-        // Instantiate player face icon prefab
         if (playerCharacter.faceIconPrefab != null)
         {
             Instantiate(playerCharacter.faceIconPrefab, playerFaceIconHolder.position, Quaternion.identity, playerFaceIconHolder);
         }
-
-        // Instantiate opponent face icon prefab
         if (opponentCharacter.faceIconPrefab != null)
         {
             Instantiate(opponentCharacter.faceIconPrefab, opponentFaceIconHolder.position, Quaternion.identity, opponentFaceIconHolder);
@@ -86,63 +83,129 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator BattleRoutine()
     {
+        playerSpecialTurnsUsed = 0;
+        opponentSpecialTurnsUsed = 0;
+
         while (playerHealthBar.value > 0 && opponentHealthBar.value > 0)
         {
-            // Player's turn
-            yield return StartCoroutine(PlayerTurn());
+            yield return new WaitForSeconds(2f);
 
-            // Check if opponent is defeated
+            // Player's turn
+            yield return StartCoroutine(TakeTurn(playerCharacter, playerHealthBar, playerAttackPowerBar, playerDefenseBar, opponentHealthBar, true));
+
             if (opponentHealthBar.value <= 0)
             {
-                Debug.Log("Player Wins!");
+                uiManager.ShowActionText("Player Wins!", true); // Show win text indefinitely
                 yield break;
             }
+
+            yield return new WaitForSeconds(2f);
 
             // Opponent's turn
-            yield return StartCoroutine(OpponentTurn());
+            yield return StartCoroutine(TakeTurn(opponentCharacter, opponentHealthBar, opponentAttackPowerBar, opponentDefenseBar, playerHealthBar, false));
 
-            // Check if player is defeated
             if (playerHealthBar.value <= 0)
             {
-                Debug.Log("Opponent Wins!");
+                uiManager.ShowActionText("Opponent Wins!", true); // Show win text indefinitely
                 yield break;
             }
+
+            yield return new WaitForSeconds(3f);
         }
     }
 
-    private IEnumerator PlayerTurn()
+    private IEnumerator TakeTurn(Character character, Slider healthBar, Slider attackPowerBar, Slider defenseBar, Slider opponentHealthBar, bool isPlayer)
     {
-        Debug.Log("Player's Turn: Attacks Opponent");
+        string actor = isPlayer ? "Player" : "Opponent";
+        Debug.Log($"{actor}'s Turn");
 
-        // Trigger player attack animation
-        /*if (GameManager.Instance.playerCharacter.characterPrefab.TryGetComponent(out Animator playerAnimator))
+        bool canUseDefense = healthBar.value <= healthBar.maxValue * 0.8f && defenseBar.value > 0.0f;
+        bool useDefense = false;
+
+        if (canUseDefense)
         {
-            playerAnimator.SetTrigger("Attack");
+            if (healthBar.value <= healthBar.maxValue * 0.4f)
+            {
+                useDefense = Random.value < 0.7f;
+            }
+            else
+            {
+                useDefense = Random.value < 0.3f;
+            }
         }
-        */
-        // Calculate damage based on player's attack power and opponent's defense
-        float damage = Mathf.Max(0, playerCharacter.attackPower - opponentCharacter.defense);
-        opponentHealthBar.value -= damage;
 
-        yield return new WaitForSeconds(1f); // Wait for a moment to visualize the turn
-    }
-
-    private IEnumerator OpponentTurn()
-    {
-        Debug.Log("Opponent's Turn: Attacks Player");
-
-        /*
-        // Trigger opponent attack animation
-        if (GameManager.Instance.opponentCharacter.characterPrefab.TryGetComponent(out Animator opponentAnimator))
+        if (useDefense && defenseBar.value > 0.0f)
         {
-            opponentAnimator.SetTrigger("Attack");
+            Debug.Log($"{actor} uses Defense!");
+            uiManager.ShowActionText($"{actor} uses Defense!");
+
+            defenseBar.value = Mathf.Max(0.0f, defenseBar.value - defenseBar.maxValue * 0.25f);
+            float healthRestoration = character.characterType == CharacterType.Magic ? 0.25f : 0.15f;
+            healthBar.value = Mathf.Min(healthBar.maxValue, healthBar.value + healthBar.maxValue * healthRestoration);
+            attackPowerBar.value = Mathf.Min(attackPowerBar.maxValue, attackPowerBar.value + attackPowerBar.maxValue * 0.2f);
         }
-        */
+        else
+        {
+            int maxSpecialUses = character.characterType == CharacterType.Melee ? 3 : 2;
+            int specialTurnsUsed = isPlayer ? playerSpecialTurnsUsed : opponentSpecialTurnsUsed;
+            bool useSpecial = specialTurnsUsed < maxSpecialUses && Random.value < 0.35f;
 
-        // Calculate damage based on opponent's attack power and player's defense
-        float damage = Mathf.Max(0, opponentCharacter.attackPower - playerCharacter.defense);
-        playerHealthBar.value -= damage;
+            float baseDamage = character.characterType switch
+            {
+                CharacterType.Ranged => 3.0f,
+                CharacterType.Melee => 1.8f,
+                CharacterType.Magic => 2.5f,
+                _ => 0.0f
+            };
 
-        yield return new WaitForSeconds(1f); // Wait for a moment to visualize the turn
+            float damage = baseDamage;
+            if (useSpecial)
+            {
+                Debug.Log($"{actor} uses Special Power!");
+                uiManager.ShowActionText($"{actor} uses Special Power!");
+                damage += baseDamage * 0.25f;
+                if (isPlayer) playerSpecialTurnsUsed++;
+                else opponentSpecialTurnsUsed++;
+            }
+            else
+            {
+                uiManager.ShowActionText($"{actor} attacks!");
+            }
+
+            //If health is below 0, zero out every bar
+            if (healthBar.value <= 0.0f)
+            {
+                healthBar.value = 0.0f;
+                attackPowerBar.value = 0.0f;
+                defenseBar.value = 0.0f;
+            }
+
+            if (healthBar.value <= healthBar.maxValue * 0.0f)
+            {
+                Debug.Log($"{actor}'s health is critically low! Attack power reduced by an additional 25%");
+                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.5f * 0.75f);
+            }
+            else if (healthBar.value <= healthBar.maxValue * 0.15f)
+            {
+                Debug.Log($"{actor}'s health is critically low! Attack power reduced by an additional 25%");
+                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.5f * 0.75f);
+            }
+            else if (healthBar.value <= healthBar.maxValue * 0.3f)
+            {
+                Debug.Log($"{actor}'s health is very low! Attack power reduced by 50%");
+                damage *= 0.5f;
+                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.5f);
+            }
+            else if (healthBar.value <= healthBar.maxValue * 0.6f)
+            {
+                Debug.Log($"{actor}'s health is below 60%! Attack power reduced by 25%");
+                damage *= 0.75f;
+                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.75f);
+            }
+
+            opponentHealthBar.value = Mathf.Clamp(opponentHealthBar.value - damage, 0.0f, opponentHealthBar.maxValue);
+        }
+
+        yield return new WaitForSeconds(1f);
     }
 }

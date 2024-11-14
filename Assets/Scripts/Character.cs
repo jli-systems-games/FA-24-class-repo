@@ -20,6 +20,8 @@ public class Character : ScriptableObject
     //For Battle Scene!
     public GameObject faceIconPrefab; // Prefab Icon for UI display next to the health bar
     public GameObject characterPrefab; // Reference to the character prefab with animations
+    public Vector3 playerPositionOffset; // Offset for player's position
+    public Vector3 opponentPositionOffset; // Offset for opponent's position
 
     public CharacterType characterType; // Enum for melee, ranged, magic
 }
