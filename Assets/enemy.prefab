@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 6931123926761543371}
   - component: {fileID: 6931123926761543364}
   - component: {fileID: 6931123926761543369}
+  - component: {fileID: -6228567832843601342}
   m_Layer: 5
   m_Name: enemy
   m_TagString: Enemy
@@ -304,4 +305,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyLevel: 0
   enemyRoll: 0
+  minEnemyRoll: 1
+  maxEnemyRoll: 6
   maxEnemyLevel: 5
+--- !u!114 &-6228567832843601342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6931123926761543365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcfea47b9279243aebfc638cf8b6d2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberDisplay: {fileID: 6931123926527412003}
+  animationDuration: 1
+  finalValue: 0

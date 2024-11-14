@@ -11,20 +11,21 @@ public class EncounterManager : MonoBehaviour
 
     public GameObject enemyPrefab;
     public Transform spawnPoint;
-    public int spawnCount = 4; 
-    public Vector2 spawnAreaSize = new Vector2(14f, 8f);
+    public int spawnCount = 5;
+    public Vector2 spawnAreaSize = new Vector2(10f, 10f);
 
+    // Start is called before the first frame update
     void Start()
     {
         diceRoller = GetComponent<DiceRoller>();
 
-        // Spawn initial set of enemies
         for (int i = 0; i < spawnCount; i++)
         {
-            SpawnNewEnemy();
+            SpawnNewEnemy(i == 0); // Ensure the first enemy is within range
         }
     }
 
+    // Update is called once per frame
     void Update()
     {
         if (enemyRoller != null && Input.GetKeyDown(KeyCode.E))
@@ -41,7 +42,7 @@ public class EncounterManager : MonoBehaviour
             if (enemy != null)
             {
                 enemyRoller = enemy;
-                Debug.Log("Enemy in range");
+                //Debug.Log("Enemy in range");
             }
         }
     }
@@ -51,7 +52,7 @@ public class EncounterManager : MonoBehaviour
         if (other.CompareTag("Enemy") && enemyRoller != null && other.GetComponent<EnemyRoller>() == enemyRoller)
         {
             enemyRoller = null;
-            Debug.Log("Enemy out of range");
+            //Debug.Log("Enemy out of range");
         }
     }
 
@@ -76,7 +77,7 @@ public class EncounterManager : MonoBehaviour
         {
             diceRoller.IncreaseMaxPlayerRoll(enemyRoll);
             Destroy(enemyRoller.gameObject);
-            SpawnNewEnemy();
+            SpawnNewEnemy(true); // Ensure a new enemy within range
         }
         else
         {
@@ -84,16 +85,26 @@ public class EncounterManager : MonoBehaviour
         }
     }
 
-    private void SpawnNewEnemy()
+    private void SpawnNewEnemy(bool ensureWithinPlayerRange = true)
     {
-        // Calculate a random position within the spawn area
         Vector2 randomPosition = new Vector2(
             spawnPoint.position.x + Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
             spawnPoint.position.y + Random.Range(-spawnAreaSize.y / 2, spawnAreaSize.y / 2)
         );
 
-        // Instantiate enemy at the random position
         GameObject newEnemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
-        newEnemy.GetComponent<EnemyRoller>(); // Access and configure if needed
+        EnemyRoller enemyComponent = newEnemy.GetComponent<EnemyRoller>();
+
+        if (enemyComponent != null)
+        {
+            enemyComponent.SetEnemyRange();
+
+            // Ensure the enemy is within the player's max roll range if needed
+            if (ensureWithinPlayerRange)
+            {
+                int playerMaxRoll = diceRoller.GetMaxPlayerRoll();
+                enemyComponent.SetMaxRollWithinRange(playerMaxRoll);
+            }
+        }
     }
 }
