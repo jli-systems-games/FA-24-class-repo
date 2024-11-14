@@ -11,12 +11,18 @@ public class EnemyRoller : MonoBehaviour
 
     [SerializeField] private int maxEnemyLevel = 5;
 
-    void Start()
+    public void InitializeEnemy(int playerMaxRoll, bool inRange)
     {
         SetEnemyRange();
+
+        // Apply the range restriction if the enemy should be within the player's max roll
+        if (inRange)
+        {
+            SetMaxRollWithinRange(playerMaxRoll);
+        }
     }
 
-    public void SetEnemyRange()
+    private void SetEnemyRange()
     {
         enemyLevel = Random.Range(1, maxEnemyLevel + 1);
         maxEnemyRoll = 6 + (enemyLevel * enemyLevel) * 2;
@@ -43,4 +49,3 @@ public class EnemyRoller : MonoBehaviour
         maxEnemyRoll = Mathf.Min(playerMaxRoll, maxEnemyRoll);
     }
 }
-
