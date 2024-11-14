@@ -17,6 +17,10 @@ public class Character : ScriptableObject
     public Vector2 playerPreviewPositionOffset = Vector2.zero; // Offset for player side
     public Vector2 opponentPreviewPositionOffset = Vector2.zero; // Offset for opponent side
 
+    //For Battle Scene!
+    public GameObject faceIconPrefab; // Prefab Icon for UI display next to the health bar
+    public GameObject characterPrefab; // Reference to the character prefab with animations
+
     public CharacterType characterType; // Enum for melee, ranged, magic
 }
 

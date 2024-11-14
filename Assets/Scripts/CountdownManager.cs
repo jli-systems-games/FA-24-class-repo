@@ -38,7 +38,7 @@ public class CountdownManager : MonoBehaviour
 
         // Show "Get ready to fight!"
         countdownText.text = "Get ready to fight!";
-        yield return new WaitForSeconds(1f); // Wait for another second
+        yield return new WaitForSeconds(1.5f); // Wait for another second
 
         // Load the battle scene
         SceneManager.LoadScene(battleSceneName);

@@ -18,6 +18,7 @@ public class CharacterSelectionManager : MonoBehaviour
     public Button continueButton; // Reference to the Continue button
 
     private Character selectedCharacter; // Track the selected player character
+    private Character opponentCharacter; // Track the randomly selected opponent character
     private CharacterType opponentCharacterType; // Track the opponent's character type
     private Button currentlyDisabledButton; // Track the currently disabled button
     private bool isHovering = false; // Track whether the player is currently hovering over any button
@@ -25,11 +26,11 @@ public class CharacterSelectionManager : MonoBehaviour
     void Start()
     {
         // Randomly pick a character for the opponent at the start
-        Character randomOpponent = allCharacters[Random.Range(0, allCharacters.Count)];
-        ShowOpponentCharacter(randomOpponent);
+        opponentCharacter = allCharacters[Random.Range(0, allCharacters.Count)];
+        ShowOpponentCharacter(opponentCharacter);
 
         // Store the opponent's character type and disable the corresponding button
-        opponentCharacterType = randomOpponent.characterType;
+        opponentCharacterType = opponentCharacter.characterType;
         DisableCharacterTypeButton(opponentCharacterType);
 
         // Show the default preview panel initially
@@ -37,6 +38,9 @@ public class CharacterSelectionManager : MonoBehaviour
 
         // Initially disable the Continue button
         continueButton.interactable = false;
+
+        // Link the Continue button to the ConfirmSelection method
+        continueButton.onClick.AddListener(ConfirmSelection);
     }
 
     // Method to show the default preview panel
@@ -58,7 +62,7 @@ public class CharacterSelectionManager : MonoBehaviour
         if (character.characterType != opponentCharacterType)
         {
             defaultPreviewPanel.SetActive(false);
-            playerPreview.ShowCharacterPreview(character, isOpponent: false, flipSprite: false);
+            playerPreview.ShowCharacterPreview(character, isOpponent: false, flipSprite: true); // Player faces right
         }
     }
 
@@ -70,7 +74,7 @@ public class CharacterSelectionManager : MonoBehaviour
         // If a character has been selected, show its preview; otherwise, show default
         if (selectedCharacter != null && !isHovering)
         {
-            playerPreview.ShowCharacterPreview(selectedCharacter, isOpponent: false, flipSprite: false);
+            playerPreview.ShowCharacterPreview(selectedCharacter, isOpponent: false, flipSprite: true); // Player faces right
         }
         else if (selectedCharacter == null)
         {
@@ -85,7 +89,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
         // Show the selected character's preview and hide the default panel
         defaultPreviewPanel.SetActive(false);
-        playerPreview.ShowCharacterPreview(character, isOpponent: false, flipSprite: false);
+        playerPreview.ShowCharacterPreview(character, isOpponent: false, flipSprite: true); // Player faces right
 
         // Enable the Continue button since a character has been selected
         continueButton.interactable = true;
@@ -101,10 +105,17 @@ public class CharacterSelectionManager : MonoBehaviour
         currentlyDisabledButton.interactable = false;
     }
 
+    // Method to confirm character selection and store it in GameManager
+    public void ConfirmSelection()
+    {
+        // Store the selected characters in the GameManager
+        GameManager.Instance.SetSelectedCharacters(selectedCharacter, opponentCharacter);
+    }
+
     // Show the randomly selected opponent character
     private void ShowOpponentCharacter(Character character)
     {
-        opponentPreview.ShowCharacterPreview(character, isOpponent: true, flipSprite: true);
+        opponentPreview.ShowCharacterPreview(character, isOpponent: true, flipSprite: false); // Opponent faces left
     }
 
     // Method to get the button for a specific character type
