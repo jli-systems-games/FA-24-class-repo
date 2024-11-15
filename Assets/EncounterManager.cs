@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class EncounterManager : MonoBehaviour
 {
@@ -9,6 +8,13 @@ public class EncounterManager : MonoBehaviour
     private DiceRoller diceRoller;
     private List<EnemyRoller> activeEnemies = new List<EnemyRoller>();
     private EnemyRoller enemyRoller;
+
+    private RollAnimation playerRollAnimation;
+    private RollAnimation enemyRollAnimation;
+    private bool encounterReadyToResolve = false;
+    public bool isDisplayingFinalRoll = false;
+
+    public RollAnimation rollAnimation;
 
     [Header("Enemy Spawning")]
     public GameObject enemyPrefab;
@@ -21,6 +27,7 @@ public class EncounterManager : MonoBehaviour
     void Start()
     {
         diceRoller = GetComponent<DiceRoller>();
+        rollAnimation = FindObjectOfType<RollAnimation>();
 
         SpawnNewEnemy(true);
         while (activeEnemies.Count < spawnCount)
@@ -36,7 +43,15 @@ public class EncounterManager : MonoBehaviour
 
         if (enemyRoller != null && Input.GetKeyDown(KeyCode.E))
         {
-            StartEncounter(enemyRoller); 
+            if (!encounterReadyToResolve)
+            {
+                StartEncounter(enemyRoller);
+            }
+            else
+            {
+                ResolveEncounter(diceRoller.ResultPlayer(), enemyRoller.ResultEnemy(), enemyRoller);
+                encounterReadyToResolve = false;  // Reset flag for next encounter
+            }
         }
     }
 
@@ -70,12 +85,21 @@ public class EncounterManager : MonoBehaviour
     {
         if (enemyRoller != null)
         {
+            playerRollAnimation = diceRoller.GetComponent<RollAnimation>();
+            enemyRollAnimation = enemyRoller.GetComponent<RollAnimation>();
+
             diceRoller.RollPlayer();
             enemyRoller.RollEnemy();
             int enemyRoll = enemyRoller.ResultEnemy();
             int playerRoll = diceRoller.ResultPlayer();
 
-            ResolveEncounter(playerRoll, enemyRoll, enemyRoller);
+            // Set the direct reference to the final roll flag
+            playerRollAnimation.isFinalRoll = true;
+            enemyRollAnimation.isFinalRoll = true;
+
+            encounterReadyToResolve = true;
+
+            Debug.Log("EC: displaying final roll, setting flag to true");
         }
     }
 
@@ -84,17 +108,21 @@ public class EncounterManager : MonoBehaviour
         if (playerRoll > enemyRoll)
         {
             diceRoller.IncreaseMaxPlayerRoll(enemyRoll);
-            Destroy(enemyRoller.gameObject);
-            activeEnemies.Remove(enemyRoller);
-            SpawnNewEnemy(true);
         }
         else
         {
             diceRoller.DecreaseMaxPlayerRoll(enemyRoll);
-            Destroy(enemyRoller.gameObject);
-            activeEnemies.Remove(enemyRoller);
-            SpawnNewEnemy(true);
         }
+
+        // Destroy enemy and spawn a new one
+        Destroy(enemyRoller.gameObject);
+        activeEnemies.Remove(enemyRoller);
+        SpawnNewEnemy(true);
+
+        // Reset the final roll flag after resolving
+        playerRollAnimation.isFinalRoll = false;
+        enemyRollAnimation.isFinalRoll = false;
+        isDisplayingFinalRoll = false;
     }
 
     #endregion
