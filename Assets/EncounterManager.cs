@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class EncounterManager : MonoBehaviour
 {
+    [Header("Player and Enemy Reference")]
     public static EncounterManager Instance;
     private DiceRoller diceRoller;
     private List<EnemyRoller> activeEnemies = new List<EnemyRoller>();
     private EnemyRoller enemyRoller;
 
+    [Header("Result Display")]
     private RollAnimation playerRollAnimation;
     private RollAnimation enemyRollAnimation;
     private bool encounterReadyToResolve = false;
     public bool isDisplayingFinalRoll = false;
-
-    public RollAnimation rollAnimation;
 
     [Header("Enemy Spawning")]
     public GameObject enemyPrefab;
@@ -27,7 +27,6 @@ public class EncounterManager : MonoBehaviour
     void Start()
     {
         diceRoller = GetComponent<DiceRoller>();
-        rollAnimation = FindObjectOfType<RollAnimation>();
 
         SpawnNewEnemy(true);
         while (activeEnemies.Count < spawnCount)
