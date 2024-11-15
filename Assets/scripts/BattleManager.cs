@@ -5,14 +5,37 @@ using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
-    public List<Unit> candyTeam;
-    public List<Unit> dentistTeam;
+    public List<Unit> candyTeam = new List<Unit>();
+    public List<Unit> dentistTeam = new List<Unit>();
+
     public TextMeshProUGUI winCandy;
     public TextMeshProUGUI winDentist;
+    public TextMeshProUGUI errorMessage;
+    public GameObject panel;
 
-    private void Start()
+    void Start()
     {
+        // candy team has units in scene
+        candyTeam.AddRange(FindObjectsOfType<Unit>());
+    }
+
+    public void DentistUnit(Unit unit)
+    {
+        // only one unit added
+        if (dentistTeam.Count == 0)
+        {
+            dentistTeam.Add(unit);
+        }
+    }
+
+    public void StartBattle()
+    {
+        if (candyTeam.Count == 0 || dentistTeam.Count != 1)
+        {
+            errorMessage.gameObject.SetActive(true);
+        }
         StartCoroutine(Battle());
+        panel.gameObject.SetActive(false);
     }
 
     private IEnumerator Battle()
