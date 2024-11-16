@@ -37,9 +37,31 @@ public class BattleManager : MonoBehaviour
     // Reference to the BattleUIManager for displaying action text
     public BattleUIManager uiManager;
 
+    // Retry button for restarting the round
+    public Button retryButton;
+
+    // Bounce effect parameters
+    public float bounceDistance = 0.5f;
+    public float bounceDuration = 0.3f;
+
+    // Camera shake parameters
+    public Transform cameraTransform;
+    public float shakeDuration = 0.5f;
+    public float shakeMagnitude = 0.2f;
+
+    // Scaling factor for attack power
+    public float attackPowerScalingFactor = 0.8f; // Determines how attack power scales relative to health
+
+
     private void Start()
     {
-        // Get the characters from the GameManager
+        // Initialize Retry button and hide it initially
+        retryButton.gameObject.SetActive(false); // Hide the button initially
+
+        // Set up listener for retry button
+        retryButton.onClick.AddListener(OnRetryButtonClicked);
+
+        // Get characters from the GameManager
         playerCharacter = GameManager.Instance.playerCharacter;
         opponentCharacter = GameManager.Instance.opponentCharacter;
 
@@ -47,7 +69,7 @@ public class BattleManager : MonoBehaviour
         playerHealthBar.maxValue = playerCharacter.health;
         playerHealthBar.value = playerCharacter.health;
         playerAttackPowerBar.maxValue = playerCharacter.attackPower;
-        playerAttackPowerBar.value = playerCharacter.attackPower;
+        playerAttackPowerBar.value = playerCharacter.attackPower * ((playerHealthBar.value / playerHealthBar.maxValue) * attackPowerScalingFactor);
         playerDefenseBar.maxValue = playerCharacter.defense;
         playerDefenseBar.value = playerCharacter.defense;
 
@@ -55,7 +77,7 @@ public class BattleManager : MonoBehaviour
         opponentHealthBar.maxValue = opponentCharacter.health;
         opponentHealthBar.value = opponentCharacter.health;
         opponentAttackPowerBar.maxValue = opponentCharacter.attackPower;
-        opponentAttackPowerBar.value = opponentCharacter.attackPower;
+        opponentAttackPowerBar.value = opponentCharacter.attackPower * ((opponentHealthBar.value / opponentHealthBar.maxValue) * attackPowerScalingFactor);
         opponentDefenseBar.maxValue = opponentCharacter.defense;
         opponentDefenseBar.value = opponentCharacter.defense;
 
@@ -88,7 +110,7 @@ public class BattleManager : MonoBehaviour
 
         while (playerHealthBar.value > 0 && opponentHealthBar.value > 0)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
             // Player's turn
             yield return StartCoroutine(TakeTurn(playerCharacter, playerHealthBar, playerAttackPowerBar, playerDefenseBar, opponentHealthBar, true));
@@ -96,10 +118,13 @@ public class BattleManager : MonoBehaviour
             if (opponentHealthBar.value <= 0)
             {
                 uiManager.ShowActionText("Player Wins!", true); // Show win text indefinitely
+                yield return new WaitForSeconds(1f);
+                retryButton.gameObject.SetActive(true); // Show retry button after delay
+                retryButton.interactable = true; // Make the button clickable
                 yield break;
             }
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
             // Opponent's turn
             yield return StartCoroutine(TakeTurn(opponentCharacter, opponentHealthBar, opponentAttackPowerBar, opponentDefenseBar, playerHealthBar, false));
@@ -107,10 +132,28 @@ public class BattleManager : MonoBehaviour
             if (playerHealthBar.value <= 0)
             {
                 uiManager.ShowActionText("Opponent Wins!", true); // Show win text indefinitely
+                yield return new WaitForSeconds(1f);
+                retryButton.gameObject.SetActive(true); // Show retry button after delay
+                retryButton.interactable = true; // Make the button clickable
                 yield break;
             }
 
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
+        }
+    }
+
+    private void ResetCharacterBarsIfHealthIsZero(Slider healthBar, Slider attackPowerBar, Slider defenseBar)
+    {
+        if (healthBar.value <= 0.0f)
+        {
+            healthBar.value = 0.0f;
+            attackPowerBar.value = 0.0f;
+            defenseBar.value = 0.0f;
+
+            // Ensure UI reflects changes
+            healthBar.SetValueWithoutNotify(0.0f);
+            attackPowerBar.SetValueWithoutNotify(0.0f);
+            defenseBar.SetValueWithoutNotify(0.0f);
         }
     }
 
@@ -118,6 +161,8 @@ public class BattleManager : MonoBehaviour
     {
         string actor = isPlayer ? "Player" : "Opponent";
         Debug.Log($"{actor}'s Turn");
+
+        GameObject characterInstance = isPlayer ? playerCharacterInstance : opponentCharacterInstance;
 
         bool canUseDefense = healthBar.value <= healthBar.maxValue * 0.8f && defenseBar.value > 0.0f;
         bool useDefense = false;
@@ -146,6 +191,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            yield return StartCoroutine(ApplyBounceEffect(characterInstance, isPlayer)); // Apply attack bounce effect
             int maxSpecialUses = character.characterType == CharacterType.Melee ? 3 : 2;
             int specialTurnsUsed = isPlayer ? playerSpecialTurnsUsed : opponentSpecialTurnsUsed;
             bool useSpecial = specialTurnsUsed < maxSpecialUses && Random.value < 0.35f;
@@ -163,6 +209,7 @@ public class BattleManager : MonoBehaviour
             {
                 Debug.Log($"{actor} uses Special Power!");
                 uiManager.ShowActionText($"{actor} uses Special Power!");
+                yield return StartCoroutine(ApplyCameraShake()); // Apply camera shake effect
                 damage += baseDamage * 0.25f;
                 if (isPlayer) playerSpecialTurnsUsed++;
                 else opponentSpecialTurnsUsed++;
@@ -172,40 +219,64 @@ public class BattleManager : MonoBehaviour
                 uiManager.ShowActionText($"{actor} attacks!");
             }
 
-            //If health is below 0, zero out every bar
-            if (healthBar.value <= 0.0f)
-            {
-                healthBar.value = 0.0f;
-                attackPowerBar.value = 0.0f;
-                defenseBar.value = 0.0f;
-            }
-
-            if (healthBar.value <= healthBar.maxValue * 0.0f)
-            {
-                Debug.Log($"{actor}'s health is critically low! Attack power reduced by an additional 25%");
-                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.5f * 0.75f);
-            }
-            else if (healthBar.value <= healthBar.maxValue * 0.15f)
-            {
-                Debug.Log($"{actor}'s health is critically low! Attack power reduced by an additional 25%");
-                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.5f * 0.75f);
-            }
-            else if (healthBar.value <= healthBar.maxValue * 0.3f)
-            {
-                Debug.Log($"{actor}'s health is very low! Attack power reduced by 50%");
-                damage *= 0.5f;
-                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.5f);
-            }
-            else if (healthBar.value <= healthBar.maxValue * 0.6f)
-            {
-                Debug.Log($"{actor}'s health is below 60%! Attack power reduced by 25%");
-                damage *= 0.75f;
-                attackPowerBar.value = Mathf.Max(0.0f, attackPowerBar.value * 0.75f);
-            }
-
             opponentHealthBar.value = Mathf.Clamp(opponentHealthBar.value - damage, 0.0f, opponentHealthBar.maxValue);
         }
 
+        // Update attack power bar based on health after each turn
+        attackPowerBar.value = Mathf.Max(0.0f, character.attackPower * (healthBar.value / healthBar.maxValue));
+
         yield return new WaitForSeconds(1f);
+    }
+
+    private IEnumerator ApplyBounceEffect(GameObject characterInstance, bool isPlayer)
+    {
+        Vector3 originalPosition = characterInstance.transform.localPosition;
+        Vector3 bounceTarget = originalPosition + new Vector3(isPlayer ? bounceDistance : -bounceDistance, 0, 0);
+
+        float elapsedTime = 0;
+
+        // Move forward
+        while (elapsedTime < bounceDuration / 2)
+        {
+            characterInstance.transform.localPosition = Vector3.Lerp(originalPosition, bounceTarget, (elapsedTime / (bounceDuration / 2)));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        elapsedTime = 0;
+
+        // Move back
+        while (elapsedTime < bounceDuration / 2)
+        {
+            characterInstance.transform.localPosition = Vector3.Lerp(bounceTarget, originalPosition, (elapsedTime / (bounceDuration / 2)));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        characterInstance.transform.localPosition = originalPosition; // Ensure it resets perfectly
+    }
+
+    private IEnumerator ApplyCameraShake()
+    {
+        Vector3 originalPosition = cameraTransform.localPosition;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < shakeDuration)
+        {
+            float offsetX = Random.Range(-1f, 1f) * shakeMagnitude;
+            float offsetY = Random.Range(-1f, 1f) * shakeMagnitude;
+
+            cameraTransform.localPosition = new Vector3(originalPosition.x + offsetX, originalPosition.y + offsetY, originalPosition.z);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        cameraTransform.localPosition = originalPosition; // Reset the camera position
+    }
+
+    public void OnRetryButtonClicked()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Character Selection Scene");
     }
 }
