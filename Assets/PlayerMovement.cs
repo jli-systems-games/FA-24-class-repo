@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     // New field to set the initial speed
     public Vector2 initialVelocity = new Vector2(2f, 2f); // Customize as needed
 
-    void Awake()
+    void Start()
     {
         rb.velocity = initialVelocity; // Give the Rigidbody an initial velocity
     }
