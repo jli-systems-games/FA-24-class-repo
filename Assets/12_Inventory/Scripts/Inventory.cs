@@ -31,6 +31,11 @@ public class Inventory : MonoBehaviour
         _amountTemp = amountToAdd;
     }
 
+    public void DisplayInventory()
+    {
+
+    }
+
     public void Add(Item newItem, int newAmount)
     {
         bool newEntry = false;
