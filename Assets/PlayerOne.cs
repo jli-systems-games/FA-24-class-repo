@@ -35,6 +35,9 @@ public class PlayerOne : MonoBehaviour
 
     public void PlayPositions()
     {
+        p1_hp = maxHp;
+        UpdateBar(p1_hp, maxHp);
+
         Player1.transform.position = locations[1];
     }
 
