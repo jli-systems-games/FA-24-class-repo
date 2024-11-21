@@ -36,5 +36,11 @@ public class GameManager : MonoBehaviour
     public void ChangeState(GameState newState)
     {
         state = newState;
+
+        if(state != GameState.matchOut && state != GameState.burning)
+        {
+            match.SetActive(false );
+        }
+        
     }
 }

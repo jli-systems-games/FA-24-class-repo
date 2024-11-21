@@ -5,7 +5,18 @@ using UnityEngine;
 public class LightMatch : MonoBehaviour
 {
     private GameManager _gameManager;
+    public Camera mainCamera;
+
     public GameObject fire;
+
+    private Ray ray;
+    private RaycastHit hit;
+
+    public GameObject matchPrefab;
+    private Vector3 initialPos;
+
+    public float throwForce;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,5 +31,30 @@ public class LightMatch : MonoBehaviour
             fire.SetActive(true); 
            _gameManager.ChangeState(GameState.burning); }
         Debug.Log(Input.GetAxis("Mouse X"));
+
+        if (GameManager.state == GameState.burning)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                ThrowMatch();
+            }
+        }
+    }
+
+    void ThrowMatch()
+    {
+       
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            initialPos = transform.position;
+
+            GameObject newMatch = Instantiate(matchPrefab, initialPos, Quaternion.identity);
+            newMatch.GetComponent<Rigidbody>().AddForce(ray.direction * throwForce, ForceMode.Impulse);
+
+            fire.SetActive(false);
+            _gameManager.ChangeState(GameState.moveable);
+        }
     }
 }

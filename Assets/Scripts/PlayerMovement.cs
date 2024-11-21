@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && GameManager.state == GameState.moveable)
             {
                 if (hit.collider.tag == "ground")
                 {
