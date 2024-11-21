@@ -72,16 +72,25 @@ public class beam : MonoBehaviour
                     startButton.SetActive(false);
                     restartButton.SetActive(true);
                 }
-
-                if(hitNext2.point != new Vector2(-10.91672f, -5.699986f))
-                {
+                else
+                {//if(hitNext2.point != new Vector2(-10.91672f, -5.699986f))
                     startButton.SetActive(false);
                     restartButton.SetActive(true);
                 }
                 
 
             }
+            else
+                {//if(hitNext2.point != new Vector2(-10.91672f, -5.699986f))
+                    startButton.SetActive(false);
+                    restartButton.SetActive(true);
+                }
         }
+        else
+                {//if(hitNext2.point != new Vector2(-10.91672f, -5.699986f))
+                    startButton.SetActive(false);
+                    restartButton.SetActive(true);
+                }
 
     }
 
