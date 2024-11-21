@@ -56,9 +56,9 @@ public class BuckController : MonoBehaviour
             else
                 rb.drag = 0f;
         }
-
         
         HandleSwitch();
+
     }
 
     private void FixedUpdate()
@@ -113,17 +113,22 @@ public class BuckController : MonoBehaviour
         if (canSwitch && Input.GetKey(KeyCode.E))
         {
             switchTimer += Time.deltaTime;
+            Debug.Log("E");
+           Debug.Log($"Switch Timer: {switchTimer}");
 
-            if (switchTimer >= switchHoldTime)
-            {
-                SwitchControl();
-                switchTimer = 0f; 
-            }
+            SwitchControl();
+
+             if (switchTimer >= switchHoldTime)
+             {
+                 Debug.Log("switch");
+                 SwitchControl();
+                 switchTimer = 0f; 
+             }
         }
-        else
-        {
-            switchTimer = 0f; 
-        }
+         else
+         {
+             switchTimer = 0f; 
+         }
     }
 
     private void SwitchControl()
