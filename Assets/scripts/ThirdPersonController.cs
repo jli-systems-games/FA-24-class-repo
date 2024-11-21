@@ -10,6 +10,8 @@ public class ThirdPersonController : MonoBehaviour
 
     [Header("Camera Settings")]
     public Transform cameraTransform; // Reference to the camera
+    public Vector3 cameraOffset = new Vector3(0f, 2f, -5f); // Camera position offset
+    public float cameraSmoothSpeed = 10f; // Smoothing speed for camera movement
 
     private CharacterController characterController;
     private Vector3 velocity;
@@ -30,6 +32,11 @@ public class ThirdPersonController : MonoBehaviour
         HandleGravity();
     }
 
+    void LateUpdate()
+    {
+        HandleCameraFollow();
+    }
+
     void HandleMovement()
     {
         // Get input for movement
@@ -42,7 +49,7 @@ public class ThirdPersonController : MonoBehaviour
         {
             // Calculate target direction based on camera
             float targetAngle = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationSpeed, 0.1f);
+            float angle = Mathf.LerpAngle(transform.eulerAngles.y, targetAngle, Time.deltaTime * rotationSpeed);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             // Move in the target direction
@@ -68,5 +75,20 @@ public class ThirdPersonController : MonoBehaviour
         // Apply gravity
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+    }
+
+    void HandleCameraFollow()
+    {
+        if (cameraTransform != null)
+        {
+            // Calculate desired position
+            Vector3 desiredPosition = transform.position + cameraOffset;
+
+            // Smoothly move the camera to the desired position
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, desiredPosition, cameraSmoothSpeed * Time.deltaTime);
+
+            // Make the camera look at the player
+            cameraTransform.LookAt(transform.position + Vector3.up * 1.5f); // Adjust the height focus point as needed
+        }
     }
 }
