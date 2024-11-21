@@ -118,6 +118,7 @@ public class EncounterManager : MonoBehaviour
             SpawnNewEnemy();
             currentState = EncounterState.Idle;
             uiText.text = "";
+            playerRollAnimation.isFinalRoll = false;
         }
     }
 
