@@ -4,13 +4,14 @@ using System.Xml;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class DrawLine : MonoBehaviour
 {
     Vector2 moveVector;
     Vector3 endPos;
     public int Energy = 10;
-    int MaxEnergy = 10;
+    public int MaxEnergy = 10;
     public float startWidth = 0.1f;
     public float endWidth = 0.1f;
     public LayerMask block;
@@ -30,6 +31,11 @@ public class DrawLine : MonoBehaviour
 
         //set the start position as the begin dot;
         lineEndPoints.Add(transform.position);
+    }
+    public void Reload(InputAction.CallbackContext context)
+    {
+        if (context.started) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
     }
     public void GetDirection(InputAction.CallbackContext context)
     {

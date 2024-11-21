@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class DeteEnd : MonoBehaviour
 {
     public Material _e,_b;
     public TMP_Text _t;
+    public TextMeshPro _p;
     int target = 2;
     MeshRenderer _mr;
     void Start()
     {
         _mr = GetComponent<MeshRenderer>();
+        _p.text = target.ToString();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,7 +24,14 @@ public class DeteEnd : MonoBehaviour
         {
             //switch state/ change materials;
             int outputs = other.GetComponentInParent<DrawLine>().Energy;
-            if (outputs == target) _mr.material = _e;
+            if (outputs == target) 
+            { 
+                _mr.material = _e;
+                if(SceneManager.GetActiveScene().name == "new")
+                {
+                    Invoke("LoadScene", 1.5f);
+                }
+            }
             else if (outputs > target)
             {
                 _mr.material = _b;
@@ -29,6 +39,10 @@ public class DeteEnd : MonoBehaviour
             }
             
         }
+    }
+    void LoadScene()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
    
 }
