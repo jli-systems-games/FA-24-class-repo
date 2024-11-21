@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class EncounterManager : MonoBehaviour
 {
     public static EncounterManager instance;
     public enum EncounterState { Idle, Rolling, Resolving }
-    private EncounterState currentState = EncounterState.Idle;
+    public EncounterState currentState = EncounterState.Idle;
 
     [Header("Player and Enemy Reference")]
     public PlayerDice playerDice; // Assign the PlayerDice object here
@@ -19,25 +21,52 @@ public class EncounterManager : MonoBehaviour
     public int spawnCount = 5;
     private Vector2 spawnAreaSize = new Vector2(14f, 8f);
 
+    private RollAnimation playerRollAnimation;
+    private RollAnimation enemyRollAnimation;
+    public TextMeshProUGUI uiText;
+
     private void Start()
     {
+        instance = this;  // Singleton setup
         playerDice.SetRollRange(1, 6);
         SpawnEnemies();
+
+        // Initialize roll animations
+        playerRollAnimation = playerDice.GetComponent<RollAnimation>();
+        if (currentEnemyDice != null)
+        {
+            enemyRollAnimation = currentEnemyDice.GetComponent<RollAnimation>();
+        }
     }
 
     private void Update()
     {
+        // Check if the current state allows for transitioning to Rolling state
         switch (currentState)
         {
             case EncounterState.Idle:
+                // Proceed to rolling when player presses E
                 if (Input.GetKeyDown(KeyCode.E) && currentEnemyDice != null)
                 {
-                    StartRolling();
+                    Debug.Log("E pressed - Starting roll");
+
+                    // Transition to Rolling state
+                    currentState = EncounterState.Rolling;
+
+                    // Start roll animations immediately
+                    if (playerRollAnimation != null)
+                        StartCoroutine(playerRollAnimation.PlayRollAnimation(2f));
+
+                    if (enemyRollAnimation != null)
+                        StartCoroutine(enemyRollAnimation.PlayRollAnimation(2f));
+
+                    // Perform rolls after the animation
+                    StartCoroutine(PerformRolls());
                 }
                 break;
 
             case EncounterState.Rolling:
-                // Displaying dice rolls; wait for transition to resolving state
+                // Wait for the animation and roll to finish (handled in PerformRolls)
                 break;
 
             case EncounterState.Resolving:
@@ -49,18 +78,18 @@ public class EncounterManager : MonoBehaviour
         }
     }
 
-    #region Encounter Logic
-
-    private void StartRolling()
+    private IEnumerator PerformRolls()
     {
-        if (currentState == EncounterState.Idle && currentEnemyDice != null)
-        {
-            playerDice.Roll();
-            currentEnemyDice.Roll();
+        // Wait for the roll animations to finish
+        yield return new WaitForSeconds(2f);
 
-            Debug.Log($"Player Roll: {playerDice.GetRollResult()}, Enemy Roll: {currentEnemyDice.GetRollResult()}");
-            currentState = EncounterState.Resolving;
-        }
+        // Perform rolls
+        playerDice.Roll();
+        currentEnemyDice.Roll();
+        uiText.text = "press E to exit";
+
+        // Transition to Resolving state
+        currentState = EncounterState.Resolving;
     }
 
     private void ResolveEncounter()
@@ -78,7 +107,7 @@ public class EncounterManager : MonoBehaviour
             else
             {
                 Debug.Log("Player Loses!");
-                playerDice.SetRollRange(playerDice.MinRoll, Mathf.Max(playerDice.MinRoll, playerDice.MaxRoll - enemyRoll));
+                playerDice.SetRollRange(playerDice.MinRoll, Mathf.Max(6, playerDice.MaxRoll - enemyRoll / 2));
             }
 
             // Remove defeated enemy
@@ -87,8 +116,8 @@ public class EncounterManager : MonoBehaviour
             currentEnemyDice = null;
 
             SpawnNewEnemy();
-
             currentState = EncounterState.Idle;
+            uiText.text = "";
         }
     }
 
@@ -96,7 +125,10 @@ public class EncounterManager : MonoBehaviour
     {
         if (collision.CompareTag("Enemy") && currentState == EncounterState.Idle)
         {
+            uiText.text = "press E to attack";
             currentEnemyDice = collision.GetComponent<EnemyDice>();
+            // Update enemy roll animation reference
+            enemyRollAnimation = currentEnemyDice.GetComponent<RollAnimation>();
         }
     }
 
@@ -104,11 +136,10 @@ public class EncounterManager : MonoBehaviour
     {
         if (collision.CompareTag("Enemy") && currentEnemyDice != null && collision.GetComponent<EnemyDice>() == currentEnemyDice)
         {
+            uiText.text = "";
             currentEnemyDice = null;
         }
     }
-
-    #endregion
 
     #region Enemy Spawning
 
