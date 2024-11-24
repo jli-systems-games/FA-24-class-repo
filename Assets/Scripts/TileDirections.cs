@@ -23,19 +23,21 @@ public class TileDirections : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // need to rework this cuz its bugged af
+
         if (other.CompareTag("north"))
         {
             other.gameObject.transform.parent.GetComponent<TileDirections>().northTile = this.gameObject;
         }
-        else if (other.CompareTag("south"))
+        if (other.CompareTag("south"))
         {
             other.gameObject.transform.parent.GetComponent<TileDirections>().southTile = this.gameObject;
         }
-        else if (other.CompareTag("east"))
+        if (other.CompareTag("east"))
         {
             other.gameObject.transform.parent.GetComponent<TileDirections>().eastTile = this.gameObject;
         }
-        else if (other.CompareTag("west"))
+        if (other.CompareTag("west"))
         {
             other.gameObject.transform.parent.GetComponent<TileDirections>().westTile = this.gameObject;
         }
