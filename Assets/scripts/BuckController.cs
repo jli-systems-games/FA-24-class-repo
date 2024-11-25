@@ -6,10 +6,13 @@ public class BuckController : MonoBehaviour
 {
     public int id;
     public bool isActive = false;
-    public bool canSwitch = false; 
-    public float switchHoldTime = 1f; 
+    public bool canSwitch = false;
+    public float switchHoldTime = 1f;
 
-    private float switchTimer = 0f; 
+    private float switchTimer = 0f;
+    public static float globalSwitchCooldown = 1f; 
+    public static float lastSwitchTime = -Mathf.Infinity; 
+
     public Transform orientation;
     private Rigidbody rb;
 
@@ -45,7 +48,6 @@ public class BuckController : MonoBehaviour
     {
         GroundCheck();
 
-        
         if (isActive)
         {
             GetInput();
@@ -56,9 +58,8 @@ public class BuckController : MonoBehaviour
             else
                 rb.drag = 0f;
         }
-        
-        HandleSwitch();
 
+        HandleSwitch();
     }
 
     private void FixedUpdate()
@@ -110,37 +111,34 @@ public class BuckController : MonoBehaviour
 
     private void HandleSwitch()
     {
+        
+        if (Time.time - lastSwitchTime < globalSwitchCooldown) return;
+
         if (canSwitch && Input.GetKey(KeyCode.E))
         {
             switchTimer += Time.deltaTime;
-            Debug.Log("E");
-           Debug.Log($"Switch Timer: {switchTimer}");
 
-            SwitchControl();
-
-             if (switchTimer >= switchHoldTime)
-             {
-                 Debug.Log("switch");
-                 SwitchControl();
-                 switchTimer = 0f; 
-             }
+            if (switchTimer >= switchHoldTime)
+            {
+                SwitchControl();
+                switchTimer = 0f;
+                lastSwitchTime = Time.time;
+            }
         }
-         else
-         {
-             switchTimer = 0f; 
-         }
+        else
+        {
+            switchTimer = 0f;
+        }
     }
 
     private void SwitchControl()
     {
-        
         Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);
         foreach (Collider col in colliders)
         {
             BuckController otherController = col.GetComponent<BuckController>();
             if (otherController != null && otherController.id != this.id && !otherController.isActive)
             {
-                
                 otherController.isActive = true;
                 otherController.rb.velocity = Vector3.zero;
                 this.isActive = false;
