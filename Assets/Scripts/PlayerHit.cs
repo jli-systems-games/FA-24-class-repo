@@ -45,24 +45,25 @@ public class PlayerHit : MonoBehaviour
             if (!Physics.Raycast(ray, out RaycastHit hit, 2f, block))
             {   
                 nextPoint = CalculateDirct(direction);
-                if (Energy > 0) Energy--;
+               
             }
             else if(Energy > 0)
             {   
-                Debug.Log("n" + nextPoint);
+               
                 if (hit.collider.CompareTag("repeater")) nextPoint = Redirect(hit);
                 Debug.Log("p" + InputManager.points.Peek());
+                Debug.Log("n" + nextPoint);
             }
 
             
             
-           if (nextPoint == InputManager.points.Peek()) 
+           if (nextPoint == InputManager.points.Peek() &&InputManager.points.Count > 0) 
             {   
-                if(InputManager.points.Count > 0)
+                if(InputManager.points.Count > 1)
                     InputManager.points.Pop();
 
                 
-                if (Energy < MaxEnergy) Energy++;
+                if (Energy < MaxEnergy && !readjusting) Energy++;
 
                 endPos = nextPoint;
                 transform.position = nextPoint;
@@ -74,7 +75,7 @@ public class PlayerHit : MonoBehaviour
                 //Debug.Log("Added p" + endPos);
                 InputManager.points.Push(endPos);
 
-                
+                 if (Energy > 0 && !readjusting) Energy--;
 
                 endPos = nextPoint;
                 transform.position = nextPoint;

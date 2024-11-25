@@ -61,34 +61,30 @@ public class DrawLine : MonoBehaviour
        
     }
 
-    void AddLine()
-    {
-        _LR.startWidth = startWidth;
-        _LR.endWidth = endWidth;
-        _LR.positionCount = lineEndPoints.Count;
-        for(int i = pointCount; i < lineEndPoints.Count; i++)
-        {
-            /*_LR.SetPosition(i, lineEndPoints[i]);*/
-        }
-        pointCount = lineEndPoints.Count;
-
-    }
     void Deleteline(Vector3 n, Vector3 d)
     {
 
         //Find the last added LineRednerer;
-        LineRenderer lr = lineEndPoints[lineEndPoints.Count - 1];
-        //Retract the position[1] until n matches the position[0];
-        if(n == lr.GetPosition(0))
+        Debug.Log("deleting");
+        if(lineEndPoints.Count > 0)
         {
-            lineEndPoints.Remove(lr);
-            Destroy(lr);
+            LineRenderer lr = lineEndPoints[lineEndPoints.Count - 1];
+            //Retract the position[1] until n matches the position[0];
+
+             if(n == lr.GetPosition(0))
+            {
+                 Debug.Log("lasy" + lr.GetPosition(0));
+                 Debug.Log("next" + n);
+                 lineEndPoints.Remove(lr);
+                 Destroy(lr);
+             }
+            else
+            {
+               lr.SetPosition(1, n);
+            }
+            prevDirct = d;
         }
-        else
-        {
-            lr.SetPosition(1, n);
-        }
-        prevDirct = d;
+        
 
         
     }
