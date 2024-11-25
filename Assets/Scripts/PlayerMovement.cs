@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
-        SetTiles();
+        Invoke("SetTiles",.5f);
     }
 
     // Update is called once per frame
