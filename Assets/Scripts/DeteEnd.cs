@@ -23,7 +23,8 @@ public class DeteEnd : MonoBehaviour
         if (other.CompareTag("EndPoint"))
         {
             //switch state/ change materials;
-            int outputs = other.GetComponentInParent<DrawLine>().Energy;
+            int outputs = other.GetComponentInParent<PlayerHit>().Energy;
+
             if (outputs == target) 
             { 
                 _mr.material = _e;

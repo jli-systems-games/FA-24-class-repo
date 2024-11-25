@@ -10,8 +10,7 @@ public class DrawLine : MonoBehaviour
 {
     Vector2 moveVector;
     Vector3 endPos;
-    public int Energy = 10;
-    public int MaxEnergy = 10;
+   
     public float startWidth = 0.1f;
     public float endWidth = 0.1f;
     public LayerMask block;
@@ -20,7 +19,6 @@ public class DrawLine : MonoBehaviour
     private List<Vector3> lineEndPoints = new List<Vector3>();
     int pointCount = 0;
     LineRenderer _LR;
-    bool readjusting;
     public float lineLen = 3;
     void Start()
     {
@@ -32,80 +30,8 @@ public class DrawLine : MonoBehaviour
         //set the start position as the begin dot;
         lineEndPoints.Add(transform.position);
     }
-    public void Reload(InputAction.CallbackContext context)
-    {
-        if (context.started) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    
 
-    }
-    public void GetDirection(InputAction.CallbackContext context)
-    {
-        moveVector = context.ReadValue<Vector2>();
-        if(context.started)
-        {
-            //calculate the new position and the distance it will go;
-            Vector3 direction = new Vector3(moveVector.x, 0, moveVector.y);
-            Vector3 nextPoint = CalculateDirct(direction);
-            Ray ray = new Ray(hitBox.transform.position, direction);
-
-            //Debug.DrawRay(hitBox.transform.position, direction, Color.cyan, Mathf.Infinity);
-            if (!Physics.Raycast(ray, 2.5f,block) && direction != Vector3.zero)
-            {
-                MoveLine(nextPoint);
-                
-
-            }
-            
-        }
-    }
-    Vector3 CalculateDirct(Vector3 dirct)
-    {
-        Vector3 newPos = Vector3.zero;
-        
-        Ray _ray = new Ray(hitBox.transform.position, dirct);
-        Debug.DrawRay(hitBox.transform.position, dirct * lineLen, Color.cyan, Mathf.Infinity);
-        if(Physics.Raycast(_ray, out RaycastHit _hit, 1f))
-        {  
-            
-            readjusting = true;
-            Debug.Log("moving" + dirct);
-            switch (_hit.collider.tag)
-            {
-                case "repeater":
-                    
-                    Vector3 fromD = _hit.transform.position - hitBox.transform.position;
-                    fromD = fromD.normalized;
-                    if (Mathf.Abs(fromD.x) == _hit.transform.up.x || Mathf.Abs(fromD.z) == _hit.transform.up.z)
-                    {   
-                        //new destination is the opposite end of the hit object;
-                        Vector3 opposLoc = _hit.transform.position + fromD * lineLen;
-
-                        //testing Objects;
-                       /* GameObject ob = new GameObject("test");
-                        ob.transform.position = opposLoc;*/
-                       
-                        newPos = opposLoc;
-                        
-                    }
-                    else
-                    {   
-                        
-                        //dirct = Vector3.zero;
-                    }
-                    ComponentBase comp = _hit.collider.GetComponent<ComponentBase>();
-                    Energy = comp.EnergyOutput(Energy);
-                    //Debug.Log("added" + Energy);
-
-                    //Debug.Log("d" + dirct);
-                    break;
-            }
-        }
-        else
-        {
-            newPos = endPos + dirct * lineLen;
-        }
-
-        return newPos;
-    }
     void MoveLine(Vector3 pos)
     {
         Vector3 newPos = pos;
@@ -120,11 +46,11 @@ public class DrawLine : MonoBehaviour
                 RemoveLine();
                 endPos = newPos;
                 hitBox.transform.position = newPos;
-                if(Energy < MaxEnergy) Energy++;
+                
             }
 
         }
-        else if (!lineEndPoints.Contains(newPos) && Energy > 0)
+        else if (!lineEndPoints.Contains(newPos) )
         {
             lineEndPoints.Add(newPos);
             //endPos = newPos;
@@ -133,10 +59,9 @@ public class DrawLine : MonoBehaviour
             endPos = newPos;
             hitBox.transform.position = newPos;
 
-            if(!readjusting) Energy--;
-            readjusting = false;
+           
         }
-        energyCount.text = Energy.ToString();
+       
     }
 
     void AddLine()
