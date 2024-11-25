@@ -15,11 +15,13 @@ public class PlayerHit : MonoBehaviour
     public int MaxEnergy = 10;
     public TextMeshPro energyCount;
     int prevEnergy = 0;
-
+    bool readjusting = false;
+    GameObject hitComponent = null;
     void Start()
     {
         endPos = transform.parent.position;
         transform.position = transform.parent.localPosition;
+        InputManager.points.Push(endPos);
     }
     public void Reload(InputAction.CallbackContext context)
     {
@@ -40,20 +42,46 @@ public class PlayerHit : MonoBehaviour
             Debug.DrawRay(transform.position, direction, Color.cyan, Mathf.Infinity);
 
             //detecting whether it has hit a wall or not;
-            if (!Physics.Raycast(ray, out RaycastHit hit, 2f, block) && Energy >0)
+            if (!Physics.Raycast(ray, out RaycastHit hit, 2f, block))
             {   
                 nextPoint = CalculateDirct(direction);
-
+                if (Energy > 0) Energy--;
             }
-            else
-            {
+            else if(Energy > 0)
+            {   
+                Debug.Log("n" + nextPoint);
                 if (hit.collider.CompareTag("repeater")) nextPoint = Redirect(hit);
-
+                Debug.Log("p" + InputManager.points.Peek());
             }
 
-            transform.position = nextPoint;
-            endPos = nextPoint;
-            Energy--;
+            
+            
+           if (nextPoint == InputManager.points.Peek()) 
+            {   
+                if(InputManager.points.Count > 0)
+                    InputManager.points.Pop();
+
+                
+                if (Energy < MaxEnergy) Energy++;
+
+                endPos = nextPoint;
+                transform.position = nextPoint;
+                InputManager.DelLine(nextPoint,direction); 
+            }
+            else if(Energy > 0 && !InputManager.points.Contains(nextPoint))
+            {
+                
+                //Debug.Log("Added p" + endPos);
+                InputManager.points.Push(endPos);
+
+                
+
+                endPos = nextPoint;
+                transform.position = nextPoint;
+                InputManager.DrawLine(direction,nextPoint);
+            }
+            
+            readjusting = false;
             energyCount.text = Energy.ToString();
         }
     }
@@ -66,27 +94,30 @@ public class PlayerHit : MonoBehaviour
    Vector3 Redirect(RaycastHit _hit)
     {   
         Vector3 newLoc = transform.position;
-
+        
+        readjusting = true;
         //determine where is it coming from; 
        if(Mathf.Abs(moveVector.x) == _hit.transform.up.x)
         {
-            Debug.Log("move:" + Mathf.Abs(moveVector.x));
+            Debug.Log("move:" + moveVector.x);
             Vector3 d = new Vector3(moveVector.x, 0, moveVector.y);
             newLoc = _hit.transform.position + d * step;
 
             //recalculate the energy level;
-            if(prevEnergy == 0)
+            if(_hit.transform.gameObject != hitComponent && d == _hit.transform.up)
             {
                 prevEnergy = Energy;
 
                 //grabbing the stats;
                 ComponentBase comp = _hit.collider.GetComponent<ComponentBase>();
                 Energy = comp.EnergyOutput(Energy);
+                hitComponent = _hit.transform.gameObject;
             }
-            else
+            else if(_hit.transform.gameObject == hitComponent && d == - _hit.transform.up)
             {
                 Energy = prevEnergy;
                 prevEnergy = 0;
+                hitComponent = null;
             }
 
         }

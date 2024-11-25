@@ -9,58 +9,55 @@ using UnityEngine.SceneManagement;
 public class DrawLine : MonoBehaviour
 {
     Vector2 moveVector;
-    Vector3 endPos;
+    Vector3 prevDirct = Vector3.zero;
    
     public float startWidth = 0.1f;
     public float endWidth = 0.1f;
-    public LayerMask block;
     public GameObject hitBox;
     public TextMeshPro energyCount;
-    private List<Vector3> lineEndPoints = new List<Vector3>();
+    private List<LineRenderer> lineEndPoints = new List<LineRenderer>();
     int pointCount = 0;
     LineRenderer _LR;
     public float lineLen = 3;
     void Start()
     {
-        endPos = transform.position;
-        _LR = GetComponent<LineRenderer>();
-        _LR.startWidth = 0f;
-        _LR.endWidth = 0f;
 
-        //set the start position as the begin dot;
-        lineEndPoints.Add(transform.position);
+        /*   _LR = GetComponent<LineRenderer>();
+           _LR.startWidth = 0f;
+           _LR.endWidth = 0f;
+           _LR.SetPosition(0,transform.position);*/
+        InputManager.RemoveLine += Deleteline;
+        InputManager.RenderLine += MoveLine;
     }
     
 
-    void MoveLine(Vector3 pos)
+    void MoveLine(Vector3 dir, Vector3 n)
     {
-        Vector3 newPos = pos;
-
-        //Debug.Log(newPos);
-        if (lineEndPoints.Contains(newPos))
-        {
-            int index = lineEndPoints.IndexOf(newPos);
-            //Debug.Log("Points:" + lineEndPoints[index] + "index" + index);
-            if (index == lineEndPoints.Count - 2)
+       if(dir != prevDirct) 
+       {
+            GameObject obj = gameObject; 
+            if (gameObject.TryGetComponent<LineRenderer>(out LineRenderer l))
             {
-                RemoveLine();
-                endPos = newPos;
-                hitBox.transform.position = newPos;
-                
+                obj = new GameObject("newLine");
+                    
             }
-
+            LineRenderer lr= obj.AddComponent<LineRenderer>();
+            Vector3[] tempPos = InputManager.points.ToArray();
+            lr.SetPosition(0, tempPos[0]);
+            lr.SetPosition(1, n);
+            prevDirct = dir;
+            lineEndPoints.Add(lr);
         }
-        else if (!lineEndPoints.Contains(newPos) )
+        else
         {
-            lineEndPoints.Add(newPos);
-            //endPos = newPos;
-
-            AddLine();
-            endPos = newPos;
-            hitBox.transform.position = newPos;
-
-           
+            if(lineEndPoints.Count > 0)
+            {
+                lineEndPoints[lineEndPoints.Count - 1].SetPosition(1, n);
+            }
         }
+
+       
+      
        
     }
 
@@ -71,19 +68,33 @@ public class DrawLine : MonoBehaviour
         _LR.positionCount = lineEndPoints.Count;
         for(int i = pointCount; i < lineEndPoints.Count; i++)
         {
-            _LR.SetPosition(i, lineEndPoints[i]);
+            /*_LR.SetPosition(i, lineEndPoints[i]);*/
         }
         pointCount = lineEndPoints.Count;
 
     }
-    void RemoveLine()
-    {   
+    void Deleteline(Vector3 n, Vector3 d)
+    {
+
+        //Find the last added LineRednerer;
+        LineRenderer lr = lineEndPoints[lineEndPoints.Count - 1];
+        //Retract the position[1] until n matches the position[0];
+        if(n == lr.GetPosition(0))
+        {
+            lineEndPoints.Remove(lr);
+            Destroy(lr);
+        }
+        else
+        {
+            lr.SetPosition(1, n);
+        }
+        prevDirct = d;
+
         
-        //Debug.Log("point to remove" + lineEndPoints[lineEndPoints.Count -1]);
-        lineEndPoints.RemoveAt(lineEndPoints.Count - 1);
-        Vector3[] lines = lineEndPoints.ToArray();
-        _LR.positionCount = lines.Length;
-        _LR.SetPositions(lines);
-        pointCount = lines.Length;
+    }
+    private void OnDestroy()
+    {
+        InputManager.RemoveLine -= Deleteline;
+        InputManager.RenderLine -= MoveLine;
     }
 }

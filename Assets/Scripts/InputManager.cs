@@ -1,18 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static event Action<Vector3, Vector3> RenderLine;
+    public static event Action<Vector3, Vector3> RemoveLine;
+    public static Stack<Vector3> points = new Stack<Vector3>();
+    public static void DrawLine(Vector3 direction, Vector3 nP)
     {
-        
+        RenderLine?.Invoke(direction, nP);
     }
-
-    // Update is called once per frame
-    void Update()
+    public static void DelLine(Vector3 nP, Vector3 d)
     {
-        
+        RemoveLine?.Invoke(nP,d);
     }
 }
