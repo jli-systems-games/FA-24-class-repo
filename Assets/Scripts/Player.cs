@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 5f; // Movement speed
-    public float verticalLimit = 2f; // Maximum range for up/down movement
+    public float speed = 1.5f; // Movement speed
+    public float verticalLimit = 1.35f; // Maximum range for up/down movement
 
     private Vector3 originalScale; // To store the player's original scale
     private Animator animator; // Reference to the Animator component
