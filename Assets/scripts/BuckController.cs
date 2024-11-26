@@ -10,8 +10,8 @@ public class BuckController : MonoBehaviour
     public float switchHoldTime = 1f;
 
     private float switchTimer = 0f;
-    public static float globalSwitchCooldown = 1f; 
-    public static float lastSwitchTime = -Mathf.Infinity; 
+    public static float globalSwitchCooldown = 1f;
+    public static float lastSwitchTime = -Mathf.Infinity;
 
     public Transform orientation;
     private Rigidbody rb;
@@ -33,6 +33,11 @@ public class BuckController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private Vector3 moveDirection;
+
+    [Header("Shrink Effect")]
+    public float shrinkRate = 0.1f; 
+    public float minScaleY = 0.5f; 
+    public float shrinkHeightRate = 0.05f; 
 
     private void Start()
     {
@@ -57,6 +62,8 @@ public class BuckController : MonoBehaviour
                 rb.drag = drag;
             else
                 rb.drag = 0f;
+
+            ApplyShrinkEffect(); 
         }
 
         HandleSwitch();
@@ -74,6 +81,23 @@ public class BuckController : MonoBehaviour
         {
             Light.SetActive(false);
             view.SetActive(false);
+        }
+    }
+
+    private void ApplyShrinkEffect()
+    {
+        
+        Vector3 scale = transform.localScale;
+        Vector3 position = transform.position;
+
+        
+        if (scale.y > minScaleY)
+        {
+            scale.y -= shrinkRate * Time.deltaTime;
+            position.y -= shrinkHeightRate * Time.deltaTime;
+
+            transform.localScale = scale;
+            transform.position = position;
         }
     }
 
@@ -111,7 +135,6 @@ public class BuckController : MonoBehaviour
 
     private void HandleSwitch()
     {
-        
         if (Time.time - lastSwitchTime < globalSwitchCooldown) return;
 
         if (canSwitch && Input.GetKey(KeyCode.E))
