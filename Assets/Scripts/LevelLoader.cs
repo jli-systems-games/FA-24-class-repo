@@ -90,6 +90,16 @@ public class LevelLoader : MonoBehaviour
                                 GameObject blocks = Instantiate(blockPrefab, newVector, Quaternion.identity);
                                 blocks.transform.SetParent(platForm.transform, true);
                                 break;
+                            case "HR":
+                                //instantiate Repeater
+                                GameObject repeater = Instantiate(repeaterPrefab);
+                                Quaternion rot = Quaternion.identity;
+                                rot.eulerAngles = new Vector3(90, 0, 90);
+                                repeater.transform.rotation = rot;
+                                repeater.transform.position = newVector;
+                                repeater.transform.SetParent (platForm.transform, true);
+                                break;
+
                             default:
                                 break;
                         }

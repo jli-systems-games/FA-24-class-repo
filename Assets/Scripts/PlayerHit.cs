@@ -22,6 +22,7 @@ public class PlayerHit : MonoBehaviour
         endPos = transform.parent.position;
         transform.position = transform.parent.localPosition;
         InputManager.points.Push(endPos);
+        GameManager.loadNextLvl += resetStat;
     }
     public void Reload(InputAction.CallbackContext context)
     {
@@ -45,14 +46,15 @@ public class PlayerHit : MonoBehaviour
             if (!Physics.Raycast(ray, out RaycastHit hit, step, block))
             {   
                 nextPoint = CalculateDirct(direction);
-               
+                
             }
             else if(Energy > 0)
             {   
                
                 if (hit.collider.CompareTag("repeater")) nextPoint = Redirect(hit);
-                Debug.Log("p" + InputManager.points.Peek());
-                Debug.Log("n" + nextPoint);
+                readjusting = true;
+                //Debug.Log("n" + nextPoint);
+                
             }
 
             
@@ -69,7 +71,7 @@ public class PlayerHit : MonoBehaviour
                 transform.position = nextPoint;
                 InputManager.DelLine(nextPoint,direction); 
             }
-            else if(Energy > 0 && !InputManager.points.Contains(nextPoint))
+            else if(Energy > 0 && !InputManager.points.Contains(nextPoint) && nextPoint != endPos)
             {
                 
                 //Debug.Log("Added p" + endPos);
@@ -90,6 +92,11 @@ public class PlayerHit : MonoBehaviour
     Vector3 CalculateDirct(Vector3 dirct)
     {
         return endPos + dirct * step;
+    }
+
+    void resetStat()
+    {
+        readjusting = true;
     }
 
    Vector3 Redirect(RaycastHit _hit)
