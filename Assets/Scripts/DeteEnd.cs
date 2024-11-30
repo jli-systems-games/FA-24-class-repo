@@ -9,7 +9,7 @@ public class DeteEnd : MonoBehaviour
     public Material _e,_b;
     public TMP_Text _t;
     public TextMeshPro _p;
-    int target = 2;
+    public int target = 2;
     MeshRenderer _mr;
     void Start()
     {
@@ -28,10 +28,7 @@ public class DeteEnd : MonoBehaviour
             if (outputs == target) 
             { 
                 _mr.material = _e;
-                if(SceneManager.GetActiveScene().name == "new")
-                {
-                    Invoke("LoadScene", 1.5f);
-                }
+                GameManager.load();
             }
             else if (outputs > target)
             {

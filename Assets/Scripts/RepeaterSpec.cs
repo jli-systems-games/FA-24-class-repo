@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RepeaterSpec : ComponentBase
+public class RepeaterSpec : MonoBehaviour
 {
 
-    public override int EnergyOutput(int currentEn)
+    public int EnergyOutput(int currentEn, int Max)
     {
-        int n = _comp.energy - currentEn;
+        int n = Max- currentEn;
         //Debug.Log("newEn" + n);
         int outPut = currentEn + n;
         return outPut;

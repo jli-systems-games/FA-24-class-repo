@@ -10,7 +10,7 @@ public class PlayerHit : MonoBehaviour
     Vector2 moveVector;
     Vector3 endPos;
     public LayerMask block;
-    float step = 2;
+    float step = 1;
     public int Energy = 10;
     public int MaxEnergy = 10;
     public TextMeshPro energyCount;
@@ -42,7 +42,7 @@ public class PlayerHit : MonoBehaviour
             Debug.DrawRay(transform.position, direction, Color.cyan, Mathf.Infinity);
 
             //detecting whether it has hit a wall or not;
-            if (!Physics.Raycast(ray, out RaycastHit hit, 2f, block))
+            if (!Physics.Raycast(ray, out RaycastHit hit, step, block))
             {   
                 nextPoint = CalculateDirct(direction);
                
@@ -110,8 +110,17 @@ public class PlayerHit : MonoBehaviour
                 prevEnergy = Energy;
 
                 //grabbing the stats;
-                ComponentBase comp = _hit.collider.GetComponent<ComponentBase>();
-                Energy = comp.EnergyOutput(Energy);
+                if(_hit.collider.TryGetComponent<RepeaterSpec>(out RepeaterSpec repeat))
+                {
+                    Energy = repeat.EnergyOutput(Energy, MaxEnergy);
+                }
+                else
+                {   
+                    ComponentBase comp = _hit.collider.GetComponent<ComponentBase>();
+                    Energy = comp.EnergyOutput(Energy);
+
+                }
+                
                 hitComponent = _hit.transform.gameObject;
             }
             else if(_hit.transform.gameObject == hitComponent && d == - _hit.transform.up)
