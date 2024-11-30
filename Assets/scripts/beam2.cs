@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class beam2 : MonoBehaviour
 {
@@ -11,14 +12,7 @@ public class beam2 : MonoBehaviour
     Vector2 linePointv2;
     Vector2 direction;
 
-    bool mirror1collision;
-    bool mirror2collision;
-    bool mirror3collision;
-    bool mirror4collision;
-    bool mirror5collision;
-
     public GameObject startButton;
-    public GameObject restartButton;
     public GameObject fire;
 
     public Vector2 raycast1;
@@ -31,17 +25,13 @@ public class beam2 : MonoBehaviour
     public bool stopLine;
     public bool won;
 
+    public GameObject transitionAnim;
+
     void Start()
     {
         raycast1 = transform.position;
         raycast2 = transform.right;
-    }
-
-    void Update()
-    {
-
         UpdateLight();
-
     }
 
     void UpdateLight()
@@ -57,87 +47,18 @@ public class beam2 : MonoBehaviour
             direction = (hit.point - linePointv2);
             firstHit = true;
         }
-        else
-        {
-            if (stopLine == false)
-            {
-                if (hit.collider.gameObject.tag == "left")
-                {
-                    hit.collider.gameObject.SetActive(false);
+        
+        fire.SetActive(true);
+        startButton.SetActive(false);
+        transitionAnim.SetActive(true);
+        StartCoroutine(transition());
+        
+    }
 
-                    RaycastHit2D hit2 = Physics2D.Raycast(raycast1, raycast2);
-
-                    if (hit2.collider.gameObject.transform.localEulerAngles.z == -180f)
-                    {
-                        Debug.Log("left180");
-                        lineRenderer.positionCount++;
-                        lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit2.point);
-
-                        raycast1 = hit2.point;
-                        raycast2 = -(hit2.collider.gameObject.transform.right);
-                        //direction = (hit.point - oldHitPoint);
-                    }
-                }
-
-                if (hit.collider.gameObject.tag == "down")
-                {
-                
-                    oldHitPoint = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
-                    lineRenderer.positionCount++;
-                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
-
-                    direction = (hit.point - oldHitPoint);
-                }
-
-                if (hit.collider.gameObject.tag == "right")
-                {
-                    Debug.Log("disablegameobject and turn bool on");
-                }
-
-                if (hit.collider.gameObject.tag == "up")
-                {
-                    Debug.Log("disablegameobject and turn bool off");
-                }
-
-                if (hit.collider.gameObject.tag == "UorR")
-                {
-                    Debug.Log("if bool is on, right. if bool is off, up");
-                }
-
-                if(oldHitPoint == hit.point)
-                {
-                     startButton.SetActive(false);
-                     restartButton.SetActive(true);
-                     stopLine = true;
-                }
-
-                if (hit.collider.gameObject.tag != "mirror" && hit.collider.gameObject.tag != "target")
-                {
-                    lineRenderer.positionCount++;
-                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
-
-                    startButton.SetActive(false);
-                    restartButton.SetActive(true);
-                    stopLine = true;
-                }
-
-                if (hit.collider.gameObject.tag == "target")
-                {
-                    lineRenderer.positionCount++;
-                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
-
-                    won = true;
-                }
-            }
-
-            if (won == true)
-            {
-                fire.SetActive(true);
-                startButton.SetActive(false);
-                restartButton.SetActive(true);
-            }
-        }
-
+    private IEnumerator transition()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("LevelLoader");
     }
 
 }

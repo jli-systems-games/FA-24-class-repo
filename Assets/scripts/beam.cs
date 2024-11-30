@@ -25,6 +25,8 @@ public class beam : MonoBehaviour
     public bool stopLine;
     public bool won;
 
+    public GameObject levelCleared;
+
     void Start()
     {
         raycast1 = transform.position;
@@ -95,7 +97,7 @@ public class beam : MonoBehaviour
             {
                 fire.SetActive(true);
                 startButton.SetActive(false);
-                restartButton.SetActive(true);
+                levelCleared.SetActive(true);
             }
         }
 

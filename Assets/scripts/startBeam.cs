@@ -16,4 +16,14 @@ public class startBeam : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void backToLevelSelection()
+    {
+        SceneManager.LoadScene("LevelLoader");
+    }
+
+    public void nextLevel(string levelNumber)
+    {
+        SceneManager.LoadScene(levelNumber);
+    }
 }
