@@ -18,14 +18,11 @@ public class DrawLine : MonoBehaviour
     private List<LineRenderer> lineEndPoints = new List<LineRenderer>();
     int pointCount = 0;
     LineRenderer _LR;
-    public float lineLen = 3;
+   
     void Start()
     {
 
-        /*   _LR = GetComponent<LineRenderer>();
-           _LR.startWidth = 0f;
-           _LR.endWidth = 0f;
-           _LR.SetPosition(0,transform.position);*/
+      
         InputManager.RemoveLine += Deleteline;
         InputManager.RenderLine += MoveLine;
     }
@@ -42,6 +39,8 @@ public class DrawLine : MonoBehaviour
                     
             }
             LineRenderer lr= obj.AddComponent<LineRenderer>();
+            lr.startWidth = startWidth;
+            lr.endWidth = endWidth;
             Vector3[] tempPos = InputManager.points.ToArray();
             lr.SetPosition(0, tempPos[0]);
             lr.SetPosition(1, n);
@@ -73,8 +72,8 @@ public class DrawLine : MonoBehaviour
 
              if(n == lr.GetPosition(0))
             {
-                 Debug.Log("lasy" + lr.GetPosition(0));
-                 Debug.Log("next" + n);
+                 //Debug.Log("lasy" + lr.GetPosition(0));
+                 //Debug.Log("next" + n);
                  lineEndPoints.Remove(lr);
                  Destroy(lr);
              }

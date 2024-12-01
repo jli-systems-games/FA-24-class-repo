@@ -11,14 +11,15 @@ public class LevelLoader : MonoBehaviour
     public levelStats[] lvStats;
     public int numberOfColumns = 1;
     public TMP_Text result;
+    public static bool loadingLevel;
     //all spawnable objects
-    public GameObject startPrefab, endPrefab, blockPrefab, repeaterPrefab,platformPrefab;
+    public GameObject startPrefab, endPrefab, blockPrefab, repeaterPrefab,platformPrefab, resisterPrefab;
 
     int levelIndex = 0;
     void Start()
     {
         MakeLevel();
-        GameManager.loadNextLvl += advaneceLevel;
+        GameManager.loadNextLvl += goToNext;
 
     }
     public void MakeLevel()
@@ -32,7 +33,7 @@ public class LevelLoader : MonoBehaviour
             if (data[i].Contains("\r"))
             {
                 data[i] = data[i].Replace("\r", "");
-                Debug.Log(data[i]);
+                //Debug.Log(data[i]);
             }
         }
         int tableSize = (data.Length / numberOfColumns); //got all the individual cell as an element from the file. Divde that number by column number u get the row numb;
@@ -94,11 +95,23 @@ public class LevelLoader : MonoBehaviour
                                 //instantiate Repeater
                                 GameObject repeater = Instantiate(repeaterPrefab);
                                 Quaternion rot = Quaternion.identity;
-                                rot.eulerAngles = new Vector3(90, 0, 90);
+                                rot.eulerAngles = new Vector3(90, 0, -90);
                                 repeater.transform.rotation = rot;
-                                repeater.transform.position = newVector;
+                               
                                 repeater.transform.SetParent (platForm.transform, true);
+                            Debug.Log(repeater.transform.up);
+                                repeater.transform.position = newVector;
                                 break;
+                        case "VR":
+                            GameObject vRepeater = Instantiate(repeaterPrefab);
+                            vRepeater.transform.position = newVector;
+                            vRepeater.transform.SetParent(platForm.transform, true);
+                            break;
+                        case "RE":
+                            GameObject resis = Instantiate(resisterPrefab);
+                            resis.transform.position = newVector;
+                            resis.transform.SetParent(platForm.transform, true);
+                            break;
 
                             default:
                                 break;
@@ -108,10 +121,26 @@ public class LevelLoader : MonoBehaviour
             }
 
         }
+
+        loadingLevel = false;
+    }
+    void goToNext()
+    {
+        StartCoroutine(loading());
+    }
+    IEnumerator loading()
+    {
+        yield return new WaitForSeconds(1.5f);
+        advaneceLevel();
+
+        yield return new WaitForSeconds(1.5f);
+        MakeLevel();
+
     }
     public void advaneceLevel()
     {
         //find the current platformParent;
+        loadingLevel = true;
         GameObject ply = GameObject.FindWithTag("platform");
         if (ply != null)
         {
@@ -120,13 +149,13 @@ public class LevelLoader : MonoBehaviour
                 Destroy(t.gameObject);
             }
             Destroy(ply);
+           
         }
 
-        if(levelIndex < lvStats.Length)
+        if(levelIndex < lvStats.Length -1)
         {   
             levelIndex++;
-            MakeLevel();
-
+            
         }
        
     }

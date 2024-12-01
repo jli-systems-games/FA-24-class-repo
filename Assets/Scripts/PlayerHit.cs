@@ -20,8 +20,9 @@ public class PlayerHit : MonoBehaviour
     void Start()
     {
         endPos = transform.parent.position;
-        transform.position = transform.parent.localPosition;
+        transform.position = transform.parent.position;
         InputManager.points.Push(endPos);
+        energyCount.text = Energy.ToString();
         GameManager.loadNextLvl += resetStat;
     }
     public void Reload(InputAction.CallbackContext context)
@@ -33,7 +34,7 @@ public class PlayerHit : MonoBehaviour
     {
         moveVector = context.ReadValue<Vector2>();
         Vector3 nextPoint = transform.position;
-        if (context.started)
+        if (context.started && LevelLoader.loadingLevel == false)
         {
             //calculate the new position and the direction it will go;
             Vector3 direction = new Vector3(moveVector.x, 0, moveVector.y);
@@ -51,7 +52,7 @@ public class PlayerHit : MonoBehaviour
             else if(Energy > 0)
             {   
                
-                if (hit.collider.CompareTag("repeater")) nextPoint = Redirect(hit);
+                if (hit.collider.CompareTag("repeater")) nextPoint = Redirect(hit, ray);
                 readjusting = true;
                 //Debug.Log("n" + nextPoint);
                 
@@ -96,18 +97,30 @@ public class PlayerHit : MonoBehaviour
 
     void resetStat()
     {
+        LineRenderer[] lns = Object.FindObjectsByType<LineRenderer>(FindObjectsSortMode.None);
+        if(lns.Length > 0)
+        {
+            foreach(LineRenderer ln in lns)
+            {
+                Destroy(ln);
+
+            }
+        }
+        
         readjusting = true;
     }
 
-   Vector3 Redirect(RaycastHit _hit)
+   Vector3 Redirect(RaycastHit _hit, Ray fromDirct)
     {   
         Vector3 newLoc = transform.position;
         
         readjusting = true;
+        Debug.Log("move:" + fromDirct.direction);
         //determine where is it coming from; 
-       if(Mathf.Abs(moveVector.x) == _hit.transform.up.x)
+        //using the ray that it casted;
+       if(fromDirct.direction == _hit.transform.up)
         {
-            Debug.Log("move:" + moveVector.x);
+            
             Vector3 d = new Vector3(moveVector.x, 0, moveVector.y);
             newLoc = _hit.transform.position + d * step;
 

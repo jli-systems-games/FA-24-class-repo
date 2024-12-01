@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     public static event Action loadNextLvl;
 
     public static void load()
-    {
+    {   
+        InputManager.points.Clear();
         loadNextLvl?.Invoke();
     }
 
