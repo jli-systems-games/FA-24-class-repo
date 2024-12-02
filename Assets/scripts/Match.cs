@@ -12,6 +12,7 @@ public class Match : MonoBehaviour
     public Image[] matchIcons;
 
     public Light[] matchLights;
+    public GameObject matchAnimation;
 
     private bool isMatchLit = false;
 
@@ -87,6 +88,11 @@ public class Match : MonoBehaviour
             if (light != null)
             {
                 light.enabled = state;
+            }
+
+            if (matchAnimation != null)
+            {
+                matchAnimation.SetActive(state);
             }
         }
     }
