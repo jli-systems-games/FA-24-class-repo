@@ -30,7 +30,7 @@ public class DeteEnd : MonoBehaviour
                 _mr.material = _e;
                 GameManager.load();
             }
-            else if (outputs > target)
+            else if (outputs > target && _mr != null)
             {
                 _mr.material = _b;
                 _t.text = "You Blew it!";
@@ -38,9 +38,6 @@ public class DeteEnd : MonoBehaviour
             
         }
     }
-    void LoadScene()
-    {
-        SceneManager.LoadScene("SampleScene");
-    }
+  
    
 }

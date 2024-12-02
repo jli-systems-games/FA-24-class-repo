@@ -16,6 +16,7 @@ public class PlayerHit : MonoBehaviour
     public TextMeshPro energyCount;
     int prevEnergy = 0;
     bool readjusting = false;
+    bool reentering = false;
     GameObject hitComponent = null;
     void Start()
     {
@@ -60,7 +61,7 @@ public class PlayerHit : MonoBehaviour
 
             
             
-           if (nextPoint == InputManager.points.Peek() &&InputManager.points.Count > 0) 
+           if (nextPoint == InputManager.points.Peek() &&InputManager.points.Count > 0 || reentering ) 
             {   
                 if(InputManager.points.Count > 1)
                     InputManager.points.Pop();
@@ -71,16 +72,18 @@ public class PlayerHit : MonoBehaviour
                 endPos = nextPoint;
                 transform.position = nextPoint;
                 InputManager.DelLine(nextPoint,direction); 
+                if(reentering) reentering = false;
             }
             else if(Energy > 0 && !InputManager.points.Contains(nextPoint) && nextPoint != endPos)
             {
                 
                 //Debug.Log("Added p" + endPos);
+               
                 InputManager.points.Push(endPos);
-
                  if (Energy > 0 && !readjusting) Energy--;
 
                 endPos = nextPoint;
+                
                 transform.position = nextPoint;
                 InputManager.DrawLine(direction,nextPoint);
             }
@@ -143,12 +146,16 @@ public class PlayerHit : MonoBehaviour
                 
                 hitComponent = _hit.transform.gameObject;
             }
-            else if(_hit.transform.gameObject == hitComponent && d == - _hit.transform.up)
-            {
-                Energy = prevEnergy;
-                prevEnergy = 0;
-                hitComponent = null;
-            }
+          
+
+        }else if(_hit.transform.gameObject == hitComponent && fromDirct.direction == -(_hit.transform.up))
+        {
+            Vector3 d = new Vector3(moveVector.x, 0, moveVector.y);
+            newLoc = _hit.transform.position + d * step;
+            Energy = prevEnergy;
+            prevEnergy = 0;
+            hitComponent = null;
+            reentering = true;
 
         }
 

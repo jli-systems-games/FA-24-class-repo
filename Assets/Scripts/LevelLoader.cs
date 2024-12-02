@@ -134,7 +134,9 @@ public class LevelLoader : MonoBehaviour
         advaneceLevel();
 
         yield return new WaitForSeconds(1.5f);
-        MakeLevel();
+
+        if(levelIndex < lvStats.Length - 1) MakeLevel();
+        
 
     }
     public void advaneceLevel()
