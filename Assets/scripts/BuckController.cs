@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class BuckController : MonoBehaviour
@@ -18,7 +19,7 @@ public class BuckController : MonoBehaviour
 
     public GameObject HoldE;
     public GameObject Light;
-    public GameObject view;
+    //public GameObject view;
 
     [Header("Movement")]
     public float speed = 3f;
@@ -37,7 +38,9 @@ public class BuckController : MonoBehaviour
     [Header("Shrink Effect")]
     public float shrinkRate = 0.1f; 
     public float minScaleY = 0.5f; 
-    public float shrinkHeightRate = 0.05f; 
+    public float shrinkHeightRate = 0.05f;
+
+    public CinemachineVirtualCamera buckCamera;
 
     private void Start()
     {
@@ -75,12 +78,15 @@ public class BuckController : MonoBehaviour
         {
             PlayerMovement();
             Light.SetActive(true);
-            view.SetActive(true);
+            buckCamera.Priority = 0;
+            buckCamera.Priority = 10;
+            // view.SetActive(true);
         }
         else
         {
             Light.SetActive(false);
-            view.SetActive(false);
+            buckCamera.Priority = 0;
+            //  view.SetActive(false);
         }
     }
 
@@ -159,9 +165,16 @@ public class BuckController : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);
         foreach (Collider col in colliders)
         {
+
+
+
+
+
             BuckController otherController = col.GetComponent<BuckController>();
             if (otherController != null && otherController.id != this.id && !otherController.isActive)
             {
+          
+
                 otherController.isActive = true;
                 otherController.rb.velocity = Vector3.zero;
                 this.isActive = false;
