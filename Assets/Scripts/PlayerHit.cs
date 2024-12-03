@@ -24,7 +24,7 @@ public class PlayerHit : MonoBehaviour
         transform.position = transform.parent.position;
         InputManager.points.Push(endPos);
         energyCount.text = Energy.ToString();
-        GameManager.loadNextLvl += resetStat;
+        //GameManager.loadNextLvl += resetStat;
     }
     public void Reload(InputAction.CallbackContext context)
     {
@@ -39,7 +39,7 @@ public class PlayerHit : MonoBehaviour
         {
             //calculate the new position and the direction it will go;
             Vector3 direction = new Vector3(moveVector.x, 0, moveVector.y);
-            
+            //Debug.Log("dirc" + direction);
             Ray ray = new Ray(transform.position, direction);
 
             Debug.DrawRay(transform.position, direction, Color.cyan, Mathf.Infinity);
@@ -85,6 +85,7 @@ public class PlayerHit : MonoBehaviour
                 endPos = nextPoint;
                 
                 transform.position = nextPoint;
+                Debug.Log("gonna draw line");
                 InputManager.DrawLine(direction,nextPoint);
             }
             
@@ -98,37 +99,25 @@ public class PlayerHit : MonoBehaviour
         return endPos + dirct * step;
     }
 
-    void resetStat()
-    {
-        LineRenderer[] lns = Object.FindObjectsByType<LineRenderer>(FindObjectsSortMode.None);
-        if(lns.Length > 0)
-        {
-            foreach(LineRenderer ln in lns)
-            {
-                Destroy(ln);
-
-            }
-        }
-        
-        readjusting = true;
-    }
+ 
 
    Vector3 Redirect(RaycastHit _hit, Ray fromDirct)
     {   
         Vector3 newLoc = transform.position;
         
         readjusting = true;
-        Debug.Log("move:" + fromDirct.direction);
+        //Debug.Log("move:" + fromDirct.direction);
         //determine where is it coming from; 
         //using the ray that it casted;
-       if(fromDirct.direction == _hit.transform.up)
+       if(fromDirct.direction == _hit.transform.up || fromDirct.direction == -(_hit.transform.up))
         {
             
             Vector3 d = new Vector3(moveVector.x, 0, moveVector.y);
             newLoc = _hit.transform.position + d * step;
 
             //recalculate the energy level;
-            if(_hit.transform.gameObject != hitComponent && d == _hit.transform.up)
+           
+                if(_hit.transform.gameObject != hitComponent && !InputManager.points.Contains(newLoc) )
             {
                 prevEnergy = Energy;
 
@@ -145,19 +134,19 @@ public class PlayerHit : MonoBehaviour
                 }
                 
                 hitComponent = _hit.transform.gameObject;
+            }else if (_hit.transform.gameObject == hitComponent)
+            {
+                Energy = prevEnergy;
+                prevEnergy = 0;
+                hitComponent = null;
+                reentering = true;
             }
+            
+            
           
 
-        }else if(_hit.transform.gameObject == hitComponent && fromDirct.direction == -(_hit.transform.up))
-        {
-            Vector3 d = new Vector3(moveVector.x, 0, moveVector.y);
-            newLoc = _hit.transform.position + d * step;
-            Energy = prevEnergy;
-            prevEnergy = 0;
-            hitComponent = null;
-            reentering = true;
-
         }
+    
 
        return newLoc;
         

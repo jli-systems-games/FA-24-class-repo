@@ -16,6 +16,7 @@ public class LevelLoader : MonoBehaviour
     public GameObject startPrefab, endPrefab, blockPrefab, repeaterPrefab,platformPrefab, resisterPrefab;
 
     int levelIndex = 0;
+    bool reload = false;
     void Start()
     {
         MakeLevel();
@@ -99,7 +100,7 @@ public class LevelLoader : MonoBehaviour
                                 repeater.transform.rotation = rot;
                                
                                 repeater.transform.SetParent (platForm.transform, true);
-                            Debug.Log(repeater.transform.up);
+                            //Debug.Log(repeater.transform.up);
                                 repeater.transform.position = newVector;
                                 break;
                         case "VR":
@@ -123,6 +124,13 @@ public class LevelLoader : MonoBehaviour
         }
 
         loadingLevel = false;
+        if(reload) reload = false;
+    }
+    public void reloadCurrentLevel()
+    {
+        reload = true;
+        InputManager.points.Clear();
+        StartCoroutine(loading());
     }
     void goToNext()
     {
@@ -131,8 +139,10 @@ public class LevelLoader : MonoBehaviour
     IEnumerator loading()
     {
         yield return new WaitForSeconds(1.5f);
-        advaneceLevel();
 
+        //combine both of them into one function and call it after the brain loading is done;
+        advaneceLevel();
+        resetStat();
         yield return new WaitForSeconds(1.5f);
 
         if(levelIndex < lvStats.Length - 1) MakeLevel();
@@ -154,12 +164,28 @@ public class LevelLoader : MonoBehaviour
            
         }
 
-        if(levelIndex < lvStats.Length -1)
+        if(levelIndex < lvStats.Length -1 && !reload)
         {   
             levelIndex++;
-            
+            //Debug.Log(levelIndex);
         }
        
+    }
+
+    void resetStat()
+    {
+        LineRenderer[] lns = UnityEngine.Object.FindObjectsByType<LineRenderer>(FindObjectsSortMode.None);
+        if (lns.Length > 0)
+        {
+            foreach (LineRenderer ln in lns)
+            {
+                if (ln.gameObject.name.Contains("newLine")) Destroy(ln.gameObject);
+
+
+            }
+        }
+
+
     }
 
 }

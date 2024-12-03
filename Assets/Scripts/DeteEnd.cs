@@ -38,6 +38,14 @@ public class DeteEnd : MonoBehaviour
             
         }
     }
-  
-   
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("EndPoint") && _t.text != "")
+        {
+            _t.text = " ";
+        }
+    }
+
+
 }
