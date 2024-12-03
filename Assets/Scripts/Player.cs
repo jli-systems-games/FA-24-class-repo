@@ -31,9 +31,17 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            // Disable movement by setting velocity to zero and stopping movement animations
+            rb.velocity = Vector2.zero;
+            animator.SetFloat("Speed", 0);
+            return; // Exit FixedUpdate early to prevent further movement logic
+        }
+
         // Get horizontal and vertical input from arrow keys or WASD
-        float horizontalInput = Input.GetAxisRaw("Horizontal"); // Left/Right input (-1, 0, 1)
-        float verticalInput = Input.GetAxisRaw("Vertical");     // Up/Down input (-1, 0, 1)
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
 
         // Calculate movement vector
         Vector2 movement = new Vector2(horizontalInput, verticalInput).normalized * speed;
@@ -44,19 +52,17 @@ public class Player : MonoBehaviour
         // Clamp the player's position within the vertical limit
         rb.position = new Vector2(rb.position.x, Mathf.Clamp(rb.position.y, -verticalLimit, verticalLimit));
 
+        // Update Animator's Speed parameter based on movement magnitude
+        animator.SetFloat("Speed", movement.magnitude);
+
         // Flip the player based on horizontal movement direction
         if (horizontalInput > 0)
         {
-            // Moving right: face right
             transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z);
         }
         else if (horizontalInput < 0)
         {
-            // Moving left: face left (flip horizontally)
             transform.localScale = new Vector3(-originalScale.x, originalScale.y, originalScale.z);
         }
-
-        // Update Animator's Speed parameter based on movement magnitude
-        animator.SetFloat("Speed", movement.magnitude);
     }
 }
