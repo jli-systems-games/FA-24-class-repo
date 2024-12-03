@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuckController : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class BuckController : MonoBehaviour
 
     public GameObject HoldE;
     public GameObject Light;
-    //public GameObject view;
+    public GameObject spark;
 
     [Header("Movement")]
     public float speed = 3f;
@@ -36,15 +35,29 @@ public class BuckController : MonoBehaviour
     private Vector3 moveDirection;
 
     [Header("Shrink Effect")]
-    public float shrinkRate = 0.1f; 
-    public float minScaleY = 0.5f; 
+    public float shrinkRate = 0.1f;
+    public float minScaleY = 0.5f;
     public float shrinkHeightRate = 0.05f;
+    private float maxScaleY; 
 
-    public CinemachineVirtualCamera buckCamera;
+    public Image bar;
+    //public GameObject endText;
+    public GameObject playerCanvas;
+
+    // public CinemachineVirtualCamera buckCamera;
 
     private void Start()
     {
         HoldE.SetActive(false);
+       // endText.SetActive(false);
+        maxScaleY = transform.localScale.y;
+
+        GameManager.Instance.RegisterController(this);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.UnregisterController(this); 
     }
 
     private void Awake()
@@ -66,7 +79,7 @@ public class BuckController : MonoBehaviour
             else
                 rb.drag = 0f;
 
-            ApplyShrinkEffect(); 
+            ApplyShrinkEffect();
         }
 
         HandleSwitch();
@@ -78,25 +91,23 @@ public class BuckController : MonoBehaviour
         {
             PlayerMovement();
             Light.SetActive(true);
-            buckCamera.Priority = 0;
-            buckCamera.Priority = 10;
-            // view.SetActive(true);
+            spark.SetActive(true);
+            playerCanvas.SetActive(true);
         }
         else
         {
+            
             Light.SetActive(false);
-            buckCamera.Priority = 0;
-            //  view.SetActive(false);
+            spark.SetActive(false);
+            playerCanvas.SetActive(false);
         }
     }
 
     private void ApplyShrinkEffect()
     {
-        
         Vector3 scale = transform.localScale;
         Vector3 position = transform.position;
 
-        
         if (scale.y > minScaleY)
         {
             scale.y -= shrinkRate * Time.deltaTime;
@@ -104,6 +115,19 @@ public class BuckController : MonoBehaviour
 
             transform.localScale = scale;
             transform.position = position;
+        }
+
+        float shrinkProgress = Mathf.Clamp01((scale.y - minScaleY) / (maxScaleY - minScaleY));
+        if (bar != null)
+        {
+            bar.fillAmount = shrinkProgress;
+        }
+
+        if (scale.y <= minScaleY && isActive) 
+        {
+            isActive = false;
+            GameManager.Instance.CheckGameOver();
+            Debug.Log("Controller has shrunk to minimum Y scale and is now inactive.");
         }
     }
 
@@ -165,16 +189,9 @@ public class BuckController : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);
         foreach (Collider col in colliders)
         {
-
-
-
-
-
             BuckController otherController = col.GetComponent<BuckController>();
             if (otherController != null && otherController.id != this.id && !otherController.isActive)
             {
-          
-
                 otherController.isActive = true;
                 otherController.rb.velocity = Vector3.zero;
                 this.isActive = false;
