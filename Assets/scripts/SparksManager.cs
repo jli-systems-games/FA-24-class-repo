@@ -7,13 +7,18 @@ public class SparksManager : MonoBehaviour
     public float timeLimit = 60f; // 倒计时秒数
     public TMP_Text timerText; // 倒计时 TMP 文本
     public TMP_Text winText; // 胜利 TMP 文本
+    public TMP_Text burnCountText; // 燃烧计数 TMP 文本
     public GameObject[] flammableObjects; // 所有可燃物体
     public string nextSceneName; // 要跳转的场景名称
+    private int totalFlammableObjects; // 总燃烧物体数量
+    private int burnedObjects; // 已经燃烧的物体数量
     private bool gameWon = false; // 游戏胜利状态
 
     private void Start()
     {
         winText.gameObject.SetActive(false); // 隐藏胜利文本
+        totalFlammableObjects = flammableObjects.Length; // 初始化总燃烧物体数量
+        UpdateBurnCount(); // 初始化燃烧计数显示
         UpdateTimer();
     }
 
@@ -37,9 +42,16 @@ public class SparksManager : MonoBehaviour
         {
             GameOver();
         }
-        else if (AllObjectsBurned())
+        else
         {
-            WinGame();
+            // 检查燃烧状态
+            UpdateBurnedObjectsCount();
+            UpdateBurnCount();
+
+            if (AllObjectsBurned())
+            {
+                WinGame();
+            }
         }
     }
 
@@ -50,14 +62,32 @@ public class SparksManager : MonoBehaviour
 
     private bool AllObjectsBurned()
     {
-        // 检查所有物体是否点燃
-        foreach (GameObject obj in flammableObjects)
+        return burnedObjects >= totalFlammableObjects;
+    }
+
+    private void UpdateBurnedObjectsCount()
+    {
+        burnedObjects = 0;
+
+        foreach (var obj in flammableObjects)
         {
-            var flammable = obj.GetComponent<Ignis.FlammableObject>();
-            if (flammable != null && !flammable.onFire)
-                return false;
+            if (obj != null)
+            {
+                var flammable = obj.GetComponent<Ignis.FlammableObject>();
+                if (flammable != null && flammable.onFire)
+                {
+                    burnedObjects++;
+                }
+            }
         }
-        return true;
+    }
+
+    private void UpdateBurnCount()
+    {
+        if (burnCountText != null)
+        {
+            burnCountText.text = $"{burnedObjects}/{totalFlammableObjects} Burned";
+        }
     }
 
     private void WinGame()
@@ -74,7 +104,7 @@ public class SparksManager : MonoBehaviour
         winText.text = "Game Over!";
     }
 
-    private void LoadNextScene()
+    public void LoadNextScene()
     {
         if (!string.IsNullOrEmpty(nextSceneName))
         {
