@@ -1,81 +1,88 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using TMPro;
 
 public class SparksManager : MonoBehaviour
 {
     public float timeLimit = 60f; // 倒计时秒数
-    public GameObject[] flammableObjects; // 可点燃的物体
-    public Text timerText; // 显示倒计时的文本
-    public Text winText; // 胜利文字
-    private int objectsBurned = 0; // 已点燃的物体计数
-    private bool gameWon = false;
+    public TMP_Text timerText; // 倒计时 TMP 文本
+    public TMP_Text winText; // 胜利 TMP 文本
+    public GameObject[] flammableObjects; // 所有可燃物体
+    public string nextSceneName; // 要跳转的场景名称
+    private bool gameWon = false; // 游戏胜利状态
 
-    void Start()
+    private void Start()
     {
-        // 初始化倒计时
-        UpdateTimerText();
-        winText.gameObject.SetActive(false); // 隐藏胜利文字
+        winText.gameObject.SetActive(false); // 隐藏胜利文本
+        UpdateTimer();
     }
 
-    void Update()
+    private void Update()
     {
-        if (!gameWon)
+        if (gameWon)
         {
-            // 更新倒计时
-            timeLimit -= Time.deltaTime;
-            UpdateTimerText();
-
-            // 如果时间用完且游戏未完成
-            if (timeLimit <= 0)
+            // 检测玩家按下回车键进入下一个场景
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                GameOver();
+                LoadNextScene();
             }
+            return;
         }
 
-        // 按下回车键进入下一场景
-        if (gameWon && Input.GetKeyDown(KeyCode.Return))
+        // 更新倒计时
+        timeLimit -= Time.deltaTime;
+        UpdateTimer();
+
+        if (timeLimit <= 0)
         {
-            LoadNextScene();
+            GameOver();
         }
-    }
-
-    public void ObjectBurned()
-    {
-        // 更新已点燃物体计数
-        objectsBurned++;
-
-        // 检查是否所有物体都点燃了
-        if (objectsBurned >= flammableObjects.Length)
+        else if (AllObjectsBurned())
         {
             WinGame();
         }
     }
 
-    void UpdateTimerText()
+    private void UpdateTimer()
     {
         timerText.text = "Time: " + Mathf.Ceil(timeLimit).ToString();
     }
 
-    void WinGame()
+    private bool AllObjectsBurned()
+    {
+        // 检查所有物体是否点燃
+        foreach (GameObject obj in flammableObjects)
+        {
+            var flammable = obj.GetComponent<Ignis.FlammableObject>();
+            if (flammable != null && !flammable.onFire)
+                return false;
+        }
+        return true;
+    }
+
+    private void WinGame()
     {
         gameWon = true;
-        winText.gameObject.SetActive(true); // 显示胜利文字
-        winText.text = "You Win!"; // 设置胜利信息
+        winText.gameObject.SetActive(true);
+        winText.text = "You Win! Press Enter to continue.";
     }
 
-    void GameOver()
+    private void GameOver()
     {
-        if (!gameWon)
+        timerText.text = "Time: 0";
+        winText.gameObject.SetActive(true);
+        winText.text = "Game Over!";
+    }
+
+    private void LoadNextScene()
+    {
+        if (!string.IsNullOrEmpty(nextSceneName))
         {
-            Debug.Log("Game Over! 时间用完。");
-            // 可在这里添加失败逻辑
+            SceneManager.LoadScene(nextSceneName); // 加载指定的场景
         }
-    }
-
-    public void LoadNextScene()
-    {
-        // 加载下一个场景
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        else
+        {
+            Debug.LogError("Next scene name is not set in the Inspector!");
+        }
     }
 }
