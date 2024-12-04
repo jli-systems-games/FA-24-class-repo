@@ -73,4 +73,9 @@ public class InfiniteMatches : MonoBehaviour
             matchAnimation.SetActive(state);
         }
     }
+
+    public bool IsMatchLit()
+    {
+        return isMatchLit;
+    }
 }
