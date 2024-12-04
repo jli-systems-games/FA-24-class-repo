@@ -20,7 +20,8 @@ public class LevelLoader : MonoBehaviour
     void Start()
     {
         MakeLevel();
-        GameManager.loadNextLvl += goToNext;
+        
+        GameManager.loadNextLvl += goNext;
 
     }
     public void MakeLevel()
@@ -132,9 +133,11 @@ public class LevelLoader : MonoBehaviour
         InputManager.points.Clear();
         StartCoroutine(loading());
     }
-    void goToNext()
-    {
+
+    void goNext()
+    {   
         StartCoroutine(loading());
+        
     }
     IEnumerator loading()
     {
@@ -142,13 +145,13 @@ public class LevelLoader : MonoBehaviour
 
         //combine both of them into one function and call it after the brain loading is done;
         advaneceLevel();
+        yield return new WaitForSeconds(1f);
         resetStat();
         yield return new WaitForSeconds(1.5f);
 
         if(levelIndex < lvStats.Length - 1) MakeLevel();
-        
-
     }
+
     public void advaneceLevel()
     {
         //find the current platformParent;

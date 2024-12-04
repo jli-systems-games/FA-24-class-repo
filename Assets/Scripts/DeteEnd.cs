@@ -28,7 +28,7 @@ public class DeteEnd : MonoBehaviour
             if (outputs == target) 
             { 
                 _mr.material = _e;
-                GameManager.load();
+                GameManager.clearLevel();
             }
             else if (outputs > target && _mr != null)
             {

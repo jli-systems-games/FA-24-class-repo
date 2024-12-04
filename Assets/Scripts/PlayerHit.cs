@@ -129,7 +129,7 @@ public class PlayerHit : MonoBehaviour
                 else
                 {   
                     ComponentBase comp = _hit.collider.GetComponent<ComponentBase>();
-                    Energy = comp.EnergyOutput(Energy);
+                    Energy = comp.EnergyOutput(Energy,MaxEnergy);
 
                 }
                 
