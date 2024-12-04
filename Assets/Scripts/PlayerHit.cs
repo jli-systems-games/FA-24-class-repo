@@ -18,6 +18,8 @@ public class PlayerHit : MonoBehaviour
     bool readjusting = false;
     bool reentering = false;
     GameObject hitComponent = null;
+    List <GameObject> hitObjects = new List <GameObject>();
+    List <int> lastEn = new List<int> ();
     void Start()
     {
         endPos = transform.parent.position;
@@ -88,6 +90,10 @@ public class PlayerHit : MonoBehaviour
                 Debug.Log("gonna draw line");
                 InputManager.DrawLine(direction,nextPoint);
             }
+            else
+            {
+
+            }
             
             readjusting = false;
             energyCount.text = Energy.ToString();
@@ -116,8 +122,9 @@ public class PlayerHit : MonoBehaviour
             newLoc = _hit.transform.position + d * step;
 
             //recalculate the energy level;
-           
-                if(_hit.transform.gameObject != hitComponent && !InputManager.points.Contains(newLoc) )
+          
+            
+                if(!hitObjects.Contains(_hit.transform.gameObject) )
             {
                 prevEnergy = Energy;
 
@@ -133,15 +140,30 @@ public class PlayerHit : MonoBehaviour
 
                 }
                 
-                hitComponent = _hit.transform.gameObject;
-            }else if (_hit.transform.gameObject == hitComponent)
-            {
-                Energy = prevEnergy;
-                prevEnergy = 0;
+                hitObjects.Add(_hit.transform.gameObject);
+                    lastEn.Add(prevEnergy);
+            }else if (hitObjects.Contains(_hit.transform.gameObject))
+            {   
+                    if(lastEn.Count > 1)
+                    {
+                         Energy = lastEn[lastEn.Count -1];
+                         lastEn.RemoveAt(lastEn.Count - 1);
+
+                         prevEnergy = lastEn[lastEn.Count - 1];
+                    }
+                    else
+                    {
+                        Energy = prevEnergy;
+                    lastEn.RemoveAt(lastEn.Count - 1);
+                    prevEnergy = 0;
+                    }
+               hitObjects.RemoveAt(hitObjects.Count - 1);    
                 hitComponent = null;
                 reentering = true;
             }
             
+            
+                
             
           
 
