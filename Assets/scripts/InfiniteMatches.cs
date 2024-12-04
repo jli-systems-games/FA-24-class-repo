@@ -12,6 +12,7 @@ public class InfiniteMatches : MonoBehaviour
 
     public Light[] matchLights;
     public GameObject matchAnimation;
+    public AudioSource matchSound;
 
     private bool isMatchLit = false;
 
@@ -32,6 +33,11 @@ public class InfiniteMatches : MonoBehaviour
         isMatchLit = true;
 
         ToggleFire(true);
+
+        if (matchSound != null)
+        {
+            matchSound.Play();
+        }
     }
 
     void MatchUnlit()
