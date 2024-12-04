@@ -39,6 +39,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    void PointAndClickMovement()
+    {
         //ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         //mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -65,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
 
     void SetTiles()
     {
+        //add compass rotations later so the player doesn't have to constantly orient themself
+
         tileDirections = currentTile.GetComponent<TileDirections>();
         //set the tiles somewhere here relative to the player directions & call this every time they move or rotate
         if (facing == PlayerDirection.North)
