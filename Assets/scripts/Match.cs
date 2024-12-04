@@ -23,6 +23,7 @@ public class Match : MonoBehaviour
         UpdateMatchAmount();
 
         ToggleFire(false);
+        RenderSettings.fog = true;
     }
 
     void LightMatch()
@@ -37,6 +38,7 @@ public class Match : MonoBehaviour
         isMatchLit = true;
 
         ToggleFire(true);
+        RenderSettings.fog = false;
     }
 
     void MatchUnlit()
@@ -45,6 +47,7 @@ public class Match : MonoBehaviour
         matchBar.value = 0;
 
         ToggleFire(false);
+        RenderSettings.fog = true;
     }
 
     void Update()
