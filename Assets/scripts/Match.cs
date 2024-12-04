@@ -13,6 +13,7 @@ public class Match : MonoBehaviour
 
     public Light[] matchLights;
     public GameObject matchAnimation;
+    public AudioSource matchSound;
 
     private bool isMatchLit = false;
 
@@ -39,6 +40,11 @@ public class Match : MonoBehaviour
 
         ToggleFire(true);
         RenderSettings.fog = false;
+
+        if (matchSound != null)
+        {
+            matchSound.Play();
+        }
     }
 
     void MatchUnlit()
