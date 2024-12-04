@@ -40,5 +40,6 @@ public class rotateObj : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, endRotation);
         isRotating = false;
+
     }
 }

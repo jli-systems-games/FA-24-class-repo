@@ -47,16 +47,17 @@ public class beam2 : MonoBehaviour
             direction = (hit.point - linePointv2);
             firstHit = true;
         }
-        
-        fire.SetActive(true);
-        startButton.SetActive(false);
-        transitionAnim.SetActive(true);
+
         StartCoroutine(transition());
         
     }
 
     private IEnumerator transition()
     {
+        fire.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        startButton.SetActive(false);
+        transitionAnim.SetActive(true);
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("LevelLoader");
     }

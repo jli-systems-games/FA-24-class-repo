@@ -27,10 +27,22 @@ public class beam : MonoBehaviour
 
     public GameObject levelCleared;
 
+    public Transform ch1;
+
+    public GameObject newBeam;
+
     void Start()
     {
         raycast1 = transform.position;
-        raycast2 = transform.right;
+
+        if(ch1.localEulerAngles.y == 180)
+        {
+            raycast2 = -transform.right;
+        }
+        else
+        {
+            raycast2 = transform.right;
+        }
     }
 
     void Update()
@@ -73,7 +85,16 @@ public class beam : MonoBehaviour
                      stopLine = true;
                 }
 
-                if (hit.collider.gameObject.tag != "mirror" && hit.collider.gameObject.tag != "target")
+                if (hit.collider.gameObject.tag == "target")
+                {
+                    lineRenderer.positionCount++;
+                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+                    
+                    stopLine = true;
+                    won = true;
+                }
+
+                if (hit.collider.gameObject.tag != "mirror" && hit.collider.gameObject.tag != "target" && hit.collider.gameObject.tag != "portal")
                 {
                     lineRenderer.positionCount++;
                     lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
@@ -83,13 +104,13 @@ public class beam : MonoBehaviour
                     stopLine = true;
                 }
 
-                if (hit.collider.gameObject.tag == "target")
+                if (hit.collider.gameObject.tag == "portal")
                 {
                     lineRenderer.positionCount++;
                     lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
                     
                     stopLine = true;
-                    won = true;
+                    newBeam.SetActive(true);
                 }
             }
 
