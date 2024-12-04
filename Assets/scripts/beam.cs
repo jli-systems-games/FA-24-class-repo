@@ -78,6 +78,19 @@ public class beam : MonoBehaviour
                     direction = (hit.point - oldHitPoint);
                 }
 
+                if (hit.collider.gameObject.tag == "mirror2")
+                {
+                    oldHitPoint = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
+                    lineRenderer.positionCount++;
+                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+
+                    direction = (hit.point - oldHitPoint);
+
+                    Collider2D m_Collider = hit.collider.gameObject.GetComponent<Collider2D>();
+
+                    m_Collider.enabled = false;
+                }
+
                 if(oldHitPoint == hit.point)
                 {
                      startButton.SetActive(false);
@@ -94,7 +107,7 @@ public class beam : MonoBehaviour
                     won = true;
                 }
 
-                if (hit.collider.gameObject.tag != "mirror" && hit.collider.gameObject.tag != "target" && hit.collider.gameObject.tag != "portal")
+                if (hit.collider.gameObject.tag != "mirror" && hit.collider.gameObject.tag != "target" && hit.collider.gameObject.tag != "portal" && hit.collider.gameObject.tag != "mirror2")
                 {
                     lineRenderer.positionCount++;
                     lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
@@ -112,6 +125,7 @@ public class beam : MonoBehaviour
                     stopLine = true;
                     newBeam.SetActive(true);
                 }
+
             }
 
             if (won == true)
