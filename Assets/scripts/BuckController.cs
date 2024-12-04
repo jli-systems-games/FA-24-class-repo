@@ -1,4 +1,5 @@
 using Cinemachine;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,7 @@ public class BuckController : MonoBehaviour
     public float speed = 3f;
     public float drag = 4f;
     public float airMult = 4f;
-
+    //always flase can switch
     [Header("Ground Check")]
     public LayerMask groundLayer;
     public float playerHeight;
@@ -41,7 +42,8 @@ public class BuckController : MonoBehaviour
     private float maxScaleY; 
 
     public Image bar;
-    //public GameObject endText;
+    public Image timer;
+    public GameObject eTimer;
     public GameObject playerCanvas;
 
     // public CinemachineVirtualCamera buckCamera;
@@ -49,7 +51,7 @@ public class BuckController : MonoBehaviour
     private void Start()
     {
         HoldE.SetActive(false);
-       // endText.SetActive(false);
+        eTimer.SetActive(false);
         maxScaleY = transform.localScale.y;
 
         GameManager.Instance.RegisterController(this);
@@ -126,8 +128,9 @@ public class BuckController : MonoBehaviour
         if (scale.y <= minScaleY && isActive) 
         {
             isActive = false;
+            canSwitch = false;
             GameManager.Instance.CheckGameOver();
-            Debug.Log("Controller has shrunk to minimum Y scale and is now inactive.");
+           // Debug.Log("Controller has shrunk to minimum Y scale and is now inactive.");
         }
     }
 
@@ -169,10 +172,18 @@ public class BuckController : MonoBehaviour
 
         if (canSwitch && Input.GetKey(KeyCode.E))
         {
+            
+            HoldE.GetComponent<TextMeshProUGUI>().alpha = 0f;
+            eTimer.SetActive(true);
+
             switchTimer += Time.deltaTime;
+
+            float progress = switchTimer / switchHoldTime;
+            timer.GetComponent<Image>().fillAmount = Mathf.Clamp01(progress);
 
             if (switchTimer >= switchHoldTime)
             {
+                //eTimer.GetComponent<Image>().alpha = 0f;
                 SwitchControl();
                 switchTimer = 0f;
                 lastSwitchTime = Time.time;
@@ -181,8 +192,13 @@ public class BuckController : MonoBehaviour
         else
         {
             switchTimer = 0f;
+            eTimer.SetActive(false);
+          
+            HoldE.GetComponent<TextMeshProUGUI>().alpha = 1f;
+            timer.GetComponent<Image>().fillAmount = 0f;
         }
     }
+
 
     private void SwitchControl()
     {
