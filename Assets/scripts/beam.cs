@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class beam : MonoBehaviour
 {
@@ -85,6 +86,9 @@ public class beam : MonoBehaviour
                     lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
 
                     direction = (hit.point - oldHitPoint);
+
+                    hit.collider.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                    hit.collider.gameObject.transform.GetChild(1).gameObject.SetActive(true);
 
                     Collider2D m_Collider = hit.collider.gameObject.GetComponent<Collider2D>();
 

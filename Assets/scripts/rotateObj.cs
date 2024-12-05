@@ -7,17 +7,27 @@ public class rotateObj : MonoBehaviour
     public float rotationSpeed = 200f;
     private bool isRotating = false;
     public Collider2D objectCollider;
+
+    public GameObject startButton;
+
+    void Start()
+    {
+        startButton = GameObject.FindWithTag("startB");
+    }
     
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (startButton.activeSelf == true)
         {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-
-            if (objectCollider.OverlapPoint(mousePosition) && !isRotating)
+            if (Input.GetMouseButtonDown(0))
             {
-                StartCoroutine(RotateObject(90f));
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
+                if (objectCollider.OverlapPoint(mousePosition) && !isRotating)
+                {
+                    StartCoroutine(RotateObject(90f));
+                }
             }
         }
 
