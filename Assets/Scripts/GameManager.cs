@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && state == GameState.moveable)
+        if ((Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.M)) && state == GameState.moveable)
         {
             match.SetActive(true);
             ChangeState(GameState.matchOut);

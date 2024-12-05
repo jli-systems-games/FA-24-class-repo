@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         if (forwardTile != null)
         {
             currentTile = forwardTile;
-            transform.position = new Vector3(currentTile.transform.position.x, 1.148575f, currentTile.transform.position.z);
+            transform.position = currentTile.transform.position;
             SetTiles();
         }
     }
@@ -150,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
         if (backTile != null)
         {
             currentTile = backTile;
-            transform.position = new Vector3(currentTile.transform.position.x, 1.148575f, currentTile.transform.position.z);
+            transform.position = currentTile.transform.position;
             SetTiles();
         }
     }
@@ -159,7 +159,7 @@ public class PlayerMovement : MonoBehaviour
         if (leftTile != null)
         {
             currentTile = leftTile;
-            transform.position = new Vector3(currentTile.transform.position.x, 1.148575f, currentTile.transform.position.z);
+            transform.position = currentTile.transform.position;
             SetTiles();
         }
     }
@@ -169,13 +169,60 @@ public class PlayerMovement : MonoBehaviour
         if (rightTile != null)
         {
             currentTile = rightTile;
-            transform.position = new Vector3(currentTile.transform.position.x, 1.148575f, currentTile.transform.position.z);
+            transform.position = currentTile.transform.position;
             SetTiles();
         }
     }
     #endregion
 
     #region Rotations
+
+    public void RotateLeft()
+    {
+        transform.Rotate(0, -90, 0);
+
+        if(facing == PlayerDirection.North)
+        {
+            facing = PlayerDirection.West;
+        }
+        else if (facing == PlayerDirection.West)
+        {
+            facing = PlayerDirection.South;
+        }
+        else if (facing == PlayerDirection.South)
+        {
+            facing = PlayerDirection.East;
+        }
+        else if(facing == PlayerDirection.East)
+        {
+            facing = PlayerDirection.North;
+        }
+
+        SetTiles();
+    }
+
+    public void RotateRight()
+    {
+        transform.Rotate(0, 90, 0);
+        if(facing == PlayerDirection.North)
+        {
+            facing = PlayerDirection.East;
+        }
+        else if(facing == PlayerDirection.East)
+        {
+            facing = PlayerDirection.South;
+        }
+        else if(facing == PlayerDirection.South)
+        {
+            facing = PlayerDirection.West;
+        }
+        else if(facing == PlayerDirection.West)
+        {
+            facing = PlayerDirection.North;
+        }
+
+        SetTiles();
+    }
     public void RotateNorth()
     {
         transform.eulerAngles = new Vector3(0, 0, 0);

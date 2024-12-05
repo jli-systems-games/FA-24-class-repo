@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LightMatch : MonoBehaviour
@@ -17,17 +18,24 @@ public class LightMatch : MonoBehaviour
 
     public float throwForce;
 
+    public AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
         fire.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetAxis("Mouse X") > 5 || Input.GetAxis("Mouse X") < -5) { 
+            if (GameManager.state == GameState.matchOut)
+            {
+                audioSource.Play();
+            }
             fire.SetActive(true); 
            _gameManager.ChangeState(GameState.burning); }
         Debug.Log(Input.GetAxis("Mouse X"));
