@@ -8,5 +8,6 @@ public class levelStats : ScriptableObject
 {
     public int maxEnergy;
     public int targetEnergy;
+    public int rows = 4;
 
 }

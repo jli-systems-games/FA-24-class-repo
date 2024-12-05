@@ -17,7 +17,7 @@ public class PlayerHit : MonoBehaviour
     int prevEnergy = 0;
     bool readjusting = false;
     bool reentering = false;
-    GameObject hitComponent = null;
+    
     List <GameObject> hitObjects = new List <GameObject>();
     List <int> lastEn = new List<int> ();
     void Start()
@@ -87,7 +87,7 @@ public class PlayerHit : MonoBehaviour
                 endPos = nextPoint;
                 
                 transform.position = nextPoint;
-                Debug.Log("gonna draw line");
+                //Debug.Log("gonna draw line");
                 InputManager.DrawLine(direction,nextPoint);
             }
             else
@@ -124,7 +124,7 @@ public class PlayerHit : MonoBehaviour
             //recalculate the energy level;
           
             
-                if(!hitObjects.Contains(_hit.transform.gameObject) )
+                if(!hitObjects.Contains(_hit.transform.gameObject) && !InputManager.points.Contains(newLoc) )
             {
                 prevEnergy = Energy;
 
@@ -158,7 +158,7 @@ public class PlayerHit : MonoBehaviour
                     prevEnergy = 0;
                     }
                hitObjects.RemoveAt(hitObjects.Count - 1);    
-                hitComponent = null;
+              
                 reentering = true;
             }
             

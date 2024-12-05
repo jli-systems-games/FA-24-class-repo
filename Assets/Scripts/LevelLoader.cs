@@ -9,7 +9,7 @@ public class LevelLoader : MonoBehaviour
 {
     public TextAsset[] levelData;
     public levelStats[] lvStats;
-    public int numberOfColumns = 1;
+    int numberOfRows = 1;
     public TMP_Text result;
     public static bool loadingLevel;
     //all spawnable objects
@@ -18,7 +18,8 @@ public class LevelLoader : MonoBehaviour
     int levelIndex = 0;
     bool reload = false;
     void Start()
-    {
+    {   
+        
         MakeLevel();
         
         GameManager.loadNextLvl += goNext;
@@ -27,7 +28,7 @@ public class LevelLoader : MonoBehaviour
     public void MakeLevel()
     {
         string[] data = levelData[levelIndex].text.Split(new string[] { ",", "\n" }, StringSplitOptions.None);
-
+        numberOfRows = lvStats[levelIndex].rows;
         //Debug.Log(data.Length);
         //clean up the array;
         for (int i = 0; i < data.Length; i++)
@@ -38,25 +39,32 @@ public class LevelLoader : MonoBehaviour
                 //Debug.Log(data[i]);
             }
         }
-        int tableSize = (data.Length / numberOfColumns); //got all the individual cell as an element from the file. Divde that number by column number u get the row numb;
+        int tableSize = (data.Length / numberOfRows); //got all the individual cell as an element from the file. Divde that number by column number u get the row numb;
 
 
 
         GameObject platForm = Instantiate(platformPrefab);
 
-        platForm.transform.localScale = new Vector3(tableSize, 1, numberOfColumns);
+        platForm.transform.localScale = new Vector3(tableSize, 1, numberOfRows);
 
 
 
-        for (int i = 0; i < tableSize; i++) //go through each line and generate it
+        for (int i = 0; i < numberOfRows; i++) //go through each line and generate it
         {
-            for (int j = 0; j < numberOfColumns; j++)
+            for (int j = 0; j < tableSize; j++)
             {
                 //basing off of the coordinates and calculate the index that it would in the string array;
-                string currentSquare = data[(i * numberOfColumns) + j];
+                string currentSquare = data[(i * tableSize) + j];
                 //Debug.Log(currentSquare);
-
                 Vector3 newVector = new Vector3(j, 0.41f, -(i));
+
+                if(tableSize %2 != 0)
+                {
+                    newVector = newVector + new Vector3(- 0.5f,0,0);
+                }
+                
+                if(numberOfRows %2 != 0) newVector = newVector + new Vector3(0, 0, 0.5f);
+
 
                 if (currentSquare != "") //skip over empty areas
                 {
@@ -167,7 +175,7 @@ public class LevelLoader : MonoBehaviour
            
         }
 
-        if(levelIndex < lvStats.Length -1 && !reload)
+        if(levelIndex <= lvStats.Length -1 && !reload)
         {   
             levelIndex++;
             //Debug.Log(levelIndex);

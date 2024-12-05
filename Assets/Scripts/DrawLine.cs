@@ -15,10 +15,11 @@ public class DrawLine : MonoBehaviour
     public float endWidth = 0.1f;
     public GameObject hitBox;
     public TextMeshPro energyCount;
+    public Material electric;
     private List<LineRenderer> lineEndPoints = new List<LineRenderer>();
     bool isdeleting;
     LineRenderer _LR;
-   
+    
     void Start()
     {
 
@@ -41,6 +42,7 @@ public class DrawLine : MonoBehaviour
             LineRenderer lr= obj.AddComponent<LineRenderer>();
             lr.startWidth = startWidth;
             lr.endWidth = endWidth;
+            lr.material = electric;
             Vector3[] tempPos = InputManager.points.ToArray();
 
             //as stack, the peek value wiil always be at [0] when converted to array;
