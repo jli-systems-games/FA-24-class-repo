@@ -8,6 +8,7 @@ public class FireInteraction : MonoBehaviour
     public GameObject fireEffect;
     public InfiniteMatches matchesScript;
     public AudioSource fireSound;
+    public SceneChange manager;
 
     public GameObject firePrompt;
     public GameObject matchUnlit;
@@ -98,6 +99,13 @@ public class FireInteraction : MonoBehaviour
             }
 
             isFireLit = true;
+
+            // for scene change script, calls a lit object before collider disabled
+            if (manager != null)
+            {
+                manager.LightObject(gameObject);
+            }
+
             firePrompt.SetActive(false);
 
             if (matchUnlit != null)
