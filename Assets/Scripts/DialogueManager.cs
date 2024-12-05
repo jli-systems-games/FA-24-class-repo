@@ -17,7 +17,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Button[] choices; // Buttons for all possible choices
     private TextMeshProUGUI[] choiceTexts; // Text components for each button
 
-    private Story currentStory;
+    public Story currentStory;
     public bool dialogueIsPlaying { get; private set; }
 
     private static DialogueManager instance;
