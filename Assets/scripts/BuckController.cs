@@ -10,7 +10,7 @@ public class BuckController : MonoBehaviour
     public bool canSwitch = false;
     public float switchHoldTime = 1f;
 
-    private float switchTimer = 0f;
+    //private float switchTimer = 0f;
     public static float globalSwitchCooldown = 1f;
     public static float lastSwitchTime = -Mathf.Infinity;
 
@@ -46,6 +46,7 @@ public class BuckController : MonoBehaviour
     public GameObject eTimer;
     public GameObject playerCanvas;
 
+    //public GameManager gameManager;
     // public CinemachineVirtualCamera buckCamera;
 
     private void Start()
@@ -55,6 +56,7 @@ public class BuckController : MonoBehaviour
         maxScaleY = transform.localScale.y;
 
         GameManager.Instance.RegisterController(this);
+        //gameManager = 
     }
 
     private void OnDestroy()
@@ -69,40 +71,49 @@ public class BuckController : MonoBehaviour
 
     void Update()
     {
-        GroundCheck();
-
-        if (isActive)
+        if (GameManager.Instance.isGameOver == false)
         {
-            GetInput();
-            SpeedControl();
+            GroundCheck();
 
-            if (isGrounded)
-                rb.drag = drag;
-            else
-                rb.drag = 0f;
+            if (isActive)
+            {
+                GetInput();
+                SpeedControl();
 
-            ApplyShrinkEffect();
+                if (isGrounded)
+                    rb.drag = drag;
+                else
+                    rb.drag = 0f;
+
+                ApplyShrinkEffect();
+
+                HandleSwitch();
+            }
+
+            
+
         }
-
-        HandleSwitch();
     }
 
     private void FixedUpdate()
     {
-        if (isActive)
-        {
-            PlayerMovement();
-            Light.SetActive(true);
-            spark.SetActive(true);
-            playerCanvas.SetActive(true);
-        }
-        else
-        {
-            
-            Light.SetActive(false);
-            spark.SetActive(false);
-            playerCanvas.SetActive(false);
-        }
+        //if (GameManager.Instance.isGameOver == false)
+       // {
+            if (isActive)
+            {
+                PlayerMovement();
+                Light.SetActive(true);
+                spark.SetActive(true);
+                playerCanvas.SetActive(true);
+            }
+            else
+            {
+
+                Light.SetActive(false);
+                spark.SetActive(false);
+                playerCanvas.SetActive(false);
+            }
+        //}
     }
 
     private void ApplyShrinkEffect()
@@ -169,6 +180,7 @@ public class BuckController : MonoBehaviour
     private void HandleSwitch()
     {
         if (Time.time - lastSwitchTime < globalSwitchCooldown) return;
+        //Debug.Log(":)");
 
         if (canSwitch && Input.GetKey(KeyCode.E))
         {
@@ -176,22 +188,27 @@ public class BuckController : MonoBehaviour
             HoldE.GetComponent<TextMeshProUGUI>().alpha = 0f;
             eTimer.SetActive(true);
 
-            switchTimer += Time.deltaTime;
+            GameManager.Instance.switchTimer += Time.deltaTime;
 
-            float progress = switchTimer / switchHoldTime;
+            float progress = GameManager.Instance.switchTimer / switchHoldTime;
             timer.GetComponent<Image>().fillAmount = Mathf.Clamp01(progress);
 
-            if (switchTimer >= switchHoldTime)
+            if (GameManager.Instance.switchTimer >= switchHoldTime)
             {
                 //eTimer.GetComponent<Image>().alpha = 0f;
+                eTimer.SetActive(false);
+
+                HoldE.GetComponent<TextMeshProUGUI>().alpha = 1f;
+                timer.GetComponent<Image>().fillAmount = 0f;
+
                 SwitchControl();
-                switchTimer = 0f;
-                lastSwitchTime = Time.time;
+                GameManager.Instance.switchTimer = 0f;
+                lastSwitchTime = Time.time;      
             }
         }
-        else
+        else if (isActive == true)
         {
-            switchTimer = 0f;
+            GameManager.Instance.switchTimer = 0f;
             eTimer.SetActive(false);
           
             HoldE.GetComponent<TextMeshProUGUI>().alpha = 1f;

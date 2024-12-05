@@ -7,50 +7,57 @@ using UnityEngine.UI;
 
 public class EnterGame : MonoBehaviour
 {
-
     private float enterTimer = 0f;
     public GameObject HoldE;
     public GameObject eTimer;
     public Image timer;
-    public float EHoldTime = 1f;
+    public float EHoldTime = 5f;
+    public GameObject Spark;
 
-    // Start is called before the first frame update
+    private bool canHoldToEnter = false;
+
     void Start()
     {
-        
+        Spark.SetActive(false);
+        eTimer.SetActive(false);
+        StartCoroutine(EnableHoldToEnterAfterDelay());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        HoldToEnter();
+        if (canHoldToEnter)
+        {
+            HoldToEnter();
+        }
+    }
+
+    private IEnumerator EnableHoldToEnterAfterDelay()
+    {
+        yield return new WaitForSeconds(1f); 
+        canHoldToEnter = true;
     }
 
     private void HoldToEnter()
     {
-       // if (Time.time - lastSwitchTime < globalSwitchCooldown) return;
-
         if (Input.GetKey(KeyCode.E))
         {
-
             HoldE.GetComponent<TextMeshProUGUI>().alpha = 0f;
             eTimer.SetActive(true);
             enterTimer += Time.deltaTime;
 
             float progress = enterTimer / EHoldTime;
             timer.GetComponent<Image>().fillAmount = Mathf.Clamp01(progress);
+            Spark.SetActive(true);
 
             if (enterTimer >= EHoldTime)
             {
-                //eTimer.GetComponent<Image>().alpha = 0f;
-                // SwitchControl();
                 SceneManager.LoadScene("Spark");
                 enterTimer = 0f;
-                //lastSwitchTime = Time.time;
             }
         }
         else
         {
+            Spark.SetActive(false);
             enterTimer = 0f;
             eTimer.SetActive(false);
             HoldE.GetComponent<TextMeshProUGUI>().alpha = 1f;
