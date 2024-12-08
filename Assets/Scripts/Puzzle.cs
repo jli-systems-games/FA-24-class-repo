@@ -6,7 +6,7 @@ public class Puzzle : MonoBehaviour
 {
     public GameObject[] candles;
 
-    public GameObject door;
+    public GameObject[] doorS;
 
     public GameObject tiles;
 
@@ -44,9 +44,11 @@ public class Puzzle : MonoBehaviour
 
     public IEnumerator OpenDoor()
     {
-        door.GetComponent<AudioSource>().Play();
-        yield return new WaitForSeconds(1f);
-        door.SetActive(false);
-
+        foreach (GameObject door in doorS)
+        {
+            door.GetComponent<AudioSource>().Play();
+            yield return new WaitForSeconds(1f);
+            door.SetActive(false);
+        }
     }
 }

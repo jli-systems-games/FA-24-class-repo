@@ -62,7 +62,19 @@ public class LightMatch : MonoBehaviour
             newMatch.GetComponent<Rigidbody>().AddForce(ray.direction * throwForce, ForceMode.Impulse);
 
             fire.SetActive(false);
+
+            StartCoroutine(Burnout(newMatch));
+
+            _gameManager.thrownMatches.Add(newMatch);
+            _gameManager.CheckMatchLimit();
             _gameManager.ChangeState(GameState.moveable);
         }
+    }
+
+    public IEnumerator Burnout(GameObject newMatch)
+    {
+        yield return new WaitForSeconds(30f);
+
+        newMatch.transform.Find("fire").gameObject.SetActive(false);
     }
 }

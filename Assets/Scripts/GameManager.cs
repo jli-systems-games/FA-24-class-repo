@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject match;
 
+    public List<GameObject> thrownMatches = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,5 +44,14 @@ public class GameManager : MonoBehaviour
             match.SetActive(false );
         }
         
+    }
+
+    public void CheckMatchLimit()
+    {
+        if(thrownMatches.Count > 30)
+        {
+            Destroy(thrownMatches[30]);
+            thrownMatches.RemoveAt(30);
+        }
     }
 }

@@ -42,7 +42,7 @@ public class TileDirections : MonoBehaviour
             other.gameObject.transform.parent.GetComponent<TileDirections>().westTile = gameObject;
         }
 
-        Debug.Log(this.gameObject.ToString() + " collides with " + other);
+        //Debug.Log(this.gameObject.ToString() + " collides with " + other);
 
         // for if i end up attaching this to the triggers
         //if (direction == PlayerDirection.North)

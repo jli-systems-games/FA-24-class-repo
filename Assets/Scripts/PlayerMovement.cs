@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PlayerDirection //the direction the player is facing
 {
@@ -26,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject backTile;
     [SerializeField] private GameObject leftTile;
     [SerializeField] private GameObject rightTile;
+
+    public GameObject[] rotateButtons;
 
     public PlayerDirection facing;
 
@@ -255,4 +258,27 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("ladder"))
+        {
+            foreach(GameObject button in rotateButtons)
+            {
+                button.SetActive(false);
+            }
+
+            RotateEast();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("ladder"))
+        {
+            foreach(GameObject button in rotateButtons)
+            {
+                button.SetActive(true);
+            }
+        }
+    }
 }

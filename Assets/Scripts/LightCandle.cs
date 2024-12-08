@@ -6,8 +6,11 @@ public class LightCandle : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.transform.Find("fire").gameObject.SetActive(true);
-        other.gameObject.GetComponent<CheckCandleLit>().lit = true;
-        other.gameObject.transform.parent.GetComponent<Puzzle>().CheckCandles();
+        if (other.gameObject.CompareTag("candle"))
+        {
+            other.gameObject.transform.Find("fire").gameObject.SetActive(true);
+            other.gameObject.GetComponent<CheckCandleLit>().lit = true;
+            other.gameObject.transform.parent.GetComponent<Puzzle>().CheckCandles();
+        }
     }
 }
