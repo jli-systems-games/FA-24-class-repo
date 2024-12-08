@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class rotateObj : MonoBehaviour
 {
-    public float rotationSpeed = 200f;
+    public float rotationSpeed = 400f;
     private bool isRotating = false;
     public Collider2D objectCollider;
 

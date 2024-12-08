@@ -31,6 +31,7 @@ public class beam : MonoBehaviour
     public Transform ch1;
 
     public GameObject newBeam;
+    public AudioSource pingg;
 
     void Start()
     {
@@ -44,6 +45,8 @@ public class beam : MonoBehaviour
         {
             raycast2 = transform.right;
         }
+
+        pingg = GameObject.FindWithTag("ping").GetComponent<AudioSource>();
     }
 
     void Update()
@@ -65,6 +68,10 @@ public class beam : MonoBehaviour
             linePointv2 = new Vector2(lightPoint.position.x, lightPoint.position.y);
             direction = (hit.point - linePointv2);
             firstHit = true;
+            if (hit.collider.gameObject.tag == "mirror" || hit.collider.gameObject.tag == "mirror2")
+            {
+                pingg.Play();
+            }
         }
         else
         {
@@ -75,27 +82,35 @@ public class beam : MonoBehaviour
                     oldHitPoint = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
                     lineRenderer.positionCount++;
                     lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+                    pingg.Play();
 
                     direction = (hit.point - oldHitPoint);
                 }
 
                 if (hit.collider.gameObject.tag == "mirror2")
                 {
-                    oldHitPoint = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
-                    lineRenderer.positionCount++;
-                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
-
-                    direction = (hit.point - oldHitPoint);
-
                     hit.collider.gameObject.transform.GetChild(0).gameObject.SetActive(false);
                     hit.collider.gameObject.transform.GetChild(1).gameObject.SetActive(true);
 
                     Collider2D m_Collider = hit.collider.gameObject.GetComponent<Collider2D>();
-
                     m_Collider.enabled = false;
+
+                    oldHitPoint = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
+                    lineRenderer.positionCount++;
+                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+                    pingg.Play();
+
+                    direction = (hit.point - oldHitPoint);
                 }
 
                 if(oldHitPoint == hit.point)
+                {
+                     startButton.SetActive(false);
+                     restartButton.SetActive(true);
+                     stopLine = true;
+                }
+
+                if(lineRenderer.positionCount > 100)
                 {
                      startButton.SetActive(false);
                      restartButton.SetActive(true);
