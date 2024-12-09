@@ -57,6 +57,8 @@ public class LightMatch : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             initialPos = transform.position;
+            //Debug.Log(hit.collider);
+            Vector3 direction = hit.point - initialPos;
 
             GameObject newMatch = Instantiate(matchPrefab, initialPos, Quaternion.identity);
             newMatch.GetComponent<Rigidbody>().AddForce(ray.direction * throwForce, ForceMode.Impulse);
@@ -65,16 +67,20 @@ public class LightMatch : MonoBehaviour
 
             StartCoroutine(Burnout(newMatch));
 
-            _gameManager.thrownMatches.Add(newMatch);
+            GameObject newFire = newMatch.transform.Find("fire").gameObject;
+            Debug.Log(newFire);
+
+            _gameManager.thrownMatches.Add(newFire);
             _gameManager.CheckMatchLimit();
             _gameManager.ChangeState(GameState.moveable);
         }
     }
 
-    public IEnumerator Burnout(GameObject newMatch)
+    public IEnumerator Burnout(GameObject newFire)
     {
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(5f);
 
-        newMatch.transform.Find("fire").gameObject.SetActive(false);
+        newFire.SetActive(false);
+        Debug.Log("burnt out");
     }
 }

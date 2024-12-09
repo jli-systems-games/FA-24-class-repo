@@ -75,6 +75,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //add compass rotations later so the player doesn't have to constantly orient themself
 
+        //figure out a way to have ONLY this tile and adjacent tiles active at a time
+
         tileDirections = currentTile.GetComponent<TileDirections>();
         //set the tiles somewhere here relative to the player directions & call this every time they move or rotate
         if (facing == PlayerDirection.North)

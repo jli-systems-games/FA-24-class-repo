@@ -16,8 +16,13 @@ public class Puzzle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tiles.SetActive(false);
+        Invoke("SetTiles", .5f);
         solved = false;
+    }
+
+    public void SetTiles() 
+    {
+        tiles.SetActive(false);
     }
 
     public void CheckCandles()
