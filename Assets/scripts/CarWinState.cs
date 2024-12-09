@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CarWinState : MonoBehaviour
 {
     public GameObject winPanel;
-    public TextMeshProUGUI winText;
 
     public GameObject itemsNeeded;
     public TextMeshProUGUI pressF;
     public float promptDuration = 3f;
 
     private bool isplayerInRange = false;
+    private bool isGamePaused = false;
+
+    public Button restartButton;
 
     private void Start()
     {
         winPanel.SetActive(false);
         itemsNeeded.SetActive(false);
         pressF.gameObject.SetActive(false);
-        winText.enabled = false;
+
+        restartButton.onClick.AddListener(RestartGame);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,7 +65,41 @@ public class CarWinState : MonoBehaviour
             {
                 winPanel.SetActive(true);
                 Time.timeScale = 0f;
+
+                PauseGame();
             }
         }
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        isGamePaused = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public bool IsGamePaused()
+    {
+        return isGamePaused;
+    }
+
+    private void ResumeGame()
+    {
+        Time.timeScale = 1;
+        isGamePaused = false;
+    }
+
+    private void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+        ResumeGame();
     }
 }

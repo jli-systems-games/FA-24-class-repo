@@ -13,8 +13,10 @@ public class BearSound : MonoBehaviour
     private Transform player;
 
     public GameObject gameOverPanel;
-    public GameObject gameOverText;
     public Button restartButton;
+
+    private bool isGamePaused = false;
+    public FirstPersonMovement movementScript;
 
     void Start()
     {
@@ -22,10 +24,11 @@ public class BearSound : MonoBehaviour
         player = Camera.main.transform;
 
         gameOverPanel.SetActive(false);
-        gameOverText.SetActive(false);
         restartButton.enabled = false;
 
         restartButton.onClick.AddListener(RestartGame);
+
+        Time.timeScale = 1;
     }
 
     void Update()
@@ -52,23 +55,55 @@ public class BearSound : MonoBehaviour
     void GameOver()
     {
         gameOverPanel.SetActive(true);
-        gameOverText.SetActive(true);
         restartButton.enabled = true;
 
         audioSource.Stop();
-        restartButton.interactable = true;
 
-        if (Input.GetMouseButtonDown(0))
+        PauseGame();
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        isGamePaused = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public bool IsGamePaused()
+    {
+        return isGamePaused;
+    }
+
+    private void ResumeGame()
+    {
+        Time.timeScale = 1;
+        isGamePaused = false;
+
+        if (isGamePaused == true)
         {
-            RestartGame();
-            Debug.Log("Mouse Clicked");
+            Debug.Log("is paused");
         }
+        else
+        {
+            Debug.Log("is not paused");
+        }
+    }
+
+    private void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void RestartGame()
     {
-        Debug.Log("Restart Game button clicked.");
+        SceneManager.LoadScene(1);
+        ResumeGame();
 
-        SceneManager.LoadScene("scene2");
+        movementScript.enabled = true;
+
+        LockCursor();
     }
 }
