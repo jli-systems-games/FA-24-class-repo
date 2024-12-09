@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,7 +9,8 @@ public class SceneChange : MonoBehaviour
 {
     public GameObject[] torches;
     public GameObject[] fireplaces;
-    public TextMeshProUGUI progressText;
+    public TextMeshProUGUI progressText; 
+    public GameObject sceneChangePanel;
 
     private int litCount = 0;
     private const int totalLights = 6;
@@ -16,6 +19,11 @@ public class SceneChange : MonoBehaviour
     {
         litCount = 0;
         UpdateProgressUI();
+
+        if (sceneChangePanel != null)
+        {
+            sceneChangePanel.SetActive(false);
+        }
     }
 
     public void LightObject(GameObject obj)
@@ -40,6 +48,18 @@ public class SceneChange : MonoBehaviour
 
     void LoadNextScene()
     {
+        if (sceneChangePanel != null)
+        {
+            sceneChangePanel.SetActive(true);
+        }
+
+        StartCoroutine(SceneTransition());
+    }
+
+    IEnumerator SceneTransition()
+    {
+        yield return new WaitForSeconds(10);
+
         SceneManager.LoadScene("scene2");
     }
 }

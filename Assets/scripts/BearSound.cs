@@ -80,15 +80,6 @@ public class BearSound : MonoBehaviour
     {
         Time.timeScale = 1;
         isGamePaused = false;
-
-        if (isGamePaused == true)
-        {
-            Debug.Log("is paused");
-        }
-        else
-        {
-            Debug.Log("is not paused");
-        }
     }
 
     private void LockCursor()
