@@ -26,7 +26,11 @@ public class EncounterManager : MonoBehaviour
 
     private void Start()
     {
-        instance = this;  // Singleton setup
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         playerDice.SetRollRange(1, 6);
         SpawnEnemies();
 

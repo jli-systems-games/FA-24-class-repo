@@ -10,9 +10,15 @@ public class PlayerMovement : MonoBehaviour
 
     private EncounterManager encounterManager;
 
+    void Start()
+    {
+        encounterManager = FindObjectOfType<EncounterManager>();
+    }
+
     void Update()
     {
-        if (encounterManager.currentState == EncounterManager.EncounterState.Idle)
+        // Ensure the player can only move during the Idle state
+        if (encounterManager != null && encounterManager.currentState == EncounterManager.EncounterState.Idle)
         {
             MovePlayer();
         }

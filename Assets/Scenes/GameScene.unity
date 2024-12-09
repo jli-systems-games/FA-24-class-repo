@@ -896,7 +896,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1555072497}
-  - component: {fileID: 1555072496}
   m_Layer: 0
   m_Name: encounter manager
   m_TagString: Untagged
@@ -904,24 +903,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1555072496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1555072495}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52eb4fd3b234842da90cd7ceec5907d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 0
-  playerDice: {fileID: 2044717415}
-  enemyPrefab: {fileID: 8831071652848894559, guid: 42d6749794fb34d39a4a1659dd61e695, type: 3}
-  spawnPoint: {fileID: 1555072497}
-  spawnCount: 5
-  uiText: {fileID: 0}
 --- !u!4 &1555072497
 Transform:
   m_ObjectHideFlags: 0
@@ -1023,7 +1004,7 @@ GameObject:
   - component: {fileID: 2044717421}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
