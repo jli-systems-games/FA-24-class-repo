@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class EncounterManager : MonoBehaviour
@@ -45,28 +44,13 @@ public class EncounterManager : MonoBehaviour
         switch (currentState)
         {
             case EncounterState.Idle:
-                // Proceed to rolling when player presses E
                 if (Input.GetKeyDown(KeyCode.E) && currentEnemyDice != null)
                 {
-                    Debug.Log("E pressed - Starting roll");
-
-                    // Transition to Rolling state
-                    currentState = EncounterState.Rolling;
-
-                    // Start roll animations immediately
-                    if (playerRollAnimation != null)
-                        StartCoroutine(playerRollAnimation.PlayRollAnimation(2f));
-
-                    if (enemyRollAnimation != null)
-                        StartCoroutine(enemyRollAnimation.PlayRollAnimation(2f));
-
-                    // Perform rolls after the animation
-                    StartCoroutine(PerformRolls());
+                    StartEncounter();
                 }
                 break;
 
             case EncounterState.Rolling:
-                // Wait for the animation and roll to finish (handled in PerformRolls)
                 break;
 
             case EncounterState.Resolving:
@@ -76,6 +60,21 @@ public class EncounterManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void StartEncounter()
+    {
+        currentState = EncounterState.Rolling;
+
+        // Start roll animations immediately
+        if (playerRollAnimation != null)
+            StartCoroutine(playerRollAnimation.PlayRollAnimation(2f));
+
+        if (enemyRollAnimation != null)
+            StartCoroutine(enemyRollAnimation.PlayRollAnimation(2f));
+
+        // Perform rolls after the animation
+        StartCoroutine(PerformRolls());
     }
 
     private IEnumerator PerformRolls()
@@ -152,6 +151,25 @@ public class EncounterManager : MonoBehaviour
         }
     }
 
+    //private void SpawnNewEnemy()
+    //{
+    //    Vector2 spawnPosition = new Vector2(
+    //        spawnPoint.position.x + Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
+    //        spawnPoint.position.y + Random.Range(-spawnAreaSize.y / 2, spawnAreaSize.y / 2)
+    //    );
+
+    //    GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+    //    EnemyDice enemyDice = newEnemy.GetComponent<EnemyDice>();
+    //    if (enemyDice != null)
+    //    {
+    //        // Initialize the enemy's roll range based on the player's max roll
+    //        enemyDice.InitializeEnemy(playerDice.MaxRoll);
+
+    //        // Add the enemy to the active list
+    //        activeEnemies.Add(enemyDice);
+    //    }
+    //}
+
     private void SpawnNewEnemy()
     {
         Vector2 spawnPosition = new Vector2(
@@ -163,16 +181,14 @@ public class EncounterManager : MonoBehaviour
         EnemyDice enemyDice = newEnemy.GetComponent<EnemyDice>();
         if (enemyDice != null)
         {
-            int playerMaxRoll = playerDice.MaxRoll;
+            // Initialize enemy based on player's max roll
+            enemyDice.InitializeEnemy(playerDice.MaxRoll);
 
-            // Initialize enemy with random roll range based on the player's roll
-            int enemyMinRoll = Mathf.Max(1, playerMaxRoll / 2);
-            int enemyMaxRoll = Mathf.Min(playerMaxRoll + 5, playerMaxRoll * 2);
-            enemyDice.SetRollRange(enemyMinRoll, enemyMaxRoll);
-
+            // Add the enemy to the active list
             activeEnemies.Add(enemyDice);
         }
     }
+
 
     #endregion
 }

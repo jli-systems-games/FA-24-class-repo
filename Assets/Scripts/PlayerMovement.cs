@@ -8,9 +8,14 @@ public class PlayerMovement : MonoBehaviour
     public float minY = -5f;
     public float maxY = 5f;
 
+    private EncounterManager encounterManager;
+
     void Update()
     {
-        MovePlayer();
+        if (encounterManager.currentState == EncounterManager.EncounterState.Idle)
+        {
+            MovePlayer();
+        }
     }
 
     void MovePlayer()
