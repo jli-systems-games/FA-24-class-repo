@@ -38,10 +38,13 @@ public class PlayerMovement : MonoBehaviour
 
     public PlayerDirection facing;
 
+    public GameObject endingButton;
+
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
+        endingButton.SetActive(false);
         Invoke("SetTiles",.5f);
     }
 
@@ -323,6 +326,11 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+
+        if (other.gameObject.CompareTag("ending"))
+        {
+            endingButton.SetActive(true);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -333,6 +341,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 button.SetActive(true);
             }
+        }
+
+        if (other.gameObject.CompareTag("ending"))
+        {
+            endingButton.SetActive(false);
         }
     }
 }
