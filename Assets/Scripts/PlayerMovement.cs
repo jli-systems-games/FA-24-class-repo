@@ -31,6 +31,11 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject[] rotateButtons;
 
+    public Sprite[] compassDirections;
+    public Image[] compassImages;
+
+    public GameObject compass;
+
     public PlayerDirection facing;
 
     // Start is called before the first frame update
@@ -76,8 +81,6 @@ public class PlayerMovement : MonoBehaviour
     {
         //add compass rotations later so the player doesn't have to constantly orient themself
 
-        //figure out a way to have ONLY this tile and adjacent tiles active at a time
-
         tileDirections = currentTile.GetComponent<TileDirections>();
         //set the tiles somewhere here relative to the player directions & call this every time they move or rotate
         if (facing == PlayerDirection.North)
@@ -93,6 +96,11 @@ public class PlayerMovement : MonoBehaviour
             
             if (tileDirections.westTile != null) { leftTile = tileDirections.westTile; }
             else {  leftTile = null; }
+
+            compassImages[0].sprite = compassDirections[0];
+            compassImages[1].sprite = compassDirections[1];
+            compassImages[2].sprite = compassDirections[2];
+            compassImages[3].sprite = compassDirections[3];
         }
 
         else if (facing == PlayerDirection.East)
@@ -108,6 +116,11 @@ public class PlayerMovement : MonoBehaviour
             
             if (tileDirections.northTile != null) { leftTile = tileDirections.northTile; }
             else { leftTile = null; }
+
+            compassImages[0].sprite = compassDirections[1];
+            compassImages[1].sprite = compassDirections[2];
+            compassImages[2].sprite = compassDirections[3];
+            compassImages[3].sprite = compassDirections[0];
         }
 
         else if (facing == PlayerDirection.South)
@@ -123,6 +136,11 @@ public class PlayerMovement : MonoBehaviour
             
             if (tileDirections.eastTile != null) { leftTile = tileDirections.eastTile; }
             else { leftTile = null; }
+
+            compassImages[0].sprite = compassDirections[2];
+            compassImages[1].sprite = compassDirections[3];
+            compassImages[2].sprite = compassDirections[0];
+            compassImages[3].sprite = compassDirections[1];
         }
 
         else if(facing == PlayerDirection.West)
@@ -138,6 +156,10 @@ public class PlayerMovement : MonoBehaviour
             
             if (tileDirections.southTile != null) { leftTile = tileDirections.southTile; }
             else { leftTile = null; }
+            compassImages[0].sprite = compassDirections[3];
+            compassImages[1].sprite = compassDirections[0];
+            compassImages[2].sprite = compassDirections[1];
+            compassImages[3].sprite = compassDirections[2];
         }
     }
 
@@ -183,9 +205,11 @@ public class PlayerMovement : MonoBehaviour
 
     #region Rotations
 
+    // 0 - north, 1 - east, 2 - south, 3 - west
     public void RotateLeft()
     {
         transform.Rotate(0, -90, 0);
+        compass.transform.Rotate(0, 0, -90);
 
         if(facing == PlayerDirection.North)
         {
@@ -210,6 +234,8 @@ public class PlayerMovement : MonoBehaviour
     public void RotateRight()
     {
         transform.Rotate(0, 90, 0);
+        compass.transform.Rotate(0, 0, 90);
+        
         if(facing == PlayerDirection.North)
         {
             facing = PlayerDirection.East;
