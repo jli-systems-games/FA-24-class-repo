@@ -58,7 +58,7 @@ public class SceneChange : MonoBehaviour
 
     IEnumerator SceneTransition()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(18);
 
         SceneManager.LoadScene("scene2");
     }
