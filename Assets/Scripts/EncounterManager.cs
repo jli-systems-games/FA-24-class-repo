@@ -125,24 +125,38 @@ public class EncounterManager : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Enemy") && currentState == EncounterState.Idle)
+    //    {
+    //        uiText.text = "press E to attack";
+    //        currentEnemyDice = collision.GetComponent<EnemyDice>();
+    //        // Update enemy roll animation reference
+    //        enemyRollAnimation = currentEnemyDice.GetComponent<RollAnimation>();
+    //    }
+    //}
+
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Enemy") && currentEnemyDice != null && collision.GetComponent<EnemyDice>() == currentEnemyDice)
+    //    {
+    //        uiText.text = "";
+    //        currentEnemyDice = null;
+    //    }
+    //}
+
+    public void OnPlayerTriggerEnemy(EnemyDice enemyDice)
     {
-        if (collision.CompareTag("Enemy") && currentState == EncounterState.Idle)
-        {
-            uiText.text = "press E to attack";
-            currentEnemyDice = collision.GetComponent<EnemyDice>();
-            // Update enemy roll animation reference
-            enemyRollAnimation = currentEnemyDice.GetComponent<RollAnimation>();
-        }
+        currentEnemyDice = enemyDice;
+        enemyRollAnimation = currentEnemyDice.GetComponent<RollAnimation>();
+        uiText.text = "Press E to attack"; // Update UI when the player is in range of an enemy
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    // This method is called when the player exits the enemy trigger
+    public void OnPlayerExitEnemy()
     {
-        if (collision.CompareTag("Enemy") && currentEnemyDice != null && collision.GetComponent<EnemyDice>() == currentEnemyDice)
-        {
-            uiText.text = "";
-            currentEnemyDice = null;
-        }
+        currentEnemyDice = null;
+        uiText.text = ""; // Clear UI when the player exits the enemy trigger
     }
 
     #region Enemy Spawning

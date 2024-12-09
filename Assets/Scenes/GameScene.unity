@@ -896,6 +896,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1555072497}
+  - component: {fileID: 1555072498}
   m_Layer: 0
   m_Name: encounter manager
   m_TagString: Untagged
@@ -918,6 +919,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1555072498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555072495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52eb4fd3b234842da90cd7ceec5907d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  playerDice: {fileID: 2044717415}
+  enemyPrefab: {fileID: 8831071652848894559, guid: 42d6749794fb34d39a4a1659dd61e695, type: 3}
+  spawnPoint: {fileID: 1555072497}
+  spawnCount: 5
+  uiText: {fileID: 1289057058}
 --- !u!1 &1638961901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,7 +1020,6 @@ GameObject:
   - component: {fileID: 2044717415}
   - component: {fileID: 2044717416}
   - component: {fileID: 2044717417}
-  - component: {fileID: 2044717421}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -1155,21 +1173,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2044717421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2044717412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52eb4fd3b234842da90cd7ceec5907d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 0
-  playerDice: {fileID: 2044717415}
-  enemyPrefab: {fileID: 8831071652848894559, guid: 42d6749794fb34d39a4a1659dd61e695, type: 3}
-  spawnPoint: {fileID: 1555072497}
-  spawnCount: 5
-  uiText: {fileID: 1289057058}

@@ -40,4 +40,22 @@ public class PlayerMovement : MonoBehaviour
         // Update the object's position with the clamped y value
         transform.position = new Vector3(transform.position.x, clampedY, transform.position.z);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            // Pass the enemy to the EncounterManager to start the encounter
+            encounterManager.OnPlayerTriggerEnemy(collision.GetComponent<EnemyDice>());
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            // Notify the EncounterManager when the player leaves the enemy trigger area
+            encounterManager.OnPlayerExitEnemy();
+        }
+    }
 }
