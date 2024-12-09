@@ -22,7 +22,7 @@ public class RollAnimation : MonoBehaviour
     {
         if (isFinalRoll)
         {
-            // Display final roll results
+            // Display final roll results after the animation is finished
             if (playerDice != null)
             {
                 numberDisplay.text = playerDice.GetRollResult().ToString();
@@ -54,7 +54,7 @@ public class RollAnimation : MonoBehaviour
         // Animate the roll by changing the number display over time
         while (elapsedTime < duration)
         {
-            int randomRoll = Random.Range(1, 7); // Assuming dice values range from 1 to 6
+            int randomRoll = Random.Range(1, 11); // Assuming dice values range from 1 to 6
             numberDisplay.text = randomRoll.ToString();
             elapsedTime += Time.deltaTime;
 

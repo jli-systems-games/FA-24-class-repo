@@ -9,6 +9,12 @@ public class EncounterManager : MonoBehaviour
     public enum EncounterState { Idle, Rolling, Resolving }
     public EncounterState currentState = EncounterState.Idle;
 
+    [Header("Sound and Music")]
+    public AudioClip[] soundEffects;
+    private AudioSource audioSource;
+    public AudioClip backgroundMusic;
+    private AudioSource backgroundMusicSource;
+
     [Header("Player and Enemy Reference")]
     public PlayerDice playerDice; // Assign the PlayerDice object here
     private List<EnemyDice> activeEnemies = new List<EnemyDice>();
@@ -34,12 +40,16 @@ public class EncounterManager : MonoBehaviour
         playerDice.SetRollRange(1, 6);
         SpawnEnemies();
 
-        // Initialize roll animations
         playerRollAnimation = playerDice.GetComponent<RollAnimation>();
         if (currentEnemyDice != null)
         {
             enemyRollAnimation = currentEnemyDice.GetComponent<RollAnimation>();
         }
+
+        audioSource = GetComponent<AudioSource>();
+        backgroundMusicSource = gameObject.AddComponent<AudioSource>();
+
+        PlayBackgroundMusic();
     }
 
     private void Update()
@@ -66,19 +76,40 @@ public class EncounterManager : MonoBehaviour
         }
     }
 
+    private void PlayBackgroundMusic()
+    {
+        if (backgroundMusic != null)
+        {
+            backgroundMusicSource.clip = backgroundMusic;
+            backgroundMusicSource.loop = true;
+            backgroundMusicSource.Play();
+        }
+    }
+
     private void StartEncounter()
     {
         currentState = EncounterState.Rolling;
 
+        PlayRandomSound();
+
         // Start roll animations immediately
         if (playerRollAnimation != null)
-            StartCoroutine(playerRollAnimation.PlayRollAnimation(2f));
+            StartCoroutine(playerRollAnimation.PlayRollAnimation(1.5f));
 
         if (enemyRollAnimation != null)
-            StartCoroutine(enemyRollAnimation.PlayRollAnimation(2f));
+            StartCoroutine(enemyRollAnimation.PlayRollAnimation(1.5f));
 
         // Perform rolls after the animation
         StartCoroutine(PerformRolls());
+    }
+
+    private void PlayRandomSound()
+    {
+        if (soundEffects.Length > 0)
+        {
+            AudioClip randomSound = soundEffects[Random.Range(0, soundEffects.Length)];
+            audioSource.PlayOneShot(randomSound);
+        }
     }
 
     private IEnumerator PerformRolls()
@@ -102,7 +133,7 @@ public class EncounterManager : MonoBehaviour
             int playerRoll = playerDice.GetRollResult();
             int enemyRoll = currentEnemyDice.GetRollResult();
 
-            if (playerRoll > enemyRoll)
+            if (playerRoll >= enemyRoll)
             {
                 Debug.Log("Player Wins!");
                 playerDice.SetRollRange(playerDice.MinRoll, playerDice.MaxRoll + enemyRoll);
