@@ -13,6 +13,7 @@ public class BearSound : MonoBehaviour
     private Transform player;
 
     public GameObject gameOverPanel;
+    public GameObject gameOverText;
     public Button restartButton;
 
     void Start()
@@ -21,6 +22,8 @@ public class BearSound : MonoBehaviour
         player = Camera.main.transform;
 
         gameOverPanel.SetActive(false);
+        gameOverText.SetActive(false);
+        restartButton.enabled = false;
 
         restartButton.onClick.AddListener(RestartGame);
     }
@@ -49,15 +52,23 @@ public class BearSound : MonoBehaviour
     void GameOver()
     {
         gameOverPanel.SetActive(true);
-
-        Time.timeScale = 0;
+        gameOverText.SetActive(true);
+        restartButton.enabled = true;
 
         audioSource.Stop();
+        restartButton.interactable = true;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RestartGame();
+            Debug.Log("Mouse Clicked");
+        }
     }
 
     public void RestartGame()
     {
-        Time.timeScale = 1;
+        Debug.Log("Restart Game button clicked.");
+
         SceneManager.LoadScene("scene2");
     }
 }

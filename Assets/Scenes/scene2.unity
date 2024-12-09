@@ -1435,7 +1435,7 @@ GameObject:
   - component: {fileID: 39955427}
   - component: {fileID: 39955426}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: game over text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1448,17 +1448,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39955424}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1313261085}
-  m_RootOrder: 0
+  m_Father: {fileID: 970303453}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 63, y: 52}
+  m_AnchoredPosition: {x: 71, y: 56}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &39955426
@@ -2525,7 +2525,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 970303453}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -2850,10 +2850,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2072456614}
   - {fileID: 2135792941}
   m_Father: {fileID: 970303453}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -22827,7 +22826,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 970303453}
-  m_RootOrder: 12
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -23974,7 +23973,7 @@ GameObject:
   - component: {fileID: 874945989}
   - component: {fileID: 874945988}
   m_Layer: 5
-  m_Name: Button
+  m_Name: game over button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23994,11 +23993,11 @@ RectTransform:
   m_Children:
   - {fileID: 1510845826}
   m_Father: {fileID: 1313261085}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18, y: -94.1788}
+  m_AnchoredPosition: {x: 33, y: -85}
   m_SizeDelta: {x: 160, y: 37.6424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &874945988
@@ -26726,8 +26725,10 @@ RectTransform:
   - {fileID: 307563632}
   - {fileID: 742329664}
   - {fileID: 2079349711}
-  - {fileID: 1313261085}
   - {fileID: 74020140}
+  - {fileID: 39955425}
+  - {fileID: 1313261085}
+  - {fileID: 2072456614}
   - {fileID: 2065733161}
   - {fileID: 68532603}
   - {fileID: 1455753991}
@@ -30665,6 +30666,7 @@ MonoBehaviour:
   bearDetection: 13
   bearDanger: 5
   gameOverPanel: {fileID: 1313261084}
+  gameOverText: {fileID: 39955424}
   restartButton: {fileID: 874945988}
 --- !u!1 &1111351083
 GameObject:
@@ -34400,7 +34402,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfbf8eba3bdf9444d80a6ab7dec8155a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winPanel: {fileID: 74020139}
+  winPanel: {fileID: 0}
+  winText: {fileID: 2072456615}
   itemsNeeded: {fileID: 2065733160}
   pressF: {fileID: 835292067}
   promptDuration: 3
@@ -34855,20 +34858,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313261084}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 39955425}
   - {fileID: 874945987}
   m_Father: {fileID: 970303453}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1.1881104}
+  m_SizeDelta: {x: 0, y: 13.6646}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1313261086
 MonoBehaviour:
@@ -37567,7 +37569,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 970303453}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -44385,7 +44387,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 970303453}
-  m_RootOrder: 13
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -51988,7 +51990,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 970303453}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -52391,7 +52393,7 @@ GameObject:
   - component: {fileID: 2072456616}
   - component: {fileID: 2072456615}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: win text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52404,17 +52406,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2072456613}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 74020140}
-  m_RootOrder: 0
+  m_Father: {fileID: 970303453}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 63, y: 52}
+  m_AnchoredPosition: {x: 65, y: 53}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2072456615
@@ -54719,7 +54721,7 @@ GameObject:
   - component: {fileID: 2135792943}
   - component: {fileID: 2135792942}
   m_Layer: 5
-  m_Name: Button
+  m_Name: win button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54739,11 +54741,11 @@ RectTransform:
   m_Children:
   - {fileID: 1737626829}
   m_Father: {fileID: 74020140}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18, y: -94.1788}
+  m_AnchoredPosition: {x: 35, y: -129.6}
   m_SizeDelta: {x: 160, y: 37.6424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2135792942

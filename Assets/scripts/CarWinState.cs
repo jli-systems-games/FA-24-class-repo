@@ -7,6 +7,8 @@ using TMPro;
 public class CarWinState : MonoBehaviour
 {
     public GameObject winPanel;
+    public TextMeshProUGUI winText;
+
     public GameObject itemsNeeded;
     public TextMeshProUGUI pressF;
     public float promptDuration = 3f;
@@ -18,6 +20,7 @@ public class CarWinState : MonoBehaviour
         winPanel.SetActive(false);
         itemsNeeded.SetActive(false);
         pressF.gameObject.SetActive(false);
+        winText.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)
