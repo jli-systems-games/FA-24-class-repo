@@ -10,16 +10,20 @@ public class LevelLoader : MonoBehaviour
     public TextAsset[] levelData;
     public levelStats[] lvStats;
     int numberOfRows = 1;
-    public TMP_Text result;
+    public TMP_Text result, lvNumb;
     public static bool loadingLevel;
     //all spawnable objects
     public GameObject startPrefab, endPrefab, blockPrefab, repeaterPrefab,platformPrefab, resisterPrefab;
-
+    public Transform leftWall, rightWall, TopWall, BottomWall;
+    Vector3 ogL, ogR, ogT, ogB;
     int levelIndex = 0;
     bool reload = false;
     void Start()
     {   
-        
+        ogL = leftWall.position;
+        ogR = rightWall.position;
+        ogT = TopWall.position;
+        ogB = BottomWall.position;  
         MakeLevel();
         
         GameManager.loadNextLvl += goNext;
@@ -47,7 +51,31 @@ public class LevelLoader : MonoBehaviour
 
         platForm.transform.localScale = new Vector3(tableSize, 1, numberOfRows);
 
+        //redo the walls
+        if (tableSize > 4)
+        {
+              //recalculate the position for side blocks;
+              float x = ((float)tableSize - 4) * 0.5f;
+            leftWall.position = leftWall.position + new Vector3(-x, 0, 0);
+            leftWall.localScale = leftWall.localScale + new Vector3(0, 0, (float)tableSize - 4);
 
+            rightWall.position = rightWall.position + new Vector3(x, 0, 0);
+            rightWall.localScale = rightWall.localScale + new Vector3(0, 0, (float)tableSize - 4);
+
+
+        }
+      
+
+        if(numberOfRows > 4)
+        {
+            float y = ((float)numberOfRows - 4) * 0.5f;
+            TopWall.position = TopWall.position + new Vector3(0, 0, y);
+            TopWall.localScale = TopWall.localScale + new Vector3((float)numberOfRows - 4, 0, 0);
+
+            BottomWall.position = BottomWall.position + new Vector3(0, 0, -y);
+            BottomWall.localScale = BottomWall.localScale + new Vector3((float)numberOfRows - 4, 0, 0);
+        }
+      
 
         for (int i = 0; i < numberOfRows; i++) //go through each line and generate it
         {
@@ -58,12 +86,18 @@ public class LevelLoader : MonoBehaviour
                 //Debug.Log(currentSquare);
                 Vector3 newVector = new Vector3(j, 0.41f, -(i));
 
-                if(tableSize %2 != 0)
+                if(tableSize > 4)
                 {
-                    newVector = newVector + new Vector3(- 0.5f,0,0);
+                    float _x = ((float)tableSize - 4) * 0.5f;
+                    newVector = newVector + new Vector3(- _x,0,0);
+                  
                 }
-                
-                if(numberOfRows %2 != 0) newVector = newVector + new Vector3(0, 0, 0.5f);
+
+                if (numberOfRows > 4) 
+                { 
+                    float _z = ((float)numberOfRows - 4) * 0.5f;
+                    newVector = newVector + new Vector3(0, 0, _z); 
+                }
 
 
                 if (currentSquare != "") //skip over empty areas
@@ -132,8 +166,12 @@ public class LevelLoader : MonoBehaviour
 
         }
 
-        loadingLevel = false;
-        if(reload) reload = false;
+        lvNumb.text = (levelIndex + 1).ToString();
+        if (reload)
+        {
+            loadingLevel = false;
+            reload = false;
+        }
     }
     public void reloadCurrentLevel()
     {
@@ -157,7 +195,7 @@ public class LevelLoader : MonoBehaviour
         resetStat();
         yield return new WaitForSeconds(1.5f);
 
-        if(levelIndex < lvStats.Length - 1) MakeLevel();
+        if(levelIndex <= lvStats.Length - 1) MakeLevel();
     }
 
     public void advaneceLevel()
@@ -196,7 +234,16 @@ public class LevelLoader : MonoBehaviour
             }
         }
 
+        //reset the wall locations;
+        leftWall.position = ogL;
+        leftWall.localScale = new Vector3(1, 1.4f, 4);
+        rightWall.position = ogR;
+        rightWall.localScale = new Vector3(1, 1.4f, 4);
 
+        TopWall.position = ogT;
+        TopWall.localScale = new Vector3(4, 1.4f, 1);
+        BottomWall.position = ogB;
+        BottomWall.localScale = new Vector3(4, 1.4f, 1);
     }
 
 }

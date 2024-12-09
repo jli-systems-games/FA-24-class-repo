@@ -27,7 +27,7 @@ public class SparkleTest : MonoBehaviour
 
         _fade.SetBool("isFading", true);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         
         
         Camera.main.enabled = false;
@@ -47,24 +47,25 @@ public class SparkleTest : MonoBehaviour
         _scolor.a = 0;
         while (_scolor.a < 1)
         {
-            _a += 0.02f;
+            _a += 0.1f;
             _scolor = new Color(_scolor.r, _scolor.g, _scolor.b, _a );
             yield return null;
         }
         
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
         _fade.SetBool("isFading", false);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         _fade.SetBool("isFading", true);
 
-        yield return new WaitForSeconds(1.5f); 
+        yield return new WaitForSeconds(1f); 
 
         cutScCam.enabled = false;
         mainCam.enabled = true;
-
-        yield return new WaitForSeconds(2f);
+        
+        yield return new WaitForSeconds(1.5f);
         _fade.SetBool("isFading", false);
+        LevelLoader.loadingLevel = false;
     }
 }

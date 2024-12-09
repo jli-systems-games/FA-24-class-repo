@@ -14,6 +14,9 @@ public class PlayerHit : MonoBehaviour
     public int Energy = 10;
     public int MaxEnergy = 10;
     public TextMeshPro energyCount;
+    public AudioClip enter, exit,baseElectric;
+    public AudioSource baseSource;
+    AudioSource aud;
     int prevEnergy = 0;
     bool readjusting = false;
     bool reentering = false;
@@ -25,6 +28,7 @@ public class PlayerHit : MonoBehaviour
         endPos = transform.parent.position;
         transform.position = transform.parent.position;
         InputManager.points.Push(endPos);
+        aud = GetComponent<AudioSource>();
         energyCount.text = Energy.ToString();
         //GameManager.loadNextLvl += resetStat;
     }
@@ -90,9 +94,13 @@ public class PlayerHit : MonoBehaviour
                 //Debug.Log("gonna draw line");
                 InputManager.DrawLine(direction,nextPoint);
             }
-            else
+           
+           if(InputManager.points.Count == 2 && !baseSource.isPlaying)
             {
-
+                baseSource.Play();
+            }else if(InputManager.points.Count < 2 && baseSource.isPlaying)
+            {
+                baseSource.Pause();
             }
             
             readjusting = false;
@@ -140,8 +148,12 @@ public class PlayerHit : MonoBehaviour
 
                 }
                 
+
                 hitObjects.Add(_hit.transform.gameObject);
-                    lastEn.Add(prevEnergy);
+                lastEn.Add(prevEnergy);
+                aud.clip = enter;
+                aud.Play();
+
             }else if (hitObjects.Contains(_hit.transform.gameObject))
             {   
                     if(lastEn.Count > 1)
@@ -159,6 +171,9 @@ public class PlayerHit : MonoBehaviour
                     }
                hitObjects.RemoveAt(hitObjects.Count - 1);    
               
+                aud.clip = exit; 
+                aud.Play();
+
                 reentering = true;
             }
             
