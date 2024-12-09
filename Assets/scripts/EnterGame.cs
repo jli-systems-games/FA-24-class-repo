@@ -11,8 +11,10 @@ public class EnterGame : MonoBehaviour
     public GameObject HoldE;
     public GameObject eTimer;
     public Image timer;
-    public float EHoldTime = 5f;
+    public float EHoldTime = 10f;
     public GameObject Spark;
+
+    public GameObject audioSource;
 
     private bool canHoldToEnter = false;
 
@@ -20,6 +22,7 @@ public class EnterGame : MonoBehaviour
     {
         Spark.SetActive(false);
         eTimer.SetActive(false);
+        audioSource.SetActive(false);
         StartCoroutine(EnableHoldToEnterAfterDelay());
     }
 
@@ -43,6 +46,7 @@ public class EnterGame : MonoBehaviour
         {
             HoldE.GetComponent<TextMeshProUGUI>().alpha = 0f;
             eTimer.SetActive(true);
+            audioSource.SetActive(true);
             enterTimer += Time.deltaTime;
 
             float progress = enterTimer / EHoldTime;
@@ -60,6 +64,7 @@ public class EnterGame : MonoBehaviour
             Spark.SetActive(false);
             enterTimer = 0f;
             eTimer.SetActive(false);
+            audioSource.SetActive(false);
             HoldE.GetComponent<TextMeshProUGUI>().alpha = 1f;
             timer.GetComponent<Image>().fillAmount = 0f;
         }

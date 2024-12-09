@@ -46,6 +46,8 @@ public class BuckController : MonoBehaviour
     public GameObject eTimer;
     public GameObject playerCanvas;
 
+    public GameObject audioSource;
+
     //public GameManager gameManager;
     // public CinemachineVirtualCamera buckCamera;
 
@@ -53,6 +55,8 @@ public class BuckController : MonoBehaviour
     {
         HoldE.SetActive(false);
         eTimer.SetActive(false);
+        
+
         maxScaleY = transform.localScale.y;
 
         GameManager.Instance.RegisterController(this);
@@ -79,6 +83,7 @@ public class BuckController : MonoBehaviour
             {
                 GetInput();
                 SpeedControl();
+                //audioSource.SetActive(true);
 
                 if (isGrounded)
                     rb.drag = drag;
@@ -89,7 +94,6 @@ public class BuckController : MonoBehaviour
 
                 HandleSwitch();
             }
-
             
 
         }
@@ -105,14 +109,16 @@ public class BuckController : MonoBehaviour
                 Light.SetActive(true);
                 spark.SetActive(true);
                 playerCanvas.SetActive(true);
-            }
+                audioSource.SetActive(true);
+        }
             else
             {
 
                 Light.SetActive(false);
                 spark.SetActive(false);
                 playerCanvas.SetActive(false);
-            }
+                audioSource.SetActive(false);
+        }
         //}
     }
 
