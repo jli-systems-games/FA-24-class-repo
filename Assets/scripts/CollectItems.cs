@@ -10,6 +10,7 @@ public class CollectItems : MonoBehaviour
 
     public TextMeshProUGUI itemTracker;
     public TextMeshProUGUI pressF;
+    public AudioSource collectSound;
 
     private bool playerInRange = false;
 
@@ -23,20 +24,26 @@ public class CollectItems : MonoBehaviour
     {
         if (playerInRange && Input.GetKeyDown(KeyCode.F))
         {
-            if (!item1 && !item2)  // neither item collected
+            if (!item1 && !item2)
             {
                 item1 = true;
                 UpdateItemTracker();
+                pressF.gameObject.SetActive(false);
+                StartCoroutine(PlaySound());
             }
             else if (!item1 && item2)
             {
                 item1 = true;
                 UpdateItemTracker();
+                pressF.gameObject.SetActive(false);
+                StartCoroutine(PlaySound());
             }
             else if (!item2 && item1)
             {
                 item2 = true;
                 UpdateItemTracker();
+                pressF.gameObject.SetActive(false);
+                StartCoroutine(PlaySound());
             }
         }
     }
@@ -47,6 +54,12 @@ public class CollectItems : MonoBehaviour
                                $"Medkit: {(item2 ? "Collected" : "Not Collected")}";
     }
 
+    IEnumerator PlaySound()
+    {
+        collectSound.Play();
+        yield return new WaitForSeconds(collectSound.clip.length);
+        gameObject.SetActive(false);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
