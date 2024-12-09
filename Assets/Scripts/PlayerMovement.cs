@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
 
+    public GameObject[] tiles;
     public GameObject currentTile;
     public TileDirections tileDirections;
 
@@ -270,6 +271,31 @@ public class PlayerMovement : MonoBehaviour
             }
 
             RotateEast();
+        }
+
+        if (other.gameObject.CompareTag("tiles"))
+        {
+            foreach(GameObject tile in tiles)
+            {
+                tile.SetActive(false);
+            }
+
+            GameObject[] activeTiles = other.GetComponent<TileActivity>().TilesActive;
+            GameObject[] newTiles = other.GetComponent<TileActivity>().NewlyAvailableTiles;
+            Debug.Log(activeTiles);
+
+            foreach(GameObject tile in activeTiles)
+            {
+                tile.SetActive(true);
+            }
+
+            if (other.GetComponent<TileActivity>().puzzle.solved && newTiles != null)
+            {
+                foreach(GameObject tile in newTiles)
+                {
+                    tile.SetActive(true);
+                }
+            }
         }
     }
 

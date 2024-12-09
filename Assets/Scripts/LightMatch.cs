@@ -38,7 +38,7 @@ public class LightMatch : MonoBehaviour
             }
             fire.SetActive(true); 
            _gameManager.ChangeState(GameState.burning); }
-        Debug.Log(Input.GetAxis("Mouse X"));
+        //Debug.Log(Input.GetAxis("Mouse X"));
 
         if (GameManager.state == GameState.burning)
         {
@@ -57,7 +57,7 @@ public class LightMatch : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             initialPos = transform.position;
-            //Debug.Log(hit.collider);
+            Debug.Log(hit.collider);
             Vector3 direction = hit.point - initialPos;
 
             GameObject newMatch = Instantiate(matchPrefab, initialPos, Quaternion.identity);
@@ -65,12 +65,7 @@ public class LightMatch : MonoBehaviour
 
             fire.SetActive(false);
 
-            StartCoroutine(Burnout(newMatch));
-
-            GameObject newFire = newMatch.transform.Find("fire").gameObject;
-            Debug.Log(newFire);
-
-            _gameManager.thrownMatches.Add(newFire);
+            _gameManager.thrownMatches.Add(newMatch);
             _gameManager.CheckMatchLimit();
             _gameManager.ChangeState(GameState.moveable);
         }
@@ -78,8 +73,10 @@ public class LightMatch : MonoBehaviour
 
     public IEnumerator Burnout(GameObject newFire)
     {
+        Debug.Log("burning out");
         yield return new WaitForSeconds(5f);
 
+        Debug.Log("we're done");
         newFire.SetActive(false);
         Debug.Log("burnt out");
     }

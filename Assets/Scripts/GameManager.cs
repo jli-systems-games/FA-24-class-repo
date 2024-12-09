@@ -50,8 +50,9 @@ public class GameManager : MonoBehaviour
     {
         if(thrownMatches.Count > 30)
         {
-            Destroy(thrownMatches[30]);
-            thrownMatches.RemoveAt(30);
+            Destroy(thrownMatches[0]);
+            thrownMatches.RemoveAt(0);
+            Debug.Log("destroyed first match");
         }
     }
 }

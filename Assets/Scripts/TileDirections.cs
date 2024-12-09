@@ -9,16 +9,26 @@ public class TileDirections : MonoBehaviour
     public GameObject eastTile;
     public GameObject westTile;
 
+    //public Puzzle puzzle;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Invoke("SetChildrenInactive", .3f);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void SetChildrenInactive()
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -41,6 +51,8 @@ public class TileDirections : MonoBehaviour
         {
             other.gameObject.transform.parent.GetComponent<TileDirections>().westTile = gameObject;
         }
+
+        
 
         //Debug.Log(this.gameObject.ToString() + " collides with " + other);
 
