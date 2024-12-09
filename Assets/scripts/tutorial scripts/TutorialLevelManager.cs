@@ -25,6 +25,19 @@ public class TutorialLevelManager : MonoBehaviour
 
     private void Start()
     {
+        if (tutorialText == null)
+        {
+            Debug.LogError("TutorialText is not assigned!");
+        }
+        if (completionText == null)
+        {
+            Debug.LogError("CompletionText is not assigned!");
+        }
+        if (burnCountText == null)
+        {
+            Debug.LogError("BurnCountText is not assigned!");
+        }
+
         totalFlammableObjects = flammableObjects.Length; // 初始化燃烧物体数量
         UpdateBurnCount();
         UpdateTutorialText();
