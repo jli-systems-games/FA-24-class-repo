@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SparkleTest : MonoBehaviour
 {
+    [SerializeField]
+    LevelLoader lvLoader;
     public GameObject sparklePrefab, boundBox;
     public Camera cutScCam, mainCam;
     MeshRenderer rend;
@@ -59,13 +61,17 @@ public class SparkleTest : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _fade.SetBool("isFading", true);
 
-        yield return new WaitForSeconds(1f); 
+        yield return new WaitForSeconds(1f);
 
-        cutScCam.enabled = false;
-        mainCam.enabled = true;
+        if(lvLoader.levelIndex <= lvLoader.lvStats.Length - 1)
+        {
+            cutScCam.enabled = false;
+            mainCam.enabled = true;
         
-        yield return new WaitForSeconds(1.5f);
-        _fade.SetBool("isFading", false);
-        LevelLoader.loadingLevel = false;
+            yield return new WaitForSeconds(1.5f);
+            _fade.SetBool("isFading", false);
+            LevelLoader.loadingLevel = false;
+        }
+       
     }
 }

@@ -70,7 +70,7 @@ public class DrawLine : MonoBehaviour
     {
 
         //Find the last added LineRednerer;
-        Debug.Log("deleting");
+       
         isdeleting = true;
         if(lineEndPoints.Count > 0)
         {   

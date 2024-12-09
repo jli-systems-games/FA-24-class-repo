@@ -34,6 +34,7 @@ public class DeteEnd : MonoBehaviour
                 p.baseSource.clip = succeed; 
                 p.baseSource.Play();
                 _r.enabled = true;
+                LevelLoader.loadingLevel = true;
                 GameManager.clearLevel();
               
                 

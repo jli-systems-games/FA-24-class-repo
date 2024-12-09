@@ -41,7 +41,7 @@ public class PlayerHit : MonoBehaviour
     {
         moveVector = context.ReadValue<Vector2>();
         Vector3 nextPoint = transform.position;
-        if (context.started && LevelLoader.loadingLevel == false)
+        if (context.started && !LevelLoader.loadingLevel && !LevelLoader.reload)
         {
             //calculate the new position and the direction it will go;
             Vector3 direction = new Vector3(moveVector.x, 0, moveVector.y);
@@ -67,18 +67,25 @@ public class PlayerHit : MonoBehaviour
 
             
             
-           if (nextPoint == InputManager.points.Peek() &&InputManager.points.Count > 0 || reentering ) 
+           if (nextPoint == InputManager.points.Peek() || reentering ) 
             {   
-                if(InputManager.points.Count > 1)
-                    InputManager.points.Pop();
+                if(InputManager.points.Count > 0)
+                {
+
+                    if(InputManager.points.Count > 1)
+                        InputManager.points.Pop();
 
                 
-                if (Energy < MaxEnergy && !readjusting) Energy++;
+                    if (Energy < MaxEnergy && !readjusting) Energy++;
 
-                endPos = nextPoint;
-                transform.position = nextPoint;
-                InputManager.DelLine(nextPoint,direction); 
-                if(reentering) reentering = false;
+                    endPos = nextPoint;
+                    transform.position = nextPoint;
+                    InputManager.DelLine(nextPoint,direction); 
+                    if(reentering) reentering = false;
+
+
+                }
+                
             }
             else if(Energy > 0 && !InputManager.points.Contains(nextPoint) && nextPoint != endPos)
             {

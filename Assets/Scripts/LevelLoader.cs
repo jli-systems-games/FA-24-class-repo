@@ -11,13 +11,13 @@ public class LevelLoader : MonoBehaviour
     public levelStats[] lvStats;
     int numberOfRows = 1;
     public TMP_Text result, lvNumb;
-    public static bool loadingLevel;
+    public static bool loadingLevel = false;
     //all spawnable objects
     public GameObject startPrefab, endPrefab, blockPrefab, repeaterPrefab,platformPrefab, resisterPrefab;
     public Transform leftWall, rightWall, TopWall, BottomWall;
     Vector3 ogL, ogR, ogT, ogB;
-    int levelIndex = 0;
-    bool reload = false;
+    public int levelIndex = 0;
+    public static bool reload = false;
     void Start()
     {   
         ogL = leftWall.position;
@@ -175,18 +175,24 @@ public class LevelLoader : MonoBehaviour
     }
     public void reloadCurrentLevel()
     {
-        reload = true;
-        InputManager.points.Clear();
-        StartCoroutine(loading());
+        if (!reload && !loadingLevel)
+        {
+             reload = true;
+            InputManager.points.Clear();
+            StartCoroutine(loading());
+        }
+       
     }
 
     void goNext()
     {   
+        loadingLevel = true;
         StartCoroutine(loading());
         
     }
     IEnumerator loading()
-    {
+    {   
+        
         yield return new WaitForSeconds(1.5f);
 
         //combine both of them into one function and call it after the brain loading is done;
@@ -201,7 +207,7 @@ public class LevelLoader : MonoBehaviour
     public void advaneceLevel()
     {
         //find the current platformParent;
-        loadingLevel = true;
+        
         GameObject ply = GameObject.FindWithTag("platform");
         if (ply != null)
         {
