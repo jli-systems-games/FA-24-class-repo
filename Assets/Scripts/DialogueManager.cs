@@ -101,7 +101,8 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentStory.canContinue)
         {
-            dialogueText.text = currentStory.Continue();
+            string rawText = currentStory.Continue();
+            dialogueText.text = ConvertFormatting(rawText); // Process bold and italics for the dialogue text
             DisplayChoices();
         }
         else
@@ -173,5 +174,30 @@ public class DialogueManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    // Function to process formatting for [text] (italics) and [[text]] (bold)
+    private string ConvertFormatting(string text)
+    {
+        // Split the text into lines
+        string[] lines = text.Split('\n');
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            // Skip lines that start with an asterisk (choices)
+            if (lines[i].TrimStart().StartsWith("*"))
+            {
+                continue;
+            }
+
+            // Replace [[text]] with <b>text</b>
+            lines[i] = System.Text.RegularExpressions.Regex.Replace(lines[i], @"\[\[(.*?)\]\]", "<b>$1</b>");
+
+            // Replace [text] with <i>text</i>
+            lines[i] = System.Text.RegularExpressions.Regex.Replace(lines[i], @"\[(.*?)\]", "<i>$1</i>");
+        }
+
+        // Recombine lines into a single string
+        return string.Join("\n", lines);
     }
 }
