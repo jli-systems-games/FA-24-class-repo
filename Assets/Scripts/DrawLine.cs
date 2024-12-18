@@ -95,6 +95,7 @@ public class DrawLine : MonoBehaviour
                 lastDirct.Normalize();
                  
                 prevDirct = lastDirct;
+                
                  
              }
             else
