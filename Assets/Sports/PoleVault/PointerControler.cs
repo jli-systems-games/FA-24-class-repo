@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PointerControler : MonoBehaviour
 {
     [Header("ITEMS")]
-    public GameObject button;
+    //public GameObject button;
     public TMP_Text displayText;
     public RectTransform flyingShrimp;
     public GameObject slider;
@@ -53,8 +53,8 @@ public class PointerControler : MonoBehaviour
         displayText = displayText.GetComponent<TMP_Text>();
         audioSource = GetComponent<AudioSource>();
 
-        displayText.text = "";
-        targetPosition = pointB.position;
+        //displayText.text = "";
+        //targetPosition = pointB.position;
 
         move = false;
 
@@ -63,22 +63,28 @@ public class PointerControler : MonoBehaviour
             item.SetActive(false);
         }
 
-        button.SetActive(true);
+        //button.SetActive(true);
         slider.SetActive(false);
+
+        StartCoroutine(PV_Start());
+        //look down
     }
 
     public void PoleVault()
     {
         StartCoroutine(PV_Start());
 
-        button.SetActive(false);
+        //button.SetActive(false)
     }
 
     IEnumerator PV_Start()
     {
-        displayText.text = "Press space to use the correct amount of strength to vault!";
-
+        displayText.text = "POLE VAULTING!\n\nthis is the closest ull ever get to flying, unless you get on a plane ig";
         yield return new WaitForSeconds(3f);
+
+        displayText.text = "time pressing space to vault!";
+
+        yield return new WaitForSeconds(5f);
 
         displayText.text = "START!";
 
@@ -87,6 +93,7 @@ public class PointerControler : MonoBehaviour
         runToPole = true;
         //shrimp carrying pole runs across screen
         targetPosition = spots[0].position;
+        //look to update
     }
 
     IEnumerator PV_PlayScenes()
@@ -101,6 +108,7 @@ public class PointerControler : MonoBehaviour
             scenes[1].SetActive(true);
             setUp = true;
             yield return null;
+            //look update
         }
     }
 
@@ -108,12 +116,14 @@ public class PointerControler : MonoBehaviour
     {
         if (!setUp)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             //set up slider
             targetPosition = pointA.position;
             slider.SetActive(true);
             move = true;
+            //look update
         }
+        yield return null;
     }
 
 
@@ -122,8 +132,6 @@ public class PointerControler : MonoBehaviour
     {
         if (runToPole)
         {
-
-
             moveSpeed = 2000f;
 
             RectTransform rectTransform = scenes[0].GetComponent<RectTransform>();
@@ -137,14 +145,13 @@ public class PointerControler : MonoBehaviour
             {
                 runToPole = false;
                 StartCoroutine(PV_PlayScenes());
+                //look up
             }
         }
 
         if (setUp)
         {
             moveSpeed = 5000f;
-
-
 
             RectTransform rectTransform = scenes[1].GetComponent<RectTransform>();
             Vector3 position = rectTransform.position; // Get the current position
@@ -156,12 +163,13 @@ public class PointerControler : MonoBehaviour
             {
                 setUp = false;
                 StartCoroutine(PV_PlayScenesTwo());
+                //look up
             }
         }
 
         if (move)
         {
-            moveSpeed = 1000f;
+            moveSpeed = 3000f;
 
             pointerTransform.position = Vector3.MoveTowards(pointerTransform.position, targetPosition, moveSpeed * Time.deltaTime);
 
@@ -179,6 +187,7 @@ public class PointerControler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 CheckSuccess();
+                //look down
             }
         }
 
@@ -197,15 +206,16 @@ public class PointerControler : MonoBehaviour
             {
                 setUpTwo = false;
                 StartCoroutine(PV_Result(result));
+                //look down bottom
             }
         }
 
         if (ending)
         {
             Vector3 rotation = flyingShrimp.transform.eulerAngles;
+            rotation.z -= 5f;
 
             // Modify the Z-axis rotation
-            rotation.z -= 5f;
 
             // Apply the new rotation
             flyingShrimp.transform.eulerAngles = rotation;
@@ -221,14 +231,11 @@ public class PointerControler : MonoBehaviour
                     targetPosition = spots[4].position;
                     audioSource.PlayOneShot(boing);
                     StartCoroutine(PV_TooWeak());
-
-
                 }
                 if (Vector3.Distance(flyingShrimp.position, spots[4].position) < 0.01f)
                 {
                     tooWeak = false;
                 }
-
             }
 
             if (tooStrong)
@@ -285,6 +292,7 @@ public class PointerControler : MonoBehaviour
 
         // Call the result method to handle the outcome based on the result value
         StartCoroutine(PV_PlayScenesThree());
+        //look next
     }
 
     IEnumerator PV_PlayScenesThree()
@@ -293,6 +301,7 @@ public class PointerControler : MonoBehaviour
         slider.SetActive(false);
         setUpTwo = true;
         targetPosition = spots[2].position;
+        //look update
     }
 
     IEnumerator PV_Result(int result)
@@ -321,9 +330,8 @@ public class PointerControler : MonoBehaviour
                 targetPosition = spots[6].position;
                 perfect = true;
             }
-
             ending = true;
-
+            //look update
         }
     }
 
@@ -332,6 +340,9 @@ public class PointerControler : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         audioSource.PlayOneShot(booing);
         displayText.text = "too weak!";
+
+        yield return new WaitForSeconds(3f);
+        NextGame();
     }
 
     IEnumerator PV_TooStrong()
@@ -352,6 +363,8 @@ public class PointerControler : MonoBehaviour
         scenes[4].SetActive(false);
         scenes[3].SetActive(false);
 
+        yield return new WaitForSeconds(3f);
+        NextGame();
     }
 
     IEnumerator PV_Perfect()
@@ -360,6 +373,15 @@ public class PointerControler : MonoBehaviour
         scenes[6].SetActive(true);
 
         audioSource.PlayOneShot(cheering);
-        displayText.text = "perfect";
+        displayText.text = "shrimple as that";
+
+        yield return new WaitForSeconds(3f);
+        NextGame();
+    }
+
+
+    public void NextGame()
+    {
+        GameObject.Find("SportSwitcher").GetComponent<SceneChanger>().Counter();
     }
 }
