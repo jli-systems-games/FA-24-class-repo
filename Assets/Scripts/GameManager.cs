@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -7,27 +6,49 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float survivalTime = 120f;
-    private float remainingTime;
+    public float survivalTime = 90f;
     public Slider timerSlider;
     public Image fillImage;
-
-    public UnityEvent<float> onTimerUpdate;
-    public UnityEvent<int> onDifficultyIncrease;
-    public UnityEvent onGameOver;
-
-    [SerializeField]
     public Color[] difficultyColors;
 
-    private int difficultyStage = 1;
-    private bool playerAlive = true;
+    public UnityEvent<float> onTimerUpdate;
+    public UnityEvent<int> onDifficultyIncrease = new UnityEvent<int>();
+
+    public UnityEvent onGameOver;
 
     public GameObject gameOverScreen;
     public GameObject winScreen;
+    public HUDManager hudManager;
 
-    void Start()
+    public Sprite[] backgroundStages;
+    public GameObject background;
+
+    private SpriteRenderer backgroundRenderer;
+    private float remainingTime;
+    public int difficultyStage = 1;
+    private const int maxDifficultyStage = 3;
+    private bool playerAlive = true;
+
+    private void Start()
     {
+        backgroundRenderer = background?.GetComponent<SpriteRenderer>();
         StartGame();
+    }
+
+    private IEnumerator StartEnemyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        var enemy = FindObjectOfType<EnemyScript>();
+        if (enemy != null)
+        {
+            Debug.Log("EnemyScript found. Starting attacks...");
+            enemy.StartAttacks();
+        }
+        else
+        {
+            Debug.LogError("EnemyScript not found in the scene.");
+        }
     }
 
     public void StartGame()
@@ -42,40 +63,41 @@ public class GameManager : MonoBehaviour
             timerSlider.value = 0f;
         }
 
+        UpdateBackground();
         UpdateTimerColor();
+
+   
         StartCoroutine(StartEnemyAfterDelay(3f));
         StartCoroutine(SurvivalTimer());
     }
 
-    private IEnumerator StartEnemyAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        FindObjectOfType<EnemyScript>()?.StartAttacks();
-    }
 
     private IEnumerator SurvivalTimer()
     {
-        float difficultyInterval = 30f;
-        float timeSinceLastDifficultyIncrease = 0f;
+        float difficultyInterval = survivalTime / maxDifficultyStage;
 
         while (remainingTime > 0f && playerAlive)
         {
             remainingTime -= Time.deltaTime;
-            timeSinceLastDifficultyIncrease += Time.deltaTime;
+            //onTimerUpdate?.Invoke(remainingTime);
 
-            onTimerUpdate?.Invoke(remainingTime);
+            timerSlider.value = survivalTime - remainingTime;
 
-            if (timerSlider != null)
-            {
-                timerSlider.value = survivalTime - remainingTime;
-            }
-
-            if (timeSinceLastDifficultyIncrease >= difficultyInterval)
+            if (remainingTime % difficultyInterval < Time.deltaTime && difficultyStage < maxDifficultyStage)
             {
                 difficultyStage++;
-                UpdateTimerColor();
+                Debug.Log($"Difficulty stage updated to: {difficultyStage}");
+
                 onDifficultyIncrease?.Invoke(difficultyStage);
-                timeSinceLastDifficultyIncrease = 0f;
+
+                UpdateBackground();
+                UpdateTimerColor();
+
+                if (hudManager != null)
+                {
+                    Debug.Log($"Calling HUDManager to update HUD for stage: {difficultyStage}");
+                    hudManager.UpdateHUD(difficultyStage);
+                }
             }
 
             yield return null;
@@ -84,32 +106,24 @@ public class GameManager : MonoBehaviour
         GameOver();
     }
 
-    private void UpdateTimerColor()
+
+
+    private void UpdateBackground()
     {
-        if (fillImage != null && difficultyColors.Length > 0)
-        {
-            int colorIndex = Mathf.Clamp(difficultyStage - 1, 0, difficultyColors.Length - 1);
-            fillImage.color = difficultyColors[colorIndex];
-        }
+        if (backgroundRenderer != null && difficultyStage <= backgroundStages.Length)
+            backgroundRenderer.sprite = backgroundStages[difficultyStage - 1];
     }
 
-    public void PlayerDied()
+    private void UpdateTimerColor()
     {
-        playerAlive = false;
-        GameOver();
+        if (fillImage != null && difficultyStage <= difficultyColors.Length)
+            fillImage.color = difficultyColors[difficultyStage - 1];
     }
 
     private void GameOver()
     {
-        if (gameOverScreen != null)
-        {
-            gameOverScreen.SetActive(true);
-        }
-
-        if (playerAlive)
-        {
-            winScreen?.SetActive(true);
-        }
+        gameOverScreen.SetActive(!playerAlive);
+        winScreen.SetActive(playerAlive);
 
         onGameOver?.Invoke();
         Time.timeScale = 0f;
@@ -119,5 +133,10 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void PlayerDied()
+    {
+        playerAlive = false;
     }
 }
