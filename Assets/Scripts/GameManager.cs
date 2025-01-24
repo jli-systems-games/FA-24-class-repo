@@ -17,17 +17,17 @@ public class GameManager : MonoBehaviour
     public static List<ToolObstacle> tools = new List<ToolObstacle>();
     [SerializeField] GameObject nextButton, Failure;
     //[SerializeField] EventManager _event;
-    List<Level> levels = new List<Level> { new Level(4, 2)};
-    string[] sceneNames = { "Level2", "SampleScene" };
-    int index = -1;
+    List<Level> levels = new List<Level> { new Level(4, 2), new Level(2)};
+    string[] sceneNames = {"SampleScene","Level2" };
+    int index = 0;
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneUnloaded += OnSceneUnloaded;
         EventManager.killedOff += ChangeLevelState;
 
-        //ChangeLevelState(LevelState.Preparing);
-        StartCoroutine(setUp());
+        ChangeLevelState(LevelState.Preparing);
+        
 
 
     }
@@ -53,9 +53,8 @@ public class GameManager : MonoBehaviour
         {
             case LevelState.Preparing:
                 //show ui of the limits of the number of the tools allow to use;
-
-              EventManager.fetchTools(levels[0]);
-                
+                Debug.Log("preparing");
+              StartCoroutine(setUp());
               nextButton.SetActive(false);
 
                 break;
@@ -87,8 +86,8 @@ public class GameManager : MonoBehaviour
         if(enemies.Count > 0) { enemies.Clear(); }
         //clear tools list 
         if(tools.Count > 0) { tools.Clear(); }
-
-        SceneManager.LoadScene(sceneNames[index + 1]);
+        index++;
+        SceneManager.LoadScene(sceneNames[index]);
     }
 
     public void beginLevel()
@@ -97,16 +96,11 @@ public class GameManager : MonoBehaviour
 
     }
     IEnumerator setUp()
-    {   
+    {
         yield return new WaitForEndOfFrame();
 
-        if(FindAnyObjectByType<ToolObstacle>() == null)
-        {
-            Debug.Log("waitin");
-        }
-        else
-        {
-            ChangeLevelState(LevelState.Preparing);
-        }
+        EventManager.fetchTools(levels[index]);
+
+        yield break;
     }
 }

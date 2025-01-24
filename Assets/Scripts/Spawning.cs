@@ -38,7 +38,7 @@ public class Spawning : MonoBehaviour
               {
                     _choice = _hit.collider.gameObject;
                      SpriteRenderer s = _hit.collider.gameObject.GetComponent<SpriteRenderer>();
-                    _tol = findCount(_choice.name);
+                    _tol = _choice.GetComponent<ToolObstacle>();
                     _sprite.sprite = s.sprite;
              
                 
@@ -48,9 +48,10 @@ public class Spawning : MonoBehaviour
                      obj.transform.position = pos + offset;
                      obj.transform.rotation = transform.rotation;
                     //minus total count;
-                    _tol._obstacleCount--;
+                   // _choice.GetComponent<ToolObstacle>()._obstacleCount--;
+                    _tol._obstacleCount -= 1;
+                    _tol.count.text = _tol._obstacleCount.ToString();
 
-                    
 
                 }
 
@@ -69,6 +70,7 @@ public class Spawning : MonoBehaviour
                     obj.transform.rotation = transform.rotation;
                     //minus from the total count
                     _tol._obstacleCount--;
+                    _tol.count.text = _tol._obstacleCount.ToString();
                 }
 
              timer = 0.2f;
@@ -96,10 +98,12 @@ public class Spawning : MonoBehaviour
     GameObject spawning()
     {
         GameObject spawn = Instantiate(_choice);
+        Destroy(spawn.GetComponent<ToolObstacle>());
         int m = LayerMask.NameToLayer("obstacle");
         TMP_Text _T = spawn.GetComponentInChildren<TMP_Text>();
         _T.text = string.Empty;
         spawn.layer = m;
+
         //add a way for them to be all unique later;
         if(spawn.TryGetComponent<ObstacleBase>(out ObstacleBase _obs))
         {
@@ -114,8 +118,8 @@ public class Spawning : MonoBehaviour
             spawn.GetComponent<ObstacleBase>()._stats = _tol._stats;
 
         }
-        ToolObstacle t = spawn.GetComponent<ToolObstacle>();
-        Destroy(t);
+        /*ToolObstacle t = spawn.GetComponent<ToolObstacle>();
+        Destroy(t);*/
        
         return spawn;
 

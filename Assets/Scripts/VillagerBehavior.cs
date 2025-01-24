@@ -41,5 +41,7 @@ public class VillagerBehavior : MonoBehaviour
     {
         EventManager.newTarget();
         _stats.ids.Remove(id);
+        EventManager.gotHit -= DeductHealth;
     }
+
 }

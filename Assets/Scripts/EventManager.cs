@@ -30,15 +30,7 @@ public class EventManager : MonoBehaviour
     }
     public static void fetchTools(Level L)
     {
-
-        if(decideCount != null)
-        {
-            decideCount(L);
-        }
-        else
-        {
-            Debug.Log("0");
-        }
+        decideCount?.Invoke(L);
 
     }
   

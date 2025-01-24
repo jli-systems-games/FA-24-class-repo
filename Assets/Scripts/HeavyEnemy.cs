@@ -20,7 +20,7 @@ public class HeavyEnemy : EnemyAttack
         currentState = SelfState.Moving;
         rb = GetComponent<Rigidbody2D>();
         
-        size = new Vector2(transform.localScale.x, transform.localScale.y *10f);
+        size = new Vector2(transform.localScale.x, transform.localScale.y *3f);
     }
     protected override void Update()
     {   
@@ -31,19 +31,11 @@ public class HeavyEnemy : EnemyAttack
         else
         {
             transform.position = transform.position;
-            Debug.Log("currently" + currentState);
+            Debug.Log("currently " + currentState);
         }
         
         origin = new Vector2(transform.position.x + transform.localScale.x, transform.position.y);
         
-/*
-        if(results != null )
-        {
-            foreach(RaycastHit2D hit in results)
-            {
-                Debug.Log(hit.collider.name);
-            }
-        }*/
 
     }
     protected override void OnCollisionEnter2D(Collision2D collision)
@@ -57,20 +49,20 @@ public class HeavyEnemy : EnemyAttack
     void ChangeState(SelfState state)
     {
         
-
+        currentState = state;
         if (state == SelfState.Breaking)
         {
             StartCoroutine(BreakingThrough());
         }
         
-        currentState = state;
+        
     }
     IEnumerator BreakingThrough()
     {
-        Debug.Log(health);
+        //Debug.Log(health);
         while(health > 0)
         {
-            Debug.Log("breaking");
+            //Debug.Log("breaking");
             results =  Physics2D.BoxCastAll(origin, size, 0, transform.right, Mathf.Infinity ,mask);
            
             if (results.Length > 0) {

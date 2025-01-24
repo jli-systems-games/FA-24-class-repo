@@ -17,7 +17,6 @@ public class ObstacleBase : MonoBehaviour
     {
         currentHealth = _stats.Health;
         healthBar = gameObject.GetComponentsInChildren<Image>().FirstOrDefault(c => c.name == "health");
-        //EventManager.gotHit += DeductHealth;
         
 
     }

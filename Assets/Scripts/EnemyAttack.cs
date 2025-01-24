@@ -52,7 +52,6 @@ public class EnemyAttack : MonoBehaviour
             if (collision.collider.CompareTag("blocks"))
             {
                 obs.DeductHealth( _stats.damage);
-                //EventManager.harming(_id, _stats.damage);
                 deductHealth(1);
             }else if (collision.collider.CompareTag("deflecting"))
             {   
@@ -136,5 +135,11 @@ public class EnemyAttack : MonoBehaviour
         {
             EventManager.ChangeState(LevelState.Defeat);
         }
+    }
+
+    private void OnDisable()
+    {
+        EventManager.changeTarget -= ChangingTarget;
+
     }
 }

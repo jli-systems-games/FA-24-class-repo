@@ -23,9 +23,14 @@ public class ToolObstacle : MonoBehaviour
     {
         
          _obstacleCount = L.assignValue(gameObject.name);
+        Debug.Log("assignSelf");
         
         if ( !GameManager.tools.Contains(this)) GameManager.tools.Add(this);    
         
        
+    }
+    private void OnDisable()
+    {
+        EventManager.decideCount -= AssignSelf;
     }
 }
