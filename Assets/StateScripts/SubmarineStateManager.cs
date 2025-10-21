@@ -6,16 +6,17 @@ using UnityEngine.UI;
 
 public class SubmarineStateManager : MonoBehaviour
 {
+    private float fuelChangeRate = -1f;
     SubmarineBaseState currentState;
     public NormalState normalState = new NormalState();
     public DepthControlState depthControlState = new DepthControlState();
-    public PressureCalibrationState pressureCalibrationState = new PressureCalibrationState();
-    public SilentRunningState silentRunningState = new SilentRunningState();
-    public LeakDetectionState leakDetectionState = new LeakDetectionState();
-    public NavigationHazardState navigationHazardState = new NavigationHazardState();
-    public MissileLaunchState  misileLaunchState = new MissileLaunchState();
+    //public PressureCalibrationState pressureCalibrationState = new PressureCalibrationState();
+    //public SilentRunningState silentRunningState = new SilentRunningState();
+    //public LeakDetectionState leakDetectionState = new LeakDetectionState();
+    ////public NavigationHazardState navigationHazardState = new NavigationHazardState();
+    ////public MissileLaunchState  misileLaunchState = new MissileLaunchState();
     public EngineRestartState engineRestartState = new EngineRestartState();
-    public WaterChangesState waterChangesState = new WaterChangesState();
+    //public WaterChangesState waterChangesState = new WaterChangesState();
 
     public TextMeshProUGUI IssueText;
 
@@ -24,12 +25,10 @@ public class SubmarineStateManager : MonoBehaviour
     public Slider WaterTemperature;
     public Slider PressureSensor;
     public Slider WaterDensity;
-    public Slider ElectricitySwitchPrefab;
+    public List<Slider> ElectricitySwitches;
 
     //driving panel
     public Slider FuelSensor;
-    public Slider PropulsionShaft;
-    public Slider Thrusters;
     public Slider DepthGauge;
     public Toggle Anchor;
     public Toggle Sonar;
@@ -37,12 +36,14 @@ public class SubmarineStateManager : MonoBehaviour
     public GameObject SteeringWheel;
     public GameObject PeriscopeView;
     public GameObject SonarArray;
+    public List<Slider> PropulsionShaft;
+    public List<Slider> ThrusterList;
 
     //ballast panel
     public Slider BuoyantSensor;
-    public Slider TrimTank;
-    public Slider BallastTank;
-    public Toggle VentPrefab;
+    public List<Slider> TrimTankSensor;
+    public List<Slider> BallastTankSensor;
+    public List<Toggle> VentToggles;
 
     //comms
     public Toggle AntennaStatus;
@@ -52,10 +53,10 @@ public class SubmarineStateManager : MonoBehaviour
     public Toggle BlowSystemPrefab;
 
     //weapons
-    public Button TorpedoFwdPrefab;
-    public Button TorpedoVLSPrefab;
-    public Button LoadMissilePrefab;
-    public Button LaunchMissilePrefab;
+    public List<Button> TorpedoFwdButtons;
+    public List<Button> TorpedoVLSButtons;
+    public List <Button> LoadMissileButtons;
+    public List <Button> LaunchMissileButtons;
 
 
     
@@ -94,12 +95,16 @@ public class SubmarineStateManager : MonoBehaviour
     {
         currentState = normalState;
         currentState.EnterState(this);
+        FuelSensor.value = 100;
     }
 
     // Update is called once per frame
     void Update()
     {
         currentState.UpdateState(this);
+
+        FuelSensor.value = Mathf.Clamp(FuelSensor.value + (fuelChangeRate * Time.deltaTime), 0, 100);
+
     }
 
     public void SwitchState(SubmarineBaseState state)
